@@ -1,0 +1,36 @@
+#!/bin/sh
+set -eu
+
+export GTK_A11Y=none
+# Avoid ZINK stderr from mesa
+# https://gitlab.freedesktop.org/mesa/mesa/-/issues/10293
+export LIBGL_ALWAYS_SOFTWARE=true
+
+if [ -n "${DEB_HOST_GNU_TYPE:-}" ]; then
+    CROSS_COMPILE="$DEB_HOST_GNU_TYPE-"
+else
+    CROSS_COMPILE=
+fi
+
+cd "$AUTOPKGTEST_TMP"
+
+cat <<EOF > adwtest.c
+#include <gtk/gtk.h>
+#include <adwaita.h>
+
+int
+main (int    argc,
+      char **argv)
+{
+	g_autoptr (GtkWidget) st = NULL;
+	gtk_init();
+	adw_init();
+	st = g_object_ref_sink (adw_status_page_new());
+}
+EOF
+
+${CROSS_COMPILE}gcc -o adwtest adwtest.c $(${CROSS_COMPILE}pkg-config --cflags --libs libadwaita-1)
+echo "build ok"
+[ -x adwtest ]
+xvfb-run -a -s "-screen 0 1024x768x24" ./adwtest
+echo "starts ok"

@@ -1,0 +1,24 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,-O1 -Wl,-z,defs
+export DPKG_GENSYMBOLS_CHECK_LEVEL = 4
+
+built_binaries := $(shell dh_listpackages)
+
+ifneq ($(filter %-doc,$(built_binaries)),)
+BUILD_DOCS := -Dgtk_doc=true
+else
+BUILD_DOCS := -Dgtk_doc=false
+endif
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	dh_auto_configure -- $(BUILD_DOCS)
+
+override_dh_auto_test:
+	xvfb-run -s -noreset dh_auto_test
+
+override_dh_gnome_clean:
