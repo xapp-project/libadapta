@@ -13,6 +13,7 @@
 #include "adw-main-private.h"
 #include "adw-settings-private.h"
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 #define SWITCH_DURATION 250
 
@@ -59,6 +60,8 @@ struct _AdwStyleManager
 
   GtkCssProvider *animations_provider;
   guint animation_timeout_id;
+
+  gchar *real_theme_name;
 };
 
 G_DEFINE_FINAL_TYPE (AdwStyleManager, adw_style_manager, G_TYPE_OBJECT);
@@ -77,6 +80,33 @@ static GParamSpec *props[LAST_PROP];
 
 static GHashTable *display_style_managers = NULL;
 static AdwStyleManager *default_instance = NULL;
+
+static void
+debug_theme_valist (const gchar *format,
+                    va_list      args)
+{
+  static gsize init = 0;
+  static gboolean debug = FALSE;
+
+  if (g_once_init_enter (&init))
+    {
+      debug = !!g_getenv ("ADW_DEBUG_THEMES");
+      g_once_init_leave (&init, 1);
+    }
+
+  if (debug)
+    g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_MESSAGE, format, args);
+}
+
+static void
+debug_theme (const gchar *format,
+             ...)
+{
+  va_list args;
+  va_start (args, format);
+  debug_theme_valist (format, args);
+  va_end (args);
+}
 
 static void
 warn_prefer_dark_theme (AdwStyleManager *self)
@@ -126,6 +156,123 @@ enable_animations_cb (AdwStyleManager *self)
   self->animation_timeout_id = 0;
 }
 
+static gboolean
+find_theme_dir_each (const gchar  *dir,
+                     const gchar  *subdir,
+                     const gchar  *name,
+                     gboolean      hc,
+                     gboolean      dark,
+                     gchar       **found_theme_path,
+                     gchar       **found_base_path,
+                     gchar       **found_colors_path)
+{
+  const gchar *base_file;
+  const gchar *color_file;
+
+  g_autofree gchar *top_theme_dir = NULL;
+  g_autofree gchar *parent_dir = NULL;
+  g_autofree gchar *base_path = NULL;
+  g_autofree gchar *colors_path = NULL;
+  g_autofree gchar *version_dir = NULL;
+
+  g_clear_pointer (found_theme_path, g_free);
+  g_clear_pointer (found_base_path, g_free);
+  g_clear_pointer (found_colors_path, g_free);
+
+  if (hc)
+    base_file = "base-hc.css";
+  else
+    base_file = "base.css";
+
+  if (dark)
+    color_file = "defaults-dark.css";
+  else
+    color_file = "defaults-light.css";
+
+  top_theme_dir = g_build_filename (dir, subdir, NULL);
+  parent_dir = g_build_filename (top_theme_dir, name, NULL);
+
+  debug_theme ("Looking for theme '%s' in '%s'", name, top_theme_dir);
+
+  if (!g_file_test (parent_dir, G_FILE_TEST_EXISTS))
+    {
+      return FALSE;
+    }
+
+  debug_theme ("Found theme directory '%s'.", parent_dir);
+
+  version_dir = g_strdup_printf ("libadwaita-%d.%d", ADW_MAJOR_VERSION, ADW_MINOR_VERSION);
+  base_path = g_build_filename (parent_dir, version_dir, base_file, NULL);
+  colors_path = g_build_filename (parent_dir, version_dir, color_file, NULL);
+
+  if (g_file_test (base_path, G_FILE_TEST_EXISTS))
+    {
+      *found_base_path = g_strdup (base_path);
+    }
+  else
+    {
+      // If the user wants high-contrast and the current theme doesn't support it,
+      // the default theme should be used.
+      if (hc)
+        {
+          debug_theme ("No high-contrast variant found, skipping this theme.");
+          return FALSE;
+        }
+    }
+
+  if (g_file_test (colors_path, G_FILE_TEST_EXISTS))
+    {
+      *found_colors_path = g_strdup (colors_path);
+    }
+  else
+    {
+      // If the user wants the dark variant and the current theme doesn't support it, check
+      // for its normal variant.
+      if (dark)
+        {
+          debug_theme ("No dark variant found, trying light variant instead.");
+          return find_theme_dir_each (dir, subdir, name, hc, FALSE, found_theme_path, found_base_path, found_colors_path);
+        }
+    }
+
+  if (*found_base_path && *found_colors_path)
+    {
+      *found_theme_path = g_strdup (parent_dir);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+find_theme_dir (const gchar  *name,
+                gboolean      hc,
+                gboolean      dark,
+                gchar       **found_theme_path,
+                gchar       **found_base_path,
+                gchar       **found_colors_path)
+{
+  const char *const *dirs;
+  int i;
+  /* First look in the user's data directory */
+  if (find_theme_dir_each (g_get_user_data_dir (), "themes", name, hc, dark, found_theme_path, found_base_path, found_colors_path))
+    return TRUE;
+
+  /* Next look in the user's home directory */
+  if (find_theme_dir_each (g_get_home_dir (), ".themes", name, hc, dark, found_theme_path, found_base_path, found_colors_path))
+    return TRUE;
+
+  /* Look in system data directories */
+  dirs = g_get_system_data_dirs ();
+  for (i = 0; dirs[i]; i++)
+    {
+      if (find_theme_dir_each (dirs[i], "themes", name, hc, dark, found_theme_path, found_base_path, found_colors_path))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 update_stylesheet (AdwStyleManager *self)
 {
@@ -151,23 +298,49 @@ update_stylesheet (AdwStyleManager *self)
 
   self->setting_dark = FALSE;
 
-  if (self->provider) {
-    if (adw_settings_get_high_contrast (self->settings))
-      gtk_css_provider_load_from_resource (self->provider,
-                                           "/org/gnome/Adwaita/styles/base-hc.css");
-    else
-      gtk_css_provider_load_from_resource (self->provider,
-                                           "/org/gnome/Adwaita/styles/base.css");
-  }
+  gchar *found_theme_path = NULL;
+  gchar *found_base_path = NULL;
+  gchar *found_colors_path = NULL;
 
-  if (self->colors_provider) {
-    if (self->dark)
-      gtk_css_provider_load_from_resource (self->colors_provider,
-                                           "/org/gnome/Adwaita/styles/defaults-dark.css");
-    else
-      gtk_css_provider_load_from_resource (self->colors_provider,
-                                           "/org/gnome/Adwaita/styles/defaults-light.css");
-  }
+  if (find_theme_dir (self->real_theme_name,
+                      adw_settings_get_high_contrast (self->settings),
+                      self->dark,
+                      &found_theme_path,
+                      &found_base_path,
+                      &found_colors_path))
+    {
+      debug_theme ("Using theme '%s' found in %s.", self->real_theme_name, found_theme_path);
+
+      if (self->provider)
+        gtk_css_provider_load_from_path (self->provider, found_base_path);
+      if (self->colors_provider)
+        gtk_css_provider_load_from_path (self->colors_provider, found_colors_path);
+
+      g_free (found_theme_path);
+      g_free (found_base_path);
+      g_free (found_colors_path);
+    }
+  else
+    {
+      debug_theme ("No libadwaita support in system theme, using default style.");
+      if (self->provider) {
+        if (adw_settings_get_high_contrast (self->settings))
+          gtk_css_provider_load_from_resource (self->provider,
+                                               "/org/gnome/Adwaita/styles/base-hc.css");
+        else
+          gtk_css_provider_load_from_resource (self->provider,
+                                               "/org/gnome/Adwaita/styles/base.css");
+      }
+
+      if (self->colors_provider) {
+        if (self->dark)
+          gtk_css_provider_load_from_resource (self->colors_provider,
+                                               "/org/gnome/Adwaita/styles/defaults-dark.css");
+        else
+          gtk_css_provider_load_from_resource (self->colors_provider,
+                                               "/org/gnome/Adwaita/styles/defaults-light.css");
+      }
+    }
 
   self->animation_timeout_id =
     g_timeout_add_once (SWITCH_DURATION,
@@ -240,6 +413,7 @@ adw_style_manager_constructed (GObject *object)
 
     g_object_get (settings,
                   "gtk-application-prefer-dark-theme", &prefer_dark_theme,
+                  "gtk-theme-name", &self->real_theme_name,
                   NULL);
 
     if (prefer_dark_theme)
@@ -303,6 +477,7 @@ adw_style_manager_dispose (GObject *object)
   g_clear_object (&self->provider);
   g_clear_object (&self->colors_provider);
   g_clear_object (&self->animations_provider);
+  g_clear_pointer (&self->real_theme_name, g_free);
 
   G_OBJECT_CLASS (adw_style_manager_parent_class)->dispose (object);
 }
