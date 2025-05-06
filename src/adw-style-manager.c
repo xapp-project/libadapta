@@ -60,8 +60,6 @@ struct _AdwStyleManager
 
   GtkCssProvider *animations_provider;
   guint animation_timeout_id;
-
-  gchar *real_theme_name;
 };
 
 G_DEFINE_FINAL_TYPE (AdwStyleManager, adw_style_manager, G_TYPE_OBJECT);
@@ -302,14 +300,14 @@ update_stylesheet (AdwStyleManager *self)
   gchar *found_base_path = NULL;
   gchar *found_colors_path = NULL;
 
-  if (find_theme_dir (self->real_theme_name,
+  if (find_theme_dir (adw_settings_get_theme_name (self->settings),
                       adw_settings_get_high_contrast (self->settings),
                       self->dark,
                       &found_theme_path,
                       &found_base_path,
                       &found_colors_path))
     {
-      debug_theme ("Using theme '%s' found in %s.", self->real_theme_name, found_theme_path);
+      debug_theme ("Using theme '%s' found in %s.", adw_settings_get_theme_name (self->settings), found_theme_path);
 
       if (self->provider)
         gtk_css_provider_load_from_path (self->provider, found_base_path);
@@ -401,6 +399,12 @@ notify_high_contrast_cb (AdwStyleManager *self)
 }
 
 static void
+notify_theme_name_cb (AdwStyleManager *self)
+{
+  update_stylesheet (self);
+}
+
+static void
 adw_style_manager_constructed (GObject *object)
 {
   AdwStyleManager *self = ADW_STYLE_MANAGER (object);
@@ -413,7 +417,6 @@ adw_style_manager_constructed (GObject *object)
 
     g_object_get (settings,
                   "gtk-application-prefer-dark-theme", &prefer_dark_theme,
-                  "gtk-theme-name", &self->real_theme_name,
                   NULL);
 
     if (prefer_dark_theme)
@@ -449,6 +452,11 @@ adw_style_manager_constructed (GObject *object)
   self->settings = adw_settings_get_default ();
 
   g_signal_connect_object (self->settings,
+                           "notify::theme-name",
+                           G_CALLBACK (notify_theme_name_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->settings,
                            "notify::system-supports-color-schemes",
                            G_CALLBACK (notify_system_supports_color_schemes_cb),
                            self,
@@ -477,7 +485,6 @@ adw_style_manager_dispose (GObject *object)
   g_clear_object (&self->provider);
   g_clear_object (&self->colors_provider);
   g_clear_object (&self->animations_provider);
-  g_clear_pointer (&self->real_theme_name, g_free);
 
   G_OBJECT_CLASS (adw_style_manager_parent_class)->dispose (object);
 }

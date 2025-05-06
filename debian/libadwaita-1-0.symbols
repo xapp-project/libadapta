@@ -679,6 +679,7 @@ libadwaita-1.so.0 libadwaita-1-0 #MINVER#
  adw_property_animation_target_new_for_pspec@LIBADWAITA_1_0 1.2~alpha
  adw_response_appearance_get_type@LIBADWAITA_1_0 1.2~alpha
  adw_settings_end_override@LIBADWAITA_1_0 1.0.1
+ adw_settings_get_theme_name@LIBADWAITA_1_0 1.5.0
  adw_settings_get_color_scheme@LIBADWAITA_1_0 1.0.1
  adw_settings_get_default@LIBADWAITA_1_0 1.0.1
  adw_settings_get_high_contrast@LIBADWAITA_1_0 1.0.1

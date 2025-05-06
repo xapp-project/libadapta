@@ -78,6 +78,7 @@ adw_settings_impl_legacy_new (gboolean enable_color_scheme,
   adw_settings_impl_set_high_contrast (ADW_SETTINGS_IMPL (self),
                                        is_theme_high_contrast (display));
   adw_settings_impl_set_features (ADW_SETTINGS_IMPL (self),
+                                  /* has_theme_name   */ FALSE,
                                   /* has_color_scheme */ FALSE,
                                   /* has_high_contrast */ TRUE);
 
