@@ -1,8 +1,10 @@
-project('libadapta', 'c',
-          version: '1.5.8',
-          license: 'LGPL-2.1-or-later',
-    meson_version: '>= 0.59.0',
-  default_options: [ 'warning_level=1', 'buildtype=debugoptimized', 'c_std=gnu11' ],
+project(
+  'libadapta',
+  'c',
+  version : '1.5.0',
+  license : 'LGPL-2.1-or-later',
+  meson_version : '>= 0.59.0',
+  default_options : ['warning_level=1', 'buildtype=debugoptimized', 'c_std=gnu11']
 )
 
 version_arr = meson.project_version().split('-')[0].split('.')
