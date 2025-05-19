@@ -6,23 +6,23 @@
 
 #include "config.h"
 
-#include "adw-toast-private.h"
+#include "adap-toast-private.h"
 
-#include "adw-marshalers.h"
+#include "adap-marshalers.h"
 #include <stdarg.h>
 
 /**
- * AdwToastPriority:
- * @ADW_TOAST_PRIORITY_NORMAL: the toast will be queued if another toast is
+ * AdapToastPriority:
+ * @ADAP_TOAST_PRIORITY_NORMAL: the toast will be queued if another toast is
  *   already displayed.
- * @ADW_TOAST_PRIORITY_HIGH: the toast will be displayed immediately, pushing
+ * @ADAP_TOAST_PRIORITY_HIGH: the toast will be displayed immediately, pushing
  *   the previous toast into the queue instead.
  *
  * [class@Toast] behavior when another toast is already displayed.
  */
 
 /**
- * AdwToast:
+ * AdapToast:
  *
  * A helper object for [class@ToastOverlay].
  *
@@ -30,7 +30,7 @@
  * follows:
  *
  * ```c
- * adw_toast_overlay_add_toast (overlay, adw_toast_new (_("Simple Toast")));
+ * adap_toast_overlay_add_toast (overlay, adap_toast_new (_("Simple Toast")));
  * ```
  *
  * <picture>
@@ -57,12 +57,12 @@
  * [iface@Gio.Action].
  *
  * ```c
- * AdwToast *toast = adw_toast_new (_("Toast with Action"));
+ * AdapToast *toast = adap_toast_new (_("Toast with Action"));
  *
- * adw_toast_set_button_label (toast, _("_Example"));
- * adw_toast_set_action_name (toast, "win.example");
+ * adap_toast_set_button_label (toast, _("_Example"));
+ * adap_toast_set_action_name (toast, "win.example");
  *
- * adw_toast_overlay_add_toast (overlay, toast);
+ * adap_toast_overlay_add_toast (overlay, toast);
  * ```
  *
  * <picture>
@@ -72,7 +72,7 @@
  *
  * ## Modifying toasts
  *
- * Toasts can be modified after they have been shown. For this, an `AdwToast`
+ * Toasts can be modified after they have been shown. For this, an `AdapToast`
  * reference must be kept around while the toast is visible.
  *
  * A common use case for this is using toasts as undo prompts that stack with
@@ -107,16 +107,16 @@
  *   n_items = ... // The number of waiting items
  *
  *   if (!self->undo_toast) {
- *     self->undo_toast = adw_toast_new_format (_("‘%s’ deleted"), ...);
+ *     self->undo_toast = adap_toast_new_format (_("‘%s’ deleted"), ...);
  *
- *     adw_toast_set_priority (self->undo_toast, ADW_TOAST_PRIORITY_HIGH);
- *     adw_toast_set_button_label (self->undo_toast, _("_Undo"));
- *     adw_toast_set_action_name (self->undo_toast, "toast.undo");
+ *     adap_toast_set_priority (self->undo_toast, ADAP_TOAST_PRIORITY_HIGH);
+ *     adap_toast_set_button_label (self->undo_toast, _("_Undo"));
+ *     adap_toast_set_action_name (self->undo_toast, "toast.undo");
  *
  *     g_signal_connect_swapped (self->undo_toast, "dismissed",
  *                               G_CALLBACK (dismissed_cb), self);
  *
- *     adw_toast_overlay_add_toast (self->toast_overlay, self->undo_toast);
+ *     adap_toast_overlay_add_toast (self->toast_overlay, self->undo_toast);
  *
  *     return;
  *   }
@@ -126,10 +126,10 @@
  *                                "<span font_features='tnum=1'>%d</span> items deleted",
  *                                n_items), n_items);
  *
- *   adw_toast_set_title (self->undo_toast, title);
+ *   adap_toast_set_title (self->undo_toast, title);
  *
  *   // Bump the toast timeout
- *   adw_toast_overlay_add_toast (self->toast_overlay, g_object_ref (self->undo_toast));
+ *   adap_toast_overlay_add_toast (self->toast_overlay, g_object_ref (self->undo_toast));
  * }
  *
  * static void
@@ -147,19 +147,19 @@
  * </picture>
  */
 
-struct _AdwToast {
+struct _AdapToast {
   GObject parent_instance;
 
   char *title;
   char *button_label;
   char *action_name;
   GVariant *action_target;
-  AdwToastPriority priority;
+  AdapToastPriority priority;
   guint timeout;
   GtkWidget *custom_title;
   gboolean use_markup;
 
-  AdwToastOverlay *overlay;
+  AdapToastOverlay *overlay;
 };
 
 enum {
@@ -185,69 +185,69 @@ enum {
 
 static guint signals[SIGNAL_LAST_SIGNAL];
 
-G_DEFINE_FINAL_TYPE (AdwToast, adw_toast, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (AdapToast, adap_toast, G_TYPE_OBJECT)
 
 static void
-dismissed_cb (AdwToast *self)
+dismissed_cb (AdapToast *self)
 {
-  adw_toast_set_overlay (self, NULL);
+  adap_toast_set_overlay (self, NULL);
 }
 
 static void
-adw_toast_dispose (GObject *object)
+adap_toast_dispose (GObject *object)
 {
-  AdwToast *self = ADW_TOAST (object);
+  AdapToast *self = ADAP_TOAST (object);
 
   g_clear_object (&self->custom_title);
 
-  G_OBJECT_CLASS (adw_toast_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_toast_parent_class)->dispose (object);
 }
 
 static void
-adw_toast_finalize (GObject *object)
+adap_toast_finalize (GObject *object)
 {
-  AdwToast *self = ADW_TOAST (object);
+  AdapToast *self = ADAP_TOAST (object);
 
   g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->button_label, g_free);
   g_clear_pointer (&self->action_name, g_free);
   g_clear_pointer (&self->action_target, g_variant_unref);
 
-  G_OBJECT_CLASS (adw_toast_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_toast_parent_class)->finalize (object);
 }
 
 static void
-adw_toast_get_property (GObject    *object,
+adap_toast_get_property (GObject    *object,
                         guint       prop_id,
                         GValue     *value,
                         GParamSpec *pspec)
 {
-  AdwToast *self = ADW_TOAST (object);
+  AdapToast *self = ADAP_TOAST (object);
 
   switch (prop_id) {
   case PROP_TITLE:
-    g_value_set_string (value, adw_toast_get_title (self));
+    g_value_set_string (value, adap_toast_get_title (self));
     break;
   case PROP_BUTTON_LABEL:
-    g_value_set_string (value, adw_toast_get_button_label (self));
+    g_value_set_string (value, adap_toast_get_button_label (self));
     break;
   case PROP_ACTION_NAME:
-    g_value_set_string (value, adw_toast_get_action_name (self));
+    g_value_set_string (value, adap_toast_get_action_name (self));
     break;
   case PROP_ACTION_TARGET:
-    g_value_set_variant (value, adw_toast_get_action_target_value (self));
+    g_value_set_variant (value, adap_toast_get_action_target_value (self));
     break;
   case PROP_PRIORITY:
-    g_value_set_enum (value, adw_toast_get_priority (self));
+    g_value_set_enum (value, adap_toast_get_priority (self));
     break;
   case PROP_TIMEOUT:
-    g_value_set_uint (value, adw_toast_get_timeout (self));
+    g_value_set_uint (value, adap_toast_get_timeout (self));
     break;
   case PROP_CUSTOM_TITLE:
-    g_value_set_object (value, adw_toast_get_custom_title (self));
+    g_value_set_object (value, adap_toast_get_custom_title (self));
     break;
   case PROP_USE_MARKUP:
-    g_value_set_boolean (value, adw_toast_get_use_markup (self));
+    g_value_set_boolean (value, adap_toast_get_use_markup (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -255,37 +255,37 @@ adw_toast_get_property (GObject    *object,
 }
 
 static void
-adw_toast_set_property (GObject      *object,
+adap_toast_set_property (GObject      *object,
                         guint         prop_id,
                         const GValue *value,
                         GParamSpec   *pspec)
 {
-  AdwToast *self = ADW_TOAST (object);
+  AdapToast *self = ADAP_TOAST (object);
 
   switch (prop_id) {
   case PROP_TITLE:
-    adw_toast_set_title (self, g_value_get_string (value));
+    adap_toast_set_title (self, g_value_get_string (value));
     break;
   case PROP_BUTTON_LABEL:
-    adw_toast_set_button_label (self, g_value_get_string (value));
+    adap_toast_set_button_label (self, g_value_get_string (value));
     break;
   case PROP_ACTION_NAME:
-    adw_toast_set_action_name (self, g_value_get_string (value));
+    adap_toast_set_action_name (self, g_value_get_string (value));
     break;
   case PROP_ACTION_TARGET:
-    adw_toast_set_action_target_value (self, g_value_get_variant (value));
+    adap_toast_set_action_target_value (self, g_value_get_variant (value));
     break;
   case PROP_PRIORITY:
-    adw_toast_set_priority (self, g_value_get_enum (value));
+    adap_toast_set_priority (self, g_value_get_enum (value));
     break;
   case PROP_TIMEOUT:
-    adw_toast_set_timeout (self, g_value_get_uint (value));
+    adap_toast_set_timeout (self, g_value_get_uint (value));
     break;
   case PROP_CUSTOM_TITLE:
-    adw_toast_set_custom_title (self, g_value_get_object (value));
+    adap_toast_set_custom_title (self, g_value_get_object (value));
     break;
   case PROP_USE_MARKUP:
-    adw_toast_set_use_markup (self, g_value_get_boolean (value));
+    adap_toast_set_use_markup (self, g_value_get_boolean (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -293,17 +293,17 @@ adw_toast_set_property (GObject      *object,
 }
 
 static void
-adw_toast_class_init (AdwToastClass *klass)
+adap_toast_class_init (AdapToastClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = adw_toast_dispose;
-  object_class->finalize = adw_toast_finalize;
-  object_class->get_property = adw_toast_get_property;
-  object_class->set_property = adw_toast_set_property;
+  object_class->dispose = adap_toast_dispose;
+  object_class->finalize = adap_toast_finalize;
+  object_class->get_property = adap_toast_get_property;
+  object_class->set_property = adap_toast_set_property;
 
   /**
-   * AdwToast:title: (attributes org.gtk.Property.get=adw_toast_get_title org.gtk.Property.set=adw_toast_set_title)
+   * AdapToast:title: (attributes org.gtk.Property.get=adap_toast_get_title org.gtk.Property.set=adap_toast_set_title)
    *
    * The title of the toast.
    *
@@ -319,7 +319,7 @@ adw_toast_class_init (AdwToastClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToast:button-label: (attributes org.gtk.Property.get=adw_toast_get_button_label org.gtk.Property.set=adw_toast_set_button_label)
+   * AdapToast:button-label: (attributes org.gtk.Property.get=adap_toast_get_button_label org.gtk.Property.set=adap_toast_set_button_label)
    *
    * The label to show on the button.
    *
@@ -335,7 +335,7 @@ adw_toast_class_init (AdwToastClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToast:action-name: (attributes org.gtk.Property.get=adw_toast_get_action_name org.gtk.Property.set=adw_toast_set_action_name)
+   * AdapToast:action-name: (attributes org.gtk.Property.get=adap_toast_get_action_name org.gtk.Property.set=adap_toast_set_action_name)
    *
    * The name of the associated action.
    *
@@ -349,7 +349,7 @@ adw_toast_class_init (AdwToastClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToast:action-target: (attributes org.gtk.Property.get=adw_toast_get_action_target_value org.gtk.Property.set=adw_toast_set_action_target_value)
+   * AdapToast:action-target: (attributes org.gtk.Property.get=adap_toast_get_action_target_value org.gtk.Property.set=adap_toast_set_action_target_value)
    *
    * The parameter for action invocations.
    */
@@ -360,26 +360,26 @@ adw_toast_class_init (AdwToastClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToast:priority: (attributes org.gtk.Property.get=adw_toast_get_priority org.gtk.Property.set=adw_toast_set_priority)
+   * AdapToast:priority: (attributes org.gtk.Property.get=adap_toast_get_priority org.gtk.Property.set=adap_toast_set_priority)
    *
    * The priority of the toast.
    *
    * Priority controls how the toast behaves when another toast is already
    * being displayed.
    *
-   * If the priority is `ADW_TOAST_PRIORITY_NORMAL`, the toast will be queued.
+   * If the priority is `ADAP_TOAST_PRIORITY_NORMAL`, the toast will be queued.
    *
-   * If the priority is `ADW_TOAST_PRIORITY_HIGH`, the toast will be displayed
+   * If the priority is `ADAP_TOAST_PRIORITY_HIGH`, the toast will be displayed
    * immediately, pushing the previous toast into the queue instead.
    */
   props[PROP_PRIORITY] =
     g_param_spec_enum ("priority", NULL, NULL,
-                       ADW_TYPE_TOAST_PRIORITY,
-                       ADW_TOAST_PRIORITY_NORMAL,
+                       ADAP_TYPE_TOAST_PRIORITY,
+                       ADAP_TOAST_PRIORITY_NORMAL,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToast:timeout: (attributes org.gtk.Property.get=adw_toast_get_timeout org.gtk.Property.set=adw_toast_set_timeout)
+   * AdapToast:timeout: (attributes org.gtk.Property.get=adap_toast_get_timeout org.gtk.Property.set=adap_toast_set_timeout)
    *
    * The timeout of the toast, in seconds.
    *
@@ -395,7 +395,7 @@ adw_toast_class_init (AdwToastClass *klass)
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToast:custom-title: (attributes org.gtk.Property.get=adw_toast_get_custom_title org.gtk.Property.set=adw_toast_set_custom_title)
+   * AdapToast:custom-title: (attributes org.gtk.Property.get=adap_toast_get_custom_title org.gtk.Property.set=adap_toast_set_custom_title)
    *
    * The custom title widget.
    *
@@ -412,7 +412,7 @@ adw_toast_class_init (AdwToastClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToast:use-markup: (attributes org.gtk.Property.get=adw_toast_get_use_markup org.gtk.Property.set=adw_toast_set_use_markup)
+   * AdapToast:use-markup: (attributes org.gtk.Property.get=adap_toast_get_use_markup org.gtk.Property.set=adap_toast_set_use_markup)
    *
    * Whether to use Pango markup for the toast title.
    *
@@ -428,7 +428,7 @@ adw_toast_class_init (AdwToastClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
-   * AdwToast::dismissed:
+   * AdapToast::dismissed:
    *
    * Emitted when the toast has been dismissed.
    */
@@ -438,14 +438,14 @@ adw_toast_class_init (AdwToastClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   g_signal_set_va_marshaller (signals[SIGNAL_DISMISSED],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   /**
-   * AdwToast::button-clicked:
+   * AdapToast::button-clicked:
    *
    * Emitted after the button has been clicked.
    *
@@ -459,18 +459,18 @@ adw_toast_class_init (AdwToastClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   g_signal_set_va_marshaller (signals[SIGNAL_BUTTON_CLICKED],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 }
 
 static void
-adw_toast_init (AdwToast *self)
+adap_toast_init (AdapToast *self)
 {
   self->title = g_strdup ("");
-  self->priority = ADW_TOAST_PRIORITY_NORMAL;
+  self->priority = ADAP_TOAST_PRIORITY_NORMAL;
   self->timeout = 5;
   self->custom_title = NULL;
   self->use_markup = TRUE;
@@ -479,33 +479,33 @@ adw_toast_init (AdwToast *self)
 }
 
 /**
- * adw_toast_new:
+ * adap_toast_new:
  * @title: the title to be displayed
  *
- * Creates a new `AdwToast`.
+ * Creates a new `AdapToast`.
  *
  * The toast will use @title as its title.
  *
  * @title can be marked up with the Pango text markup language.
  *
- * Returns: the new created `AdwToast`
+ * Returns: the new created `AdapToast`
  */
-AdwToast *
-adw_toast_new (const char *title)
+AdapToast *
+adap_toast_new (const char *title)
 {
   g_return_val_if_fail (title != NULL, NULL);
 
-  return g_object_new (ADW_TYPE_TOAST,
+  return g_object_new (ADAP_TYPE_TOAST,
                        "title", title,
                        NULL);
 }
 
 /**
- * adw_toast_new_format:
+ * adap_toast_new_format:
  * @format: the formatted string for the toast title
  * @...: the parameters to insert into the format string
  *
- * Creates a new `AdwToast`.
+ * Creates a new `AdapToast`.
  *
  * The toast will use the format string as its title.
  *
@@ -515,11 +515,11 @@ adw_toast_new (const char *title)
  *
  * Since: 1.2
  */
-AdwToast *
-adw_toast_new_format (const char *format,
+AdapToast *
+adap_toast_new_format (const char *format,
                       ...)
 {
-  AdwToast *res;
+  AdapToast *res;
   va_list args;
   char *title;
 
@@ -527,7 +527,7 @@ adw_toast_new_format (const char *format,
   title = g_strdup_vprintf (format, args);
   va_end (args);
 
-  res = g_object_new (ADW_TYPE_TOAST,
+  res = g_object_new (ADAP_TYPE_TOAST,
                       "title", title,
                       NULL);
 
@@ -537,20 +537,20 @@ adw_toast_new_format (const char *format,
 }
 
 /**
- * adw_toast_get_title: (attributes org.gtk.Method.get_property=title)
+ * adap_toast_get_title: (attributes org.gtk.Method.get_property=title)
  * @self: a toast
  *
  * Gets the title that will be displayed on the toast.
  *
- * If a custom title has been set with [method@Adw.Toast.set_custom_title]
+ * If a custom title has been set with [method@Adap.Toast.set_custom_title]
  * the return value will be %NULL.
  *
  * Returns: (nullable): the title
  */
 const char *
-adw_toast_get_title (AdwToast *self)
+adap_toast_get_title (AdapToast *self)
 {
-  g_return_val_if_fail (ADW_IS_TOAST (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TOAST (self), NULL);
 
   if (self->custom_title == NULL)
     return self->title;
@@ -559,7 +559,7 @@ adw_toast_get_title (AdwToast *self)
 }
 
 /**
- * adw_toast_set_title: (attributes org.gtk.Method.set_property=title)
+ * adap_toast_set_title: (attributes org.gtk.Method.set_property=title)
  * @self: a toast
  * @title: a title
  *
@@ -572,10 +572,10 @@ adw_toast_get_title (AdwToast *self)
  * If [property@Toast:custom-title] is set, it will be used instead.
  */
 void
-adw_toast_set_title (AdwToast   *self,
+adap_toast_set_title (AdapToast   *self,
                      const char *title)
 {
-  g_return_if_fail (ADW_IS_TOAST (self));
+  g_return_if_fail (ADAP_IS_TOAST (self));
   g_return_if_fail (title != NULL);
 
   if (!g_strcmp0 (self->title, title))
@@ -583,7 +583,7 @@ adw_toast_set_title (AdwToast   *self,
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  adw_toast_set_custom_title (self, NULL);
+  adap_toast_set_custom_title (self, NULL);
 
   g_set_str (&self->title, title);
 
@@ -593,7 +593,7 @@ adw_toast_set_title (AdwToast   *self,
 }
 
 /**
- * adw_toast_get_button_label: (attributes org.gtk.Method.get_property=button-label)
+ * adap_toast_get_button_label: (attributes org.gtk.Method.get_property=button-label)
  * @self: a toast
  *
  * Gets the label to show on the button.
@@ -601,15 +601,15 @@ adw_toast_set_title (AdwToast   *self,
  * Returns: (nullable): the button label
  */
 const char *
-adw_toast_get_button_label (AdwToast *self)
+adap_toast_get_button_label (AdapToast *self)
 {
-  g_return_val_if_fail (ADW_IS_TOAST (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TOAST (self), NULL);
 
   return self->button_label;
 }
 
 /**
- * adw_toast_set_button_label: (attributes org.gtk.Method.set_property=button-label)
+ * adap_toast_set_button_label: (attributes org.gtk.Method.set_property=button-label)
  * @self: a toast
  * @button_label: (nullable): a button label
  *
@@ -622,10 +622,10 @@ adw_toast_get_button_label (AdwToast *self)
  * See [property@Toast:action-name].
  */
 void
-adw_toast_set_button_label (AdwToast   *self,
+adap_toast_set_button_label (AdapToast   *self,
                             const char *button_label)
 {
-  g_return_if_fail (ADW_IS_TOAST (self));
+  g_return_if_fail (ADAP_IS_TOAST (self));
 
   if (!g_set_str (&self->button_label, button_label))
     return;
@@ -634,7 +634,7 @@ adw_toast_set_button_label (AdwToast   *self,
 }
 
 /**
- * adw_toast_get_action_name: (attributes org.gtk.Method.get_property=action-name)
+ * adap_toast_get_action_name: (attributes org.gtk.Method.get_property=action-name)
  * @self: a toast
  *
  * Gets the name of the associated action.
@@ -642,15 +642,15 @@ adw_toast_set_button_label (AdwToast   *self,
  * Returns: (nullable): the action name
  */
 const char *
-adw_toast_get_action_name (AdwToast *self)
+adap_toast_get_action_name (AdapToast *self)
 {
-  g_return_val_if_fail (ADW_IS_TOAST (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TOAST (self), NULL);
 
   return self->action_name;
 }
 
 /**
- * adw_toast_set_action_name: (attributes org.gtk.Method.set_property=action-name)
+ * adap_toast_set_action_name: (attributes org.gtk.Method.set_property=action-name)
  * @self: a toast
  * @action_name: (nullable): the action name
  *
@@ -661,10 +661,10 @@ adw_toast_get_action_name (AdwToast *self)
  * See [property@Toast:action-target].
  */
 void
-adw_toast_set_action_name (AdwToast   *self,
+adap_toast_set_action_name (AdapToast   *self,
                            const char *action_name)
 {
-  g_return_if_fail (ADW_IS_TOAST (self));
+  g_return_if_fail (ADAP_IS_TOAST (self));
 
   if (!g_set_str (&self->action_name, action_name))
     return;
@@ -673,7 +673,7 @@ adw_toast_set_action_name (AdwToast   *self,
 }
 
 /**
- * adw_toast_get_action_target_value: (attributes org.gtk.Method.get_property=action-target)
+ * adap_toast_get_action_target_value: (attributes org.gtk.Method.get_property=action-target)
  * @self: a toast
  *
  * Gets the parameter for action invocations.
@@ -681,15 +681,15 @@ adw_toast_set_action_name (AdwToast   *self,
  * Returns: (transfer none) (nullable): the action target
  */
 GVariant *
-adw_toast_get_action_target_value (AdwToast *self)
+adap_toast_get_action_target_value (AdapToast *self)
 {
-  g_return_val_if_fail (ADW_IS_TOAST (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TOAST (self), NULL);
 
   return self->action_target;
 }
 
 /**
- * adw_toast_set_action_target_value: (attributes org.gtk.Method.set_property=action-target)
+ * adap_toast_set_action_target_value: (attributes org.gtk.Method.set_property=action-target)
  * @self: a toast
  * @action_target: (nullable): the action target
  *
@@ -699,10 +699,10 @@ adw_toast_get_action_target_value (AdwToast *self)
  * will sink it.
  */
 void
-adw_toast_set_action_target_value (AdwToast *self,
+adap_toast_set_action_target_value (AdapToast *self,
                                    GVariant *action_target)
 {
-  g_return_if_fail (ADW_IS_TOAST (self));
+  g_return_if_fail (ADAP_IS_TOAST (self));
 
   if (action_target == self->action_target)
     return;
@@ -719,7 +719,7 @@ adw_toast_set_action_target_value (AdwToast *self,
 }
 
 /**
- * adw_toast_set_action_target: (skip)
+ * adap_toast_set_action_target: (skip)
  * @self: a toast
  * @format_string: (nullable): a variant format string
  * @...: arguments appropriate for @target_format
@@ -735,21 +735,21 @@ adw_toast_set_action_target_value (AdwToast *self,
  * [method@Toast.set_detailed_action_name].
  */
 void
-adw_toast_set_action_target (AdwToast   *self,
+adap_toast_set_action_target (AdapToast   *self,
                              const char *format_string,
                              ...)
 {
   va_list args;
 
   va_start (args, format_string);
-  adw_toast_set_action_target_value (self,
+  adap_toast_set_action_target_value (self,
                                      g_variant_new_va (format_string,
                                                        NULL, &args));
   va_end (args);
 }
 
 /**
- * adw_toast_set_detailed_action_name:
+ * adap_toast_set_detailed_action_name:
  * @self: a toast
  * @detailed_action_name: (nullable): the detailed action name
  *
@@ -759,25 +759,25 @@ adw_toast_set_action_target (AdwToast   *self,
  * [func@Gio.Action.parse_detailed_name].
  */
 void
-adw_toast_set_detailed_action_name (AdwToast   *self,
+adap_toast_set_detailed_action_name (AdapToast   *self,
                                     const char *detailed_action_name)
 {
   char *name;
   GVariant *target;
   GError *error = NULL;
 
-  g_return_if_fail (ADW_IS_TOAST (self));
+  g_return_if_fail (ADAP_IS_TOAST (self));
 
   if (!detailed_action_name) {
-    adw_toast_set_action_name (self, NULL);
-    adw_toast_set_action_target_value (self, NULL);
+    adap_toast_set_action_name (self, NULL);
+    adap_toast_set_action_target_value (self, NULL);
 
     return;
   }
 
   if (g_action_parse_detailed_name (detailed_action_name, &name, &target, &error)) {
-    adw_toast_set_action_name (self, name);
-    adw_toast_set_action_target_value (self, target);
+    adap_toast_set_action_name (self, name);
+    adap_toast_set_action_target_value (self, target);
   } else {
     g_critical ("Couldn't parse detailed action name: %s", error->message);
   }
@@ -788,23 +788,23 @@ adw_toast_set_detailed_action_name (AdwToast   *self,
 }
 
 /**
- * adw_toast_get_priority: (attributes org.gtk.Method.get_property=priority)
+ * adap_toast_get_priority: (attributes org.gtk.Method.get_property=priority)
  * @self: a toast
  *
  * Gets priority for @self.
  *
  * Returns: the priority
  */
-AdwToastPriority
-adw_toast_get_priority (AdwToast *self)
+AdapToastPriority
+adap_toast_get_priority (AdapToast *self)
 {
-  g_return_val_if_fail (ADW_IS_TOAST (self), ADW_TOAST_PRIORITY_NORMAL);
+  g_return_val_if_fail (ADAP_IS_TOAST (self), ADAP_TOAST_PRIORITY_NORMAL);
 
   return self->priority;
 }
 
 /**
- * adw_toast_set_priority: (attributes org.gtk.Method.set_property=priority)
+ * adap_toast_set_priority: (attributes org.gtk.Method.set_property=priority)
  * @self: a toast
  * @priority: the priority
  *
@@ -813,18 +813,18 @@ adw_toast_get_priority (AdwToast *self)
  * Priority controls how the toast behaves when another toast is already
  * being displayed.
  *
- * If @priority is `ADW_TOAST_PRIORITY_NORMAL`, the toast will be queued.
+ * If @priority is `ADAP_TOAST_PRIORITY_NORMAL`, the toast will be queued.
  *
- * If @priority is `ADW_TOAST_PRIORITY_HIGH`, the toast will be displayed
+ * If @priority is `ADAP_TOAST_PRIORITY_HIGH`, the toast will be displayed
  * immediately, pushing the previous toast into the queue instead.
  */
 void
-adw_toast_set_priority (AdwToast         *self,
-                        AdwToastPriority  priority)
+adap_toast_set_priority (AdapToast         *self,
+                        AdapToastPriority  priority)
 {
-  g_return_if_fail (ADW_IS_TOAST (self));
-  g_return_if_fail (priority >= ADW_TOAST_PRIORITY_NORMAL &&
-                    priority <= ADW_TOAST_PRIORITY_HIGH);
+  g_return_if_fail (ADAP_IS_TOAST (self));
+  g_return_if_fail (priority >= ADAP_TOAST_PRIORITY_NORMAL &&
+                    priority <= ADAP_TOAST_PRIORITY_HIGH);
 
   if (self->priority == priority)
     return;
@@ -835,7 +835,7 @@ adw_toast_set_priority (AdwToast         *self,
 }
 
 /**
- * adw_toast_get_timeout: (attributes org.gtk.Method.get_property=timeout)
+ * adap_toast_get_timeout: (attributes org.gtk.Method.get_property=timeout)
  * @self: a toast
  *
  * Gets timeout for @self.
@@ -843,15 +843,15 @@ adw_toast_set_priority (AdwToast         *self,
  * Returns: the timeout
  */
 guint
-adw_toast_get_timeout (AdwToast *self)
+adap_toast_get_timeout (AdapToast *self)
 {
-  g_return_val_if_fail (ADW_IS_TOAST (self), 0);
+  g_return_val_if_fail (ADAP_IS_TOAST (self), 0);
 
   return self->timeout;
 }
 
 /**
- * adw_toast_set_timeout: (attributes org.gtk.Method.set_property=timeout)
+ * adap_toast_set_timeout: (attributes org.gtk.Method.set_property=timeout)
  * @self: a toast
  * @timeout: the timeout
  *
@@ -864,10 +864,10 @@ adw_toast_get_timeout (AdwToast *self)
  * have keyboard focus inside them.
  */
 void
-adw_toast_set_timeout (AdwToast *self,
+adap_toast_set_timeout (AdapToast *self,
                        guint     timeout)
 {
-  g_return_if_fail (ADW_IS_TOAST (self));
+  g_return_if_fail (ADAP_IS_TOAST (self));
 
   if (self->timeout == timeout)
     return;
@@ -878,7 +878,7 @@ adw_toast_set_timeout (AdwToast *self,
 }
 
 /**
- * adw_toast_get_custom_title: (attributes org.gtk.Method.get_property=custom-title)
+ * adap_toast_get_custom_title: (attributes org.gtk.Method.get_property=custom-title)
  * @self: a toast
  *
  * Gets the custom title widget of @self.
@@ -888,15 +888,15 @@ adw_toast_set_timeout (AdwToast *self,
  * Since: 1.2
  */
 GtkWidget *
-adw_toast_get_custom_title (AdwToast *self)
+adap_toast_get_custom_title (AdapToast *self)
 {
-  g_return_val_if_fail (ADW_IS_TOAST (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TOAST (self), NULL);
 
   return self->custom_title;
 }
 
 /**
- * adw_toast_set_custom_title: (attributes org.gtk.Method.set_property=custom-title)
+ * adap_toast_set_custom_title: (attributes org.gtk.Method.set_property=custom-title)
  * @self: a toast
  * @widget: (nullable): the custom title widget
  *
@@ -910,10 +910,10 @@ adw_toast_get_custom_title (AdwToast *self)
  * Since: 1.2
  */
 void
-adw_toast_set_custom_title (AdwToast  *self,
+adap_toast_set_custom_title (AdapToast  *self,
                             GtkWidget *widget)
 {
-  g_return_if_fail (ADW_IS_TOAST (self));
+  g_return_if_fail (ADAP_IS_TOAST (self));
   g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
 
   if (widget)
@@ -924,7 +924,7 @@ adw_toast_set_custom_title (AdwToast  *self,
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  adw_toast_set_title (self, "");
+  adap_toast_set_title (self, "");
 
   g_set_object (&self->custom_title, widget);
 
@@ -934,7 +934,7 @@ adw_toast_set_custom_title (AdwToast  *self,
 }
 
 /**
- * adw_toast_dismiss:
+ * adap_toast_dismiss:
  * @self: a toast
  *
  * Dismisses @self.
@@ -943,9 +943,9 @@ adw_toast_set_custom_title (AdwToast  *self,
  * [class@ToastOverlay].
  */
 void
-adw_toast_dismiss (AdwToast *self)
+adap_toast_dismiss (AdapToast *self)
 {
-  g_return_if_fail (ADW_IS_TOAST (self));
+  g_return_if_fail (ADAP_IS_TOAST (self));
 
   if (!self->overlay)
     return;
@@ -953,26 +953,26 @@ adw_toast_dismiss (AdwToast *self)
   g_signal_emit (self, signals[SIGNAL_DISMISSED], 0, NULL);
 }
 
-AdwToastOverlay *
-adw_toast_get_overlay (AdwToast *self)
+AdapToastOverlay *
+adap_toast_get_overlay (AdapToast *self)
 {
-  g_return_val_if_fail (ADW_IS_TOAST (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TOAST (self), NULL);
 
   return self->overlay;
 }
 
 void
-adw_toast_set_overlay (AdwToast        *self,
-                       AdwToastOverlay *overlay)
+adap_toast_set_overlay (AdapToast        *self,
+                       AdapToastOverlay *overlay)
 {
-  g_return_if_fail (ADW_IS_TOAST (self));
-  g_return_if_fail (overlay == NULL || ADW_IS_TOAST_OVERLAY (overlay));
+  g_return_if_fail (ADAP_IS_TOAST (self));
+  g_return_if_fail (overlay == NULL || ADAP_IS_TOAST_OVERLAY (overlay));
 
   self->overlay = overlay;
 }
 
 /**
- * adw_toast_get_use_markup: (attributes org.gtk.Method.get_property=use-markup)
+ * adap_toast_get_use_markup: (attributes org.gtk.Method.get_property=use-markup)
  * @self: a toast
  *
  * Gets whether to use Pango markup for the toast title.
@@ -982,15 +982,15 @@ adw_toast_set_overlay (AdwToast        *self,
  * Since: 1.4
  */
 gboolean
-adw_toast_get_use_markup (AdwToast *self)
+adap_toast_get_use_markup (AdapToast *self)
 {
-  g_return_val_if_fail (ADW_IS_TOAST (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TOAST (self), FALSE);
 
   return self->use_markup;
 }
 
 /**
- * adw_toast_set_use_markup: (attributes org.gtk.Method.set_property=use-markup)
+ * adap_toast_set_use_markup: (attributes org.gtk.Method.set_property=use-markup)
  * @self: a toast
  * @use_markup: whether to use markup
  *
@@ -1001,14 +1001,14 @@ adw_toast_get_use_markup (AdwToast *self)
  * Since: 1.4
  */
 void
-adw_toast_set_use_markup (AdwToast *self,
+adap_toast_set_use_markup (AdapToast *self,
                           gboolean  use_markup)
 {
-  g_return_if_fail (ADW_IS_TOAST (self));
+  g_return_if_fail (ADAP_IS_TOAST (self));
 
   use_markup = !!use_markup;
 
-  if (adw_toast_get_use_markup (self) == use_markup)
+  if (adap_toast_get_use_markup (self) == use_markup)
     return;
 
   self->use_markup = use_markup;

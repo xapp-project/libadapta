@@ -6,19 +6,19 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-entry-row.h"
+#include "adap-entry-row.h"
 
 G_BEGIN_DECLS
 
-void adw_entry_row_set_indicator_icon_name (AdwEntryRow *self,
+void adap_entry_row_set_indicator_icon_name (AdapEntryRow *self,
                                             const char  *icon_name);
-void adw_entry_row_set_indicator_tooltip   (AdwEntryRow *self,
+void adap_entry_row_set_indicator_tooltip   (AdapEntryRow *self,
                                             const char  *tooltip);
-void adw_entry_row_set_show_indicator      (AdwEntryRow *self,
+void adap_entry_row_set_show_indicator      (AdapEntryRow *self,
                                             gboolean     show_indicator);
 
 G_END_DECLS

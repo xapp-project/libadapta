@@ -8,17 +8,17 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-toast.h"
-#include "adw-toast-overlay.h"
+#include "adap-toast.h"
+#include "adap-toast-overlay.h"
 
 G_BEGIN_DECLS
 
-AdwToastOverlay *adw_toast_get_overlay (AdwToast        *self);
-void             adw_toast_set_overlay (AdwToast        *self,
-                                        AdwToastOverlay *overlay);
+AdapToastOverlay *adap_toast_get_overlay (AdapToast        *self);
+void             adap_toast_set_overlay (AdapToast        *self,
+                                        AdapToastOverlay *overlay);
 
 G_END_DECLS

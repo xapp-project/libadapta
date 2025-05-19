@@ -9,11 +9,11 @@
 #include "config.h"
 #include <glib/gi18n.h>
 
-#include "adw-sheet-controls-private.h"
+#include "adap-sheet-controls-private.h"
 
-#include "adw-widget-utils-private.h"
+#include "adap-widget-utils-private.h"
 
-struct _AdwSheetControls
+struct _AdapSheetControls
 {
   GtkWidget parent_instance;
 
@@ -34,10 +34,10 @@ enum {
 
 static GParamSpec *props[LAST_PROP];
 
-G_DEFINE_FINAL_TYPE (AdwSheetControls, adw_sheet_controls, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (AdapSheetControls, adap_sheet_controls, GTK_TYPE_WIDGET)
 
 static gboolean
-get_prefers_start (AdwSheetControls *self)
+get_prefers_start (AdapSheetControls *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
   char *layout_desc;
@@ -51,7 +51,7 @@ get_prefers_start (AdwSheetControls *self)
                   NULL);
   }
 
-  ret = adw_decoration_layout_prefers_start (layout_desc);
+  ret = adap_decoration_layout_prefers_start (layout_desc);
 
   g_free (layout_desc);
 
@@ -59,7 +59,7 @@ get_prefers_start (AdwSheetControls *self)
 }
 
 static void
-set_empty (AdwSheetControls *self,
+set_empty (AdapSheetControls *self,
            gboolean          empty)
 {
   if (empty == self->empty)
@@ -76,7 +76,7 @@ set_empty (AdwSheetControls *self,
 }
 
 static void
-clear_controls (AdwSheetControls *self)
+clear_controls (AdapSheetControls *self)
 {
   GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self));
 
@@ -90,7 +90,7 @@ clear_controls (AdwSheetControls *self)
 }
 
 static void
-update_window_buttons (AdwSheetControls *self,
+update_window_buttons (AdapSheetControls *self,
                        gboolean          force_update)
 {
   GtkWidget *widget = GTK_WIDGET (self);
@@ -134,21 +134,21 @@ update_window_buttons (AdwSheetControls *self,
 }
 
 static void
-adw_sheet_controls_root (GtkWidget *widget)
+adap_sheet_controls_root (GtkWidget *widget)
 {
   GtkSettings *settings;
 
-  GTK_WIDGET_CLASS (adw_sheet_controls_parent_class)->root (widget);
+  GTK_WIDGET_CLASS (adap_sheet_controls_parent_class)->root (widget);
 
   settings = gtk_widget_get_settings (widget);
   g_signal_connect_swapped (settings, "notify::gtk-decoration-layout",
                             G_CALLBACK (update_window_buttons), widget);
 
-  update_window_buttons (ADW_SHEET_CONTROLS (widget), FALSE);
+  update_window_buttons (ADAP_SHEET_CONTROLS (widget), FALSE);
 }
 
 static void
-adw_sheet_controls_unroot (GtkWidget *widget)
+adap_sheet_controls_unroot (GtkWidget *widget)
 {
   GtkSettings *settings;
 
@@ -156,46 +156,46 @@ adw_sheet_controls_unroot (GtkWidget *widget)
 
   g_signal_handlers_disconnect_by_func (settings, update_window_buttons, widget);
 
-  GTK_WIDGET_CLASS (adw_sheet_controls_parent_class)->unroot (widget);
+  GTK_WIDGET_CLASS (adap_sheet_controls_parent_class)->unroot (widget);
 }
 
 static void
-adw_sheet_controls_dispose (GObject *object)
+adap_sheet_controls_dispose (GObject *object)
 {
-  AdwSheetControls *self = ADW_SHEET_CONTROLS (object);
+  AdapSheetControls *self = ADAP_SHEET_CONTROLS (object);
 
   clear_controls (self);
 
-  G_OBJECT_CLASS (adw_sheet_controls_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_sheet_controls_parent_class)->dispose (object);
 }
 
 static void
-adw_sheet_controls_finalize (GObject *object)
+adap_sheet_controls_finalize (GObject *object)
 {
-  AdwSheetControls *self = ADW_SHEET_CONTROLS (object);
+  AdapSheetControls *self = ADAP_SHEET_CONTROLS (object);
 
   g_free (self->decoration_layout);
 
-  G_OBJECT_CLASS (adw_sheet_controls_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_sheet_controls_parent_class)->finalize (object);
 }
 
 static void
-adw_sheet_controls_get_property (GObject    *object,
+adap_sheet_controls_get_property (GObject    *object,
                                  guint       prop_id,
                                  GValue     *value,
                                  GParamSpec *pspec)
 {
-  AdwSheetControls *self = ADW_SHEET_CONTROLS (object);
+  AdapSheetControls *self = ADAP_SHEET_CONTROLS (object);
 
   switch (prop_id) {
   case PROP_SIDE:
-    g_value_set_enum (value, adw_sheet_controls_get_side (self));
+    g_value_set_enum (value, adap_sheet_controls_get_side (self));
     break;
   case PROP_DECORATION_LAYOUT:
-    g_value_set_string (value, adw_sheet_controls_get_decoration_layout (self));
+    g_value_set_string (value, adap_sheet_controls_get_decoration_layout (self));
     break;
   case PROP_EMPTY:
-    g_value_set_boolean (value, adw_sheet_controls_get_empty (self));
+    g_value_set_boolean (value, adap_sheet_controls_get_empty (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -204,19 +204,19 @@ adw_sheet_controls_get_property (GObject    *object,
 }
 
 static void
-adw_sheet_controls_set_property (GObject      *object,
+adap_sheet_controls_set_property (GObject      *object,
                                  guint         prop_id,
                                  const GValue *value,
                                  GParamSpec   *pspec)
 {
-  AdwSheetControls *self = ADW_SHEET_CONTROLS (object);
+  AdapSheetControls *self = ADAP_SHEET_CONTROLS (object);
 
   switch (prop_id) {
   case PROP_SIDE:
-    adw_sheet_controls_set_side (self, g_value_get_enum (value));
+    adap_sheet_controls_set_side (self, g_value_get_enum (value));
     break;
   case PROP_DECORATION_LAYOUT:
-    adw_sheet_controls_set_decoration_layout (self, g_value_get_string (value));
+    adap_sheet_controls_set_decoration_layout (self, g_value_get_string (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -225,18 +225,18 @@ adw_sheet_controls_set_property (GObject      *object,
 }
 
 static void
-adw_sheet_controls_class_init (AdwSheetControlsClass *klass)
+adap_sheet_controls_class_init (AdapSheetControlsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_sheet_controls_dispose;
-  object_class->finalize = adw_sheet_controls_finalize;
-  object_class->get_property = adw_sheet_controls_get_property;
-  object_class->set_property = adw_sheet_controls_set_property;
+  object_class->dispose = adap_sheet_controls_dispose;
+  object_class->finalize = adap_sheet_controls_finalize;
+  object_class->get_property = adap_sheet_controls_get_property;
+  object_class->set_property = adap_sheet_controls_set_property;
 
-  widget_class->root = adw_sheet_controls_root;
-  widget_class->unroot = adw_sheet_controls_unroot;
+  widget_class->root = adap_sheet_controls_root;
+  widget_class->unroot = adap_sheet_controls_unroot;
 
   props[PROP_SIDE] =
       g_param_spec_enum ("side", NULL, NULL,
@@ -262,7 +262,7 @@ adw_sheet_controls_class_init (AdwSheetControlsClass *klass)
 }
 
 static void
-adw_sheet_controls_init (AdwSheetControls *self)
+adap_sheet_controls_init (AdapSheetControls *self)
 {
   self->decoration_layout = NULL;
   self->side = GTK_PACK_START;
@@ -277,26 +277,26 @@ adw_sheet_controls_init (AdwSheetControls *self)
 }
 
 GtkWidget *
-adw_sheet_controls_new (GtkPackType side)
+adap_sheet_controls_new (GtkPackType side)
 {
-  return g_object_new (ADW_TYPE_SHEET_CONTROLS,
+  return g_object_new (ADAP_TYPE_SHEET_CONTROLS,
                        "side", side,
                        NULL);
 }
 
 GtkPackType
-adw_sheet_controls_get_side (AdwSheetControls *self)
+adap_sheet_controls_get_side (AdapSheetControls *self)
 {
-  g_return_val_if_fail (ADW_IS_SHEET_CONTROLS (self), GTK_PACK_START);
+  g_return_val_if_fail (ADAP_IS_SHEET_CONTROLS (self), GTK_PACK_START);
 
   return self->side;
 }
 
 void
-adw_sheet_controls_set_side (AdwSheetControls *self,
+adap_sheet_controls_set_side (AdapSheetControls *self,
                              GtkPackType       side)
 {
-  g_return_if_fail (ADW_IS_SHEET_CONTROLS (self));
+  g_return_if_fail (ADAP_IS_SHEET_CONTROLS (self));
 
   if (self->side == side)
     return;
@@ -323,18 +323,18 @@ adw_sheet_controls_set_side (AdwSheetControls *self,
 }
 
 const char *
-adw_sheet_controls_get_decoration_layout (AdwSheetControls *self)
+adap_sheet_controls_get_decoration_layout (AdapSheetControls *self)
 {
-  g_return_val_if_fail (ADW_IS_SHEET_CONTROLS (self), NULL);
+  g_return_val_if_fail (ADAP_IS_SHEET_CONTROLS (self), NULL);
 
   return self->decoration_layout;
 }
 
 void
-adw_sheet_controls_set_decoration_layout (AdwSheetControls *self,
+adap_sheet_controls_set_decoration_layout (AdapSheetControls *self,
                                           const char       *layout)
 {
-  g_return_if_fail (ADW_IS_SHEET_CONTROLS (self));
+  g_return_if_fail (ADAP_IS_SHEET_CONTROLS (self));
 
   if (!g_set_str (&self->decoration_layout, layout))
     return;
@@ -345,9 +345,9 @@ adw_sheet_controls_set_decoration_layout (AdwSheetControls *self,
 }
 
 gboolean
-adw_sheet_controls_get_empty (AdwSheetControls *self)
+adap_sheet_controls_get_empty (AdapSheetControls *self)
 {
-  g_return_val_if_fail (ADW_IS_SHEET_CONTROLS (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SHEET_CONTROLS (self), FALSE);
 
   return self->empty;
 }

@@ -7,8 +7,8 @@
 
 #include "config.h"
 
-#include "adw-indicator-bin-private.h"
-#include "adw-view-switcher-button-private.h"
+#include "adap-indicator-bin-private.h"
+#include "adap-view-switcher-button-private.h"
 
 #define TIMEOUT_EXPAND 500
 
@@ -28,7 +28,7 @@ enum {
 #define MIN_NAT_BUTTON_WIDTH_NARROW 100
 #define MIN_NAT_BUTTON_WIDTH_WIDE 120
 
-struct _AdwViewSwitcherButton
+struct _AdapViewSwitcherButton
 {
   GtkToggleButton parent_instance;
 
@@ -51,11 +51,11 @@ struct _AdwViewSwitcherButton
 
 static GParamSpec *props[LAST_PROP];
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwViewSwitcherButton, adw_view_switcher_button, GTK_TYPE_TOGGLE_BUTTON,
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapViewSwitcherButton, adap_view_switcher_button, GTK_TYPE_TOGGLE_BUTTON,
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static void
-switch_timeout_cb (AdwViewSwitcherButton *self)
+switch_timeout_cb (AdapViewSwitcherButton *self)
 {
   self->switch_timer = 0;
 
@@ -63,9 +63,9 @@ switch_timeout_cb (AdwViewSwitcherButton *self)
 }
 
 static void
-update_mnemonic (AdwViewSwitcherButton *self)
+update_mnemonic (AdapViewSwitcherButton *self)
 {
-  g_assert (ADW_IS_VIEW_SWITCHER_BUTTON (self));
+  g_assert (ADAP_IS_VIEW_SWITCHER_BUTTON (self));
 
   gtk_label_set_mnemonic_widget (self->horizontal_label,
                                  (self->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -76,7 +76,7 @@ update_mnemonic (AdwViewSwitcherButton *self)
 }
 
 static void
-drag_enter_cb (AdwViewSwitcherButton *self)
+drag_enter_cb (AdapViewSwitcherButton *self)
 {
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self)))
     return;
@@ -85,28 +85,28 @@ drag_enter_cb (AdwViewSwitcherButton *self)
     g_timeout_add_once (TIMEOUT_EXPAND,
                         (GSourceOnceFunc) switch_timeout_cb,
                         self);
-  g_source_set_name_by_id (self->switch_timer, "[adw] switch_timeout_cb");
+  g_source_set_name_by_id (self->switch_timer, "[adap] switch_timeout_cb");
 }
 
 static void
-drag_leave_cb (AdwViewSwitcherButton *self)
+drag_leave_cb (AdapViewSwitcherButton *self)
 {
   g_clear_handle_id (&self->switch_timer, g_source_remove);
 }
 
 static GtkOrientation
-get_orientation (AdwViewSwitcherButton *self)
+get_orientation (AdapViewSwitcherButton *self)
 {
-  g_return_val_if_fail (ADW_IS_VIEW_SWITCHER_BUTTON (self), GTK_ORIENTATION_HORIZONTAL);
+  g_return_val_if_fail (ADAP_IS_VIEW_SWITCHER_BUTTON (self), GTK_ORIENTATION_HORIZONTAL);
 
   return self->orientation;
 }
 
 static void
-set_orientation (AdwViewSwitcherButton *self,
+set_orientation (AdapViewSwitcherButton *self,
                  GtkOrientation         orientation)
 {
-  g_return_if_fail (ADW_IS_VIEW_SWITCHER_BUTTON (self));
+  g_return_if_fail (ADAP_IS_VIEW_SWITCHER_BUTTON (self));
 
   if (self->orientation == orientation)
     return;
@@ -122,7 +122,7 @@ set_orientation (AdwViewSwitcherButton *self,
 }
 
 static gchar *
-get_badge_text (AdwViewSwitcherButton *self,
+get_badge_text (AdapViewSwitcherButton *self,
                 guint                  badge_number)
 {
   if (badge_number > 999)
@@ -135,25 +135,25 @@ get_badge_text (AdwViewSwitcherButton *self,
 }
 
 static void
-adw_view_switcher_button_get_property (GObject    *object,
+adap_view_switcher_button_get_property (GObject    *object,
                                        guint       prop_id,
                                        GValue     *value,
                                        GParamSpec *pspec)
 {
-  AdwViewSwitcherButton *self = ADW_VIEW_SWITCHER_BUTTON (object);
+  AdapViewSwitcherButton *self = ADAP_VIEW_SWITCHER_BUTTON (object);
 
   switch (prop_id) {
   case PROP_ICON_NAME:
-    g_value_set_string (value, adw_view_switcher_button_get_icon_name (self));
+    g_value_set_string (value, adap_view_switcher_button_get_icon_name (self));
     break;
   case PROP_NEEDS_ATTENTION:
-    g_value_set_boolean (value, adw_view_switcher_button_get_needs_attention (self));
+    g_value_set_boolean (value, adap_view_switcher_button_get_needs_attention (self));
     break;
   case PROP_BADGE_NUMBER:
-    g_value_set_uint (value, adw_view_switcher_button_get_badge_number (self));
+    g_value_set_uint (value, adap_view_switcher_button_get_badge_number (self));
     break;
   case PROP_LABEL:
-    g_value_set_string (value, adw_view_switcher_button_get_label (self));
+    g_value_set_string (value, adap_view_switcher_button_get_label (self));
     break;
   case PROP_ORIENTATION:
     g_value_set_enum (value, get_orientation (self));
@@ -165,25 +165,25 @@ adw_view_switcher_button_get_property (GObject    *object,
 }
 
 static void
-adw_view_switcher_button_set_property (GObject      *object,
+adap_view_switcher_button_set_property (GObject      *object,
                                        guint         prop_id,
                                        const GValue *value,
                                        GParamSpec   *pspec)
 {
-  AdwViewSwitcherButton *self = ADW_VIEW_SWITCHER_BUTTON (object);
+  AdapViewSwitcherButton *self = ADAP_VIEW_SWITCHER_BUTTON (object);
 
   switch (prop_id) {
   case PROP_ICON_NAME:
-    adw_view_switcher_button_set_icon_name (self, g_value_get_string (value));
+    adap_view_switcher_button_set_icon_name (self, g_value_get_string (value));
     break;
   case PROP_NEEDS_ATTENTION:
-    adw_view_switcher_button_set_needs_attention (self, g_value_get_boolean (value));
+    adap_view_switcher_button_set_needs_attention (self, g_value_get_boolean (value));
     break;
   case PROP_BADGE_NUMBER:
-    adw_view_switcher_button_set_badge_number (self, g_value_get_uint (value));
+    adap_view_switcher_button_set_badge_number (self, g_value_get_uint (value));
     break;
   case PROP_LABEL:
-    adw_view_switcher_button_set_label (self, g_value_get_string (value));
+    adap_view_switcher_button_set_label (self, g_value_get_string (value));
     break;
   case PROP_ORIENTATION:
     set_orientation (self, g_value_get_enum (value));
@@ -195,28 +195,28 @@ adw_view_switcher_button_set_property (GObject      *object,
 }
 
 static void
-adw_view_switcher_button_dispose (GObject *object)
+adap_view_switcher_button_dispose (GObject *object)
 {
-  AdwViewSwitcherButton *self = ADW_VIEW_SWITCHER_BUTTON (object);
+  AdapViewSwitcherButton *self = ADAP_VIEW_SWITCHER_BUTTON (object);
 
   g_clear_handle_id (&self->switch_timer, g_source_remove);
 
-  G_OBJECT_CLASS (adw_view_switcher_button_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_view_switcher_button_parent_class)->dispose (object);
 }
 
 static void
-adw_view_switcher_button_finalize (GObject *object)
+adap_view_switcher_button_finalize (GObject *object)
 {
-  AdwViewSwitcherButton *self = ADW_VIEW_SWITCHER_BUTTON (object);
+  AdapViewSwitcherButton *self = ADAP_VIEW_SWITCHER_BUTTON (object);
 
   g_free (self->icon_name);
   g_free (self->label);
 
-  G_OBJECT_CLASS (adw_view_switcher_button_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_view_switcher_button_parent_class)->finalize (object);
 }
 
 static void
-adw_view_switcher_button_measure (GtkWidget      *widget,
+adap_view_switcher_button_measure (GtkWidget      *widget,
                                   GtkOrientation  orientation,
                                   int             for_size,
                                   int            *minimum,
@@ -224,7 +224,7 @@ adw_view_switcher_button_measure (GtkWidget      *widget,
                                   int            *minimum_baseline,
                                   int            *natural_baseline)
 {
-  AdwViewSwitcherButton *self = ADW_VIEW_SWITCHER_BUTTON (widget);
+  AdapViewSwitcherButton *self = ADAP_VIEW_SWITCHER_BUTTON (widget);
 
   gtk_widget_measure (GTK_WIDGET (self->stack), orientation, for_size,
                       minimum, natural, minimum_baseline, natural_baseline);
@@ -239,29 +239,29 @@ adw_view_switcher_button_measure (GtkWidget      *widget,
 }
 
 static void
-adw_view_switcher_button_size_allocate (GtkWidget *widget,
+adap_view_switcher_button_size_allocate (GtkWidget *widget,
                                         int        width,
                                         int        height,
                                         int        baseline)
 {
-  AdwViewSwitcherButton *self = ADW_VIEW_SWITCHER_BUTTON (widget);
+  AdapViewSwitcherButton *self = ADAP_VIEW_SWITCHER_BUTTON (widget);
 
   gtk_widget_allocate (GTK_WIDGET (self->stack), width, height, baseline, NULL);
 }
 
 static void
-adw_view_switcher_button_class_init (AdwViewSwitcherButtonClass *klass)
+adap_view_switcher_button_class_init (AdapViewSwitcherButtonClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_view_switcher_button_get_property;
-  object_class->set_property = adw_view_switcher_button_set_property;
-  object_class->dispose = adw_view_switcher_button_dispose;
-  object_class->finalize = adw_view_switcher_button_finalize;
+  object_class->get_property = adap_view_switcher_button_get_property;
+  object_class->set_property = adap_view_switcher_button_set_property;
+  object_class->dispose = adap_view_switcher_button_dispose;
+  object_class->finalize = adap_view_switcher_button_finalize;
 
-  widget_class->measure = adw_view_switcher_button_measure;
-  widget_class->size_allocate = adw_view_switcher_button_size_allocate;
+  widget_class->measure = adap_view_switcher_button_measure;
+  widget_class->size_allocate = adap_view_switcher_button_size_allocate;
 
   g_object_class_override_property (object_class,
                                     PROP_LABEL,
@@ -272,7 +272,7 @@ adw_view_switcher_button_class_init (AdwViewSwitcherButtonClass *klass)
                                     "orientation");
 
   /**
-   * AdwViewSwitcherButton:icon-name: (attributes org.gtk.Property.get=adw_view_switcher_button_get_icon_name org.gtk.Property.set=adw_view_switcher_button_set_icon_name)
+   * AdapViewSwitcherButton:icon-name: (attributes org.gtk.Property.get=adap_view_switcher_button_get_icon_name org.gtk.Property.set=adap_view_switcher_button_set_icon_name)
    *
    * The icon name representing the view, or `NULL` for no icon.
    */
@@ -282,7 +282,7 @@ adw_view_switcher_button_class_init (AdwViewSwitcherButtonClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwViewSwitcherButton:needs-attention: (attributes org.gtk.Property.get=adw_view_switcher_button_get_needs_attention org.gtk.Property.set=adw_view_switcher_button_set_needs_attention)
+   * AdapViewSwitcherButton:needs-attention: (attributes org.gtk.Property.get=adap_view_switcher_button_get_needs_attention org.gtk.Property.set=adap_view_switcher_button_set_needs_attention)
    *
    * Sets a flag specifying whether the view requires the user attention.
    *
@@ -296,7 +296,7 @@ adw_view_switcher_button_class_init (AdwViewSwitcherButtonClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwViewSwitcherButton:badge-number:
+   * AdapViewSwitcherButton:badge-number:
    *
    * A number to display as a badge on the button.
    */
@@ -317,25 +317,25 @@ adw_view_switcher_button_class_init (AdwViewSwitcherButtonClass *klass)
    */
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-view-switcher-button.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwViewSwitcherButton, horizontal_box);
-  gtk_widget_class_bind_template_child (widget_class, AdwViewSwitcherButton, horizontal_image);
-  gtk_widget_class_bind_template_child (widget_class, AdwViewSwitcherButton, horizontal_label);
-  gtk_widget_class_bind_template_child (widget_class, AdwViewSwitcherButton, stack);
-  gtk_widget_class_bind_template_child (widget_class, AdwViewSwitcherButton, vertical_box);
-  gtk_widget_class_bind_template_child (widget_class, AdwViewSwitcherButton, vertical_image);
-  gtk_widget_class_bind_template_child (widget_class, AdwViewSwitcherButton, vertical_label);
+                                               "/org/gnome/Adapta/ui/adap-view-switcher-button.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapViewSwitcherButton, horizontal_box);
+  gtk_widget_class_bind_template_child (widget_class, AdapViewSwitcherButton, horizontal_image);
+  gtk_widget_class_bind_template_child (widget_class, AdapViewSwitcherButton, horizontal_label);
+  gtk_widget_class_bind_template_child (widget_class, AdapViewSwitcherButton, stack);
+  gtk_widget_class_bind_template_child (widget_class, AdapViewSwitcherButton, vertical_box);
+  gtk_widget_class_bind_template_child (widget_class, AdapViewSwitcherButton, vertical_image);
+  gtk_widget_class_bind_template_child (widget_class, AdapViewSwitcherButton, vertical_label);
   gtk_widget_class_bind_template_callback (widget_class, drag_enter_cb);
   gtk_widget_class_bind_template_callback (widget_class, drag_leave_cb);
   gtk_widget_class_bind_template_callback (widget_class, get_badge_text);
 
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TAB);
 
-  g_type_ensure (ADW_TYPE_INDICATOR_BIN);
+  g_type_ensure (ADAP_TYPE_INDICATOR_BIN);
 }
 
 static void
-adw_view_switcher_button_init (AdwViewSwitcherButton *self)
+adap_view_switcher_button_init (AdapViewSwitcherButton *self)
 {
   gtk_widget_set_layout_manager (GTK_WIDGET (self), NULL);
 
@@ -350,20 +350,20 @@ adw_view_switcher_button_init (AdwViewSwitcherButton *self)
 }
 
 /**
- * adw_view_switcher_button_new:
+ * adap_view_switcher_button_new:
  *
- * Creates a new `AdwViewSwitcherButton`.
+ * Creates a new `AdapViewSwitcherButton`.
  *
- * Returns: the newly created `AdwViewSwitcherButton`
+ * Returns: the newly created `AdapViewSwitcherButton`
  */
 GtkWidget *
-adw_view_switcher_button_new (void)
+adap_view_switcher_button_new (void)
 {
-  return g_object_new (ADW_TYPE_VIEW_SWITCHER_BUTTON, NULL);
+  return g_object_new (ADAP_TYPE_VIEW_SWITCHER_BUTTON, NULL);
 }
 
 /**
- * adw_view_switcher_button_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
+ * adap_view_switcher_button_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
  * @self: a view switcher button
  *
  * Gets the icon name representing the view.
@@ -371,25 +371,25 @@ adw_view_switcher_button_new (void)
  * Returns: (nullable): the icon name
  **/
 const char *
-adw_view_switcher_button_get_icon_name (AdwViewSwitcherButton *self)
+adap_view_switcher_button_get_icon_name (AdapViewSwitcherButton *self)
 {
-  g_return_val_if_fail (ADW_IS_VIEW_SWITCHER_BUTTON (self), NULL);
+  g_return_val_if_fail (ADAP_IS_VIEW_SWITCHER_BUTTON (self), NULL);
 
   return self->icon_name;
 }
 
 /**
- * adw_view_switcher_button_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
+ * adap_view_switcher_button_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
  * @self: a view switcher button
  * @icon_name: (nullable): an icon name
  *
  * Sets the icon name representing the view.
  **/
 void
-adw_view_switcher_button_set_icon_name (AdwViewSwitcherButton *self,
+adap_view_switcher_button_set_icon_name (AdapViewSwitcherButton *self,
                                         const char            *icon_name)
 {
-  g_return_if_fail (ADW_IS_VIEW_SWITCHER_BUTTON (self));
+  g_return_if_fail (ADAP_IS_VIEW_SWITCHER_BUTTON (self));
 
   if (!g_strcmp0 (self->icon_name, icon_name))
     return;
@@ -403,7 +403,7 @@ adw_view_switcher_button_set_icon_name (AdwViewSwitcherButton *self,
 }
 
 /**
- * adw_view_switcher_button_get_needs_attention: (attributes org.gtk.Method.get_property=needs-attention)
+ * adap_view_switcher_button_get_needs_attention: (attributes org.gtk.Method.get_property=needs-attention)
  * @self: a view switcher button
  *
  * Gets whether the view represented by @self requires the user attention.
@@ -411,25 +411,25 @@ adw_view_switcher_button_set_icon_name (AdwViewSwitcherButton *self,
  * Returns: whether the view requires the user attention
  **/
 gboolean
-adw_view_switcher_button_get_needs_attention (AdwViewSwitcherButton *self)
+adap_view_switcher_button_get_needs_attention (AdapViewSwitcherButton *self)
 {
-  g_return_val_if_fail (ADW_IS_VIEW_SWITCHER_BUTTON (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_VIEW_SWITCHER_BUTTON (self), FALSE);
 
   return self->needs_attention;
 }
 
 /**
- * adw_view_switcher_button_set_needs_attention: (attributes org.gtk.Method.set_property=needs-attention)
+ * adap_view_switcher_button_set_needs_attention: (attributes org.gtk.Method.set_property=needs-attention)
  * @self: a view switcher button
  * @needs_attention: whether the view needs attention
  *
  * Sets whether the view represented by @self requires the user attention.
  */
 void
-adw_view_switcher_button_set_needs_attention (AdwViewSwitcherButton *self,
+adap_view_switcher_button_set_needs_attention (AdapViewSwitcherButton *self,
                                               gboolean               needs_attention)
 {
-  g_return_if_fail (ADW_IS_VIEW_SWITCHER_BUTTON (self));
+  g_return_if_fail (ADAP_IS_VIEW_SWITCHER_BUTTON (self));
 
   needs_attention = !!needs_attention;
 
@@ -442,7 +442,7 @@ adw_view_switcher_button_set_needs_attention (AdwViewSwitcherButton *self,
 }
 
 /**
- * adw_view_switcher_button_get_badge_number:
+ * adap_view_switcher_button_get_badge_number:
  * @self: a view switcher button
  *
  * Gets the badge number.
@@ -450,25 +450,25 @@ adw_view_switcher_button_set_needs_attention (AdwViewSwitcherButton *self,
  * Returns: the badge number
  */
 guint
-adw_view_switcher_button_get_badge_number (AdwViewSwitcherButton *self)
+adap_view_switcher_button_get_badge_number (AdapViewSwitcherButton *self)
 {
-  g_return_val_if_fail (ADW_IS_VIEW_SWITCHER_BUTTON (self), 0);
+  g_return_val_if_fail (ADAP_IS_VIEW_SWITCHER_BUTTON (self), 0);
 
   return self->badge_number;
 }
 
 /**
- * adw_view_switcher_button_set_badge_number:
+ * adap_view_switcher_button_set_badge_number:
  * @self: a view switcher button
  * @badge_number: the new value
  *
  * Sets the badge number.
  */
 void
-adw_view_switcher_button_set_badge_number (AdwViewSwitcherButton *self,
+adap_view_switcher_button_set_badge_number (AdapViewSwitcherButton *self,
                                            guint                  badge_number)
 {
-  g_return_if_fail (ADW_IS_VIEW_SWITCHER_BUTTON (self));
+  g_return_if_fail (ADAP_IS_VIEW_SWITCHER_BUTTON (self));
 
   if (self->badge_number == badge_number)
     return;
@@ -479,7 +479,7 @@ adw_view_switcher_button_set_badge_number (AdwViewSwitcherButton *self,
 }
 
 /**
- * adw_view_switcher_button_get_label:
+ * adap_view_switcher_button_get_label:
  * @self: a view switcher button
  *
  * Gets the label representing the view.
@@ -487,25 +487,25 @@ adw_view_switcher_button_set_badge_number (AdwViewSwitcherButton *self,
  * Returns: (nullable): the label
  **/
 const char *
-adw_view_switcher_button_get_label (AdwViewSwitcherButton *self)
+adap_view_switcher_button_get_label (AdapViewSwitcherButton *self)
 {
-  g_return_val_if_fail (ADW_IS_VIEW_SWITCHER_BUTTON (self), NULL);
+  g_return_val_if_fail (ADAP_IS_VIEW_SWITCHER_BUTTON (self), NULL);
 
   return self->label;
 }
 
 /**
- * adw_view_switcher_button_set_label:
+ * adap_view_switcher_button_set_label:
  * @self: a view switcher button
  * @label: (nullable): a label
  *
  * Sets the label representing the view.
  **/
 void
-adw_view_switcher_button_set_label (AdwViewSwitcherButton *self,
+adap_view_switcher_button_set_label (AdapViewSwitcherButton *self,
                                     const char            *label)
 {
-  g_return_if_fail (ADW_IS_VIEW_SWITCHER_BUTTON (self));
+  g_return_if_fail (ADAP_IS_VIEW_SWITCHER_BUTTON (self));
 
   if (!g_set_str (&self->label, label))
     return;

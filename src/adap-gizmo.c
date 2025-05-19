@@ -7,26 +7,26 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#include "adw-gizmo-private.h"
+#include "adap-gizmo-private.h"
 
-#include "adw-widget-utils-private.h"
+#include "adap-widget-utils-private.h"
 
-struct _AdwGizmo
+struct _AdapGizmo
 {
   GtkWidget parent_instance;
 
-  AdwGizmoMeasureFunc   measure_func;
-  AdwGizmoAllocateFunc  allocate_func;
-  AdwGizmoSnapshotFunc  snapshot_func;
-  AdwGizmoContainsFunc  contains_func;
-  AdwGizmoFocusFunc     focus_func;
-  AdwGizmoGrabFocusFunc grab_focus_func;
+  AdapGizmoMeasureFunc   measure_func;
+  AdapGizmoAllocateFunc  allocate_func;
+  AdapGizmoSnapshotFunc  snapshot_func;
+  AdapGizmoContainsFunc  contains_func;
+  AdapGizmoFocusFunc     focus_func;
+  AdapGizmoGrabFocusFunc grab_focus_func;
 };
 
-G_DEFINE_FINAL_TYPE (AdwGizmo, adw_gizmo, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (AdapGizmo, adap_gizmo, GTK_TYPE_WIDGET)
 
 static void
-adw_gizmo_measure (GtkWidget      *widget,
+adap_gizmo_measure (GtkWidget      *widget,
                    GtkOrientation  orientation,
                    int             for_size,
                    int            *minimum,
@@ -34,7 +34,7 @@ adw_gizmo_measure (GtkWidget      *widget,
                    int            *minimum_baseline,
                    int            *natural_baseline)
 {
-  AdwGizmo *self = ADW_GIZMO (widget);
+  AdapGizmo *self = ADAP_GIZMO (widget);
 
   if (self->measure_func)
     self->measure_func (self, orientation, for_size,
@@ -43,47 +43,47 @@ adw_gizmo_measure (GtkWidget      *widget,
 }
 
 static void
-adw_gizmo_size_allocate (GtkWidget *widget,
+adap_gizmo_size_allocate (GtkWidget *widget,
                          int        width,
                          int        height,
                          int        baseline)
 {
-  AdwGizmo *self = ADW_GIZMO (widget);
+  AdapGizmo *self = ADAP_GIZMO (widget);
 
   if (self->allocate_func)
     self->allocate_func (self, width, height, baseline);
 }
 
 static void
-adw_gizmo_snapshot (GtkWidget   *widget,
+adap_gizmo_snapshot (GtkWidget   *widget,
                     GtkSnapshot *snapshot)
 {
-  AdwGizmo *self = ADW_GIZMO (widget);
+  AdapGizmo *self = ADAP_GIZMO (widget);
 
   if (self->snapshot_func)
     self->snapshot_func (self, snapshot);
   else
-    GTK_WIDGET_CLASS (adw_gizmo_parent_class)->snapshot (widget, snapshot);
+    GTK_WIDGET_CLASS (adap_gizmo_parent_class)->snapshot (widget, snapshot);
 }
 
 static gboolean
-adw_gizmo_contains (GtkWidget *widget,
+adap_gizmo_contains (GtkWidget *widget,
                     double     x,
                     double     y)
 {
-  AdwGizmo *self = ADW_GIZMO (widget);
+  AdapGizmo *self = ADAP_GIZMO (widget);
 
   if (self->contains_func)
     return self->contains_func (self, x, y);
   else
-    return GTK_WIDGET_CLASS (adw_gizmo_parent_class)->contains (widget, x, y);
+    return GTK_WIDGET_CLASS (adap_gizmo_parent_class)->contains (widget, x, y);
 }
 
 static gboolean
-adw_gizmo_focus (GtkWidget        *widget,
+adap_gizmo_focus (GtkWidget        *widget,
                  GtkDirectionType  direction)
 {
-  AdwGizmo *self = ADW_GIZMO (widget);
+  AdapGizmo *self = ADAP_GIZMO (widget);
 
   if (self->focus_func)
     return self->focus_func (self, direction);
@@ -92,9 +92,9 @@ adw_gizmo_focus (GtkWidget        *widget,
 }
 
 static gboolean
-adw_gizmo_grab_focus (GtkWidget *widget)
+adap_gizmo_grab_focus (GtkWidget *widget)
 {
-  AdwGizmo *self = ADW_GIZMO (widget);
+  AdapGizmo *self = ADAP_GIZMO (widget);
 
   if (self->grab_focus_func)
     return self->grab_focus_func (self);
@@ -103,9 +103,9 @@ adw_gizmo_grab_focus (GtkWidget *widget)
 }
 
 static void
-adw_gizmo_dispose (GObject *object)
+adap_gizmo_dispose (GObject *object)
 {
-  AdwGizmo *self = ADW_GIZMO (object);
+  AdapGizmo *self = ADAP_GIZMO (object);
   GtkWidget *widget = gtk_widget_get_first_child (GTK_WIDGET (self));
 
   while (widget) {
@@ -116,41 +116,41 @@ adw_gizmo_dispose (GObject *object)
     widget = next;
   }
 
-  G_OBJECT_CLASS (adw_gizmo_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_gizmo_parent_class)->dispose (object);
 }
 
 static void
-adw_gizmo_class_init (AdwGizmoClass *klass)
+adap_gizmo_class_init (AdapGizmoClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_gizmo_dispose;
+  object_class->dispose = adap_gizmo_dispose;
 
-  widget_class->measure = adw_gizmo_measure;
-  widget_class->size_allocate = adw_gizmo_size_allocate;
-  widget_class->snapshot = adw_gizmo_snapshot;
-  widget_class->contains = adw_gizmo_contains;
-  widget_class->grab_focus = adw_gizmo_grab_focus;
-  widget_class->focus = adw_gizmo_focus;
-  widget_class->compute_expand = adw_widget_compute_expand;
+  widget_class->measure = adap_gizmo_measure;
+  widget_class->size_allocate = adap_gizmo_size_allocate;
+  widget_class->snapshot = adap_gizmo_snapshot;
+  widget_class->contains = adap_gizmo_contains;
+  widget_class->grab_focus = adap_gizmo_grab_focus;
+  widget_class->focus = adap_gizmo_focus;
+  widget_class->compute_expand = adap_widget_compute_expand;
 }
 
 static void
-adw_gizmo_init (AdwGizmo *self)
+adap_gizmo_init (AdapGizmo *self)
 {
 }
 
 GtkWidget *
-adw_gizmo_new (const char            *css_name,
-               AdwGizmoMeasureFunc    measure_func,
-               AdwGizmoAllocateFunc   allocate_func,
-               AdwGizmoSnapshotFunc   snapshot_func,
-               AdwGizmoContainsFunc   contains_func,
-               AdwGizmoFocusFunc      focus_func,
-               AdwGizmoGrabFocusFunc  grab_focus_func)
+adap_gizmo_new (const char            *css_name,
+               AdapGizmoMeasureFunc    measure_func,
+               AdapGizmoAllocateFunc   allocate_func,
+               AdapGizmoSnapshotFunc   snapshot_func,
+               AdapGizmoContainsFunc   contains_func,
+               AdapGizmoFocusFunc      focus_func,
+               AdapGizmoGrabFocusFunc  grab_focus_func)
 {
-  AdwGizmo *gizmo = g_object_new (ADW_TYPE_GIZMO,
+  AdapGizmo *gizmo = g_object_new (ADAP_TYPE_GIZMO,
                                   "css-name", css_name,
                                   NULL);
 
@@ -165,16 +165,16 @@ adw_gizmo_new (const char            *css_name,
 }
 
 GtkWidget *
-adw_gizmo_new_with_role (const char            *css_name,
+adap_gizmo_new_with_role (const char            *css_name,
                          GtkAccessibleRole      role,
-                         AdwGizmoMeasureFunc    measure_func,
-                         AdwGizmoAllocateFunc   allocate_func,
-                         AdwGizmoSnapshotFunc   snapshot_func,
-                         AdwGizmoContainsFunc   contains_func,
-                         AdwGizmoFocusFunc      focus_func,
-                         AdwGizmoGrabFocusFunc  grab_focus_func)
+                         AdapGizmoMeasureFunc    measure_func,
+                         AdapGizmoAllocateFunc   allocate_func,
+                         AdapGizmoSnapshotFunc   snapshot_func,
+                         AdapGizmoContainsFunc   contains_func,
+                         AdapGizmoFocusFunc      focus_func,
+                         AdapGizmoGrabFocusFunc  grab_focus_func)
 {
-  AdwGizmo *gizmo = ADW_GIZMO (g_object_new (ADW_TYPE_GIZMO,
+  AdapGizmo *gizmo = ADAP_GIZMO (g_object_new (ADAP_TYPE_GIZMO,
                                              "css-name", css_name,
                                              "accessible-role", role,
                                              NULL));
@@ -190,8 +190,8 @@ adw_gizmo_new_with_role (const char            *css_name,
 }
 
 void
-adw_gizmo_set_measure_func (AdwGizmo            *self,
-                            AdwGizmoMeasureFunc  measure_func)
+adap_gizmo_set_measure_func (AdapGizmo            *self,
+                            AdapGizmoMeasureFunc  measure_func)
 {
   self->measure_func = measure_func;
 
@@ -199,8 +199,8 @@ adw_gizmo_set_measure_func (AdwGizmo            *self,
 }
 
 void
-adw_gizmo_set_allocate_func (AdwGizmo             *self,
-                             AdwGizmoAllocateFunc  allocate_func)
+adap_gizmo_set_allocate_func (AdapGizmo             *self,
+                             AdapGizmoAllocateFunc  allocate_func)
 {
   self->allocate_func = allocate_func;
 
@@ -208,8 +208,8 @@ adw_gizmo_set_allocate_func (AdwGizmo             *self,
 }
 
 void
-adw_gizmo_set_snapshot_func (AdwGizmo             *self,
-                             AdwGizmoSnapshotFunc  snapshot_func)
+adap_gizmo_set_snapshot_func (AdapGizmo             *self,
+                             AdapGizmoSnapshotFunc  snapshot_func)
 {
   self->snapshot_func = snapshot_func;
 
@@ -217,8 +217,8 @@ adw_gizmo_set_snapshot_func (AdwGizmo             *self,
 }
 
 void
-adw_gizmo_set_contains_func (AdwGizmo             *self,
-                             AdwGizmoContainsFunc  contains_func)
+adap_gizmo_set_contains_func (AdapGizmo             *self,
+                             AdapGizmoContainsFunc  contains_func)
 {
   self->contains_func = contains_func;
 
@@ -226,15 +226,15 @@ adw_gizmo_set_contains_func (AdwGizmo             *self,
 }
 
 void
-adw_gizmo_set_focus_func (AdwGizmo          *self,
-                          AdwGizmoFocusFunc  focus_func)
+adap_gizmo_set_focus_func (AdapGizmo          *self,
+                          AdapGizmoFocusFunc  focus_func)
 {
   self->focus_func = focus_func;
 }
 
 void
-adw_gizmo_set_grab_focus_func (AdwGizmo              *self,
-                               AdwGizmoGrabFocusFunc  grab_focus_func)
+adap_gizmo_set_grab_focus_func (AdapGizmo              *self,
+                               AdapGizmoGrabFocusFunc  grab_focus_func)
 {
   self->grab_focus_func = grab_focus_func;
 }

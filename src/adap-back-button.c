@@ -9,55 +9,55 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
-#include "adw-back-button-private.h"
+#include "adap-back-button-private.h"
 
-#include "adw-bin.h"
-#include "adw-navigation-view-private.h"
-#include "adw-widget-utils-private.h"
+#include "adap-bin.h"
+#include "adap-navigation-view-private.h"
+#include "adap-widget-utils-private.h"
 
 typedef struct {
-  AdwBackButton *self;
-  AdwNavigationView *view;
-  AdwNavigationPage *page;
+  AdapBackButton *self;
+  AdapNavigationView *view;
+  AdapNavigationPage *page;
 } NavigationViewData;
 
-struct _AdwBackButton {
-  AdwBin parent_instance;
+struct _AdapBackButton {
+  AdapBin parent_instance;
 
   GSList *navigation_views;
 
-  AdwNavigationPage *page;
+  AdapNavigationPage *page;
 
   GtkWidget *navigation_menu;
   GPtrArray *navigation_history;
   guint clear_menu_id;
 };
 
-G_DEFINE_FINAL_TYPE (AdwBackButton, adw_back_button, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (AdapBackButton, adap_back_button, ADAP_TYPE_BIN)
 
-typedef gboolean (*TraverseFunc) (AdwNavigationView *view,
-                                  AdwNavigationPage *page,
+typedef gboolean (*TraverseFunc) (AdapNavigationView *view,
+                                  AdapNavigationPage *page,
                                   gboolean           is_child_view,
                                   gpointer           user_data);
 
 static gboolean
-traverse_view (AdwNavigationView *view,
+traverse_view (AdapNavigationView *view,
                gboolean           skip_first,
                gboolean           is_in_child_view,
                TraverseFunc       callback,
                gpointer           user_data)
 {
-  AdwNavigationPage *page = adw_navigation_view_get_visible_page (view);
+  AdapNavigationPage *page = adap_navigation_view_get_visible_page (view);
   gboolean first_page = TRUE;
 
   /* Skip the current page unless it's a child view */
   if (page && skip_first) {
-    page = adw_navigation_view_get_previous_page (view, page);
+    page = adap_navigation_view_get_previous_page (view, page);
     first_page = FALSE;
   }
 
   while (page) {
-    AdwNavigationView *child_view;
+    AdapNavigationView *child_view;
 
     if (callback (view, page, is_in_child_view, user_data))
       return TRUE;
@@ -66,33 +66,33 @@ traverse_view (AdwNavigationView *view,
       child_view = NULL;
       first_page = FALSE;
     } else {
-      child_view = adw_navigation_page_get_child_view (page);
+      child_view = adap_navigation_page_get_child_view (page);
     }
 
     if (child_view && traverse_view (child_view, FALSE, TRUE, callback, user_data))
       return TRUE;
 
-    if (!adw_navigation_page_get_can_pop (page))
+    if (!adap_navigation_page_get_can_pop (page))
       return TRUE;
 
-    page = adw_navigation_view_get_previous_page (view, page);
+    page = adap_navigation_view_get_previous_page (view, page);
   }
 
   return FALSE;
 }
 
 static void
-update_page (AdwBackButton *self)
+update_page (AdapBackButton *self)
 {
-  AdwNavigationPage *prev_page = NULL;
+  AdapNavigationPage *prev_page = NULL;
   GSList *l;
 
   for (l = self->navigation_views; l; l = l->next) {
     NavigationViewData *data = l->data;
 
-    prev_page = adw_navigation_view_get_previous_page (data->view, data->page);
+    prev_page = adap_navigation_view_get_previous_page (data->view, data->page);
 
-    if (!adw_navigation_page_get_can_pop (data->page)) {
+    if (!adap_navigation_page_get_can_pop (data->page)) {
       prev_page = NULL;
       break;
     }
@@ -110,15 +110,15 @@ update_page (AdwBackButton *self)
 }
 
 static gboolean
-traverse_gather_history (AdwNavigationView *view,
-                         AdwNavigationPage *page,
+traverse_gather_history (AdapNavigationView *view,
+                         AdapNavigationPage *page,
                          gboolean           is_child_view,
                          gpointer           user_data)
 {
-  AdwNavigationView *child_view;
+  AdapNavigationView *child_view;
   GPtrArray *pages = user_data;
 
-  child_view = adw_navigation_page_get_child_view (page);
+  child_view = adap_navigation_page_get_child_view (page);
   if (!child_view)
     g_ptr_array_add (pages, page);
 
@@ -126,7 +126,7 @@ traverse_gather_history (AdwNavigationView *view,
 }
 
 static GPtrArray *
-gather_navigation_history (AdwBackButton *self)
+gather_navigation_history (AdapBackButton *self)
 {
   GPtrArray *pages = g_ptr_array_new ();
   GSList *l;
@@ -142,8 +142,8 @@ gather_navigation_history (AdwBackButton *self)
 }
 
 typedef struct {
-  AdwBackButton *self;
-  AdwNavigationPage *target_page;
+  AdapBackButton *self;
+  AdapNavigationPage *target_page;
   gboolean last_view;
 
   NavigationViewData outer_view;
@@ -153,8 +153,8 @@ typedef struct {
 } PopData;
 
 static gboolean
-traverse_find_target (AdwNavigationView *view,
-                      AdwNavigationPage *page,
+traverse_find_target (AdapNavigationView *view,
+                      AdapNavigationPage *page,
                       gboolean           is_child_view,
                       gpointer           user_data)
 {
@@ -169,8 +169,8 @@ traverse_find_target (AdwNavigationView *view,
 }
 
 static gboolean
-traverse_pop_pages (AdwNavigationView *view,
-                    AdwNavigationPage *page,
+traverse_pop_pages (AdapNavigationView *view,
+                    AdapNavigationPage *page,
                     gboolean           is_child_view,
                     gpointer           user_data)
 {
@@ -207,7 +207,7 @@ traverse_pop_pages (AdwNavigationView *view,
 }
 
 static void
-pop_pages_hidden (AdwNavigationPage *page,
+pop_pages_hidden (AdapNavigationPage *page,
                   GSList            *pop_after)
 {
   GSList *l;
@@ -217,7 +217,7 @@ pop_pages_hidden (AdwNavigationPage *page,
   for (l = pop_after; l; l = l->next) {
     NavigationViewData *data = l->data;
 
-    adw_navigation_view_pop_to_page (data->view, data->page);
+    adap_navigation_view_pop_to_page (data->view, data->page);
 
     g_object_unref (data->view);
     g_object_unref (data->page);
@@ -228,17 +228,17 @@ pop_pages_hidden (AdwNavigationPage *page,
 }
 
 static void
-pop_to_page_cb (AdwBackButton *self,
+pop_to_page_cb (AdapBackButton *self,
                 const char    *action_name,
                 GVariant      *param)
 {
   int index = g_variant_get_int32 (param);
-  AdwNavigationPage *target_page = g_ptr_array_index (self->navigation_history, index);
+  AdapNavigationPage *target_page = g_ptr_array_index (self->navigation_history, index);
   GSList *l;
   PopData pop_data;
 
   /* The page has been unparented while the menu was opened */
-  if (!ADW_IS_NAVIGATION_VIEW (gtk_widget_get_parent (GTK_WIDGET (target_page))))
+  if (!ADAP_IS_NAVIGATION_VIEW (gtk_widget_get_parent (GTK_WIDGET (target_page))))
     return;
 
   pop_data.self = self;
@@ -266,7 +266,7 @@ pop_to_page_cb (AdwBackButton *self,
   for (l = pop_data.pop_before; l; l = l->next) {
     NavigationViewData *data = l->data;
 
-    adw_navigation_view_pop_to_page (data->view, data->page);
+    adap_navigation_view_pop_to_page (data->view, data->page);
   }
 
   for (l = pop_data.pop_after; l; l = l->next) {
@@ -280,13 +280,13 @@ pop_to_page_cb (AdwBackButton *self,
 
   g_signal_connect (pop_data.outer_view.page, "shown",
                     G_CALLBACK (pop_pages_hidden), pop_data.pop_after);
-  adw_navigation_view_pop_to_page (pop_data.outer_view.view, pop_data.outer_view.page);
+  adap_navigation_view_pop_to_page (pop_data.outer_view.view, pop_data.outer_view.page);
 
   g_slist_free_full (pop_data.pop_before, g_free);
 }
 
 static void
-clear_menu (AdwBackButton *self)
+clear_menu (AdapBackButton *self)
 {
   g_clear_pointer (&self->navigation_menu, gtk_widget_unparent);
 
@@ -299,9 +299,9 @@ clear_menu (AdwBackButton *self)
 }
 
 static void
-navigation_menu_closed_cb (AdwBackButton *self)
+navigation_menu_closed_cb (AdapBackButton *self)
 {
-  GtkWidget *button = adw_bin_get_child (ADW_BIN (self));
+  GtkWidget *button = adap_bin_get_child (ADAP_BIN (self));
 
   gtk_widget_unset_state_flags (button, GTK_STATE_FLAG_CHECKED);
 
@@ -309,7 +309,7 @@ navigation_menu_closed_cb (AdwBackButton *self)
 }
 
 static void
-create_navigation_menu (AdwBackButton *self)
+create_navigation_menu (AdapBackButton *self)
 {
   GtkWidget *popover;
   GPtrArray *history;
@@ -322,8 +322,8 @@ create_navigation_menu (AdwBackButton *self)
   history = gather_navigation_history (self);
 
   for (i = 0; i < history->len; i++) {
-    AdwNavigationPage *page = g_ptr_array_index (history, i);
-    const char *title = adw_navigation_page_get_title (page);
+    AdapNavigationPage *page = g_ptr_array_index (history, i);
+    const char *title = adap_navigation_page_get_title (page);
     GMenuItem *item = g_menu_item_new ((title && *title) ? title : _("Back"), NULL);
 
     g_menu_item_set_action_and_target (item, "menu.pop-to-page", "i", i);
@@ -345,9 +345,9 @@ create_navigation_menu (AdwBackButton *self)
 }
 
 static void
-open_navigation_menu (AdwBackButton *self)
+open_navigation_menu (AdapBackButton *self)
 {
-  GtkWidget *button = adw_bin_get_child (ADW_BIN (self));
+  GtkWidget *button = adap_bin_get_child (ADAP_BIN (self));
 
   create_navigation_menu (self);
 
@@ -360,7 +360,7 @@ static void
 long_pressed_cb (GtkGesture    *gesture,
                  double         x,
                  double         y,
-                 AdwBackButton *self)
+                 AdapBackButton *self)
 {
   if (!gtk_widget_contains (GTK_WIDGET (self), x, y)) {
     gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
@@ -377,7 +377,7 @@ right_click_pressed_cb (GtkGesture    *gesture,
                         int            n_click,
                         double         x,
                         double         y,
-                        AdwBackButton *self)
+                        AdapBackButton *self)
 {
   if (!gtk_widget_contains (GTK_WIDGET (self), x, y)) {
     gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
@@ -389,16 +389,16 @@ right_click_pressed_cb (GtkGesture    *gesture,
   gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
-static AdwNavigationPage *
-get_inner_page (AdwNavigationPage *page)
+static AdapNavigationPage *
+get_inner_page (AdapNavigationPage *page)
 {
-  AdwNavigationView *child_view = adw_navigation_page_get_child_view (page);
-  AdwNavigationPage *visible_page;
+  AdapNavigationView *child_view = adap_navigation_page_get_child_view (page);
+  AdapNavigationPage *visible_page;
 
   if (!child_view)
     return page;
 
-  visible_page = adw_navigation_view_get_visible_page (child_view);
+  visible_page = adap_navigation_view_get_visible_page (child_view);
 
   if (!visible_page)
     return page;
@@ -407,20 +407,20 @@ get_inner_page (AdwNavigationPage *page)
 }
 
 static gboolean
-query_tooltip (AdwBackButton *self,
+query_tooltip (AdapBackButton *self,
                int            x,
                int            y,
                gboolean       keyboard_tooltip,
                GtkTooltip    *tooltip)
 {
-  AdwNavigationPage *page;
+  AdapNavigationPage *page;
   const char *title;
 
   if (!self->page)
     return FALSE;
 
   page = get_inner_page (self->page);
-  title = adw_navigation_page_get_title (page);
+  title = adap_navigation_page_get_title (page);
 
   gtk_tooltip_set_text (tooltip, (title && *title) ? title : _("Back"));
 
@@ -428,24 +428,24 @@ query_tooltip (AdwBackButton *self,
 }
 
 static void
-adw_back_button_root (GtkWidget *widget)
+adap_back_button_root (GtkWidget *widget)
 {
-  AdwBackButton *self = ADW_BACK_BUTTON (widget);
+  AdapBackButton *self = ADAP_BACK_BUTTON (widget);
   GtkWidget *page;
 
-  GTK_WIDGET_CLASS (adw_back_button_parent_class)->root (widget);
+  GTK_WIDGET_CLASS (adap_back_button_parent_class)->root (widget);
 
-  page = adw_widget_get_ancestor (widget, ADW_TYPE_NAVIGATION_PAGE, TRUE, TRUE);
+  page = adap_widget_get_ancestor (widget, ADAP_TYPE_NAVIGATION_PAGE, TRUE, TRUE);
 
   while (page) {
     GtkWidget *view = gtk_widget_get_parent (page);
 
-    if (ADW_IS_NAVIGATION_VIEW (view)) {
+    if (ADAP_IS_NAVIGATION_VIEW (view)) {
       NavigationViewData *data = g_new0 (NavigationViewData, 1);
 
       data->self = self;
-      data->view = ADW_NAVIGATION_VIEW (view);
-      data->page = ADW_NAVIGATION_PAGE (page);
+      data->view = ADAP_NAVIGATION_VIEW (view);
+      data->page = ADAP_NAVIGATION_PAGE (page);
 
       g_signal_connect_swapped (data->view, "replaced",
                                 G_CALLBACK (update_page), self);
@@ -457,7 +457,7 @@ adw_back_button_root (GtkWidget *widget)
       self->navigation_views = g_slist_prepend (self->navigation_views, data);
     }
 
-    page = adw_widget_get_ancestor (view, ADW_TYPE_NAVIGATION_PAGE, TRUE, TRUE);
+    page = adap_widget_get_ancestor (view, ADAP_TYPE_NAVIGATION_PAGE, TRUE, TRUE);
   }
 
   self->navigation_views = g_slist_reverse (self->navigation_views);
@@ -466,9 +466,9 @@ adw_back_button_root (GtkWidget *widget)
 }
 
 static void
-adw_back_button_unroot (GtkWidget *widget)
+adap_back_button_unroot (GtkWidget *widget)
 {
-  AdwBackButton *self = ADW_BACK_BUTTON (widget);
+  AdapBackButton *self = ADAP_BACK_BUTTON (widget);
   GSList *l;
 
   for (l = self->navigation_views; l; l = l->next) {
@@ -484,31 +484,31 @@ adw_back_button_unroot (GtkWidget *widget)
 
   update_page (self);
 
-  GTK_WIDGET_CLASS (adw_back_button_parent_class)->unroot (widget);
+  GTK_WIDGET_CLASS (adap_back_button_parent_class)->unroot (widget);
 }
 
 static void
-adw_back_button_dispose (GObject *object)
+adap_back_button_dispose (GObject *object)
 {
-  AdwBackButton *self = ADW_BACK_BUTTON (object);
+  AdapBackButton *self = ADAP_BACK_BUTTON (object);
 
   g_clear_handle_id (&self->clear_menu_id, g_source_remove);
 
   clear_menu (self);
 
-  G_OBJECT_CLASS (adw_back_button_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_back_button_parent_class)->dispose (object);
 }
 
 static void
-adw_back_button_class_init (AdwBackButtonClass *klass)
+adap_back_button_class_init (AdapBackButtonClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_back_button_dispose;
+  object_class->dispose = adap_back_button_dispose;
 
-  widget_class->root = adw_back_button_root;
-  widget_class->unroot = adw_back_button_unroot;
+  widget_class->root = adap_back_button_root;
+  widget_class->unroot = adap_back_button_unroot;
 
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL,
                                    (GtkWidgetActionActivateFunc) open_navigation_menu);
@@ -520,7 +520,7 @@ adw_back_button_class_init (AdwBackButtonClass *klass)
 }
 
 static void
-adw_back_button_init (AdwBackButton *self)
+adap_back_button_init (AdapBackButton *self)
 {
   GtkWidget *button;
   GtkGesture *gesture;
@@ -536,7 +536,7 @@ adw_back_button_init (AdwBackButton *self)
                                   -1);
   g_signal_connect_swapped (button, "query-tooltip",
                             G_CALLBACK (query_tooltip), self);
-  adw_bin_set_child (ADW_BIN (self), button);
+  adap_bin_set_child (ADAP_BIN (self), button);
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
@@ -549,7 +549,7 @@ adw_back_button_init (AdwBackButton *self)
 }
 
 GtkWidget *
-adw_back_button_new (void)
+adap_back_button_new (void)
 {
-  return g_object_new (ADW_TYPE_BACK_BUTTON, NULL);
+  return g_object_new (ADAP_TYPE_BACK_BUTTON, NULL);
 }

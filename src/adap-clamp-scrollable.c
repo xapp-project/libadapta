@@ -5,22 +5,22 @@
  */
 
 #include "config.h"
-#include "adw-clamp-scrollable.h"
+#include "adap-clamp-scrollable.h"
 
-#include "adw-clamp-layout.h"
-#include "adw-enums.h"
-#include "adw-length-unit.h"
-#include "adw-widget-utils-private.h"
+#include "adap-clamp-layout.h"
+#include "adap-enums.h"
+#include "adap-length-unit.h"
+#include "adap-widget-utils-private.h"
 
 /**
- * AdwClampScrollable:
+ * AdapClampScrollable:
  *
  * A scrollable [class@Clamp].
  *
- * `AdwClampScrollable` is a variant of [class@Clamp] that implements the
+ * `AdapClampScrollable` is a variant of [class@Clamp] that implements the
  * [iface@Gtk.Scrollable] interface.
  *
- * The primary use case for `AdwClampScrollable` is clamping
+ * The primary use case for `AdapClampScrollable` is clamping
  * [class@Gtk.ListView].
  *
  * See also: [class@ClampLayout].
@@ -43,7 +43,7 @@ enum {
   LAST_PROP = PROP_UNIT + 1,
 };
 
-struct _AdwClampScrollable
+struct _AdapClampScrollable
 {
   GtkWidget parent_instance;
 
@@ -63,17 +63,17 @@ struct _AdwClampScrollable
 
 static GParamSpec *props[LAST_PROP];
 
-static void adw_clamp_scrollable_buildable_init (GtkBuildableIface *iface);
+static void adap_clamp_scrollable_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwClampScrollable, adw_clamp_scrollable, GTK_TYPE_WIDGET,
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapClampScrollable, adap_clamp_scrollable, GTK_TYPE_WIDGET,
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL)
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_clamp_scrollable_buildable_init))
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_clamp_scrollable_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
 static void
-set_orientation (AdwClampScrollable *self,
+set_orientation (AdapClampScrollable *self,
                  GtkOrientation      orientation)
 {
   GtkLayoutManager *layout = gtk_widget_get_layout_manager (GTK_WIDGET (self));
@@ -90,7 +90,7 @@ set_orientation (AdwClampScrollable *self,
 }
 
 static void
-set_hadjustment (AdwClampScrollable *self,
+set_hadjustment (AdapClampScrollable *self,
                  GtkAdjustment      *adjustment)
 {
   if (self->hadjustment == adjustment)
@@ -102,7 +102,7 @@ set_hadjustment (AdwClampScrollable *self,
 }
 
 static void
-set_vadjustment (AdwClampScrollable *self,
+set_vadjustment (AdapClampScrollable *self,
                  GtkAdjustment      *adjustment)
 {
   if (self->vadjustment == adjustment)
@@ -114,7 +114,7 @@ set_vadjustment (AdwClampScrollable *self,
 }
 
 static void
-set_hscroll_policy (AdwClampScrollable  *self,
+set_hscroll_policy (AdapClampScrollable  *self,
                     GtkScrollablePolicy  policy)
 {
   if (self->hscroll_policy == policy)
@@ -126,7 +126,7 @@ set_hscroll_policy (AdwClampScrollable  *self,
 }
 
 static void
-set_vscroll_policy (AdwClampScrollable  *self,
+set_vscroll_policy (AdapClampScrollable  *self,
                     GtkScrollablePolicy  policy)
 {
   if (self->vscroll_policy == policy)
@@ -138,25 +138,25 @@ set_vscroll_policy (AdwClampScrollable  *self,
 }
 
 static void
-adw_clamp_scrollable_get_property (GObject    *object,
+adap_clamp_scrollable_get_property (GObject    *object,
                                    guint       prop_id,
                                    GValue     *value,
                                    GParamSpec *pspec)
 {
-  AdwClampScrollable *self = ADW_CLAMP_SCROLLABLE (object);
+  AdapClampScrollable *self = ADAP_CLAMP_SCROLLABLE (object);
 
   switch (prop_id) {
   case PROP_CHILD:
-    g_value_set_object (value, adw_clamp_scrollable_get_child (self));
+    g_value_set_object (value, adap_clamp_scrollable_get_child (self));
     break;
   case PROP_MAXIMUM_SIZE:
-    g_value_set_int (value, adw_clamp_scrollable_get_maximum_size (self));
+    g_value_set_int (value, adap_clamp_scrollable_get_maximum_size (self));
     break;
   case PROP_TIGHTENING_THRESHOLD:
-    g_value_set_int (value, adw_clamp_scrollable_get_tightening_threshold (self));
+    g_value_set_int (value, adap_clamp_scrollable_get_tightening_threshold (self));
     break;
   case PROP_UNIT:
-    g_value_set_enum (value, adw_clamp_scrollable_get_unit (self));
+    g_value_set_enum (value, adap_clamp_scrollable_get_unit (self));
     break;
   case PROP_ORIENTATION:
     g_value_set_enum (value, self->orientation);
@@ -179,25 +179,25 @@ adw_clamp_scrollable_get_property (GObject    *object,
 }
 
 static void
-adw_clamp_scrollable_set_property (GObject      *object,
+adap_clamp_scrollable_set_property (GObject      *object,
                                    guint         prop_id,
                                    const GValue *value,
                                    GParamSpec   *pspec)
 {
-  AdwClampScrollable *self = ADW_CLAMP_SCROLLABLE (object);
+  AdapClampScrollable *self = ADAP_CLAMP_SCROLLABLE (object);
 
   switch (prop_id) {
   case PROP_CHILD:
-    adw_clamp_scrollable_set_child (self, g_value_get_object (value));
+    adap_clamp_scrollable_set_child (self, g_value_get_object (value));
     break;
   case PROP_MAXIMUM_SIZE:
-    adw_clamp_scrollable_set_maximum_size (self, g_value_get_int (value));
+    adap_clamp_scrollable_set_maximum_size (self, g_value_get_int (value));
     break;
   case PROP_TIGHTENING_THRESHOLD:
-    adw_clamp_scrollable_set_tightening_threshold (self, g_value_get_int (value));
+    adap_clamp_scrollable_set_tightening_threshold (self, g_value_get_int (value));
     break;
   case PROP_UNIT:
-    adw_clamp_scrollable_set_unit (self, g_value_get_enum (value));
+    adap_clamp_scrollable_set_unit (self, g_value_get_enum (value));
     break;
   case PROP_ORIENTATION:
     set_orientation (self, g_value_get_enum (value));
@@ -220,26 +220,26 @@ adw_clamp_scrollable_set_property (GObject      *object,
 }
 
 static void
-adw_clamp_scrollable_dispose (GObject *object)
+adap_clamp_scrollable_dispose (GObject *object)
 {
-  AdwClampScrollable *self = ADW_CLAMP_SCROLLABLE (object);
+  AdapClampScrollable *self = ADAP_CLAMP_SCROLLABLE (object);
 
-  adw_clamp_scrollable_set_child (self, NULL);
+  adap_clamp_scrollable_set_child (self, NULL);
 
-  G_OBJECT_CLASS (adw_clamp_scrollable_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_clamp_scrollable_parent_class)->dispose (object);
 }
 
 static void
-adw_clamp_scrollable_class_init (AdwClampScrollableClass *klass)
+adap_clamp_scrollable_class_init (AdapClampScrollableClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_clamp_scrollable_get_property;
-  object_class->set_property = adw_clamp_scrollable_set_property;
-  object_class->dispose = adw_clamp_scrollable_dispose;
+  object_class->get_property = adap_clamp_scrollable_get_property;
+  object_class->set_property = adap_clamp_scrollable_set_property;
+  object_class->dispose = adap_clamp_scrollable_dispose;
 
-  widget_class->compute_expand = adw_widget_compute_expand;
+  widget_class->compute_expand = adap_widget_compute_expand;
 
   g_object_class_override_property (object_class,
                                     PROP_ORIENTATION,
@@ -262,9 +262,9 @@ adw_clamp_scrollable_class_init (AdwClampScrollableClass *klass)
                                     "vscroll-policy");
 
   /**
-   * AdwClampScrollable:child: (attributes org.gtk.Property.get=adw_clamp_scrollable_get_child org.gtk.Property.set=adw_clamp_scrollable_set_child)
+   * AdapClampScrollable:child: (attributes org.gtk.Property.get=adap_clamp_scrollable_get_child org.gtk.Property.set=adap_clamp_scrollable_set_child)
    *
-   * The child widget of the `AdwClampScrollable`.
+   * The child widget of the `AdapClampScrollable`.
    */
   props[PROP_CHILD] =
     g_param_spec_object ("child", NULL, NULL,
@@ -272,7 +272,7 @@ adw_clamp_scrollable_class_init (AdwClampScrollableClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwClampScrollable:maximum-size: (attributes org.gtk.Property.get=adw_clamp_scrollable_get_maximum_size org.gtk.Property.set=adw_clamp_scrollable_set_maximum_size)
+   * AdapClampScrollable:maximum-size: (attributes org.gtk.Property.get=adap_clamp_scrollable_get_maximum_size org.gtk.Property.set=adap_clamp_scrollable_set_maximum_size)
    *
    * The maximum size allocated to the child.
    *
@@ -284,7 +284,7 @@ adw_clamp_scrollable_class_init (AdwClampScrollableClass *klass)
                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwClampScrollable:tightening-threshold: (attributes org.gtk.Property.get=adw_clamp_scrollable_get_tightening_threshold org.gtk.Property.set=adw_clamp_scrollable_set_tightening_threshold)
+   * AdapClampScrollable:tightening-threshold: (attributes org.gtk.Property.get=adap_clamp_scrollable_get_tightening_threshold org.gtk.Property.set=adap_clamp_scrollable_set_tightening_threshold)
    *
    * The size above which the child is clamped.
    *
@@ -307,7 +307,7 @@ adw_clamp_scrollable_class_init (AdwClampScrollableClass *klass)
                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwClampScrollable:unit: (attributes org.gtk.Property.get=adw_clamp_scrollable_get_unit org.gtk.Property.set=adw_clamp_scrollable_set_unit)
+   * AdapClampScrollable:unit: (attributes org.gtk.Property.get=adap_clamp_scrollable_get_unit org.gtk.Property.set=adap_clamp_scrollable_set_unit)
    *
    * The length unit for maximum size and tightening threshold.
    *
@@ -317,56 +317,56 @@ adw_clamp_scrollable_class_init (AdwClampScrollableClass *klass)
    */
   props[PROP_UNIT] =
     g_param_spec_enum ("unit", NULL, NULL,
-                       ADW_TYPE_LENGTH_UNIT,
-                       ADW_LENGTH_UNIT_SP,
+                       ADAP_TYPE_LENGTH_UNIT,
+                       ADAP_LENGTH_UNIT_SP,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
-  gtk_widget_class_set_layout_manager_type (widget_class, ADW_TYPE_CLAMP_LAYOUT);
+  gtk_widget_class_set_layout_manager_type (widget_class, ADAP_TYPE_CLAMP_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "clamp");
 }
 
 static void
-adw_clamp_scrollable_init (AdwClampScrollable *self)
+adap_clamp_scrollable_init (AdapClampScrollable *self)
 {
 }
 
 static void
-adw_clamp_scrollable_buildable_add_child (GtkBuildable *buildable,
+adap_clamp_scrollable_buildable_add_child (GtkBuildable *buildable,
                                           GtkBuilder   *builder,
                                           GObject      *child,
                                           const char   *type)
 {
   if (GTK_IS_WIDGET (child))
-    adw_clamp_scrollable_set_child (ADW_CLAMP_SCROLLABLE (buildable), GTK_WIDGET (child));
+    adap_clamp_scrollable_set_child (ADAP_CLAMP_SCROLLABLE (buildable), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_clamp_scrollable_buildable_init (GtkBuildableIface *iface)
+adap_clamp_scrollable_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_clamp_scrollable_buildable_add_child;
+  iface->add_child = adap_clamp_scrollable_buildable_add_child;
 }
 
 /**
- * adw_clamp_scrollable_new:
+ * adap_clamp_scrollable_new:
  *
- * Creates a new `AdwClampScrollable`.
+ * Creates a new `AdapClampScrollable`.
  *
- * Returns: the newly created `AdwClampScrollable`
+ * Returns: the newly created `AdapClampScrollable`
  */
 GtkWidget *
-adw_clamp_scrollable_new (void)
+adap_clamp_scrollable_new (void)
 {
-  return g_object_new (ADW_TYPE_CLAMP_SCROLLABLE, NULL);
+  return g_object_new (ADAP_TYPE_CLAMP_SCROLLABLE, NULL);
 }
 
 /**
- * adw_clamp_scrollable_get_child: (attributes org.gtk.Method.get_property=child)
+ * adap_clamp_scrollable_get_child: (attributes org.gtk.Method.get_property=child)
  * @self: a clamp scrollable
  *
  * Gets the child widget of @self.
@@ -374,25 +374,25 @@ adw_clamp_scrollable_new (void)
  * Returns: (nullable) (transfer none): the child widget of @self
  */
 GtkWidget *
-adw_clamp_scrollable_get_child (AdwClampScrollable *self)
+adap_clamp_scrollable_get_child (AdapClampScrollable *self)
 {
-  g_return_val_if_fail (ADW_IS_CLAMP_SCROLLABLE (self), NULL);
+  g_return_val_if_fail (ADAP_IS_CLAMP_SCROLLABLE (self), NULL);
 
   return self->child;
 }
 
 /**
- * adw_clamp_scrollable_set_child: (attributes org.gtk.Method.set_property=child)
+ * adap_clamp_scrollable_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a clamp scrollable
  * @child: (nullable): the child widget
  *
  * Sets the child widget of @self.
  */
 void
-adw_clamp_scrollable_set_child (AdwClampScrollable *self,
+adap_clamp_scrollable_set_child (AdapClampScrollable *self,
                                 GtkWidget          *child)
 {
-  g_return_if_fail (ADW_IS_CLAMP_SCROLLABLE (self));
+  g_return_if_fail (ADAP_IS_CLAMP_SCROLLABLE (self));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
   if (child)
@@ -437,7 +437,7 @@ adw_clamp_scrollable_set_child (AdwClampScrollable *self,
 }
 
 /**
- * adw_clamp_scrollable_get_maximum_size: (attributes org.gtk.Method.get_property=maximum-size)
+ * adap_clamp_scrollable_get_maximum_size: (attributes org.gtk.Method.get_property=maximum-size)
  * @self: a clamp scrollable
  *
  * Gets the maximum size allocated to the child.
@@ -445,19 +445,19 @@ adw_clamp_scrollable_set_child (AdwClampScrollable *self,
  * Returns: the maximum size to allocate to the child
  */
 int
-adw_clamp_scrollable_get_maximum_size (AdwClampScrollable *self)
+adap_clamp_scrollable_get_maximum_size (AdapClampScrollable *self)
 {
-  AdwClampLayout *layout;
+  AdapClampLayout *layout;
 
-  g_return_val_if_fail (ADW_IS_CLAMP_SCROLLABLE (self), 0);
+  g_return_val_if_fail (ADAP_IS_CLAMP_SCROLLABLE (self), 0);
 
-  layout = ADW_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
+  layout = ADAP_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
 
-  return adw_clamp_layout_get_maximum_size (layout);
+  return adap_clamp_layout_get_maximum_size (layout);
 }
 
 /**
- * adw_clamp_scrollable_set_maximum_size: (attributes org.gtk.Method.set_property=maximum-size)
+ * adap_clamp_scrollable_set_maximum_size: (attributes org.gtk.Method.set_property=maximum-size)
  * @self: a clamp scrollable
  * @maximum_size: the maximum size
  *
@@ -466,25 +466,25 @@ adw_clamp_scrollable_get_maximum_size (AdwClampScrollable *self)
  * It is the width if the clamp is horizontal, or the height if it is vertical.
  */
 void
-adw_clamp_scrollable_set_maximum_size (AdwClampScrollable *self,
+adap_clamp_scrollable_set_maximum_size (AdapClampScrollable *self,
                                        int                 maximum_size)
 {
-  AdwClampLayout *layout;
+  AdapClampLayout *layout;
 
-  g_return_if_fail (ADW_IS_CLAMP_SCROLLABLE (self));
+  g_return_if_fail (ADAP_IS_CLAMP_SCROLLABLE (self));
 
-  layout = ADW_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
+  layout = ADAP_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
 
-  if (adw_clamp_layout_get_maximum_size (layout) == maximum_size)
+  if (adap_clamp_layout_get_maximum_size (layout) == maximum_size)
     return;
 
-  adw_clamp_layout_set_maximum_size (layout, maximum_size);
+  adap_clamp_layout_set_maximum_size (layout, maximum_size);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_MAXIMUM_SIZE]);
 }
 
 /**
- * adw_clamp_scrollable_get_tightening_threshold: (attributes org.gtk.Method.get_property=tightening-threshold)
+ * adap_clamp_scrollable_get_tightening_threshold: (attributes org.gtk.Method.get_property=tightening-threshold)
  * @self: a clamp scrollable
  *
  * Gets the size above which the child is clamped.
@@ -492,19 +492,19 @@ adw_clamp_scrollable_set_maximum_size (AdwClampScrollable *self,
  * Returns: the size above which the child is clamped
  */
 int
-adw_clamp_scrollable_get_tightening_threshold (AdwClampScrollable *self)
+adap_clamp_scrollable_get_tightening_threshold (AdapClampScrollable *self)
 {
-  AdwClampLayout *layout;
+  AdapClampLayout *layout;
 
-  g_return_val_if_fail (ADW_IS_CLAMP_SCROLLABLE (self), 0);
+  g_return_val_if_fail (ADAP_IS_CLAMP_SCROLLABLE (self), 0);
 
-  layout = ADW_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
+  layout = ADAP_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
 
-  return adw_clamp_layout_get_tightening_threshold (layout);
+  return adap_clamp_layout_get_tightening_threshold (layout);
 }
 
 /**
- * adw_clamp_scrollable_set_tightening_threshold: (attributes org.gtk.Method.set_property=tightening-threshold)
+ * adap_clamp_scrollable_set_tightening_threshold: (attributes org.gtk.Method.set_property=tightening-threshold)
  * @self: a clamp scrollable
  * @tightening_threshold: the tightening threshold
  *
@@ -524,25 +524,25 @@ adw_clamp_scrollable_get_tightening_threshold (AdwClampScrollable *self)
  * size makes transitions to and from the maximum size smoother when resizing.
  */
 void
-adw_clamp_scrollable_set_tightening_threshold (AdwClampScrollable *self,
+adap_clamp_scrollable_set_tightening_threshold (AdapClampScrollable *self,
                                                int                 tightening_threshold)
 {
-  AdwClampLayout *layout;
+  AdapClampLayout *layout;
 
-  g_return_if_fail (ADW_IS_CLAMP_SCROLLABLE (self));
+  g_return_if_fail (ADAP_IS_CLAMP_SCROLLABLE (self));
 
-  layout = ADW_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
+  layout = ADAP_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
 
-  if (adw_clamp_layout_get_tightening_threshold (layout) == tightening_threshold)
+  if (adap_clamp_layout_get_tightening_threshold (layout) == tightening_threshold)
     return;
 
-  adw_clamp_layout_set_tightening_threshold (layout, tightening_threshold);
+  adap_clamp_layout_set_tightening_threshold (layout, tightening_threshold);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_TIGHTENING_THRESHOLD]);
 }
 
 /**
- * adw_clamp_scrollable_get_unit: (attributes org.gtk.Method.get_property=unit)
+ * adap_clamp_scrollable_get_unit: (attributes org.gtk.Method.get_property=unit)
  * @self: a clamp scrollable
  *
  * Gets the length unit for maximum size and tightening threshold.
@@ -551,20 +551,20 @@ adw_clamp_scrollable_set_tightening_threshold (AdwClampScrollable *self,
  *
  * Since: 1.4
  */
-AdwLengthUnit
-adw_clamp_scrollable_get_unit (AdwClampScrollable *self)
+AdapLengthUnit
+adap_clamp_scrollable_get_unit (AdapClampScrollable *self)
 {
-  AdwClampLayout *layout;
+  AdapClampLayout *layout;
 
-  g_return_val_if_fail (ADW_IS_CLAMP_SCROLLABLE (self), ADW_LENGTH_UNIT_PX);
+  g_return_val_if_fail (ADAP_IS_CLAMP_SCROLLABLE (self), ADAP_LENGTH_UNIT_PX);
 
-  layout = ADW_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
+  layout = ADAP_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
 
-  return adw_clamp_layout_get_unit (layout);
+  return adap_clamp_layout_get_unit (layout);
 }
 
 /**
- * adw_clamp_scrollable_set_unit: (attributes org.gtk.Method.set_property=unit)
+ * adap_clamp_scrollable_set_unit: (attributes org.gtk.Method.set_property=unit)
  * @self: a clamp
  * @unit: the length unit
  *
@@ -575,21 +575,21 @@ adw_clamp_scrollable_get_unit (AdwClampScrollable *self)
  * Since: 1.4
  */
 void
-adw_clamp_scrollable_set_unit (AdwClampScrollable *self,
-                               AdwLengthUnit       unit)
+adap_clamp_scrollable_set_unit (AdapClampScrollable *self,
+                               AdapLengthUnit       unit)
 {
-  AdwClampLayout *layout;
+  AdapClampLayout *layout;
 
-  g_return_if_fail (ADW_IS_CLAMP_SCROLLABLE (self));
-  g_return_if_fail (unit >= ADW_LENGTH_UNIT_PX);
-  g_return_if_fail (unit <= ADW_LENGTH_UNIT_SP);
+  g_return_if_fail (ADAP_IS_CLAMP_SCROLLABLE (self));
+  g_return_if_fail (unit >= ADAP_LENGTH_UNIT_PX);
+  g_return_if_fail (unit <= ADAP_LENGTH_UNIT_SP);
 
-  layout = ADW_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
+  layout = ADAP_CLAMP_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
 
-  if (adw_clamp_layout_get_unit (layout) == unit)
+  if (adap_clamp_layout_get_unit (layout) == unit)
     return;
 
-  adw_clamp_layout_set_unit (layout, unit);
+  adap_clamp_layout_set_unit (layout, unit);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_UNIT]);
 }

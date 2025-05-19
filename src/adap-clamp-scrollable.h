@@ -6,48 +6,48 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-length-unit.h"
+#include "adap-length-unit.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_CLAMP_SCROLLABLE (adw_clamp_scrollable_get_type())
+#define ADAP_TYPE_CLAMP_SCROLLABLE (adap_clamp_scrollable_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwClampScrollable, adw_clamp_scrollable, ADW, CLAMP_SCROLLABLE, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapClampScrollable, adap_clamp_scrollable, ADAP, CLAMP_SCROLLABLE, GtkWidget)
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_clamp_scrollable_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_clamp_scrollable_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_clamp_scrollable_get_child (AdwClampScrollable *self);
-ADW_AVAILABLE_IN_ALL
-void       adw_clamp_scrollable_set_child (AdwClampScrollable *self,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_clamp_scrollable_get_child (AdapClampScrollable *self);
+ADAP_AVAILABLE_IN_ALL
+void       adap_clamp_scrollable_set_child (AdapClampScrollable *self,
                                            GtkWidget          *child);
 
-ADW_AVAILABLE_IN_ALL
-int  adw_clamp_scrollable_get_maximum_size (AdwClampScrollable *self);
-ADW_AVAILABLE_IN_ALL
-void adw_clamp_scrollable_set_maximum_size (AdwClampScrollable *self,
+ADAP_AVAILABLE_IN_ALL
+int  adap_clamp_scrollable_get_maximum_size (AdapClampScrollable *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_clamp_scrollable_set_maximum_size (AdapClampScrollable *self,
                                             int                 maximum_size);
 
-ADW_AVAILABLE_IN_ALL
-int  adw_clamp_scrollable_get_tightening_threshold (AdwClampScrollable *self);
-ADW_AVAILABLE_IN_ALL
-void adw_clamp_scrollable_set_tightening_threshold (AdwClampScrollable *self,
+ADAP_AVAILABLE_IN_ALL
+int  adap_clamp_scrollable_get_tightening_threshold (AdapClampScrollable *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_clamp_scrollable_set_tightening_threshold (AdapClampScrollable *self,
                                                     int                 tightening_threshold);
 
-ADW_AVAILABLE_IN_1_4
-AdwLengthUnit adw_clamp_scrollable_get_unit (AdwClampScrollable *self);
-ADW_AVAILABLE_IN_1_4
-void          adw_clamp_scrollable_set_unit (AdwClampScrollable *self,
-                                             AdwLengthUnit       unit);
+ADAP_AVAILABLE_IN_1_4
+AdapLengthUnit adap_clamp_scrollable_get_unit (AdapClampScrollable *self);
+ADAP_AVAILABLE_IN_1_4
+void          adap_clamp_scrollable_set_unit (AdapClampScrollable *self,
+                                             AdapLengthUnit       unit);
 
 G_END_DECLS

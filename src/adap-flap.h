@@ -6,127 +6,127 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
-#include "adw-enums.h"
-#include "adw-fold-threshold-policy.h"
-#include "adw-spring-params.h"
+#include "adap-enums.h"
+#include "adap-fold-threshold-policy.h"
+#include "adap-spring-params.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_FLAP (adw_flap_get_type ())
+#define ADAP_TYPE_FLAP (adap_flap_get_type ())
 
-ADW_DEPRECATED_IN_1_4
-G_DECLARE_FINAL_TYPE (AdwFlap, adw_flap, ADW, FLAP, GtkWidget)
-
-typedef enum {
-  ADW_FLAP_FOLD_POLICY_NEVER,
-  ADW_FLAP_FOLD_POLICY_ALWAYS,
-  ADW_FLAP_FOLD_POLICY_AUTO,
-} AdwFlapFoldPolicy;
+ADAP_DEPRECATED_IN_1_4
+G_DECLARE_FINAL_TYPE (AdapFlap, adap_flap, ADAP, FLAP, GtkWidget)
 
 typedef enum {
-  ADW_FLAP_TRANSITION_TYPE_OVER,
-  ADW_FLAP_TRANSITION_TYPE_UNDER,
-  ADW_FLAP_TRANSITION_TYPE_SLIDE,
-} AdwFlapTransitionType;
+  ADAP_FLAP_FOLD_POLICY_NEVER,
+  ADAP_FLAP_FOLD_POLICY_ALWAYS,
+  ADAP_FLAP_FOLD_POLICY_AUTO,
+} AdapFlapFoldPolicy;
 
-ADW_DEPRECATED_IN_1_4
-GtkWidget *adw_flap_new (void) G_GNUC_WARN_UNUSED_RESULT;
+typedef enum {
+  ADAP_FLAP_TRANSITION_TYPE_OVER,
+  ADAP_FLAP_TRANSITION_TYPE_UNDER,
+  ADAP_FLAP_TRANSITION_TYPE_SLIDE,
+} AdapFlapTransitionType;
 
-ADW_DEPRECATED_IN_1_4
-GtkWidget *adw_flap_get_content (AdwFlap   *self);
-ADW_DEPRECATED_IN_1_4
-void       adw_flap_set_content (AdwFlap   *self,
+ADAP_DEPRECATED_IN_1_4
+GtkWidget *adap_flap_new (void) G_GNUC_WARN_UNUSED_RESULT;
+
+ADAP_DEPRECATED_IN_1_4
+GtkWidget *adap_flap_get_content (AdapFlap   *self);
+ADAP_DEPRECATED_IN_1_4
+void       adap_flap_set_content (AdapFlap   *self,
                                  GtkWidget *content);
 
-ADW_DEPRECATED_IN_1_4
-GtkWidget *adw_flap_get_flap (AdwFlap   *self);
-ADW_DEPRECATED_IN_1_4
-void       adw_flap_set_flap (AdwFlap   *self,
+ADAP_DEPRECATED_IN_1_4
+GtkWidget *adap_flap_get_flap (AdapFlap   *self);
+ADAP_DEPRECATED_IN_1_4
+void       adap_flap_set_flap (AdapFlap   *self,
                               GtkWidget *flap);
 
-ADW_DEPRECATED_IN_1_4
-GtkWidget *adw_flap_get_separator (AdwFlap   *self);
-ADW_DEPRECATED_IN_1_4
-void       adw_flap_set_separator (AdwFlap   *self,
+ADAP_DEPRECATED_IN_1_4
+GtkWidget *adap_flap_get_separator (AdapFlap   *self);
+ADAP_DEPRECATED_IN_1_4
+void       adap_flap_set_separator (AdapFlap   *self,
                                    GtkWidget *separator);
 
-ADW_DEPRECATED_IN_1_4
-GtkPackType adw_flap_get_flap_position (AdwFlap     *self);
-ADW_DEPRECATED_IN_1_4
-void        adw_flap_set_flap_position (AdwFlap     *self,
+ADAP_DEPRECATED_IN_1_4
+GtkPackType adap_flap_get_flap_position (AdapFlap     *self);
+ADAP_DEPRECATED_IN_1_4
+void        adap_flap_set_flap_position (AdapFlap     *self,
                                         GtkPackType  position);
 
-ADW_DEPRECATED_IN_1_4
-gboolean adw_flap_get_reveal_flap (AdwFlap  *self);
-ADW_DEPRECATED_IN_1_4
-void     adw_flap_set_reveal_flap (AdwFlap  *self,
+ADAP_DEPRECATED_IN_1_4
+gboolean adap_flap_get_reveal_flap (AdapFlap  *self);
+ADAP_DEPRECATED_IN_1_4
+void     adap_flap_set_reveal_flap (AdapFlap  *self,
                                    gboolean  reveal_flap);
 
-ADW_DEPRECATED_IN_1_4
-AdwSpringParams *adw_flap_get_reveal_params (AdwFlap         *self);
-ADW_DEPRECATED_IN_1_4
-void             adw_flap_set_reveal_params (AdwFlap         *self,
-                                             AdwSpringParams *params);
+ADAP_DEPRECATED_IN_1_4
+AdapSpringParams *adap_flap_get_reveal_params (AdapFlap         *self);
+ADAP_DEPRECATED_IN_1_4
+void             adap_flap_set_reveal_params (AdapFlap         *self,
+                                             AdapSpringParams *params);
 
-ADW_DEPRECATED_IN_1_4
-double adw_flap_get_reveal_progress (AdwFlap *self);
+ADAP_DEPRECATED_IN_1_4
+double adap_flap_get_reveal_progress (AdapFlap *self);
 
-ADW_DEPRECATED_IN_1_4
-AdwFlapFoldPolicy adw_flap_get_fold_policy (AdwFlap           *self);
-ADW_DEPRECATED_IN_1_4
-void              adw_flap_set_fold_policy (AdwFlap           *self,
-                                            AdwFlapFoldPolicy  policy);
+ADAP_DEPRECATED_IN_1_4
+AdapFlapFoldPolicy adap_flap_get_fold_policy (AdapFlap           *self);
+ADAP_DEPRECATED_IN_1_4
+void              adap_flap_set_fold_policy (AdapFlap           *self,
+                                            AdapFlapFoldPolicy  policy);
 
-ADW_DEPRECATED_IN_1_4
-AdwFoldThresholdPolicy adw_flap_get_fold_threshold_policy (AdwFlap                *self);
-ADW_DEPRECATED_IN_1_4
-void                   adw_flap_set_fold_threshold_policy (AdwFlap                *self,
-                                                           AdwFoldThresholdPolicy  policy);
+ADAP_DEPRECATED_IN_1_4
+AdapFoldThresholdPolicy adap_flap_get_fold_threshold_policy (AdapFlap                *self);
+ADAP_DEPRECATED_IN_1_4
+void                   adap_flap_set_fold_threshold_policy (AdapFlap                *self,
+                                                           AdapFoldThresholdPolicy  policy);
 
-ADW_DEPRECATED_IN_1_4
-guint adw_flap_get_fold_duration (AdwFlap *self);
-ADW_DEPRECATED_IN_1_4
-void  adw_flap_set_fold_duration (AdwFlap *self,
+ADAP_DEPRECATED_IN_1_4
+guint adap_flap_get_fold_duration (AdapFlap *self);
+ADAP_DEPRECATED_IN_1_4
+void  adap_flap_set_fold_duration (AdapFlap *self,
                                   guint    duration);
 
-ADW_DEPRECATED_IN_1_4
-gboolean adw_flap_get_folded (AdwFlap *self);
+ADAP_DEPRECATED_IN_1_4
+gboolean adap_flap_get_folded (AdapFlap *self);
 
-ADW_DEPRECATED_IN_1_4
-gboolean adw_flap_get_locked (AdwFlap *self);
-ADW_DEPRECATED_IN_1_4
-void     adw_flap_set_locked (AdwFlap  *self,
+ADAP_DEPRECATED_IN_1_4
+gboolean adap_flap_get_locked (AdapFlap *self);
+ADAP_DEPRECATED_IN_1_4
+void     adap_flap_set_locked (AdapFlap  *self,
                               gboolean  locked);
 
-ADW_DEPRECATED_IN_1_4
-AdwFlapTransitionType adw_flap_get_transition_type (AdwFlap               *self);
-ADW_DEPRECATED_IN_1_4
-void                  adw_flap_set_transition_type (AdwFlap               *self,
-                                                    AdwFlapTransitionType  transition_type);
+ADAP_DEPRECATED_IN_1_4
+AdapFlapTransitionType adap_flap_get_transition_type (AdapFlap               *self);
+ADAP_DEPRECATED_IN_1_4
+void                  adap_flap_set_transition_type (AdapFlap               *self,
+                                                    AdapFlapTransitionType  transition_type);
 
-ADW_DEPRECATED_IN_1_4
-gboolean adw_flap_get_modal (AdwFlap  *self);
-ADW_DEPRECATED_IN_1_4
-void     adw_flap_set_modal (AdwFlap  *self,
+ADAP_DEPRECATED_IN_1_4
+gboolean adap_flap_get_modal (AdapFlap  *self);
+ADAP_DEPRECATED_IN_1_4
+void     adap_flap_set_modal (AdapFlap  *self,
                              gboolean  modal);
 
-ADW_DEPRECATED_IN_1_4
-gboolean adw_flap_get_swipe_to_open (AdwFlap  *self);
-ADW_DEPRECATED_IN_1_4
-void     adw_flap_set_swipe_to_open (AdwFlap  *self,
+ADAP_DEPRECATED_IN_1_4
+gboolean adap_flap_get_swipe_to_open (AdapFlap  *self);
+ADAP_DEPRECATED_IN_1_4
+void     adap_flap_set_swipe_to_open (AdapFlap  *self,
                                      gboolean  swipe_to_open);
 
-ADW_DEPRECATED_IN_1_4
-gboolean adw_flap_get_swipe_to_close (AdwFlap  *self);
-ADW_DEPRECATED_IN_1_4
-void     adw_flap_set_swipe_to_close (AdwFlap  *self,
+ADAP_DEPRECATED_IN_1_4
+gboolean adap_flap_get_swipe_to_close (AdapFlap  *self);
+ADAP_DEPRECATED_IN_1_4
+void     adap_flap_set_swipe_to_close (AdapFlap  *self,
                                       gboolean  swipe_to_close);
 
 G_END_DECLS

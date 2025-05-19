@@ -1,9 +1,9 @@
 {
-  "app-id": "org.gnome.Adwaita1.Demo",
+  "app-id": "org.gnome.Adapta1.Demo",
   "runtime": "org.gnome.Platform",
   "runtime-version": "master",
   "sdk": "org.gnome.Sdk",
-  "command": "adwaita-1-demo",
+  "command": "adapta-1-demo",
   "finish-args": [
     "--device=dri",
     "--share=ipc",
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "name": "libadwaita",
+      "name": "libadapta",
       "buildsystem": "meson",
       "builddir": true,
       "run-tests" : true,
@@ -47,12 +47,12 @@
         ]
       },
       "post-install" : [
-        "desktop-file-edit --remove-key=NoDisplay ${FLATPAK_DEST}/share/applications/org.gnome.Adwaita1.Demo.desktop"
+        "desktop-file-edit --remove-key=NoDisplay ${FLATPAK_DEST}/share/applications/org.gnome.Adapta1.Demo.desktop"
       ],
       "sources": [
         {
           "type": "git",
-          "url": "https://gitlab.gnome.org/GNOME/libadwaita.git",
+          "url": "https://gitlab.gnome.org/GNOME/libadapta.git",
           "branch": "main"
         }
       ]

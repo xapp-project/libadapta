@@ -25,7 +25,7 @@ Slug: named-colors
 
 # Named Colors
 
-The Adwaita stylesheet provides a number of predefined colors that can be used
+The Adapta stylesheet provides a number of predefined colors that can be used
 from applications.
 
 # UI Colors
@@ -391,7 +391,7 @@ border for header bars and similar widgets. This color should always be
 partially transparent black.
 
 <code>&#64;headerbar_darker_shade_color</code> is used for the
-`ADW_TOOLBAR_RAISED_BORDER` border. This color should always be
+`ADAP_TOOLBAR_RAISED_BORDER` border. This color should always be
 partially transparent black, and is intended to be darker than both
 <code>&#64;headerbar_bg_color</code> and
 <code>&#64;headerbar_backdrop_color</code> on top of white color.
@@ -984,7 +984,7 @@ as the following set of named colors:
 
 # Compatibility Colors
 
-A number of colors has been available in Adwaita in GTK3. They are aliases of
+A number of colors has been available in Adapta in GTK3. They are aliases of
 UI colors or otherwise derived from them:
 
 Name                                            | Value

@@ -8,26 +8,26 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-dialog.h"
+#include "adap-dialog.h"
 
 G_BEGIN_DECLS
 
-void adw_dialog_set_shadowed (AdwDialog *self,
+void adap_dialog_set_shadowed (AdapDialog *self,
                               gboolean   shadowed);
 
-void adw_dialog_set_callbacks (AdwDialog *self,
+void adap_dialog_set_callbacks (AdapDialog *self,
                                GFunc      closing_callback,
                                GFunc      remove_callback,
                                gpointer   user_data);
 
-gboolean adw_dialog_get_closing (AdwDialog *self);
-void     adw_dialog_set_closing (AdwDialog *self,
+gboolean adap_dialog_get_closing (AdapDialog *self);
+void     adap_dialog_set_closing (AdapDialog *self,
                                  gboolean   closing);
 
-GtkWidget *adw_dialog_get_window (AdwDialog *self);
+GtkWidget *adap_dialog_get_window (AdapDialog *self);
 
 G_END_DECLS

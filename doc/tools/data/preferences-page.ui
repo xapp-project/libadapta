@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwPreferencesPage" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapPreferencesPage" id="widget">
     <property name="width-request">400</property>
     <style>
       <class name="docs-background"/>
     </style>
     <child>
-      <object class="AdwPreferencesGroup">
+      <object class="AdapPreferencesGroup">
         <property name="title">Group Title</property>
         <property name="description">Group description.</property>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdapActionRow">
             <property name="title">Row Title</property>
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdapActionRow">
             <property name="title">Row Title</property>
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdapActionRow">
             <property name="title">Row Title</property>
           </object>
         </child>
       </object>
     </child>
     <child>
-      <object class="AdwPreferencesGroup">
+      <object class="AdapPreferencesGroup">
         <property name="title">Group Title</property>
         <property name="description">Group description.</property>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdapActionRow">
             <property name="title">Row Title</property>
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdapActionRow">
             <property name="title">Row Title</property>
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdapActionRow">
             <property name="title">Row Title</property>
           </object>
         </child>

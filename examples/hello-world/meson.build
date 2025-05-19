@@ -7,7 +7,7 @@ executable('hello',
   'hello.c',
   dependencies: [
     dependency('gtk4'),
-    dependency('libadwaita-1'),
+    dependency('libadapta-1'),
   ],
   install: false,
 )

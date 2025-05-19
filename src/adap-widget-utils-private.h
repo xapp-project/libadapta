@@ -17,15 +17,15 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_CRITICAL_CANNOT_REMOVE_CHILD(parent, child) \
+#define ADAP_CRITICAL_CANNOT_REMOVE_CHILD(parent, child) \
 G_STMT_START { \
   g_critical ("%s:%d: tried to remove non-child %p of type '%s' from %p of type '%s'", \
               __FILE__, __LINE__, \
@@ -35,36 +35,36 @@ G_STMT_START { \
               G_OBJECT_TYPE_NAME ((GObject*) (parent))); \
 } G_STMT_END
 
-gboolean adw_widget_focus_child (GtkWidget        *widget,
+gboolean adap_widget_focus_child (GtkWidget        *widget,
                                  GtkDirectionType  direction);
 
-gboolean adw_widget_grab_focus_self          (GtkWidget *widget);
-gboolean adw_widget_grab_focus_child         (GtkWidget *widget);
-gboolean adw_widget_grab_focus_child_or_self (GtkWidget *widget);
+gboolean adap_widget_grab_focus_self          (GtkWidget *widget);
+gboolean adap_widget_grab_focus_child         (GtkWidget *widget);
+gboolean adap_widget_grab_focus_child_or_self (GtkWidget *widget);
 
-void adw_widget_compute_expand (GtkWidget *widget,
+void adap_widget_compute_expand (GtkWidget *widget,
                                 gboolean  *hexpand_p,
                                 gboolean  *vexpand_p);
 
-void adw_widget_compute_expand_horizontal_only (GtkWidget *widget,
+void adap_widget_compute_expand_horizontal_only (GtkWidget *widget,
                                                 gboolean  *hexpand_p,
                                                 gboolean  *vexpand_p);
 
-GtkSizeRequestMode adw_widget_get_request_mode (GtkWidget *widget);
+GtkSizeRequestMode adap_widget_get_request_mode (GtkWidget *widget);
 
-gboolean adw_widget_contains_passthrough (GtkWidget *widget,
+gboolean adap_widget_contains_passthrough (GtkWidget *widget,
                                           double     x,
                                           double     y);
 
-gboolean adw_widget_lookup_color (GtkWidget  *widget,
+gboolean adap_widget_lookup_color (GtkWidget  *widget,
                                   const char *name,
                                   GdkRGBA    *rgba);
 
-GtkWidget *adw_widget_get_ancestor (GtkWidget *widget,
+GtkWidget *adap_widget_get_ancestor (GtkWidget *widget,
                                     GType      widget_type,
                                     gboolean   same_native,
                                     gboolean   same_sheet);
 
-gboolean adw_decoration_layout_prefers_start (const char *layout);
+gboolean adap_decoration_layout_prefers_start (const char *layout);
 
 G_END_DECLS

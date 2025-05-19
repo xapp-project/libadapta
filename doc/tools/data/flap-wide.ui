@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwWindow" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapWindow" id="widget">
     <property name="default-width">420</property>
     <property name="default-height">150</property>
     <property name="content">
-      <object class="AdwFlap">
+      <object class="AdapFlap">
         <property name="locked">True</property>
         <property name="flap">
           <object class="GtkLabel">

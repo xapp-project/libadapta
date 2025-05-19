@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwViewSwitcherBar" parent="GtkWidget">
+  <template class="AdapViewSwitcherBar" parent="GtkWidget">
     <child>
       <object class="GtkActionBar" id="action_bar">
         <child type="center">
-          <object class="AdwViewSwitcher" id="view_switcher">
+          <object class="AdapViewSwitcher" id="view_switcher">
             <property name="margin-start">10</property>
             <property name="margin-end">10</property>
             <property name="policy">narrow</property>

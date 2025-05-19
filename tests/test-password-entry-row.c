@@ -6,12 +6,12 @@
  * Author: Alice Mikhaylenko <alice.mikhaylenko@puri.sm>
  */
 
-#include <adwaita.h>
+#include <adapta.h>
 
 static void
-test_adw_password_entry_row_new (void)
+test_adap_password_entry_row_new (void)
 {
-  GtkWidget *row = g_object_ref_sink (adw_password_entry_row_new ());
+  GtkWidget *row = g_object_ref_sink (adap_password_entry_row_new ());
   g_assert_nonnull (row);
 
   g_assert_finalize_object (row);
@@ -22,9 +22,9 @@ main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
-  adw_init ();
+  adap_init ();
 
-  g_test_add_func("/Adwaita/PasswordEntryRow/new", test_adw_password_entry_row_new);
+  g_test_add_func("/Adapta/PasswordEntryRow/new", test_adap_password_entry_row_new);
 
   return g_test_run();
 }

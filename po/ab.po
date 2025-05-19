@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadwaita/issues\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadapta/issues\n"
 "POT-Creation-Date: 2022-07-09 18:02+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
 "Language-Team: Abkhazian <daniel.abzakh@gmail.com>\n"
@@ -10,262 +10,262 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/adw-about-window.c:205
+#: src/adap-about-window.c:205
 msgid "GNU General Public License, version 2 or later"
 msgstr "GNU General Public License, аверсиа 2 мамзар еиҳа ихьшәоу"
 
-#: src/adw-about-window.c:206
+#: src/adap-about-window.c:206
 msgid "GNU General Public License, version 3 or later"
 msgstr "GNU General Public License, аверсиа 3 мамзар еиҳа ихьшәоу"
 
-#: src/adw-about-window.c:207
+#: src/adap-about-window.c:207
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "GNU Lesser General Public License, аверсиа 2.1 мамзар еиҳа ихьшәоу"
 
-#: src/adw-about-window.c:208
+#: src/adap-about-window.c:208
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "GNU Lesser General Public License, аверсиа 3 мамзар еиҳа ихьшәоу"
 
-#: src/adw-about-window.c:209
+#: src/adap-about-window.c:209
 msgid "BSD 2-Clause License"
 msgstr "BSD 2-Clause License"
 
-#: src/adw-about-window.c:210
+#: src/adap-about-window.c:210
 msgid "The MIT License (MIT)"
 msgstr "The MIT License (MIT)"
 
-#: src/adw-about-window.c:211
+#: src/adap-about-window.c:211
 msgid "Artistic License 2.0"
 msgstr "Artistic License 2.0"
 
-#: src/adw-about-window.c:212
+#: src/adap-about-window.c:212
 msgid "GNU General Public License, version 2 only"
 msgstr ""
 
-#: src/adw-about-window.c:213
+#: src/adap-about-window.c:213
 msgid "GNU General Public License, version 3 only"
 msgstr ""
 
-#: src/adw-about-window.c:214
+#: src/adap-about-window.c:214
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr ""
 
-#: src/adw-about-window.c:215
+#: src/adap-about-window.c:215
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr ""
 
-#: src/adw-about-window.c:216
+#: src/adap-about-window.c:216
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero General Public License, аверсиа 3 мамзар еиҳа ихьшәоу"
 
-#: src/adw-about-window.c:217
+#: src/adap-about-window.c:217
 msgid "GNU Affero General Public License, version 3 only"
 msgstr ""
 
-#: src/adw-about-window.c:218
+#: src/adap-about-window.c:218
 msgid "BSD 3-Clause License"
 msgstr "BSD 3-Clause License"
 
-#: src/adw-about-window.c:219
+#: src/adap-about-window.c:219
 msgid "Apache License, Version 2.0"
 msgstr "Apache License, Аверсиа 2.1"
 
-#: src/adw-about-window.c:220
+#: src/adap-about-window.c:220
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Public License 2.0"
 
-#: src/adw-about-window.c:527
+#: src/adap-about-window.c:527
 msgid "Code by"
 msgstr ""
 
-#: src/adw-about-window.c:528
+#: src/adap-about-window.c:528
 msgid "Design by"
 msgstr ""
 
-#: src/adw-about-window.c:529
+#: src/adap-about-window.c:529
 msgid "Artwork by"
 msgstr ""
 
-#: src/adw-about-window.c:530
+#: src/adap-about-window.c:530
 msgid "Documentation by"
 msgstr ""
 
-#: src/adw-about-window.c:531
+#: src/adap-about-window.c:531
 msgid "Translated by"
 msgstr ""
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: src/adw-about-window.c:558
+#: src/adap-about-window.c:558
 #, c-format
 msgid ""
 "This application comes with absolutely no warranty. See the <a "
 "href=\"%s\">%s</a> for details."
 msgstr ""
 
-#: src/adw-about-window.c:636
+#: src/adap-about-window.c:636
 msgid "This Application"
 msgstr ""
 
-#: src/adw-about-window.c:933
+#: src/adap-about-window.c:933
 #, c-format
 msgid "Version %s"
 msgstr "Аверсиа %s"
 
-#: src/adw-about-window.c:959
+#: src/adap-about-window.c:959
 msgid "Unable to parse release notes:"
 msgstr ""
 
-#: src/adw-about-window.c:965
+#: src/adap-about-window.c:965
 #, c-format
 msgid "Line: %d, character: %d"
 msgstr ""
 
-#: src/adw-about-window.c:1235
+#: src/adap-about-window.c:1235
 msgid "Copied to clipboard"
 msgstr ""
 
-#: src/adw-about-window.c:1270
+#: src/adap-about-window.c:1270
 msgid "Unable to save debugging information"
 msgstr ""
 
-#: src/adw-about-window.c:1275
+#: src/adap-about-window.c:1275
 msgid "Close"
 msgstr ""
 
-#: src/adw-about-window.c:1293
+#: src/adap-about-window.c:1293
 msgid "Save debugging information"
 msgstr ""
 
-#: src/adw-about-window.c:1296
+#: src/adap-about-window.c:1296
 msgid "_Save"
 msgstr ""
 
-#: src/adw-about-window.c:1297
+#: src/adap-about-window.c:1297
 msgid "_Cancel"
 msgstr ""
 
-#: src/adw-about-window.ui:5
+#: src/adap-about-window.ui:5
 msgid "About"
 msgstr ""
 
-#: src/adw-about-window.ui:121
+#: src/adap-about-window.ui:121
 msgid "_What’s New"
 msgstr ""
 
-#: src/adw-about-window.ui:140
+#: src/adap-about-window.ui:140
 msgid "_Details"
 msgstr ""
 
-#: src/adw-about-window.ui:162 src/adw-about-window.ui:487
+#: src/adap-about-window.ui:162 src/adap-about-window.ui:487
 msgid "_Website"
 msgstr ""
 
-#: src/adw-about-window.ui:193
+#: src/adap-about-window.ui:193
 msgid "_Support Questions"
 msgstr ""
 
-#: src/adw-about-window.ui:215
+#: src/adap-about-window.ui:215
 msgid "_Report an Issue"
 msgstr ""
 
-#: src/adw-about-window.ui:236
+#: src/adap-about-window.ui:236
 msgid "_Troubleshooting"
 msgstr ""
 
-#: src/adw-about-window.ui:267
+#: src/adap-about-window.ui:267
 msgid "_Credits"
 msgstr ""
 
-#: src/adw-about-window.ui:284
+#: src/adap-about-window.ui:284
 msgid "_Legal"
 msgstr ""
 
-#: src/adw-about-window.ui:301
+#: src/adap-about-window.ui:301
 msgid "_Acknowledgements"
 msgstr ""
 
-#: src/adw-about-window.ui:381
+#: src/adap-about-window.ui:381
 msgid "What’s New"
 msgstr ""
 
-#: src/adw-about-window.ui:386 src/adw-about-window.ui:442
-#: src/adw-about-window.ui:531 src/adw-about-window.ui:606
-#: src/adw-about-window.ui:653 src/adw-about-window.ui:700
-#: src/adw-about-window.ui:747
+#: src/adap-about-window.ui:386 src/adap-about-window.ui:442
+#: src/adap-about-window.ui:531 src/adap-about-window.ui:606
+#: src/adap-about-window.ui:653 src/adap-about-window.ui:700
+#: src/adap-about-window.ui:747
 msgid "Back"
 msgstr ""
 
-#: src/adw-about-window.ui:437
+#: src/adap-about-window.ui:437
 msgid "Details"
 msgstr ""
 
-#: src/adw-about-window.ui:526
+#: src/adap-about-window.ui:526
 msgid "Troubleshooting"
 msgstr ""
 
-#: src/adw-about-window.ui:555
+#: src/adap-about-window.ui:555
 msgid ""
 "To assist in troubleshooting, you can view your debugging information. "
 "Providing this information to the application developers can help diagnose "
 "any problems you encounter when you report an issue."
 msgstr ""
 
-#: src/adw-about-window.ui:566
+#: src/adap-about-window.ui:566
 msgid "_Debugging Information"
 msgstr ""
 
-#: src/adw-about-window.ui:601
+#: src/adap-about-window.ui:601
 msgid "Credits"
 msgstr " Аҭабурақәа"
 
-#: src/adw-about-window.ui:648
+#: src/adap-about-window.ui:648
 msgid "Legal"
 msgstr ""
 
-#: src/adw-about-window.ui:695
+#: src/adap-about-window.ui:695
 msgid "Acknowledgements"
 msgstr ""
 
-#: src/adw-about-window.ui:742
+#: src/adap-about-window.ui:742
 msgid "Debugging Information"
 msgstr ""
 
-#: src/adw-about-window.ui:790
+#: src/adap-about-window.ui:790
 msgid "_Copy Text"
 msgstr ""
 
-#: src/adw-about-window.ui:797
+#: src/adap-about-window.ui:797
 msgid "_Save as…"
 msgstr ""
 
-#: src/adw-entry-row.ui:93
+#: src/adap-entry-row.ui:93
 msgid "Apply"
 msgstr ""
 
-#: src/adw-inspector-page.c:76
+#: src/adap-inspector-page.c:76
 msgid "No Preference"
 msgstr "Аиӷьашьарақәа рыда"
 
-#: src/adw-inspector-page.c:78
+#: src/adap-inspector-page.c:78
 msgid "Prefer Dark"
 msgstr "Еиҟәароу аиӷьашьара"
 
-#: src/adw-inspector-page.c:80
+#: src/adap-inspector-page.c:80
 msgid "Prefer Light"
 msgstr "Илашоу аиӷьашьара"
 
 #. Translators: The name of the library, not the stylesheet
-#: src/adw-inspector-page.c:98
-msgid "Adwaita"
-msgstr "Adwaita"
+#: src/adap-inspector-page.c:98
+msgid "Adapta"
+msgstr "Adapta"
 
-#: src/adw-inspector-page.ui:10
+#: src/adap-inspector-page.ui:10
 msgid "System Appearance"
 msgstr "Асистема адәахьтәи аҿанԥшылара"
 
-#: src/adw-inspector-page.ui:11
+#: src/adap-inspector-page.ui:11
 msgid ""
 "Override settings for this application. They will be reset upon closing the "
 "inspector."
@@ -273,50 +273,50 @@ msgstr ""
 "Еиҭашьақәшәыргыл архиарақәа ари аԥшьы азы.Урҭ алырыҩроит агәаҭараанаркхалак "
 "ашьҭахь"
 
-#: src/adw-inspector-page.ui:14
+#: src/adap-inspector-page.ui:14
 msgid "System Supports Color Schemes"
 msgstr "Асистема аԥшшәытә схемақәа ирыдгылоит "
 
-#: src/adw-inspector-page.ui:26
+#: src/adap-inspector-page.ui:26
 msgid "Preferred Color Scheme"
 msgstr "Еиӷьу аԥшшәытә схема"
 
-#: src/adw-inspector-page.ui:43
+#: src/adap-inspector-page.ui:43
 msgid "High Contrast"
 msgstr "Иҳараку аконтрастра "
 
-#: src/adw-password-entry-row.c:71
+#: src/adap-password-entry-row.c:71
 msgid "Hide Text"
 msgstr ""
 
-#: src/adw-password-entry-row.c:75
+#: src/adap-password-entry-row.c:75
 msgid "Show Text"
 msgstr ""
 
-#: src/adw-password-entry-row.c:169
+#: src/adap-password-entry-row.c:169
 msgid "Caps Lock is on"
 msgstr "Caps Lock аҿакуп"
 
-#: src/adw-password-entry-row.c:177
+#: src/adap-password-entry-row.c:177
 msgid "_Show Text"
 msgstr ""
 
-#: src/adw-preferences-window.c:242
+#: src/adap-preferences-window.c:242
 msgid "Untitled page"
 msgstr "Ихьӡыдоу адаҟьа"
 
-#: src/adw-preferences-window.ui:8
+#: src/adap-preferences-window.ui:8
 msgid "Preferences"
 msgstr "Ахышәарақәа"
 
-#: src/adw-preferences-window.ui:69
+#: src/adap-preferences-window.ui:69
 msgid "Search"
 msgstr "Аԥшаара"
 
-#: src/adw-preferences-window.ui:139
+#: src/adap-preferences-window.ui:139
 msgid "No Results Found"
 msgstr "Алҵшәақәа ыҟаӡам"
 
-#: src/adw-preferences-window.ui:140
+#: src/adap-preferences-window.ui:140
 msgid "Try a different search."
 msgstr "Шәхы иашәырхәа даҿа шьҭазааратә зыҳәамҭак. "

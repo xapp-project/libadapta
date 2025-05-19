@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: libhandy master\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadwaita/issues\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadapta/issues\n"
 "POT-Creation-Date: 2023-07-08 11:22+0000\n"
 "PO-Revision-Date: 2023-07-20 21:59+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
@@ -18,94 +18,94 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: src/adw-about-window.c:206
+#: src/adap-about-window.c:206
 msgid "GNU General Public License, version 2 or later"
 msgstr "Licence Publiche Gjenerâl GNU GPL, version 2 o sucessive"
 
-#: src/adw-about-window.c:207
+#: src/adap-about-window.c:207
 msgid "GNU General Public License, version 3 or later"
 msgstr "Licence Publiche Gjenerâl GNU GPL, version 3 o sucessive"
 
-#: src/adw-about-window.c:208
+#: src/adap-about-window.c:208
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "Licence Publiche Gjenerâl Minôr GNU LGPL, version 2.1 o sucessive"
 
-#: src/adw-about-window.c:209
+#: src/adap-about-window.c:209
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "Licence Publiche Gjenerâl Minôr GNU LGPL, version 3 o sucessive"
 
-#: src/adw-about-window.c:210
+#: src/adap-about-window.c:210
 msgid "BSD 2-Clause License"
 msgstr "Licence BSD 2-Clausolis"
 
-#: src/adw-about-window.c:211
+#: src/adap-about-window.c:211
 msgid "The MIT License (MIT)"
 msgstr "La licence MIT (MIT)"
 
-#: src/adw-about-window.c:212
+#: src/adap-about-window.c:212
 msgid "Artistic License 2.0"
 msgstr "Licence Artistiche 2.0"
 
-#: src/adw-about-window.c:213
+#: src/adap-about-window.c:213
 msgid "GNU General Public License, version 2 only"
 msgstr "Licence Publiche Gjenerâl GNU GPL, dome version 2"
 
-#: src/adw-about-window.c:214
+#: src/adap-about-window.c:214
 msgid "GNU General Public License, version 3 only"
 msgstr "Licence Publiche Gjenerâl GNU GPL, dome version 3"
 
-#: src/adw-about-window.c:215
+#: src/adap-about-window.c:215
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "Licence Publiche Gjenerâl Minôr GNU LGPL, dome version 2.1"
 
-#: src/adw-about-window.c:216
+#: src/adap-about-window.c:216
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "Licence Publiche Gjenerâl Minôr GNU LGPL, dome version 3"
 
-#: src/adw-about-window.c:217
+#: src/adap-about-window.c:217
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "Licence Publiche Gjenerâl GNU Affero AGPL, version 3 o sucessive"
 
-#: src/adw-about-window.c:218
+#: src/adap-about-window.c:218
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "Licence Publiche Gjenerâl GNU Affero, dome version 3"
 
-#: src/adw-about-window.c:219
+#: src/adap-about-window.c:219
 msgid "BSD 3-Clause License"
 msgstr "Licence BSD 3-Clausolis"
 
-#: src/adw-about-window.c:220
+#: src/adap-about-window.c:220
 msgid "Apache License, Version 2.0"
 msgstr "Licence Apache, Version 2.0"
 
-#: src/adw-about-window.c:221
+#: src/adap-about-window.c:221
 msgid "Mozilla Public License 2.0"
 msgstr "Licence Publiche di Mozilla 2.0"
 
-#: src/adw-about-window.c:535
+#: src/adap-about-window.c:535
 msgid "Code by"
 msgstr "Codiç di"
 
-#: src/adw-about-window.c:536
+#: src/adap-about-window.c:536
 msgid "Design by"
 msgstr "Design di"
 
-#: src/adw-about-window.c:537
+#: src/adap-about-window.c:537
 msgid "Artwork by"
 msgstr "Grafiche di"
 
-#: src/adw-about-window.c:538
+#: src/adap-about-window.c:538
 msgid "Documentation by"
 msgstr "Documentazion di"
 
-#: src/adw-about-window.c:539
+#: src/adap-about-window.c:539
 msgid "Translated by"
 msgstr "Tradot di"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: src/adw-about-window.c:568
+#: src/adap-about-window.c:568
 #, c-format
 msgid ""
 "This application comes with absolutely no warranty. See the <a "
@@ -114,93 +114,93 @@ msgstr ""
 "Chest program al rive cence nissune garanzie. Par vê plui detais consultâ <a "
 "href=\"%s\">%s</a>."
 
-#: src/adw-about-window.c:646
+#: src/adap-about-window.c:646
 msgid "This Application"
 msgstr "Cheste aplicazion"
 
-#: src/adw-about-window.c:948
+#: src/adap-about-window.c:948
 #, c-format
 msgid "Version %s"
 msgstr "Version %s"
 
-#: src/adw-about-window.c:974
+#: src/adap-about-window.c:974
 msgid "Unable to parse release notes:"
 msgstr "Impussibil analizâ lis notis di publicazion:"
 
-#: src/adw-about-window.c:980
+#: src/adap-about-window.c:980
 #, c-format
 msgid "Line: %d, character: %d"
 msgstr "Rie: %d, caratar: %d"
 
-#: src/adw-about-window.c:1256
+#: src/adap-about-window.c:1256
 msgid "Copied to clipboard"
 msgstr "Copiât tes notis"
 
-#: src/adw-about-window.c:1284
+#: src/adap-about-window.c:1284
 msgid "Unable to save debugging information"
 msgstr "Impussibil salvâ lis informazion di debug"
 
-#: src/adw-about-window.c:1289
+#: src/adap-about-window.c:1289
 msgid "Close"
 msgstr "Siere"
 
-#: src/adw-about-window.c:1305
+#: src/adap-about-window.c:1305
 msgid "Save debugging information"
 msgstr "Salve informazions di debug"
 
-#: src/adw-about-window.ui:5
+#: src/adap-about-window.ui:5
 msgid "About"
 msgstr "Informazions"
 
-#: src/adw-about-window.ui:91
+#: src/adap-about-window.ui:91
 msgid "_What’s New"
 msgstr "_Novitâts"
 
-#: src/adw-about-window.ui:106
+#: src/adap-about-window.ui:106
 msgid "_Details"
 msgstr "_Detais"
 
-#: src/adw-about-window.ui:121 src/adw-about-window.ui:331
+#: src/adap-about-window.ui:121 src/adap-about-window.ui:331
 msgid "_Website"
 msgstr "Sît _web"
 
-#: src/adw-about-window.ui:144
+#: src/adap-about-window.ui:144
 msgid "_Support Questions"
 msgstr "Domandis di _supuart"
 
-#: src/adw-about-window.ui:160
+#: src/adap-about-window.ui:160
 msgid "_Report an Issue"
 msgstr "_Segnale un probleme"
 
-#: src/adw-about-window.ui:175
+#: src/adap-about-window.ui:175
 msgid "_Troubleshooting"
 msgstr "Soluzion _problemis"
 
-#: src/adw-about-window.ui:194
+#: src/adap-about-window.ui:194
 msgid "_Credits"
 msgstr "Ri_cognossiments"
 
-#: src/adw-about-window.ui:209
+#: src/adap-about-window.ui:209
 msgid "_Legal"
 msgstr "_Legâl"
 
-#: src/adw-about-window.ui:224
+#: src/adap-about-window.ui:224
 msgid "_Acknowledgements"
 msgstr "Ringr_aciaments"
 
-#: src/adw-about-window.ui:253
+#: src/adap-about-window.ui:253
 msgid "What’s New"
 msgstr "Novitâts"
 
-#: src/adw-about-window.ui:293
+#: src/adap-about-window.ui:293
 msgid "Details"
 msgstr "Detais"
 
-#: src/adw-about-window.ui:358
+#: src/adap-about-window.ui:358
 msgid "Troubleshooting"
 msgstr "Soluzion problemis"
 
-#: src/adw-about-window.ui:381
+#: src/adap-about-window.ui:381
 msgid ""
 "To assist in troubleshooting, you can view your debugging information. "
 "Providing this information to the application developers can help diagnose "
@@ -211,68 +211,68 @@ msgstr ""
 "aplicazion tu puedis judâ a diagnosticâ cualsisei probleme che tu cjatis "
 "cuant che tu segnalis un probleme."
 
-#: src/adw-about-window.ui:392
+#: src/adap-about-window.ui:392
 msgid "_Debugging Information"
 msgstr "Informazions di _debug"
 
-#: src/adw-about-window.ui:418
+#: src/adap-about-window.ui:418
 msgid "Debugging Information"
 msgstr "Informazions di debug"
 
-#: src/adw-about-window.ui:460
+#: src/adap-about-window.ui:460
 msgid "_Copy Text"
 msgstr "_Copie test"
 
-#: src/adw-about-window.ui:468
+#: src/adap-about-window.ui:468
 msgid "_Save as…"
 msgstr "_Salve come…"
 
-#: src/adw-about-window.ui:481
+#: src/adap-about-window.ui:481
 msgid "Credits"
 msgstr "Ricognossiments"
 
-#: src/adw-about-window.ui:512
+#: src/adap-about-window.ui:512
 msgid "Legal"
 msgstr "Legâl"
 
-#: src/adw-about-window.ui:543
+#: src/adap-about-window.ui:543
 msgid "Acknowledgements"
 msgstr "Ringraciaments"
 
-#: src/adw-back-button.c:444
+#: src/adap-back-button.c:444
 msgid "Back"
 msgstr "Indaûr"
 
-#: src/adw-combo-row.ui:50
+#: src/adap-combo-row.ui:50
 msgid "Search…"
 msgstr "Cîr…"
 
-#: src/adw-entry-row.ui:97
+#: src/adap-entry-row.ui:97
 msgid "Apply"
 msgstr "Apliche"
 
-#: src/adw-inspector-page.c:75
+#: src/adap-inspector-page.c:75
 msgid "No Preference"
 msgstr "Nissune preference"
 
-#: src/adw-inspector-page.c:77
+#: src/adap-inspector-page.c:77
 msgid "Prefer Dark"
 msgstr "Preferìs scûr"
 
-#: src/adw-inspector-page.c:79
+#: src/adap-inspector-page.c:79
 msgid "Prefer Light"
 msgstr "Preferìs clâr"
 
 #. Translators: The name of the library, not the stylesheet
-#: src/adw-inspector-page.c:97
-msgid "Adwaita"
-msgstr "Adwaita"
+#: src/adap-inspector-page.c:97
+msgid "Adapta"
+msgstr "Adapta"
 
-#: src/adw-inspector-page.ui:10
+#: src/adap-inspector-page.ui:10
 msgid "System Appearance"
 msgstr "Aspiet dal sisteme"
 
-#: src/adw-inspector-page.ui:11
+#: src/adap-inspector-page.ui:11
 msgid ""
 "Override settings for this application. They will be reset upon closing the "
 "inspector."
@@ -280,95 +280,95 @@ msgstr ""
 "Passe sore aes impostazions par cheste aplicazion. A vignaran ripristinadis "
 "ae sieradure dal ispetôr."
 
-#: src/adw-inspector-page.ui:14
+#: src/adap-inspector-page.ui:14
 msgid "System Supports Color Schemes"
 msgstr "Il sisteme al supuarte i schemis di colôr"
 
-#: src/adw-inspector-page.ui:20
+#: src/adap-inspector-page.ui:20
 msgid "Preferred Color Scheme"
 msgstr "Scheme di colôr preferît"
 
-#: src/adw-inspector-page.ui:37
+#: src/adap-inspector-page.ui:37
 msgid "High Contrast"
 msgstr "Contrast elevât"
 
-#: src/adw-password-entry-row.c:70
+#: src/adap-password-entry-row.c:70
 msgid "Hide Password"
 msgstr "Plate la password"
 
-#: src/adw-password-entry-row.c:74
+#: src/adap-password-entry-row.c:74
 msgid "Show Password"
 msgstr "Mostre la password"
 
-#: src/adw-password-entry-row.c:168
+#: src/adap-password-entry-row.c:168
 msgid "Caps Lock is on"
 msgstr "BlocMaiusc al è atîf"
 
-#: src/adw-password-entry-row.c:176
+#: src/adap-password-entry-row.c:176
 msgid "_Show Password"
 msgstr "_Mostre password"
 
-#: src/adw-preferences-window.c:259
+#: src/adap-preferences-window.c:259
 msgid "Untitled page"
 msgstr "Pagjine cence titul"
 
-#: src/adw-preferences-window.ui:8
+#: src/adap-preferences-window.ui:8
 msgid "Preferences"
 msgstr "Preferencis"
 
-#: src/adw-preferences-window.ui:81
+#: src/adap-preferences-window.ui:81
 msgid "Search preferences"
 msgstr "Preferencis di ricercje"
 
-#: src/adw-preferences-window.ui:96
+#: src/adap-preferences-window.ui:96
 msgid "Search"
 msgstr "Cîr"
 
-#: src/adw-preferences-window.ui:163
+#: src/adap-preferences-window.ui:163
 msgid "No Results Found"
 msgstr "Nissun risultât cjatât"
 
-#: src/adw-preferences-window.ui:164 src/adw-tab-overview.ui:111
+#: src/adap-preferences-window.ui:164 src/adap-tab-overview.ui:111
 msgid "Try a different search."
 msgstr "Prove cuntune ricercje diferente."
 
-#: src/adw-split-button.c:519 src/adw-split-button.c:1033
+#: src/adap-split-button.c:519 src/adap-split-button.c:1033
 msgid "More Options"
 msgstr "Altris opzions"
 
-#: src/adw-tab-button.ui:7
+#: src/adap-tab-button.ui:7
 msgid "View Open Tabs"
 msgstr "Viôt schedis viertis"
 
 #. Translators: Tab overview title, %u is the number of open tabs
-#: src/adw-tab-overview.c:918
+#: src/adap-tab-overview.c:918
 #, c-format
 msgid "%u Tab"
 msgid_plural "%u Tabs"
 msgstr[0] "%u schede"
 msgstr[1] "%u schedis"
 
-#: src/adw-tab-overview.ui:21
+#: src/adap-tab-overview.ui:21
 msgid "Search Tabs"
 msgstr "Cîr schedis"
 
-#: src/adw-tab-overview.ui:51
+#: src/adap-tab-overview.ui:51
 msgid "Search tabs"
 msgstr "Cîr schedis"
 
-#: src/adw-tab-overview.ui:97
+#: src/adap-tab-overview.ui:97
 msgid "No Open Tabs"
 msgstr "Nissune schede vierte"
 
-#: src/adw-tab-overview.ui:110
+#: src/adap-tab-overview.ui:110
 msgid "No Tabs Found"
 msgstr "Nissune schede cjatade"
 
-#: src/adw-tab-overview.ui:131
+#: src/adap-tab-overview.ui:131
 msgid "New _Tab"
 msgstr "Gnove _schede"
 
-#: src/adw-tab-thumbnail.ui:39 src/adw-tab.ui:95
+#: src/adap-tab-thumbnail.ui:39 src/adap-tab.ui:95
 msgid "Close Tab"
 msgstr "Siere schede"
 

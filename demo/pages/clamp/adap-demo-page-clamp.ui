@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <template class="AdwDemoPageClamp" parent="AdwBin">
+  <requires lib="libadapta" version="1.0"/>
+  <template class="AdapDemoPageClamp" parent="AdapBin">
     <property name="child">
-      <object class="AdwStatusPage">
+      <object class="AdapStatusPage">
         <property name="icon-name">widget-clamp-symbolic</property>
         <property name="title" translatable="yes">Clamp</property>
         <property name="description" translatable="yes">This page is clamped to smoothly grow up to a maximum width.</property>
         <property name="child">
-          <object class="AdwClamp">
+          <object class="AdapClamp">
             <property name="maximum-size" bind-source="maximum_size_adjustment" bind-property="value" bind-flags="sync-create"/>
             <property name="tightening-threshold" bind-source="tightening_threshold_adjustment" bind-property="value" bind-flags="sync-create"/>
             <property name="unit" bind-source="unit_row" bind-property="selected" bind-flags="sync-create"/>
             <property name="child">
-              <object class="AdwPreferencesGroup">
+              <object class="AdapPreferencesGroup">
                 <child>
-                  <object class="AdwSpinRow">
+                  <object class="AdapSpinRow">
                     <property name="title" translatable="yes">Maximum Width</property>
                     <property name="adjustment">
                       <object class="GtkAdjustment" id="maximum_size_adjustment">
@@ -30,7 +30,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwSpinRow">
+                  <object class="AdapSpinRow">
                     <property name="title" translatable="yes">Tightening Threshold</property>
                     <property name="adjustment">
                       <object class="GtkAdjustment" id="tightening_threshold_adjustment">
@@ -44,15 +44,15 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwComboRow" id="unit_row">
+                  <object class="AdapComboRow" id="unit_row">
                     <property name="title" translatable="yes">Unit</property>
                     <property name="model">
-                      <object class="AdwEnumListModel">
-                        <property name="enum-type">AdwLengthUnit</property>
+                      <object class="AdapEnumListModel">
+                        <property name="enum-type">AdapLengthUnit</property>
                       </object>
                     </property>
                     <property name="expression">
-                      <lookup type="AdwEnumListItem" name="nick"/>
+                      <lookup type="AdapEnumListItem" name="nick"/>
                     </property>
                     <property name="selected">2</property>
                   </object>

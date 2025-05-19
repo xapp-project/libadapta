@@ -6,7 +6,7 @@
  * Author: Alice Mikhaylenko <alice.mikhaylenko@puri.sm>
  */
 
-#include <adwaita.h>
+#include <adapta.h>
 
 static void
 value_cb (double   value,
@@ -21,13 +21,13 @@ increment (int *data)
 }
 
 static void
-test_adw_animation_value_from (void)
+test_adap_animation_value_from (void)
 {
   GtkWidget *widget = g_object_ref_sink (gtk_button_new ());
-  AdwAnimationTarget *target =
-    adw_callback_animation_target_new (value_cb, NULL, NULL);
-  AdwTimedAnimation *animation =
-    ADW_TIMED_ANIMATION (adw_timed_animation_new (widget, 10, 20, 100,
+  AdapAnimationTarget *target =
+    adap_callback_animation_target_new (value_cb, NULL, NULL);
+  AdapTimedAnimation *animation =
+    ADAP_TIMED_ANIMATION (adap_timed_animation_new (widget, 10, 20, 100,
                                                   g_object_ref (target)));
   double value;
   int notified = 0;
@@ -40,13 +40,13 @@ test_adw_animation_value_from (void)
   g_assert_true (G_APPROX_VALUE (value, 10, DBL_EPSILON));
   g_assert_cmpint (notified, ==, 0);
 
-  adw_timed_animation_set_value_from (animation, 20);
+  adap_timed_animation_set_value_from (animation, 20);
   g_object_get (animation, "value-from", &value, NULL);
   g_assert_true (G_APPROX_VALUE (value, 20, DBL_EPSILON));
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (animation, "value-from", 30.0, NULL);
-  g_assert_true (G_APPROX_VALUE (adw_timed_animation_get_value_from (animation), 30, DBL_EPSILON));
+  g_assert_true (G_APPROX_VALUE (adap_timed_animation_get_value_from (animation), 30, DBL_EPSILON));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (animation);
@@ -55,20 +55,20 @@ test_adw_animation_value_from (void)
 }
 
 static void
-test_adw_animation_value_to (void)
+test_adap_animation_value_to (void)
 {
   GtkWidget *widget = g_object_ref_sink (gtk_button_new ());
-  AdwAnimationTarget *target =
-    adw_callback_animation_target_new (value_cb, NULL, NULL);
-  AdwTimedAnimation *animation =
-    ADW_TIMED_ANIMATION (adw_timed_animation_new (widget, 10, 20, 100,
+  AdapAnimationTarget *target =
+    adap_callback_animation_target_new (value_cb, NULL, NULL);
+  AdapTimedAnimation *animation =
+    ADAP_TIMED_ANIMATION (adap_timed_animation_new (widget, 10, 20, 100,
                                                   g_object_ref (target)));
   double value;
   int notified = 0;
 
   g_assert_nonnull (animation);
 
-  adw_animation_skip (ADW_ANIMATION (animation));
+  adap_animation_skip (ADAP_ANIMATION (animation));
 
   g_signal_connect_swapped (animation, "notify::value-to", G_CALLBACK (increment), &notified);
 
@@ -76,13 +76,13 @@ test_adw_animation_value_to (void)
   g_assert_true (G_APPROX_VALUE (value, 20, DBL_EPSILON));
   g_assert_cmpint (notified, ==, 0);
 
-  adw_timed_animation_set_value_to (animation, 10);
+  adap_timed_animation_set_value_to (animation, 10);
   g_object_get (animation, "value-to", &value, NULL);
   g_assert_true (G_APPROX_VALUE (value, 10, DBL_EPSILON));
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (animation, "value-to", 30.0, NULL);
-  g_assert_true (G_APPROX_VALUE (adw_timed_animation_get_value_to (animation), 30, DBL_EPSILON));
+  g_assert_true (G_APPROX_VALUE (adap_timed_animation_get_value_to (animation), 30, DBL_EPSILON));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (animation);
@@ -91,13 +91,13 @@ test_adw_animation_value_to (void)
 }
 
 static void
-test_adw_animation_duration (void)
+test_adap_animation_duration (void)
 {
   GtkWidget *widget = g_object_ref_sink (gtk_button_new ());
-  AdwAnimationTarget *target =
-    adw_callback_animation_target_new (value_cb, NULL, NULL);
-  AdwTimedAnimation *animation =
-    ADW_TIMED_ANIMATION (adw_timed_animation_new (widget, 10, 20, 100,
+  AdapAnimationTarget *target =
+    adap_callback_animation_target_new (value_cb, NULL, NULL);
+  AdapTimedAnimation *animation =
+    ADAP_TIMED_ANIMATION (adap_timed_animation_new (widget, 10, 20, 100,
                                                   g_object_ref (target)));
   guint duration;
   int notified = 0;
@@ -110,13 +110,13 @@ test_adw_animation_duration (void)
   g_assert_cmpint (duration, ==, 100);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_timed_animation_set_duration (animation, 200);
+  adap_timed_animation_set_duration (animation, 200);
   g_object_get (animation, "duration", &duration, NULL);
   g_assert_cmpint (duration, ==, 200);
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (animation, "duration", 300u, NULL);
-  g_assert_cmpint (adw_timed_animation_get_duration (animation), ==, 300);
+  g_assert_cmpint (adap_timed_animation_get_duration (animation), ==, 300);
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (animation);
@@ -125,15 +125,15 @@ test_adw_animation_duration (void)
 }
 
 static void
-test_adw_animation_easing (void)
+test_adap_animation_easing (void)
 {
   GtkWidget *widget = g_object_ref_sink (gtk_button_new ());
-  AdwAnimationTarget *target =
-    adw_callback_animation_target_new (value_cb, NULL, NULL);
-  AdwTimedAnimation *animation =
-    ADW_TIMED_ANIMATION (adw_timed_animation_new (widget, 10, 20, 100,
+  AdapAnimationTarget *target =
+    adap_callback_animation_target_new (value_cb, NULL, NULL);
+  AdapTimedAnimation *animation =
+    ADAP_TIMED_ANIMATION (adap_timed_animation_new (widget, 10, 20, 100,
                                                   g_object_ref (target)));
-  AdwEasing easing;
+  AdapEasing easing;
   int notified = 0;
 
   g_assert_nonnull (animation);
@@ -141,16 +141,16 @@ test_adw_animation_easing (void)
   g_signal_connect_swapped (animation, "notify::easing", G_CALLBACK (increment), &notified);
 
   g_object_get (animation, "easing", &easing, NULL);
-  g_assert_cmpint (easing, ==, ADW_EASE_OUT_CUBIC);
+  g_assert_cmpint (easing, ==, ADAP_EASE_OUT_CUBIC);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_timed_animation_set_easing (animation, ADW_EASE_IN_CUBIC);
+  adap_timed_animation_set_easing (animation, ADAP_EASE_IN_CUBIC);
   g_object_get (animation, "easing", &easing, NULL);
-  g_assert_cmpint (easing, ==, ADW_EASE_IN_CUBIC);
+  g_assert_cmpint (easing, ==, ADAP_EASE_IN_CUBIC);
   g_assert_cmpint (notified, ==, 1);
 
-  g_object_set (animation, "easing", ADW_EASE_IN_OUT_CUBIC, NULL);
-  g_assert_cmpint (adw_timed_animation_get_easing (animation), ==, ADW_EASE_IN_OUT_CUBIC);
+  g_object_set (animation, "easing", ADAP_EASE_IN_OUT_CUBIC, NULL);
+  g_assert_cmpint (adap_timed_animation_get_easing (animation), ==, ADAP_EASE_IN_OUT_CUBIC);
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (animation);
@@ -159,13 +159,13 @@ test_adw_animation_easing (void)
 }
 
 static void
-test_adw_animation_repeat_count (void)
+test_adap_animation_repeat_count (void)
 {
   GtkWidget *widget = g_object_ref_sink (gtk_button_new ());
-  AdwAnimationTarget *target =
-    adw_callback_animation_target_new (value_cb, NULL, NULL);
-  AdwTimedAnimation *animation =
-    ADW_TIMED_ANIMATION (adw_timed_animation_new (widget, 10, 20, 100,
+  AdapAnimationTarget *target =
+    adap_callback_animation_target_new (value_cb, NULL, NULL);
+  AdapTimedAnimation *animation =
+    ADAP_TIMED_ANIMATION (adap_timed_animation_new (widget, 10, 20, 100,
                                                   g_object_ref (target)));
   guint repeat_count;
   int notified = 0;
@@ -178,13 +178,13 @@ test_adw_animation_repeat_count (void)
   g_assert_cmpint (repeat_count, ==, 1);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_timed_animation_set_repeat_count (animation, 2);
+  adap_timed_animation_set_repeat_count (animation, 2);
   g_object_get (animation, "repeat-count", &repeat_count, NULL);
   g_assert_cmpint (repeat_count, ==, 2);
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (animation, "repeat-count", 3u, NULL);
-  g_assert_cmpint (adw_timed_animation_get_repeat_count (animation), ==, 3);
+  g_assert_cmpint (adap_timed_animation_get_repeat_count (animation), ==, 3);
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (animation);
@@ -193,13 +193,13 @@ test_adw_animation_repeat_count (void)
 }
 
 static void
-test_adw_animation_reverse (void)
+test_adap_animation_reverse (void)
 {
   GtkWidget *widget = g_object_ref_sink (gtk_button_new ());
-  AdwAnimationTarget *target =
-    adw_callback_animation_target_new (value_cb, NULL, NULL);
-  AdwTimedAnimation *animation =
-    ADW_TIMED_ANIMATION (adw_timed_animation_new (widget, 10, 20, 100,
+  AdapAnimationTarget *target =
+    adap_callback_animation_target_new (value_cb, NULL, NULL);
+  AdapTimedAnimation *animation =
+    ADAP_TIMED_ANIMATION (adap_timed_animation_new (widget, 10, 20, 100,
                                                   g_object_ref (target)));
   gboolean reverse;
   int notified = 0;
@@ -212,13 +212,13 @@ test_adw_animation_reverse (void)
   g_assert_false (reverse);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_timed_animation_set_reverse (animation, TRUE);
+  adap_timed_animation_set_reverse (animation, TRUE);
   g_object_get (animation, "reverse", &reverse, NULL);
   g_assert_true (reverse);
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (animation, "reverse", FALSE, NULL);
-  g_assert_false (adw_timed_animation_get_reverse (animation));
+  g_assert_false (adap_timed_animation_get_reverse (animation));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (animation);
@@ -227,13 +227,13 @@ test_adw_animation_reverse (void)
 }
 
 static void
-test_adw_animation_alternate (void)
+test_adap_animation_alternate (void)
 {
   GtkWidget *widget = g_object_ref_sink (gtk_button_new ());
-  AdwAnimationTarget *target =
-    adw_callback_animation_target_new (value_cb, NULL, NULL);
-  AdwTimedAnimation *animation =
-    ADW_TIMED_ANIMATION (adw_timed_animation_new (widget, 10, 20, 100,
+  AdapAnimationTarget *target =
+    adap_callback_animation_target_new (value_cb, NULL, NULL);
+  AdapTimedAnimation *animation =
+    ADAP_TIMED_ANIMATION (adap_timed_animation_new (widget, 10, 20, 100,
                                                   g_object_ref (target)));
   gboolean alternate;
   int notified = 0;
@@ -246,13 +246,13 @@ test_adw_animation_alternate (void)
   g_assert_false (alternate);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_timed_animation_set_alternate (animation, TRUE);
+  adap_timed_animation_set_alternate (animation, TRUE);
   g_object_get (animation, "alternate", &alternate, NULL);
   g_assert_true (alternate);
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (animation, "alternate", FALSE, NULL);
-  g_assert_false (adw_timed_animation_get_alternate (animation));
+  g_assert_false (adap_timed_animation_get_alternate (animation));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (animation);
@@ -265,15 +265,15 @@ main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
-  adw_init ();
+  adap_init ();
 
-  g_test_add_func("/Adwaita/TimedAnimation/value_from", test_adw_animation_value_from);
-  g_test_add_func("/Adwaita/TimedAnimation/value_to", test_adw_animation_value_to);
-  g_test_add_func("/Adwaita/TimedAnimation/duration", test_adw_animation_duration);
-  g_test_add_func("/Adwaita/TimedAnimation/easing", test_adw_animation_easing);
-  g_test_add_func("/Adwaita/TimedAnimation/repeat_count", test_adw_animation_repeat_count);
-  g_test_add_func("/Adwaita/TimedAnimation/reverse", test_adw_animation_reverse);
-  g_test_add_func("/Adwaita/TimedAnimation/alternate", test_adw_animation_alternate);
+  g_test_add_func("/Adapta/TimedAnimation/value_from", test_adap_animation_value_from);
+  g_test_add_func("/Adapta/TimedAnimation/value_to", test_adap_animation_value_to);
+  g_test_add_func("/Adapta/TimedAnimation/duration", test_adap_animation_duration);
+  g_test_add_func("/Adapta/TimedAnimation/easing", test_adap_animation_easing);
+  g_test_add_func("/Adapta/TimedAnimation/repeat_count", test_adap_animation_repeat_count);
+  g_test_add_func("/Adapta/TimedAnimation/reverse", test_adap_animation_reverse);
+  g_test_add_func("/Adapta/TimedAnimation/alternate", test_adap_animation_alternate);
 
   return g_test_run();
 }

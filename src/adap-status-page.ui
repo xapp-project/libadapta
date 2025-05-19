@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwStatusPage" parent="GtkWidget">
+  <template class="AdapStatusPage" parent="GtkWidget">
     <accessibility>
       <relation name="labelled-by">title_label</relation>
       <relation name="described-by">description_label</relation>
@@ -15,7 +15,7 @@
             <property name="orientation">vertical</property>
             <property name="valign">center</property>
             <child>
-              <object class="AdwClamp">
+              <object class="AdapClamp">
                 <property name="child">
                   <object class="GtkBox">
                     <property name="orientation">vertical</property>

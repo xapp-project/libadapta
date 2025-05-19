@@ -9,13 +9,13 @@ include:
   - component: gitlab.gnome.org/GNOME/citemplates/gnomeos-build-sysext@1.0.0-alpha.3
 
 variables:
-  APP_ID: 'org.gnome.Adwaita1.Demo'
-  BUNDLE: 'org.gnome.Adwaita1.Demo.flatpak'
+  APP_ID: 'org.gnome.Adapta1.Demo'
+  BUNDLE: 'org.gnome.Adapta1.Demo.flatpak'
   RUNTIME_REPO: 'https://nightly.gnome.org/gnome-nightly.flatpakrepo'
-  MANIFEST_PATH: 'demo/org.gnome.Adwaita1.Demo.json'
-  FLATPAK_MODULE: 'libadwaita'
+  MANIFEST_PATH: 'demo/org.gnome.Adapta1.Demo.json'
+  FLATPAK_MODULE: 'libadapta'
   FLATPAK_BUILD_DIR: build
-  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/libadwaita/fedora:v1"
+  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/libadapta/fedora:v1"
   TARBALL_ARTIFACT_PATH: ".flatpak-builder/build/${FLATPAK_MODULE}/_flatpak_build/meson-dist/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.xz"
 
 stages:
@@ -44,7 +44,7 @@ doc:
   script:
     - meson setup --fatal-meson-warnings --prefix=/app ${MESON_ARGS} _build
     - ninja -C _build
-    - mv _build/doc/libadwaita-1 _doc/
+    - mv _build/doc/libadapta-1 _doc/
   artifacts:
     expose_as: 'Browse documentation'
     paths:

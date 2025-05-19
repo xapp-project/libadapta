@@ -5,19 +5,19 @@ Slug: styles-and-appearance
 
 ## Dark Style
 
-Libadwaita applications can use a light or a dark appearance. This can be used
+Libadapta applications can use a light or a dark appearance. This can be used
 to request a darker UI, or to support a system-wide dark style preference if one
 exists.
 
 By default, applications use light appearance unless the system prefers dark
-appearance, matching the `ADW_COLOR_SCHEME_PREFER_LIGHT` color scheme. The
+appearance, matching the `ADAP_COLOR_SCHEME_PREFER_LIGHT` color scheme. The
 [property@StyleManager:color-scheme] property allows to change this behavior
 when set to:
 
-* `ADW_COLOR_SCHEME_PREFER_DARK`: Use dark appearance unless the system prefers
+* `ADAP_COLOR_SCHEME_PREFER_DARK`: Use dark appearance unless the system prefers
   light appearance.
-* `ADW_COLOR_SCHEME_FORCE_DARK`: Always use dark appearance.
-* `ADW_COLOR_SCHEME_FORCE_LIGHT`: Always use light appearance.
+* `ADAP_COLOR_SCHEME_FORCE_DARK`: Always use dark appearance.
+* `ADAP_COLOR_SCHEME_FORCE_LIGHT`: Always use light appearance.
 
 <table>
   <tr>
@@ -54,22 +54,22 @@ when set to:
 
 Common use cases:
 
-1. An application wants to use dark UI. Use the `ADW_COLOR_SCHEME_PREFER_DARK`
+1. An application wants to use dark UI. Use the `ADAP_COLOR_SCHEME_PREFER_DARK`
    color scheme.
 
 2. An application has a style switcher with the system, light and
 dark states. Use the following color scheme values:
 
-    * System: `ADW_COLOR_SCHEME_PREFER_LIGHT`
-    * Light: `ADW_COLOR_SCHEME_FORCE_LIGHT`
-    * Dark: `ADW_COLOR_SCHEME_FORCE_DARK`
+    * System: `ADAP_COLOR_SCHEME_PREFER_LIGHT`
+    * Light: `ADAP_COLOR_SCHEME_FORCE_LIGHT`
+    * Dark: `ADAP_COLOR_SCHEME_FORCE_DARK`
 
 If the system does not provide a style preference, the
 [property@StyleManager:system-supports-color-schemes] property can be used to
 provide a fallback. For example, applications with a system/light/dark switcher
 may want to hide or disable the system value.
 
-All standard GTK and Libadwaita widgets automatically support both styles.
+All standard GTK and Libadapta widgets automatically support both styles.
 Applications that use custom drawing or styles may need to ensure the UI
 remains legible in both appearances:
 
@@ -86,13 +86,13 @@ remains legible in both appearances:
 
 ## High Contrast
 
-The system can provide a high contrast preference. Libadwaita applications
+The system can provide a high contrast preference. Libadapta applications
 automatically support it; applications cannot disable it.
 
 High contrast appearance can be combined with the [dark style](#dark-style) and
 is independent from it.
 
-All standard GTK and Libadwaita widgets automatically support the high contrast
+All standard GTK and Libadapta widgets automatically support the high contrast
 appearance. Applications that use custom drawing or styles may need to support
 it manually.
 

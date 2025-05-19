@@ -22,14 +22,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/..
  */
 
-/* Bits taken from GTK 4.0.2 and tweaked to be used by libadwaita. */
+/* Bits taken from GTK 4.0.2 and tweaked to be used by libadapta. */
 
-#include "adw-bidi-private.h"
+#include "adap-bidi-private.h"
 
 #include <fribidi.h>
 
 static PangoDirection
-adw_unichar_direction (gunichar ch)
+adap_unichar_direction (gunichar ch)
 {
   FriBidiCharType fribidi_ch_type;
 
@@ -46,7 +46,7 @@ adw_unichar_direction (gunichar ch)
 }
 
 PangoDirection
-adw_find_base_dir (const char *text,
+adap_find_base_dir (const char *text,
                    int         length)
 {
   PangoDirection dir = PANGO_DIRECTION_NEUTRAL;
@@ -58,7 +58,7 @@ adw_find_base_dir (const char *text,
   while ((length < 0 || p < text + length) && *p) {
     gunichar wc = g_utf8_get_char (p);
 
-    dir = adw_unichar_direction (wc);
+    dir = adap_unichar_direction (wc);
 
     if (dir != PANGO_DIRECTION_NEUTRAL)
       break;

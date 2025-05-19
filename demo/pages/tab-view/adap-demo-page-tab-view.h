@@ -1,11 +1,11 @@
 #pragma once
 
-#include <adwaita.h>
+#include <adapta.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_DEMO_PAGE_TAB_VIEW (adw_demo_page_tab_view_get_type())
+#define ADAP_TYPE_DEMO_PAGE_TAB_VIEW (adap_demo_page_tab_view_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwDemoPageTabView, adw_demo_page_tab_view, ADW, DEMO_PAGE_TAB_VIEW, AdwBin)
+G_DECLARE_FINAL_TYPE (AdapDemoPageTabView, adap_demo_page_tab_view, ADAP, DEMO_PAGE_TAB_VIEW, AdapBin)
 
 G_END_DECLS

@@ -1,25 +1,25 @@
-#include "adw-demo-page-carousel.h"
+#include "adap-demo-page-carousel.h"
 
 #include <glib/gi18n.h>
 
-struct _AdwDemoPageCarousel
+struct _AdapDemoPageCarousel
 {
-  AdwBin parent_instance;
+  AdapBin parent_instance;
 
   GtkBox *box;
-  AdwCarousel *carousel;
+  AdapCarousel *carousel;
   GtkStack *indicators_stack;
-  AdwComboRow *orientation_row;
-  AdwComboRow *indicators_row;
+  AdapComboRow *orientation_row;
+  AdapComboRow *indicators_row;
 };
 
-G_DEFINE_FINAL_TYPE (AdwDemoPageCarousel, adw_demo_page_carousel, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (AdapDemoPageCarousel, adap_demo_page_carousel, ADAP_TYPE_BIN)
 
 static char *
-get_orientation_name (AdwEnumListItem *item,
+get_orientation_name (AdapEnumListItem *item,
                       gpointer         user_data)
 {
-  switch (adw_enum_list_item_get_value (item)) {
+  switch (adap_enum_list_item_get_value (item)) {
   case GTK_ORIENTATION_HORIZONTAL:
     return g_strdup (_("Horizontal"));
   case GTK_ORIENTATION_VERTICAL:
@@ -30,9 +30,9 @@ get_orientation_name (AdwEnumListItem *item,
 }
 
 static void
-notify_orientation_cb (AdwDemoPageCarousel *self)
+notify_orientation_cb (AdapDemoPageCarousel *self)
 {
-  GtkOrientation orientation = adw_combo_row_get_selected (self->orientation_row);
+  GtkOrientation orientation = adap_combo_row_get_selected (self->orientation_row);
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self->box),
                                   1 - orientation);
@@ -59,33 +59,33 @@ get_indicators_name (GtkStringObject *value)
 }
 
 static void
-notify_indicators_cb (AdwDemoPageCarousel *self)
+notify_indicators_cb (AdapDemoPageCarousel *self)
 {
-  GtkStringObject *obj = adw_combo_row_get_selected_item (self->indicators_row);
+  GtkStringObject *obj = adap_combo_row_get_selected_item (self->indicators_row);
 
   gtk_stack_set_visible_child_name (self->indicators_stack,
                                     gtk_string_object_get_string (obj));
 }
 
 static void
-carousel_return_cb (AdwDemoPageCarousel *self)
+carousel_return_cb (AdapDemoPageCarousel *self)
 {
-  adw_carousel_scroll_to (self->carousel,
-                          adw_carousel_get_nth_page (self->carousel, 0),
+  adap_carousel_scroll_to (self->carousel,
+                          adap_carousel_get_nth_page (self->carousel, 0),
                           TRUE);
 }
 
 static void
-adw_demo_page_carousel_class_init (AdwDemoPageCarouselClass *klass)
+adap_demo_page_carousel_class_init (AdapDemoPageCarouselClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adwaita1/Demo/ui/pages/carousel/adw-demo-page-carousel.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoPageCarousel, box);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoPageCarousel, carousel);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoPageCarousel, indicators_stack);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoPageCarousel, orientation_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoPageCarousel, indicators_row);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adapta1/Demo/ui/pages/carousel/adap-demo-page-carousel.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoPageCarousel, box);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoPageCarousel, carousel);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoPageCarousel, indicators_stack);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoPageCarousel, orientation_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoPageCarousel, indicators_row);
   gtk_widget_class_bind_template_callback (widget_class, get_orientation_name);
   gtk_widget_class_bind_template_callback (widget_class, notify_orientation_cb);
   gtk_widget_class_bind_template_callback (widget_class, get_indicators_name);
@@ -95,7 +95,7 @@ adw_demo_page_carousel_class_init (AdwDemoPageCarouselClass *klass)
 }
 
 static void
-adw_demo_page_carousel_init (AdwDemoPageCarousel *self)
+adap_demo_page_carousel_init (AdapDemoPageCarousel *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }

@@ -6,7 +6,7 @@
  * Author: Alice Mikhaylenko <alice.mikhaylenko@puri.sm>
  */
 
-#include <adwaita.h>
+#include <adapta.h>
 
 static void
 increment (int *data)
@@ -15,9 +15,9 @@ increment (int *data)
 }
 
 static void
-test_adw_bin_child (void)
+test_adap_bin_child (void)
 {
-  AdwBin *bin = g_object_ref_sink (ADW_BIN (adw_bin_new ()));
+  AdapBin *bin = g_object_ref_sink (ADAP_BIN (adap_bin_new ()));
   GtkWidget *widget = NULL;
   int notified = 0;
 
@@ -28,16 +28,16 @@ test_adw_bin_child (void)
   g_object_get (bin, "child", &widget, NULL);
   g_assert_null (widget);
 
-  adw_bin_set_child (bin, NULL);
+  adap_bin_set_child (bin, NULL);
   g_assert_cmpint (notified, ==, 0);
 
   widget = gtk_button_new ();
-  adw_bin_set_child (bin, widget);
-  g_assert_true (adw_bin_get_child (bin) == widget);
+  adap_bin_set_child (bin, widget);
+  g_assert_true (adap_bin_get_child (bin) == widget);
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (bin, "child", NULL, NULL);
-  g_assert_null (adw_bin_get_child (bin));
+  g_assert_null (adap_bin_get_child (bin));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (bin);
@@ -48,9 +48,9 @@ main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
-  adw_init ();
+  adap_init ();
 
-  g_test_add_func ("/Adwaita/Bin/child", test_adw_bin_child);
+  g_test_add_func ("/Adapta/Bin/child", test_adap_bin_child);
 
   return g_test_run ();
 }

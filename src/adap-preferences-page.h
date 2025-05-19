@@ -6,27 +6,27 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
-#include "adw-preferences-group.h"
+#include "adap-preferences-group.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_PREFERENCES_PAGE (adw_preferences_page_get_type())
+#define ADAP_TYPE_PREFERENCES_PAGE (adap_preferences_page_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_DERIVABLE_TYPE (AdwPreferencesPage, adw_preferences_page, ADW, PREFERENCES_PAGE, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (AdapPreferencesPage, adap_preferences_page, ADAP, PREFERENCES_PAGE, GtkWidget)
 
 /**
- * AdwPreferencesPageClass
+ * AdapPreferencesPageClass
  * @parent_class: The parent class
  */
-struct _AdwPreferencesPageClass
+struct _AdapPreferencesPageClass
 {
   GtkWidgetClass parent_class;
 
@@ -34,47 +34,47 @@ struct _AdwPreferencesPageClass
   gpointer padding[4];
 };
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_preferences_page_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_preferences_page_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-void adw_preferences_page_add    (AdwPreferencesPage  *self,
-                                  AdwPreferencesGroup *group);
-ADW_AVAILABLE_IN_ALL
-void adw_preferences_page_remove (AdwPreferencesPage  *self,
-                                  AdwPreferencesGroup *group);
+ADAP_AVAILABLE_IN_ALL
+void adap_preferences_page_add    (AdapPreferencesPage  *self,
+                                  AdapPreferencesGroup *group);
+ADAP_AVAILABLE_IN_ALL
+void adap_preferences_page_remove (AdapPreferencesPage  *self,
+                                  AdapPreferencesGroup *group);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_preferences_page_get_icon_name (AdwPreferencesPage *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_preferences_page_set_icon_name (AdwPreferencesPage *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_preferences_page_get_icon_name (AdapPreferencesPage *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_preferences_page_set_icon_name (AdapPreferencesPage *self,
                                                 const char         *icon_name);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_preferences_page_get_title (AdwPreferencesPage *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_preferences_page_set_title (AdwPreferencesPage *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_preferences_page_get_title (AdapPreferencesPage *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_preferences_page_set_title (AdapPreferencesPage *self,
                                             const char         *title);
 
-ADW_AVAILABLE_IN_1_4
-const char *adw_preferences_page_get_description (AdwPreferencesPage *self);
-ADW_AVAILABLE_IN_1_4
-void        adw_preferences_page_set_description (AdwPreferencesPage *self,
+ADAP_AVAILABLE_IN_1_4
+const char *adap_preferences_page_get_description (AdapPreferencesPage *self);
+ADAP_AVAILABLE_IN_1_4
+void        adap_preferences_page_set_description (AdapPreferencesPage *self,
                                                   const char         *description);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_preferences_page_get_name (AdwPreferencesPage *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_preferences_page_set_name (AdwPreferencesPage *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_preferences_page_get_name (AdapPreferencesPage *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_preferences_page_set_name (AdapPreferencesPage *self,
                                            const char         *name);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_preferences_page_get_use_underline (AdwPreferencesPage *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_preferences_page_set_use_underline (AdwPreferencesPage *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_preferences_page_get_use_underline (AdapPreferencesPage *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_preferences_page_set_use_underline (AdapPreferencesPage *self,
                                                  gboolean            use_underline);
 
-ADW_AVAILABLE_IN_1_3
-void adw_preferences_page_scroll_to_top (AdwPreferencesPage *self);
+ADAP_AVAILABLE_IN_1_3
+void adap_preferences_page_scroll_to_top (AdapPreferencesPage *self);
 
 G_END_DECLS

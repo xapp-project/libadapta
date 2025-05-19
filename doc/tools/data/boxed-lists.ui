@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
+  <requires lib="libadapta" version="1.0"/>
   <object class="GtkListBox" id="widget">
     <property name="margin-top">6</property>
     <property name="margin-bottom">6</property>
@@ -13,17 +13,17 @@
       <class name="boxed-list"/>
     </style>
     <child>
-      <object class="AdwActionRow">
+      <object class="AdapActionRow">
         <property name="title">Item 1</property>
       </object>
     </child>
     <child>
-      <object class="AdwActionRow">
+      <object class="AdapActionRow">
         <property name="title">Item 2</property>
       </object>
     </child>
     <child>
-      <object class="AdwActionRow">
+      <object class="AdapActionRow">
         <property name="title">Item 3</property>
       </object>
     </child>

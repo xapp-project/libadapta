@@ -6,15 +6,15 @@
 
 #include "config.h"
 
-#include "adw-spring-params.h"
+#include "adap-spring-params.h"
 
 #include <math.h>
 
-G_DEFINE_BOXED_TYPE (AdwSpringParams, adw_spring_params,
-                     adw_spring_params_ref, adw_spring_params_unref)
+G_DEFINE_BOXED_TYPE (AdapSpringParams, adap_spring_params,
+                     adap_spring_params_ref, adap_spring_params_unref)
 
 /**
- * AdwSpringParams:
+ * AdapSpringParams:
  *
  * Physical parameters of a spring for [class@SpringAnimation].
  *
@@ -48,7 +48,7 @@ G_DEFINE_BOXED_TYPE (AdwSpringParams, adw_spring_params,
  * As such
  */
 
-struct _AdwSpringParams
+struct _AdapSpringParams
 {
   gatomicrefcount ref_count;
 
@@ -58,12 +58,12 @@ struct _AdwSpringParams
 };
 
 /**
- * adw_spring_params_new:
+ * adap_spring_params_new:
  * @damping_ratio: the damping ratio of the spring
  * @mass: the mass of the spring
  * @stiffness: the stiffness of the spring
  *
- * Creates a new `AdwSpringParams` from @mass, @stiffness and @damping_ratio.
+ * Creates a new `AdapSpringParams` from @mass, @stiffness and @damping_ratio.
  *
  * The damping value is calculated from @damping_ratio and the other two
  * parameters.
@@ -81,8 +81,8 @@ struct _AdwSpringParams
  *
  * Returns: (transfer full): the newly created spring parameters
  */
-AdwSpringParams *
-adw_spring_params_new (double damping_ratio,
+AdapSpringParams *
+adap_spring_params_new (double damping_ratio,
                        double mass,
                        double stiffness)
 {
@@ -93,34 +93,34 @@ adw_spring_params_new (double damping_ratio,
   critical_damping = 2 * sqrt (mass * stiffness);
   damping = damping_ratio * critical_damping;
 
-  return adw_spring_params_new_full (damping, mass, stiffness);
+  return adap_spring_params_new_full (damping, mass, stiffness);
 }
 
 /**
- * adw_spring_params_new_full:
+ * adap_spring_params_new_full:
  * @damping: the damping of the spring
  * @mass: the mass of the spring
  * @stiffness: the stiffness of the spring
  *
- * Creates a new `AdwSpringParams` from @mass, @stiffness and @damping.
+ * Creates a new `AdapSpringParams` from @mass, @stiffness and @damping.
  *
  * See [ctor@SpringParams.new] for a simplified constructor using damping ratio
  * instead of @damping.
  *
  * Returns: (transfer full): the newly created spring parameters
  */
-AdwSpringParams *
-adw_spring_params_new_full (double damping,
+AdapSpringParams *
+adap_spring_params_new_full (double damping,
                             double mass,
                             double stiffness)
 {
-  AdwSpringParams *self;
+  AdapSpringParams *self;
 
   g_return_val_if_fail (G_APPROX_VALUE (damping, 0.0, DBL_EPSILON) || damping > 0.0, NULL);
   g_return_val_if_fail (mass > 0.0, NULL);
   g_return_val_if_fail (stiffness > 0.0, NULL);
 
-  self = g_new0 (AdwSpringParams, 1);
+  self = g_new0 (AdapSpringParams, 1);
 
   g_atomic_ref_count_init (&self->ref_count);
 
@@ -132,15 +132,15 @@ adw_spring_params_new_full (double damping,
 }
 
 /**
- * adw_spring_params_ref:
+ * adap_spring_params_ref:
  * @self: spring params
  *
  * Increases the reference count of @self.
  *
  * Returns: (transfer full): @self
  */
-AdwSpringParams *
-adw_spring_params_ref (AdwSpringParams *self)
+AdapSpringParams *
+adap_spring_params_ref (AdapSpringParams *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
 
@@ -150,7 +150,7 @@ adw_spring_params_ref (AdwSpringParams *self)
 }
 
 /**
- * adw_spring_params_unref:
+ * adap_spring_params_unref:
  * @self: spring params
  *
  * Decreases the reference count of @self.
@@ -158,7 +158,7 @@ adw_spring_params_ref (AdwSpringParams *self)
  * If the last reference is dropped, the structure is freed.
  */
 void
-adw_spring_params_unref (AdwSpringParams *self)
+adap_spring_params_unref (AdapSpringParams *self)
 {
   g_return_if_fail (self != NULL);
 
@@ -167,7 +167,7 @@ adw_spring_params_unref (AdwSpringParams *self)
 }
 
 /**
- * adw_spring_params_get_damping:
+ * adap_spring_params_get_damping:
  * @self: spring params
  *
  * Gets the damping of @self.
@@ -175,7 +175,7 @@ adw_spring_params_unref (AdwSpringParams *self)
  * Returns: the damping
  */
 double
-adw_spring_params_get_damping (AdwSpringParams *self)
+adap_spring_params_get_damping (AdapSpringParams *self)
 {
   g_return_val_if_fail (self != NULL, 0.0);
 
@@ -183,7 +183,7 @@ adw_spring_params_get_damping (AdwSpringParams *self)
 }
 
 /**
- * adw_spring_params_get_damping_ratio:
+ * adap_spring_params_get_damping_ratio:
  * @self: spring params
  *
  * Gets the damping ratio of @self.
@@ -191,7 +191,7 @@ adw_spring_params_get_damping (AdwSpringParams *self)
  * Returns: the damping ratio
  */
 double
-adw_spring_params_get_damping_ratio (AdwSpringParams *self)
+adap_spring_params_get_damping_ratio (AdapSpringParams *self)
 {
   double critical_damping;
 
@@ -203,7 +203,7 @@ adw_spring_params_get_damping_ratio (AdwSpringParams *self)
 }
 
 /**
- * adw_spring_params_get_mass:
+ * adap_spring_params_get_mass:
  * @self: spring params
  *
  * Gets the mass of @self.
@@ -211,7 +211,7 @@ adw_spring_params_get_damping_ratio (AdwSpringParams *self)
  * Returns: the mass
  */
 double
-adw_spring_params_get_mass (AdwSpringParams *self)
+adap_spring_params_get_mass (AdapSpringParams *self)
 {
   g_return_val_if_fail (self != NULL, 0.0);
 
@@ -219,7 +219,7 @@ adw_spring_params_get_mass (AdwSpringParams *self)
 }
 
 /**
- * adw_spring_params_get_stiffness:
+ * adap_spring_params_get_stiffness:
  * @self: spring params
  *
  * Gets the stiffness of @self.
@@ -227,7 +227,7 @@ adw_spring_params_get_mass (AdwSpringParams *self)
  * Returns: the stiffness
  */
 double
-adw_spring_params_get_stiffness (AdwSpringParams *self)
+adap_spring_params_get_stiffness (AdapSpringParams *self)
 {
   g_return_val_if_fail (self != NULL, 0.0);
 

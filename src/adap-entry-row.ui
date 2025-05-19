@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwEntryRow" parent="AdwPreferencesRow">
+  <template class="AdapEntryRow" parent="AdapPreferencesRow">
     <property name="activatable">True</property>
     <child>
       <object class="GtkGestureClick">
@@ -23,7 +23,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwGizmo" id="editable_area">
+          <object class="AdapGizmo" id="editable_area">
             <property name="hexpand">True</property>
             <property name="overflow">hidden</property>
             <child>
@@ -32,10 +32,10 @@
                 <property name="halign">start</property>
                 <property name="lines">0</property>
                 <property name="xalign">0</property>
-                <property name="label" bind-source="AdwEntryRow" bind-property="title" bind-flags="sync-create"/>
-                <property name="mnemonic-widget">AdwEntryRow</property>
-                <property name="use-markup" bind-source="AdwEntryRow" bind-property="use-markup" bind-flags="sync-create"/>
-                <property name="use-underline" bind-source="AdwEntryRow" bind-property="use-underline" bind-flags="sync-create"/>
+                <property name="label" bind-source="AdapEntryRow" bind-property="title" bind-flags="sync-create"/>
+                <property name="mnemonic-widget">AdapEntryRow</property>
+                <property name="use-markup" bind-source="AdapEntryRow" bind-property="use-markup" bind-flags="sync-create"/>
+                <property name="use-underline" bind-source="AdapEntryRow" bind-property="use-underline" bind-flags="sync-create"/>
                 <property name="can-target">False</property>
                 <style>
                   <class name="title"/>
@@ -49,10 +49,10 @@
                 <property name="halign">start</property>
                 <property name="xalign">0</property>
                 <property name="opacity">0</property>
-                <property name="label" bind-source="AdwEntryRow" bind-property="title" bind-flags="sync-create"/>
-                <property name="mnemonic-widget">AdwEntryRow</property>
-                <property name="use-markup" bind-source="AdwEntryRow" bind-property="use-markup" bind-flags="sync-create"/>
-                <property name="use-underline" bind-source="AdwEntryRow" bind-property="use-underline" bind-flags="sync-create"/>
+                <property name="label" bind-source="AdapEntryRow" bind-property="title" bind-flags="sync-create"/>
+                <property name="mnemonic-widget">AdapEntryRow</property>
+                <property name="use-markup" bind-source="AdapEntryRow" bind-property="use-markup" bind-flags="sync-create"/>
+                <property name="use-underline" bind-source="AdapEntryRow" bind-property="use-underline" bind-flags="sync-create"/>
                 <property name="can-target">False</property>
                 <style>
                   <class name="subtitle"/>
@@ -93,7 +93,7 @@
           <object class="GtkButton" id="apply_button">
             <property name="visible">False</property>
             <property name="valign">center</property>
-            <property name="icon-name">adw-entry-apply-symbolic</property>
+            <property name="icon-name">adap-entry-apply-symbolic</property>
             <property name="tooltip-text" translatable="yes">Apply</property>
             <property name="focus-on-click">False</property>
             <signal name="clicked" handler="apply_button_clicked_cb" swapped="yes"/>

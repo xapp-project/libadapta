@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
+  <requires lib="libadapta" version="1.0"/>
   <object class="GtkWindow">
     <property name="decorated">False</property>
     <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
-          <object class="AdwCarousel" id="carousel">
+          <object class="AdapCarousel" id="carousel">
             <property name="vexpand">True</property>
             <property name="width-request">400</property>
             <child>
@@ -29,9 +29,9 @@
           </object>
         </child>
         <child>
-          <object class="AdwBin" id="widget">
+          <object class="AdapBin" id="widget">
             <property name="child">
-              <object class="AdwCarouselIndicatorDots">
+              <object class="AdapCarouselIndicatorDots">
                 <property name="carousel">carousel</property>
                 <property name="margin-top">6</property>
                 <property name="margin-bottom">6</property>

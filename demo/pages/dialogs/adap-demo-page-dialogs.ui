@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <template class="AdwDemoPageDialogs" parent="AdwBin">
+  <requires lib="libadapta" version="1.0"/>
+  <template class="AdapDemoPageDialogs" parent="AdapBin">
     <property name="child">
-      <object class="AdwStatusPage">
+      <object class="AdapStatusPage">
         <property name="icon-name">widget-dialog-symbolic</property>
         <property name="title" translatable="yes">Dialogs</property>
         <property name="description" translatable="yes">Adaptive dialog widgets.</property>

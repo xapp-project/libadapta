@@ -3,13 +3,13 @@ Slug: migrating-to-adaptive-dialogs
 
 # Migrating to Adaptive Dialogs
 
-Libadwaita 1.5 introduces [class@Dialog] and replacements for
+Libadapta 1.5 introduces [class@Dialog] and replacements for
 [class@MessageDialog], [class@PreferencesWindow] and [class@AboutWindow] that
 derive from it.
 
 While the old widgets are not deprecated yet, they will be in the next release.
 
-# Use `AdwWindow` or `AdwApplicationWindow` for the Parent Window
+# Use `AdapWindow` or `AdapApplicationWindow` for the Parent Window
 
 To use [class@Dialog], your parent window must be an instance of either
 [class@Window] or [class@ApplicationWindow]. You should migrate to these widgets
@@ -29,7 +29,7 @@ Example:
 ```xml
 <object class="GtkWindow">
   <property name="titlebar">
-    <object class="AdwHeaderBar"/>
+    <object class="AdapHeaderBar"/>
   </property>
   <property name="child">
     <object class="GtkBox">
@@ -48,11 +48,11 @@ Example:
 becomes this:
 
 ```xml
-<object class="AdwWindow">
+<object class="AdapWindow">
   <property name="content">
-    <object class="AdwToolbarView">
+    <object class="AdapToolbarView">
       <child type="top">
-        <object class="AdwHeaderBar"/>
+        <object class="AdapHeaderBar"/>
       </child>
       <property name="content">
         <!-- content -->
@@ -65,11 +65,11 @@ becomes this:
 </object>
 ```
 
-# Porting to `AdwDialog`
+# Porting to `AdapDialog`
 
 The API of [class@Dialog] is somewhat like a subset of the API of [class@Window].
 
-`GtkWindow`                          | `AdwDialog`
+`GtkWindow`                          | `AdapDialog`
 -------------------------------------|---------------------------------
 [property@Gtk.Window:child]          | [property@Dialog:child]
 [property@Gtk.Window:title]          | [property@Dialog:title]
@@ -82,7 +82,7 @@ The API of [class@Dialog] is somewhat like a subset of the API of [class@Window]
 [method@Gtk.Window.destroy]          | [method@Dialog.force_close]
 [method@Gtk.Window.present]          | [method@Dialog.present]
 
-`AdwWindow`                          | `AdwDialog`
+`AdapWindow`                          | `AdapDialog`
 -------------------------------------|---------------------------------
 [property@Window:content]            | [property@Dialog:child]
 [property@Window:current-breakpoint] | [property@Dialog:current-breakpoint]
@@ -115,7 +115,7 @@ Dialogs are always modal. The [property@Gtk.Window:transient-for] property is
 replaced by a parameter in [method@Dialog.present].
 
 ::: tip
-    The widget passed into `adw_dialog_present()` doesn't have to be a window.
+    The widget passed into `adap_dialog_present()` doesn't have to be a window.
     You can pass any widget within a window to get the same effect as passing
     the window itself. This is done both for convenience and to allow for more
     flexibility in future.
@@ -132,29 +132,29 @@ the [property@Dialog:can-close] property to `FALSE`.
 - If you were using `::close-request` just to track when the window is closed,
   use the [signal@Dialog::closed] signal instead.
 
-## Use `AdwHeaderBar` Instead of `GtkHeaderBar`
+## Use `AdapHeaderBar` Instead of `GtkHeaderBar`
 
 [class@HeaderBar] will use the dialog's title and adjust decoration layout to
 always include a close button and nothing else. Since [class@Gtk.HeaderBar]
 doesn't do this, the dialog will not behave correctly.
 
-Replace your `GtkHeaderBar` with `AdwHeaderBar`, and
+Replace your `GtkHeaderBar` with `AdapHeaderBar`, and
 [property@Gtk.HeaderBar:show-title-buttons] with a combination of
 [property@HeaderBar:show-start-title-buttons] and
 [property@HeaderBar:show-end-title-buttons].
 
 ## Remove Close Shortcut
 
-`AdwDialog` can be closed by pressing <kbd>Esc</kbd>. If you were handling that
+`AdapDialog` can be closed by pressing <kbd>Esc</kbd>. If you were handling that
 manually, you can stop doing it.
 
-# Port `AdwAboutWindow` to `AdwAboutDialog`
+# Port `AdapAboutWindow` to `AdapAboutDialog`
 
 [class@AboutDialog] has identical API to [class@AboutWindow], so just replace
 the function calls as appropriate - for example, [method@AboutWindow.add_link]
 with [method@AboutDialog.add_link] and so on.
 
-# Port `AdwPreferencesWindow` to `AdwPreferencesDialog`
+# Port `AdapPreferencesWindow` to `AdapPreferencesDialog`
 
 [class@PreferencesDialog] has very similar API to [class@PreferencesWindow],
 and only needs a few adjustments.
@@ -162,12 +162,12 @@ and only needs a few adjustments.
 ## Stop Using Deprecated API
 
 The deprecated subpage API has been removed. Refer to the [breakpoints migration
-guide](migrating-to-breakpoints.html#migrate-adwpreferenceswindow-subpages) for
+guide](migrating-to-breakpoints.html#migrate-adappreferenceswindow-subpages) for
 information on how to replace it.
 
 ## Adapt to Search Changes
 
-`AdwPreferencesDialog` changes the default of the
+`AdapPreferencesDialog` changes the default of the
 [property@PreferencesWindow:search-enabled] property to `FALSE`.
 
 If you want search, make sure to set it to `TRUE` manually, and if you were
@@ -177,7 +177,7 @@ Otherwise, replace the function calls as appropriate, for example
 [method@PreferencesWindow.add_toast] with [method@PreferencesDialog.add_toast]
 and so on.
 
-# Port `AdwMessageDialog` to `AdwAlertDialog`
+# Port `AdapMessageDialog` to `AdapAlertDialog`
 
 [class@AlertDialog] has mostly similar API to [class@MessageDialog].
 
@@ -187,18 +187,18 @@ and so on.
 parameter. Instead, pass it as a parameter to [method@Dialog.present] or
 [method@AlertDialog.choose].
 
-## Adapt to `adw_alert_dialog_choose()` Changes
+## Adapt to `adap_alert_dialog_choose()` Changes
 
 Just like [method@Dialog.present], [method@AlertDialog.choose] now takes the
 parent widget as a parameter.
 
 ::: tip
-    The widget passed into `adw_alert_dialog_choose()` doesn't have to be a
+    The widget passed into `adap_alert_dialog_choose()` doesn't have to be a
     window. You can pass any widget within a window to get the same effect as
     passing the window itself. This is done both for convenience and to allow
     for more flexibility in future.
 
-## Stop Using `adw_message_dialog_response()`
+## Stop Using `adap_message_dialog_response()`
 
 [method@MessageDialog.response] has no replacement. Most applications shouldn't
 be using it in the first place, but if you really do, emit the
@@ -210,6 +210,6 @@ and so on.
 
 ## Adapt to Scrolling
 
-`AdwAlertDialog` can scroll its content. If you were setting a
+`AdapAlertDialog` can scroll its content. If you were setting a
 [class@Gtk.ScrolledWindow] as [property@MessageDialog:extra-child], you may want
 to remove the scrolled window and use its contents directly.

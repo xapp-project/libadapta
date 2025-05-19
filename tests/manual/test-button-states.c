@@ -1,4 +1,4 @@
-#include <adwaita.h>
+#include <adapta.h>
 
 static inline void
 add_button (GtkGrid       *grid,
@@ -86,7 +86,7 @@ main (int   argc,
   GtkWidget *window;
   gboolean done = FALSE;
 
-  adw_init ();
+  adap_init ();
 
   window = gtk_window_new ();
   g_signal_connect_swapped (window, "destroy", G_CALLBACK (close_cb), &done);

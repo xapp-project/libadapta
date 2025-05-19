@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwMessageDialog" parent="GtkWindow">
+  <template class="AdapMessageDialog" parent="GtkWindow">
     <style>
       <class name="messagedialog"/>
     </style>
@@ -51,7 +51,7 @@
               <object class="GtkSeparator"/>
             </child>
             <child>
-              <object class="AdwGizmo" id="response_area">
+              <object class="AdapGizmo" id="response_area">
                 <style>
                   <class name="response-area"/>
                 </style>

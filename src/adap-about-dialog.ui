@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwAboutDialog" parent="AdwDialog">
+  <template class="AdapAboutDialog" parent="AdapDialog">
     <property name="title" translatable="yes">About</property>
     <property name="content-width">360</property>
     <property name="width-request">360</property>
@@ -10,16 +10,16 @@
       <class name="about"/>
     </style>
     <property name="child">
-      <object class="AdwToastOverlay" id="toast_overlay">
+      <object class="AdapToastOverlay" id="toast_overlay">
         <property name="child">
-          <object class="AdwNavigationView" id="navigation_view">
+          <object class="AdapNavigationView" id="navigation_view">
             <child>
-              <object class="AdwNavigationPage">
-                <property name="title" bind-source="AdwAboutDialog" bind-property="title" bind-flags="sync-create"/>
+              <object class="AdapNavigationPage">
+                <property name="title" bind-source="AdapAboutDialog" bind-property="title" bind-flags="sync-create"/>
                 <property name="child">
-                  <object class="AdwToolbarView">
+                  <object class="AdapToolbarView">
                     <child type="top">
-                      <object class="AdwHeaderBar" id="main_headerbar"/>
+                      <object class="AdapHeaderBar" id="main_headerbar"/>
                     </child>
                     <property name="content">
                       <object class="GtkScrolledWindow" id="main_scrolled_window">
@@ -30,7 +30,7 @@
                           <class name="main-page"/>
                         </style>
                         <property name="child">
-                          <object class="AdwClamp">
+                          <object class="AdapClamp">
                             <property name="child">
                               <object class="GtkBox">
                                 <property name="orientation">vertical</property>
@@ -38,7 +38,7 @@
                                   <object class="GtkImage" id="app_icon_image">
                                     <property name="visible">False</property>
                                     <property name="pixel-size">128</property>
-                                    <property name="icon-name" bind-source="AdwAboutDialog" bind-property="application-icon" bind-flags="sync-create"/>
+                                    <property name="icon-name" bind-source="AdapAboutDialog" bind-property="application-icon" bind-flags="sync-create"/>
                                     <property name="accessible-role">presentation</property>
                                     <style>
                                       <class name="icon-dropshadow"/>
@@ -50,7 +50,7 @@
                                     <property name="visible">False</property>
                                     <property name="wrap">True</property>
                                     <property name="justify">center</property>
-                                    <property name="label" bind-source="AdwAboutDialog" bind-property="application-name" bind-flags="sync-create"/>
+                                    <property name="label" bind-source="AdapAboutDialog" bind-property="application-name" bind-flags="sync-create"/>
                                     <style>
                                       <class name="title-1"/>
                                     </style>
@@ -61,7 +61,7 @@
                                     <property name="visible">False</property>
                                     <property name="wrap">True</property>
                                     <property name="justify">center</property>
-                                    <property name="label" bind-source="AdwAboutDialog" bind-property="developer-name" bind-flags="sync-create"/>
+                                    <property name="label" bind-source="AdapAboutDialog" bind-property="developer-name" bind-flags="sync-create"/>
                                   </object>
                                 </child>
                                 <child>
@@ -71,7 +71,7 @@
                                     <property name="action-name">about.copy-property</property>
                                     <property name="action-target">"version"</property>
                                     <property name="can-shrink">True</property>
-                                    <property name="label" bind-source="AdwAboutDialog" bind-property="version" bind-flags="sync-create"/>
+                                    <property name="label" bind-source="AdapAboutDialog" bind-property="version" bind-flags="sync-create"/>
                                     <style>
                                       <class name="app-version"/>
                                     </style>
@@ -81,10 +81,10 @@
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
                                     <child>
-                                      <object class="AdwPreferencesGroup" id="details_group">
+                                      <object class="AdapPreferencesGroup" id="details_group">
                                         <property name="visible">False</property>
                                         <child>
-                                          <object class="AdwActionRow" id="whats_new_row">
+                                          <object class="AdapActionRow" id="whats_new_row">
                                             <property name="visible">False</property>
                                             <property name="title" translatable="yes">_What’s New</property>
                                             <property name="use-underline">True</property>
@@ -100,7 +100,7 @@
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="AdwActionRow" id="details_row">
+                                          <object class="AdapActionRow" id="details_row">
                                             <property name="visible">False</property>
                                             <property name="title" translatable="yes">_Details</property>
                                             <property name="use-underline">True</property>
@@ -116,17 +116,17 @@
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="AdwActionRow" id="website_row">
+                                          <object class="AdapActionRow" id="website_row">
                                             <property name="visible">False</property>
                                             <property name="title" translatable="yes">_Website</property>
                                             <property name="use-underline">True</property>
                                             <property name="activatable">True</property>
                                             <property name="action-name">about.show-url-property</property>
                                             <property name="action-target">"website"</property>
-                                            <property name="tooltip-text" bind-source="AdwAboutDialog" bind-property="website" bind-flags="sync-create"/>
+                                            <property name="tooltip-text" bind-source="AdapAboutDialog" bind-property="website" bind-flags="sync-create"/>
                                             <child>
                                               <object class="GtkImage">
-                                                <property name="icon-name">adw-external-link-symbolic</property>
+                                                <property name="icon-name">adap-external-link-symbolic</property>
                                                 <property name="accessible-role">presentation</property>
                                               </object>
                                             </child>
@@ -136,44 +136,44 @@
                                     </child>
 
                                     <child>
-                                      <object class="AdwPreferencesGroup" id="support_group">
+                                      <object class="AdapPreferencesGroup" id="support_group">
                                         <property name="visible">False</property>
                                         <child>
-                                          <object class="AdwActionRow" id="support_row">
+                                          <object class="AdapActionRow" id="support_row">
                                             <property name="visible">False</property>
                                             <property name="activatable">True</property>
                                             <property name="title" translatable="yes">_Support Questions</property>
                                             <property name="use-underline">True</property>
                                             <property name="action-name">about.show-url-property</property>
                                             <property name="action-target">"support-url"</property>
-                                            <property name="tooltip-text" bind-source="AdwAboutDialog" bind-property="support-url" bind-flags="sync-create"/>
+                                            <property name="tooltip-text" bind-source="AdapAboutDialog" bind-property="support-url" bind-flags="sync-create"/>
                                             <child>
                                               <object class="GtkImage">
-                                                <property name="icon-name">adw-external-link-symbolic</property>
+                                                <property name="icon-name">adap-external-link-symbolic</property>
                                                 <property name="accessible-role">presentation</property>
                                               </object>
                                             </child>
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="AdwActionRow" id="issue_row">
+                                          <object class="AdapActionRow" id="issue_row">
                                             <property name="visible">False</property>
                                             <property name="activatable">True</property>
                                             <property name="title" translatable="yes">_Report an Issue</property>
                                             <property name="use-underline">True</property>
                                             <property name="action-name">about.show-url-property</property>
                                             <property name="action-target">"issue-url"</property>
-                                            <property name="tooltip-text" bind-source="AdwAboutDialog" bind-property="issue-url" bind-flags="sync-create"/>
+                                            <property name="tooltip-text" bind-source="AdapAboutDialog" bind-property="issue-url" bind-flags="sync-create"/>
                                             <child>
                                               <object class="GtkImage">
-                                                <property name="icon-name">adw-external-link-symbolic</property>
+                                                <property name="icon-name">adap-external-link-symbolic</property>
                                                 <property name="accessible-role">presentation</property>
                                               </object>
                                             </child>
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="AdwActionRow" id="troubleshooting_row">
+                                          <object class="AdapActionRow" id="troubleshooting_row">
                                             <property name="visible">False</property>
                                             <property name="title" translatable="yes">_Troubleshooting</property>
                                             <property name="use-underline">True</property>
@@ -191,10 +191,10 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="AdwPreferencesGroup" id="credits_legal_group">
+                                      <object class="AdapPreferencesGroup" id="credits_legal_group">
                                         <property name="visible">False</property>
                                         <child>
-                                          <object class="AdwActionRow">
+                                          <object class="AdapActionRow">
                                             <property name="title" translatable="yes">_Credits</property>
                                             <property name="use-underline">True</property>
                                             <property name="activatable">True</property>
@@ -210,7 +210,7 @@
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="AdwActionRow">
+                                          <object class="AdapActionRow">
                                             <property name="title" translatable="yes">_Legal</property>
                                             <property name="use-underline">True</property>
                                             <property name="activatable">True</property>
@@ -226,7 +226,7 @@
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="AdwActionRow">
+                                          <object class="AdapActionRow">
                                             <property name="title" translatable="yes">_Acknowledgements</property>
                                             <property name="use-underline">True</property>
                                             <property name="activatable">True</property>
@@ -256,13 +256,13 @@
               </object>
             </child>
             <child>
-              <object class="AdwNavigationPage" id="whatsnew_page">
+              <object class="AdapNavigationPage" id="whatsnew_page">
                 <property name="title" translatable="yes">What’s New</property>
                 <property name="tag">whatsnew</property>
                 <property name="child">
-                  <object class="AdwToolbarView">
+                  <object class="AdapToolbarView">
                     <child type="top">
-                      <object class="AdwHeaderBar"/>
+                      <object class="AdapHeaderBar"/>
                     </child>
                     <property name="content">
                       <object class="GtkScrolledWindow">
@@ -271,7 +271,7 @@
                           <class name="subpage"/>
                         </style>
                         <property name="child">
-                          <object class="AdwClampScrollable">
+                          <object class="AdapClampScrollable">
                             <property name="child">
                               <object class="GtkTextView">
                                 <property name="left-margin">12</property>
@@ -299,13 +299,13 @@
               </object>
             </child>
             <child>
-              <object class="AdwNavigationPage">
+              <object class="AdapNavigationPage">
                 <property name="title" translatable="yes">Details</property>
                 <property name="tag">details</property>
                 <property name="child">
-                  <object class="AdwToolbarView">
+                  <object class="AdapToolbarView">
                     <child type="top">
-                      <object class="AdwHeaderBar"/>
+                      <object class="AdapHeaderBar"/>
                     </child>
                     <property name="content">
                       <object class="GtkScrolledWindow">
@@ -314,7 +314,7 @@
                           <class name="subpage"/>
                         </style>
                         <property name="child">
-                          <object class="AdwClamp">
+                          <object class="AdapClamp">
                             <property name="child">
                               <object class="GtkBox">
                                 <property name="orientation">vertical</property>
@@ -325,7 +325,7 @@
                                     <property name="wrap">True</property>
                                     <property name="wrap-mode">word-char</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" bind-source="AdwAboutDialog" bind-property="comments" bind-flags="sync-create"/>
+                                    <property name="label" bind-source="AdapAboutDialog" bind-property="comments" bind-flags="sync-create"/>
                                     <signal name="activate-link" handler="activate_link_cb" swapped="yes"/>
                                     <style>
                                       <class name="body"/>
@@ -333,20 +333,20 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="AdwPreferencesGroup" id="links_group">
+                                  <object class="AdapPreferencesGroup" id="links_group">
                                     <property name="visible">False</property>
                                     <child>
-                                      <object class="AdwActionRow" id="details_website_row">
+                                      <object class="AdapActionRow" id="details_website_row">
                                         <property name="visible">False</property>
                                         <property name="title" translatable="yes">_Website</property>
                                         <property name="use-underline">True</property>
                                         <property name="activatable">True</property>
                                         <property name="action-name">about.show-url-property</property>
                                         <property name="action-target">"website"</property>
-                                        <property name="tooltip-text" bind-source="AdwAboutDialog" bind-property="website" bind-flags="sync-create"/>
+                                        <property name="tooltip-text" bind-source="AdapAboutDialog" bind-property="website" bind-flags="sync-create"/>
                                         <child>
                                           <object class="GtkImage">
-                                            <property name="icon-name">adw-external-link-symbolic</property>
+                                            <property name="icon-name">adap-external-link-symbolic</property>
                                             <property name="accessible-role">presentation</property>
                                           </object>
                                         </child>
@@ -365,13 +365,13 @@
               </object>
             </child>
             <child>
-              <object class="AdwNavigationPage">
+              <object class="AdapNavigationPage">
                 <property name="title" translatable="yes">Troubleshooting</property>
                 <property name="tag">troubleshooting</property>
                 <property name="child">
-                  <object class="AdwToolbarView">
+                  <object class="AdapToolbarView">
                     <child type="top">
-                      <object class="AdwHeaderBar"/>
+                      <object class="AdapHeaderBar"/>
                     </child>
                     <property name="content">
                       <object class="GtkScrolledWindow">
@@ -380,7 +380,7 @@
                           <class name="subpage"/>
                         </style>
                         <property name="child">
-                          <object class="AdwClamp">
+                          <object class="AdapClamp">
                             <property name="child">
                               <object class="GtkBox">
                                 <property name="orientation">vertical</property>
@@ -397,9 +397,9 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="AdwPreferencesGroup">
+                                  <object class="AdapPreferencesGroup">
                                     <child>
-                                      <object class="AdwActionRow">
+                                      <object class="AdapActionRow">
                                         <property name="title" translatable="yes">_Debugging Information</property>
                                         <property name="use-underline">True</property>
                                         <property name="activatable">True</property>
@@ -426,13 +426,13 @@
               </object>
             </child>
             <child>
-              <object class="AdwNavigationPage" id="debug_info_page">
+              <object class="AdapNavigationPage" id="debug_info_page">
                 <property name="title" translatable="yes">Debugging Information</property>
                 <property name="tag">debuginfo</property>
                 <property name="child">
-                  <object class="AdwToolbarView">
+                  <object class="AdapToolbarView">
                     <child type="top">
-                      <object class="AdwHeaderBar"/>
+                      <object class="AdapHeaderBar"/>
                     </child>
                     <property name="content">
                       <object class="GtkScrolledWindow">
@@ -441,7 +441,7 @@
                           <class name="subpage"/>
                         </style>
                         <property name="child">
-                          <object class="AdwClampScrollable">
+                          <object class="AdapClampScrollable">
                             <property name="child">
                               <object class="GtkTextView">
                                 <property name="left-margin">12</property>
@@ -453,7 +453,7 @@
                                 <property name="buffer">
                                   <object class="GtkTextBuffer" id="debug_info_buffer">
                                     <property name="enable-undo">False</property>
-                                    <property name="text" bind-source="AdwAboutDialog" bind-property="debug-info" bind-flags="sync-create"/>
+                                    <property name="text" bind-source="AdapAboutDialog" bind-property="debug-info" bind-flags="sync-create"/>
                                   </object>
                                 </property>
                                 <accessibility>
@@ -492,13 +492,13 @@
               </object>
             </child>
             <child>
-              <object class="AdwNavigationPage">
+              <object class="AdapNavigationPage">
                 <property name="title" translatable="yes">Credits</property>
                 <property name="tag">credits</property>
                 <property name="child">
-                  <object class="AdwToolbarView">
+                  <object class="AdapToolbarView">
                     <child type="top">
-                      <object class="AdwHeaderBar"/>
+                      <object class="AdapHeaderBar"/>
                     </child>
                     <property name="content">
                       <object class="GtkScrolledWindow">
@@ -507,7 +507,7 @@
                           <class name="subpage"/>
                         </style>
                         <property name="child">
-                          <object class="AdwClamp">
+                          <object class="AdapClamp">
                             <property name="child">
                               <object class="GtkBox" id="credits_box">
                                 <property name="orientation">vertical</property>
@@ -523,14 +523,14 @@
               </object>
             </child>
             <child>
-              <object class="AdwNavigationPage">
+              <object class="AdapNavigationPage">
                 <property name="title" translatable="yes">Legal</property>
                 <property name="tag">legal</property>
                 <signal name="showing" handler="legal_showing_cb" swapped="yes"/>
                 <property name="child">
-                  <object class="AdwToolbarView">
+                  <object class="AdapToolbarView">
                     <child type="top">
-                      <object class="AdwHeaderBar"/>
+                      <object class="AdapHeaderBar"/>
                     </child>
                     <property name="content">
                       <object class="GtkScrolledWindow">
@@ -539,7 +539,7 @@
                           <class name="subpage"/>
                         </style>
                         <property name="child">
-                          <object class="AdwClamp">
+                          <object class="AdapClamp">
                             <property name="child">
                               <object class="GtkBox" id="legal_box">
                                 <property name="orientation">vertical</property>
@@ -555,13 +555,13 @@
               </object>
             </child>
             <child>
-              <object class="AdwNavigationPage">
+              <object class="AdapNavigationPage">
                 <property name="title" translatable="yes">Acknowledgements</property>
                 <property name="tag">acknowledgements</property>
                 <property name="child">
-                  <object class="AdwToolbarView">
+                  <object class="AdapToolbarView">
                     <child type="top">
-                      <object class="AdwHeaderBar"/>
+                      <object class="AdapHeaderBar"/>
                     </child>
                     <property name="content">
                       <object class="GtkScrolledWindow">
@@ -570,7 +570,7 @@
                           <class name="subpage"/>
                         </style>
                         <property name="child">
-                          <object class="AdwClamp">
+                          <object class="AdapClamp">
                             <property name="child">
                               <object class="GtkBox" id="acknowledgements_box">
                                 <property name="orientation">vertical</property>

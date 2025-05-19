@@ -1,12 +1,12 @@
-#include "adw-demo-page-toasts.h"
+#include "adap-demo-page-toasts.h"
 
 #include <glib/gi18n.h>
 
-struct _AdwDemoPageToasts
+struct _AdapDemoPageToasts
 {
-  AdwBin parent_instance;
+  AdapBin parent_instance;
 
-  AdwToast *undo_toast;
+  AdapToast *undo_toast;
   int toast_undo_items;
 };
 
@@ -17,17 +17,17 @@ enum {
 
 static guint signals[SIGNAL_LAST_SIGNAL];
 
-G_DEFINE_FINAL_TYPE (AdwDemoPageToasts, adw_demo_page_toasts, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (AdapDemoPageToasts, adap_demo_page_toasts, ADAP_TYPE_BIN)
 
 static void
-add_toast (AdwDemoPageToasts *self,
-           AdwToast          *toast)
+add_toast (AdapDemoPageToasts *self,
+           AdapToast          *toast)
 {
   g_signal_emit (self, signals[SIGNAL_ADD_TOAST], 0, toast);
 }
 
 static void
-dismissed_cb (AdwDemoPageToasts *self)
+dismissed_cb (AdapDemoPageToasts *self)
 {
   self->undo_toast = NULL;
   self->toast_undo_items = 0;
@@ -36,13 +36,13 @@ dismissed_cb (AdwDemoPageToasts *self)
 }
 
 static void
-toast_add_cb (AdwDemoPageToasts *self)
+toast_add_cb (AdapDemoPageToasts *self)
 {
-  add_toast (self, adw_toast_new (_("Simple Toast")));
+  add_toast (self, adap_toast_new (_("Simple Toast")));
 }
 
 static void
-toast_add_with_button_cb (AdwDemoPageToasts *self)
+toast_add_with_button_cb (AdapDemoPageToasts *self)
 {
   self->toast_undo_items++;
 
@@ -52,18 +52,18 @@ toast_add_with_button_cb (AdwDemoPageToasts *self)
                                  "<span font_features='tnum=1'>%d</span> items deleted",
                                  self->toast_undo_items), self->toast_undo_items);
 
-    adw_toast_set_title (self->undo_toast, title);
+    adap_toast_set_title (self->undo_toast, title);
 
     /* Bump the toast timeout */
     add_toast (self, g_object_ref (self->undo_toast));
 
     g_free (title);
   } else {
-    self->undo_toast = adw_toast_new_format (_("‘%s’ deleted"), "Lorem Ipsum");
+    self->undo_toast = adap_toast_new_format (_("‘%s’ deleted"), "Lorem Ipsum");
 
-    adw_toast_set_priority (self->undo_toast, ADW_TOAST_PRIORITY_HIGH);
-    adw_toast_set_button_label (self->undo_toast, _("_Undo"));
-    adw_toast_set_action_name (self->undo_toast, "toast.undo");
+    adap_toast_set_priority (self->undo_toast, ADAP_TOAST_PRIORITY_HIGH);
+    adap_toast_set_button_label (self->undo_toast, _("_Undo"));
+    adap_toast_set_action_name (self->undo_toast, "toast.undo");
 
     g_signal_connect_swapped (self->undo_toast, "dismissed", G_CALLBACK (dismissed_cb), self);
 
@@ -74,9 +74,9 @@ toast_add_with_button_cb (AdwDemoPageToasts *self)
 }
 
 static void
-toast_add_with_long_title_cb (AdwDemoPageToasts *self)
+toast_add_with_long_title_cb (AdapDemoPageToasts *self)
 {
-  add_toast (self, adw_toast_new (_("Lorem ipsum dolor sit amet, "
+  add_toast (self, adap_toast_new (_("Lorem ipsum dolor sit amet, "
                                     "consectetur adipiscing elit, "
                                     "sed do eiusmod tempor incididunt "
                                     "ut labore et dolore magnam aliquam "
@@ -84,14 +84,14 @@ toast_add_with_long_title_cb (AdwDemoPageToasts *self)
 }
 
 static void
-toast_dismiss_cb (AdwDemoPageToasts *self)
+toast_dismiss_cb (AdapDemoPageToasts *self)
 {
   if (self->undo_toast)
-    adw_toast_dismiss (self->undo_toast);
+    adap_toast_dismiss (self->undo_toast);
 }
 
 static void
-adw_demo_page_toasts_class_init (AdwDemoPageToastsClass *klass)
+adap_demo_page_toasts_class_init (AdapDemoPageToastsClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
@@ -102,9 +102,9 @@ adw_demo_page_toasts_class_init (AdwDemoPageToastsClass *klass)
                   0,
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
-                  ADW_TYPE_TOAST);
+                  ADAP_TYPE_TOAST);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adwaita1/Demo/ui/pages/toasts/adw-demo-page-toasts.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adapta1/Demo/ui/pages/toasts/adap-demo-page-toasts.ui");
 
   gtk_widget_class_install_action (widget_class, "toast.add", NULL, (GtkWidgetActionActivateFunc) toast_add_cb);
   gtk_widget_class_install_action (widget_class, "toast.add-with-button", NULL, (GtkWidgetActionActivateFunc) toast_add_with_button_cb);
@@ -113,7 +113,7 @@ adw_demo_page_toasts_class_init (AdwDemoPageToastsClass *klass)
 }
 
 static void
-adw_demo_page_toasts_init (AdwDemoPageToasts *self)
+adap_demo_page_toasts_init (AdapDemoPageToasts *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -121,15 +121,15 @@ adw_demo_page_toasts_init (AdwDemoPageToasts *self)
 }
 
 void
-adw_demo_page_toasts_undo (AdwDemoPageToasts *self)
+adap_demo_page_toasts_undo (AdapDemoPageToasts *self)
 {
   char *title =
     g_strdup_printf (ngettext ("Undoing deleting <span font_features='tnum=1'>%d</span> item…",
                                "Undoing deleting <span font_features='tnum=1'>%d</span> items…",
                                self->toast_undo_items), self->toast_undo_items);
-  AdwToast *toast = adw_toast_new (title);
+  AdapToast *toast = adap_toast_new (title);
 
-  adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
+  adap_toast_set_priority (toast, ADAP_TOAST_PRIORITY_HIGH);
 
   add_toast (self, toast);
 

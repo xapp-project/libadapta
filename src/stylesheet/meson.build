@@ -85,9 +85,9 @@ if sassc.found()
   endforeach
 endif
 
-libadwaita_stylesheet_resources = gnome.compile_resources(
-  'adwaita-stylesheet-resources',
-  'adwaita-stylesheet.gresources.xml',
+libadapta_stylesheet_resources = gnome.compile_resources(
+  'adapta-stylesheet-resources',
+  'adapta-stylesheet.gresources.xml',
 
   source_dir: [
     # List in order of preference
@@ -95,7 +95,7 @@ libadwaita_stylesheet_resources = gnome.compile_resources(
     meson.current_source_dir(),
   ],
   dependencies: stylesheet_deps,
-  c_name: 'adw_stylesheet',
+  c_name: 'adap_stylesheet',
 )
 
 install_subdir(

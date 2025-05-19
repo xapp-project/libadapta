@@ -7,7 +7,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
+  <requires lib="libadapta" version="1.0"/>
   <object class="GtkButton" id="widget">
     <property name="label">Example</property>
   </object>
@@ -27,7 +27,7 @@ should be special-cased in `screenshot.c` based on its type.
 ```
 
 4. The generator will create `IMAGE.png` and `IMAGE-dark.png` images. Add them
-to `libadwaita.toml.in`.
+to `libadapta.toml.in`.
 5. Use them in the docs as follows:
 
 ```html

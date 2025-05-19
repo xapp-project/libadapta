@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <template class="AdwDemoPageAbout" parent="AdwBin">
+  <requires lib="libadapta" version="1.0"/>
+  <template class="AdapDemoPageAbout" parent="AdapBin">
     <property name="child">
-      <object class="AdwStatusPage">
+      <object class="AdapStatusPage">
         <property name="icon-name">widget-about-symbolic</property>
         <property name="title" translatable="yes">About Dialog</property>
         <property name="description" translatable="yes">An about dialog.</property>

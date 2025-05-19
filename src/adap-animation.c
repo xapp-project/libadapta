@@ -7,25 +7,25 @@
 
 #include "config.h"
 
-#include "adw-animation-private.h"
+#include "adap-animation-private.h"
 
-#include "adw-animation-target-private.h"
-#include "adw-animation-util.h"
-#include "adw-marshalers.h"
+#include "adap-animation-target-private.h"
+#include "adap-animation-util.h"
+#include "adap-marshalers.h"
 
 /**
- * AdwAnimation:
+ * AdapAnimation:
  *
  * A base class for animations.
  *
- * `AdwAnimation` represents an animation on a widget. It has a target that
+ * `AdapAnimation` represents an animation on a widget. It has a target that
  * provides a value to animate, and a state indicating whether the
  * animation hasn't been started yet, is playing, paused or finished.
  *
  * Currently there are two concrete animation types:
  * [class@TimedAnimation] and [class@SpringAnimation].
  *
- * `AdwAnimation` will automatically skip the animation if
+ * `AdapAnimation` will automatically skip the animation if
  * [property@Animation:widget] is unmapped, or if
  * [property@Gtk.Settings:gtk-enable-animations] is `FALSE`.
  *
@@ -33,7 +33,7 @@
  * the animation ends, for example hiding a widget after animating its
  * [property@Gtk.Widget:opacity] to 0.
  *
- * `AdwAnimation` will be kept alive while the animation is playing. As such,
+ * `AdapAnimation` will be kept alive while the animation is playing. As such,
  * it's safe to create an animation, start it and immediately unref it:
  * A fire-and-forget animation:
  *
@@ -48,27 +48,27 @@
  * static void
  * my_object_animate (MyObject *self)
  * {
- *   AdwAnimationTarget *target =
- *     adw_callback_animation_target_new ((AdwAnimationTargetFunc) animation_cb,
+ *   AdapAnimationTarget *target =
+ *     adap_callback_animation_target_new ((AdapAnimationTargetFunc) animation_cb,
  *                                        self, NULL);
- *   g_autoptr (AdwAnimation) animation =
- *     adw_timed_animation_new (widget, 0, 1, 250, target);
+ *   g_autoptr (AdapAnimation) animation =
+ *     adap_timed_animation_new (widget, 0, 1, 250, target);
  *
- *   adw_animation_play (animation);
+ *   adap_animation_play (animation);
  * }
  * ```
  *
  * If there's a chance the previous animation for the same target hasn't yet
  * finished, the previous animation should be stopped first, or the existing
- * `AdwAnimation` object can be reused.
+ * `AdapAnimation` object can be reused.
  */
 
 /**
- * AdwAnimationState:
- * @ADW_ANIMATION_IDLE: The animation hasn't started yet.
- * @ADW_ANIMATION_PAUSED: The animation has been paused.
- * @ADW_ANIMATION_PLAYING: The animation is currently playing.
- * @ADW_ANIMATION_FINISHED: The animation has finished.
+ * AdapAnimationState:
+ * @ADAP_ANIMATION_IDLE: The animation hasn't started yet.
+ * @ADAP_ANIMATION_PAUSED: The animation has been paused.
+ * @ADAP_ANIMATION_PLAYING: The animation is currently playing.
+ * @ADAP_ANIMATION_FINISHED: The animation has finished.
  *
  * Describes the possible states of an [class@Animation].
  *
@@ -88,15 +88,15 @@ typedef struct
   guint tick_cb_id;
   gulong unmap_cb_id;
 
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
   gpointer user_data;
 
-  AdwAnimationState state;
+  AdapAnimationState state;
 
   gboolean follow_enable_animations_setting;
-} AdwAnimationPrivate;
+} AdapAnimationPrivate;
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (AdwAnimation, adw_animation, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (AdapAnimation, adap_animation, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -118,18 +118,18 @@ enum {
 static guint signals[SIGNAL_LAST_SIGNAL];
 
 static void
-widget_notify_cb (AdwAnimation *self)
+widget_notify_cb (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv = adw_animation_get_instance_private (self);
+  AdapAnimationPrivate *priv = adap_animation_get_instance_private (self);
 
   priv->widget = NULL;
 }
 
 static void
-set_widget (AdwAnimation *self,
+set_widget (AdapAnimation *self,
             GtkWidget    *widget)
 {
-  AdwAnimationPrivate *priv = adw_animation_get_instance_private (self);
+  AdapAnimationPrivate *priv = adap_animation_get_instance_private (self);
 
   if (priv->widget == widget)
     return;
@@ -148,22 +148,22 @@ set_widget (AdwAnimation *self,
 }
 
 static void
-set_value (AdwAnimation *self,
+set_value (AdapAnimation *self,
            guint         t)
 {
-  AdwAnimationPrivate *priv = adw_animation_get_instance_private (self);
+  AdapAnimationPrivate *priv = adap_animation_get_instance_private (self);
 
-  priv->value = ADW_ANIMATION_GET_CLASS (self)->calculate_value (self, t);
+  priv->value = ADAP_ANIMATION_GET_CLASS (self)->calculate_value (self, t);
 
-  adw_animation_target_set_value (priv->target, priv->value);
+  adap_animation_target_set_value (priv->target, priv->value);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_VALUE]);
 }
 
 static void
-stop_animation (AdwAnimation *self)
+stop_animation (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv = adw_animation_get_instance_private (self);
+  AdapAnimationPrivate *priv = adap_animation_get_instance_private (self);
 
   if (priv->tick_cb_id) {
     gtk_widget_remove_tick_callback (priv->widget, priv->tick_cb_id);
@@ -179,16 +179,16 @@ stop_animation (AdwAnimation *self)
 static gboolean
 tick_cb (GtkWidget     *widget,
          GdkFrameClock *frame_clock,
-         AdwAnimation  *self)
+         AdapAnimation  *self)
 {
-  AdwAnimationPrivate *priv = adw_animation_get_instance_private (self);
+  AdapAnimationPrivate *priv = adap_animation_get_instance_private (self);
 
   gint64 frame_time = gdk_frame_clock_get_frame_time (frame_clock) / 1000; /* ms */
-  guint duration = ADW_ANIMATION_GET_CLASS (self)->estimate_duration (self);
+  guint duration = ADAP_ANIMATION_GET_CLASS (self)->estimate_duration (self);
   guint t = (guint) (frame_time - priv->start_time);
 
-  if (t >= duration && duration != ADW_DURATION_INFINITE) {
-    adw_animation_skip (self);
+  if (t >= duration && duration != ADAP_DURATION_INFINITE) {
+    adap_animation_skip (self);
 
     return G_SOURCE_REMOVE;
   }
@@ -199,37 +199,37 @@ tick_cb (GtkWidget     *widget,
 }
 
 static guint
-adw_animation_estimate_duration (AdwAnimation *animation)
+adap_animation_estimate_duration (AdapAnimation *animation)
 {
   g_assert_not_reached ();
 }
 
 static double
-adw_animation_calculate_value (AdwAnimation *animation,
+adap_animation_calculate_value (AdapAnimation *animation,
                                guint         t)
 {
   g_assert_not_reached ();
 }
 
 static void
-play (AdwAnimation *self)
+play (AdapAnimation *self)
 {
 
-  AdwAnimationPrivate *priv = adw_animation_get_instance_private (self);
+  AdapAnimationPrivate *priv = adap_animation_get_instance_private (self);
 
-  if (priv->state == ADW_ANIMATION_PLAYING) {
+  if (priv->state == ADAP_ANIMATION_PLAYING) {
     g_critical ("Trying to play animation %p, but it's already playing", self);
 
     return;
   }
 
-  priv->state = ADW_ANIMATION_PLAYING;
+  priv->state = ADAP_ANIMATION_PLAYING;
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_STATE]);
 
   if ((priv->follow_enable_animations_setting &&
-       !adw_get_enable_animations (priv->widget)) ||
+       !adap_get_enable_animations (priv->widget)) ||
       !gtk_widget_get_mapped (priv->widget)) {
-    adw_animation_skip (g_object_ref (self));
+    adap_animation_skip (g_object_ref (self));
 
     return;
   }
@@ -242,67 +242,67 @@ play (AdwAnimation *self)
 
   priv->unmap_cb_id =
     g_signal_connect_swapped (priv->widget, "unmap",
-                              G_CALLBACK (adw_animation_skip), self);
+                              G_CALLBACK (adap_animation_skip), self);
   priv->tick_cb_id = gtk_widget_add_tick_callback (priv->widget, (GtkTickCallback) tick_cb, self, NULL);
 
   g_object_ref (self);
 }
 
 static void
-adw_animation_constructed (GObject *object)
+adap_animation_constructed (GObject *object)
 {
-  AdwAnimation *self = ADW_ANIMATION (object);
-  AdwAnimationPrivate *priv = adw_animation_get_instance_private (self);
+  AdapAnimation *self = ADAP_ANIMATION (object);
+  AdapAnimationPrivate *priv = adap_animation_get_instance_private (self);
 
-  G_OBJECT_CLASS (adw_animation_parent_class)->constructed (object);
+  G_OBJECT_CLASS (adap_animation_parent_class)->constructed (object);
 
-  priv->value = ADW_ANIMATION_GET_CLASS (self)->calculate_value (self, 0);
+  priv->value = ADAP_ANIMATION_GET_CLASS (self)->calculate_value (self, 0);
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_VALUE]);
 }
 
 static void
-adw_animation_dispose (GObject *object)
+adap_animation_dispose (GObject *object)
 {
-  AdwAnimation *self = ADW_ANIMATION (object);
-  AdwAnimationPrivate *priv = adw_animation_get_instance_private (self);
+  AdapAnimation *self = ADAP_ANIMATION (object);
+  AdapAnimationPrivate *priv = adap_animation_get_instance_private (self);
 
-  if (priv->state == ADW_ANIMATION_PLAYING)
-    adw_animation_skip (self);
+  if (priv->state == ADAP_ANIMATION_PLAYING)
+    adap_animation_skip (self);
 
   g_clear_object (&priv->target);
 
   set_widget (self, NULL);
 
-  G_OBJECT_CLASS (adw_animation_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_animation_parent_class)->dispose (object);
 }
 
 static void
-adw_animation_get_property (GObject    *object,
+adap_animation_get_property (GObject    *object,
                             guint       prop_id,
                             GValue     *value,
                             GParamSpec *pspec)
 {
-  AdwAnimation *self = ADW_ANIMATION (object);
+  AdapAnimation *self = ADAP_ANIMATION (object);
 
   switch (prop_id) {
   case PROP_WIDGET:
-    g_value_set_object (value, adw_animation_get_widget (self));
+    g_value_set_object (value, adap_animation_get_widget (self));
     break;
 
   case PROP_TARGET:
-    g_value_set_object (value, adw_animation_get_target (self));
+    g_value_set_object (value, adap_animation_get_target (self));
     break;
 
   case PROP_VALUE:
-    g_value_set_double (value, adw_animation_get_value (self));
+    g_value_set_double (value, adap_animation_get_value (self));
     break;
 
   case PROP_STATE:
-    g_value_set_enum (value, adw_animation_get_state (self));
+    g_value_set_enum (value, adap_animation_get_state (self));
     break;
 
   case PROP_FOLLOW_ENABLE_ANIMATIONS_SETTING:
-    g_value_set_boolean (value, adw_animation_get_follow_enable_animations_setting (self));
+    g_value_set_boolean (value, adap_animation_get_follow_enable_animations_setting (self));
     break;
 
   default:
@@ -311,12 +311,12 @@ adw_animation_get_property (GObject    *object,
 }
 
 static void
-adw_animation_set_property (GObject      *object,
+adap_animation_set_property (GObject      *object,
                             guint         prop_id,
                             const GValue *value,
                             GParamSpec   *pspec)
 {
-  AdwAnimation *self = ADW_ANIMATION (object);
+  AdapAnimation *self = ADAP_ANIMATION (object);
 
   switch (prop_id) {
   case PROP_WIDGET:
@@ -324,11 +324,11 @@ adw_animation_set_property (GObject      *object,
     break;
 
   case PROP_TARGET:
-    adw_animation_set_target (ADW_ANIMATION (self), g_value_get_object (value));
+    adap_animation_set_target (ADAP_ANIMATION (self), g_value_get_object (value));
     break;
 
   case PROP_FOLLOW_ENABLE_ANIMATIONS_SETTING:
-    adw_animation_set_follow_enable_animations_setting (self, g_value_get_boolean (value));
+    adap_animation_set_follow_enable_animations_setting (self, g_value_get_boolean (value));
     break;
 
   default:
@@ -337,20 +337,20 @@ adw_animation_set_property (GObject      *object,
 }
 
 static void
-adw_animation_class_init (AdwAnimationClass *klass)
+adap_animation_class_init (AdapAnimationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = adw_animation_constructed;
-  object_class->dispose = adw_animation_dispose;
-  object_class->set_property = adw_animation_set_property;
-  object_class->get_property = adw_animation_get_property;
+  object_class->constructed = adap_animation_constructed;
+  object_class->dispose = adap_animation_dispose;
+  object_class->set_property = adap_animation_set_property;
+  object_class->get_property = adap_animation_get_property;
 
-  klass->estimate_duration = adw_animation_estimate_duration;
-  klass->calculate_value = adw_animation_calculate_value;
+  klass->estimate_duration = adap_animation_estimate_duration;
+  klass->calculate_value = adap_animation_calculate_value;
 
   /**
-   * AdwAnimation:widget: (attributes org.gtk.Property.get=adw_animation_get_widget)
+   * AdapAnimation:widget: (attributes org.gtk.Property.get=adap_animation_get_widget)
    *
    * The animation widget.
    *
@@ -367,17 +367,17 @@ adw_animation_class_init (AdwAnimationClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwAnimation:target: (attributes org.gtk.Property.get=adw_animation_get_target org.gtk.Property.set=adw_animation_set_target)
+   * AdapAnimation:target: (attributes org.gtk.Property.get=adap_animation_get_target org.gtk.Property.set=adap_animation_set_target)
    *
    * The target to animate.
    */
   props[PROP_TARGET] =
     g_param_spec_object ("target", NULL, NULL,
-                         ADW_TYPE_ANIMATION_TARGET,
+                         ADAP_TYPE_ANIMATION_TARGET,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAnimation:value: (attributes org.gtk.Property.get=adw_animation_get_value)
+   * AdapAnimation:value: (attributes org.gtk.Property.get=adap_animation_get_value)
    *
    * The current value of the animation.
    */
@@ -389,7 +389,7 @@ adw_animation_class_init (AdwAnimationClass *klass)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwAnimation:state: (attributes org.gtk.Property.get=adw_animation_get_state)
+   * AdapAnimation:state: (attributes org.gtk.Property.get=adap_animation_get_state)
    *
    * The animation state.
    *
@@ -398,12 +398,12 @@ adw_animation_class_init (AdwAnimationClass *klass)
    */
   props[PROP_STATE] =
     g_param_spec_enum ("state", NULL, NULL,
-                       ADW_TYPE_ANIMATION_STATE,
-                       ADW_ANIMATION_IDLE,
+                       ADAP_TYPE_ANIMATION_STATE,
+                       ADAP_ANIMATION_IDLE,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwAnimation:follow-enable-animations-setting: (attributes org.gtk.Property.get=adw_animation_get_follow_enable_animations_setting org.gtk.Property.set=adw_animation_set_follow_enable_animations_setting)
+   * AdapAnimation:follow-enable-animations-setting: (attributes org.gtk.Property.get=adap_animation_get_follow_enable_animations_setting org.gtk.Property.set=adap_animation_set_follow_enable_animations_setting)
    *
    * Whether to skip the animation when animations are globally disabled.
    *
@@ -425,7 +425,7 @@ adw_animation_class_init (AdwAnimationClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
-   * AdwAnimation::done:
+   * AdapAnimation::done:
    *
    * This signal is emitted when the animation has been completed, either on its
    * own or via calling [method@Animation.skip].
@@ -436,25 +436,25 @@ adw_animation_class_init (AdwAnimationClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_DONE],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 }
 
 static void
-adw_animation_init (AdwAnimation *self)
+adap_animation_init (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv = adw_animation_get_instance_private (self);
+  AdapAnimationPrivate *priv = adap_animation_get_instance_private (self);
 
-  priv->state = ADW_ANIMATION_IDLE;
+  priv->state = ADAP_ANIMATION_IDLE;
   priv->follow_enable_animations_setting = TRUE;
 }
 
 /**
- * adw_animation_get_widget: (attributes org.gtk.Method.get_property=widget)
+ * adap_animation_get_widget: (attributes org.gtk.Method.get_property=widget)
  * @self: an animation
  *
  * Gets the widget @self was created for.
@@ -469,54 +469,54 @@ adw_animation_init (AdwAnimation *self)
  * Returns: (transfer none): the animation widget
  */
 GtkWidget *
-adw_animation_get_widget (AdwAnimation *self)
+adap_animation_get_widget (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ANIMATION (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ANIMATION (self), NULL);
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
   return priv->widget;
 }
 
 /**
- * adw_animation_get_target: (attributes org.gtk.Method.get_property=target)
+ * adap_animation_get_target: (attributes org.gtk.Method.get_property=target)
  * @self: an animation
  *
  * Gets the target @self animates.
  *
  * Returns: (transfer none): the animation target
  */
-AdwAnimationTarget *
-adw_animation_get_target (AdwAnimation *self)
+AdapAnimationTarget *
+adap_animation_get_target (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ANIMATION (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ANIMATION (self), NULL);
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
   return priv->target;
 }
 
 /**
- * adw_animation_set_target: (attributes org.gtk.Method.set_property=target)
+ * adap_animation_set_target: (attributes org.gtk.Method.set_property=target)
  * @self: an animation
  * @target: an animation target
  *
  * Sets the target @self animates to @target.
  */
 void
-adw_animation_set_target (AdwAnimation       *self,
-                          AdwAnimationTarget *target)
+adap_animation_set_target (AdapAnimation       *self,
+                          AdapAnimationTarget *target)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ANIMATION (self));
-  g_return_if_fail (ADW_IS_ANIMATION_TARGET (target));
+  g_return_if_fail (ADAP_IS_ANIMATION (self));
+  g_return_if_fail (ADAP_IS_ANIMATION_TARGET (target));
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
   if (target == priv->target)
     return;
@@ -527,7 +527,7 @@ adw_animation_set_target (AdwAnimation       *self,
 }
 
 /**
- * adw_animation_get_value: (attributes org.gtk.Method.get_property=value)
+ * adap_animation_get_value: (attributes org.gtk.Method.get_property=value)
  * @self: an animation
  *
  * Gets the current value of @self.
@@ -535,19 +535,19 @@ adw_animation_set_target (AdwAnimation       *self,
  * Returns: the current value
  */
 double
-adw_animation_get_value (AdwAnimation *self)
+adap_animation_get_value (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ANIMATION (self), 0.0);
+  g_return_val_if_fail (ADAP_IS_ANIMATION (self), 0.0);
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
   return priv->value;
 }
 
 /**
- * adw_animation_get_state: (attributes org.gtk.Method.get_property=state)
+ * adap_animation_get_state: (attributes org.gtk.Method.get_property=state)
  * @self: an animation
  *
  * Gets the current value of @self.
@@ -557,20 +557,20 @@ adw_animation_get_value (AdwAnimation *self)
  *
  * Returns: the animation value
  */
-AdwAnimationState
-adw_animation_get_state (AdwAnimation *self)
+AdapAnimationState
+adap_animation_get_state (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ANIMATION (self), ADW_ANIMATION_IDLE);
+  g_return_val_if_fail (ADAP_IS_ANIMATION (self), ADAP_ANIMATION_IDLE);
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
   return priv->state;
 }
 
 /**
- * adw_animation_play:
+ * adap_animation_play:
  * @self: an animation
  *
  * Starts the animation for @self.
@@ -579,7 +579,7 @@ adw_animation_get_state (AdwAnimation *self)
  * the beginning. This allows to easily play an animation regardless of whether
  * it's already playing or not.
  *
- * Sets [property@Animation:state] to `ADW_ANIMATION_PLAYING`.
+ * Sets [property@Animation:state] to `ADAP_ANIMATION_PLAYING`.
  *
  * The animation will be automatically skipped if [property@Animation:widget] is
  * unmapped, or if [property@Gtk.Settings:gtk-enable-animations] is `FALSE`.
@@ -590,16 +590,16 @@ adw_animation_get_state (AdwAnimation *self)
  * run after the animation has already finished, and not while it's playing.
  */
 void
-adw_animation_play (AdwAnimation *self)
+adap_animation_play (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ANIMATION (self));
+  g_return_if_fail (ADAP_IS_ANIMATION (self));
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
-  if (priv->state != ADW_ANIMATION_IDLE) {
-    priv->state = ADW_ANIMATION_IDLE;
+  if (priv->state != ADAP_ANIMATION_IDLE) {
+    priv->state = ADAP_ANIMATION_IDLE;
     priv->start_time = 0;
     priv->paused_time = 0;
   }
@@ -608,30 +608,30 @@ adw_animation_play (AdwAnimation *self)
 }
 
 /**
- * adw_animation_pause:
+ * adap_animation_pause:
  * @self: an animation
  *
  * Pauses a playing animation for @self.
  *
- * Does nothing if the current state of @self isn't `ADW_ANIMATION_PLAYING`.
+ * Does nothing if the current state of @self isn't `ADAP_ANIMATION_PLAYING`.
  *
- * Sets [property@Animation:state] to `ADW_ANIMATION_PAUSED`.
+ * Sets [property@Animation:state] to `ADAP_ANIMATION_PAUSED`.
  */
 void
-adw_animation_pause (AdwAnimation *self)
+adap_animation_pause (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ANIMATION (self));
+  g_return_if_fail (ADAP_IS_ANIMATION (self));
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
-  if (priv->state != ADW_ANIMATION_PLAYING)
+  if (priv->state != ADAP_ANIMATION_PLAYING)
     return;
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  priv->state = ADW_ANIMATION_PAUSED;
+  priv->state = ADAP_ANIMATION_PAUSED;
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_STATE]);
 
   stop_animation (self);
@@ -644,7 +644,7 @@ adw_animation_pause (AdwAnimation *self)
 }
 
 /**
- * adw_animation_resume:
+ * adap_animation_resume:
  * @self: an animation
  *
  * Resumes a paused animation for @self.
@@ -652,18 +652,18 @@ adw_animation_pause (AdwAnimation *self)
  * This function must only be used if the animation has been paused with
  * [method@Animation.pause].
  *
- * Sets [property@Animation:state] to `ADW_ANIMATION_PLAYING`.
+ * Sets [property@Animation:state] to `ADAP_ANIMATION_PLAYING`.
  */
 void
-adw_animation_resume (AdwAnimation *self)
+adap_animation_resume (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ANIMATION (self));
+  g_return_if_fail (ADAP_IS_ANIMATION (self));
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
-  if (priv->state != ADW_ANIMATION_PAUSED) {
+  if (priv->state != ADAP_ANIMATION_PAUSED) {
     g_critical ("Trying to resume animation %p, but it's not paused", self);
 
     return;
@@ -673,7 +673,7 @@ adw_animation_resume (AdwAnimation *self)
 }
 
 /**
- * adw_animation_skip:
+ * adap_animation_skip:
  * @self: an animation
  *
  * Skips the animation for @self.
@@ -682,31 +682,31 @@ adw_animation_resume (AdwAnimation *self)
  * skips the animation to the end and causes [signal@Animation::done] to be
  * emitted.
  *
- * Sets [property@Animation:state] to `ADW_ANIMATION_FINISHED`.
+ * Sets [property@Animation:state] to `ADAP_ANIMATION_FINISHED`.
  */
 void
-adw_animation_skip (AdwAnimation *self)
+adap_animation_skip (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
   gboolean was_playing;
 
-  g_return_if_fail (ADW_IS_ANIMATION (self));
+  g_return_if_fail (ADAP_IS_ANIMATION (self));
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
-  if (priv->state == ADW_ANIMATION_FINISHED)
+  if (priv->state == ADAP_ANIMATION_FINISHED)
     return;
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  was_playing = priv->state == ADW_ANIMATION_PLAYING;
+  was_playing = priv->state == ADAP_ANIMATION_PLAYING;
 
-  priv->state = ADW_ANIMATION_FINISHED;
+  priv->state = ADAP_ANIMATION_FINISHED;
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_STATE]);
 
   stop_animation (self);
 
-  set_value (self, ADW_ANIMATION_GET_CLASS (self)->estimate_duration (self));
+  set_value (self, ADAP_ANIMATION_GET_CLASS (self)->estimate_duration (self));
 
   priv->start_time = 0;
   priv->paused_time = 0;
@@ -720,31 +720,31 @@ adw_animation_skip (AdwAnimation *self)
 }
 
 /**
- * adw_animation_reset:
+ * adap_animation_reset:
  * @self: an animation
  *
  * Resets the animation for @self.
  *
- * Sets [property@Animation:state] to `ADW_ANIMATION_IDLE`.
+ * Sets [property@Animation:state] to `ADAP_ANIMATION_IDLE`.
  */
 void
-adw_animation_reset (AdwAnimation *self)
+adap_animation_reset (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
   gboolean was_playing;
 
-  g_return_if_fail (ADW_IS_ANIMATION (self));
+  g_return_if_fail (ADAP_IS_ANIMATION (self));
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
-  if (priv->state == ADW_ANIMATION_IDLE)
+  if (priv->state == ADAP_ANIMATION_IDLE)
     return;
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  was_playing = priv->state == ADW_ANIMATION_PLAYING;
+  was_playing = priv->state == ADAP_ANIMATION_PLAYING;
 
-  priv->state = ADW_ANIMATION_IDLE;
+  priv->state = ADAP_ANIMATION_IDLE;
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_STATE]);
 
   stop_animation (self);
@@ -760,7 +760,7 @@ adw_animation_reset (AdwAnimation *self)
 }
 
 /**
- * adw_animation_get_follow_enable_animations_setting: (attributes org.gtk.Method.get_property=follow-enable-animations-setting)
+ * adap_animation_get_follow_enable_animations_setting: (attributes org.gtk.Method.get_property=follow-enable-animations-setting)
  * @self: an animation
  *
  * Gets whether @self should be skipped when animations are globally disabled.
@@ -770,19 +770,19 @@ adw_animation_reset (AdwAnimation *self)
  * Since: 1.3
  */
 gboolean
-adw_animation_get_follow_enable_animations_setting (AdwAnimation *self)
+adap_animation_get_follow_enable_animations_setting (AdapAnimation *self)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ANIMATION (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_ANIMATION (self), FALSE);
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
   return priv->follow_enable_animations_setting;
 }
 
 /**
- * adw_animation_set_follow_enable_animations_setting: (attributes org.gtk.Method.set_property=follow-enable-animations-setting)
+ * adap_animation_set_follow_enable_animations_setting: (attributes org.gtk.Method.set_property=follow-enable-animations-setting)
  * @self: an animation
  * @setting: whether to follow the global setting
  *
@@ -799,14 +799,14 @@ adw_animation_get_follow_enable_animations_setting (AdwAnimation *self)
  * Since: 1.3
  */
 void
-adw_animation_set_follow_enable_animations_setting (AdwAnimation *self,
+adap_animation_set_follow_enable_animations_setting (AdapAnimation *self,
                                                     gboolean      setting)
 {
-  AdwAnimationPrivate *priv;
+  AdapAnimationPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ANIMATION (self));
+  g_return_if_fail (ADAP_IS_ANIMATION (self));
 
-  priv = adw_animation_get_instance_private (self);
+  priv = adap_animation_get_instance_private (self);
 
   setting = !!setting;
 
@@ -816,9 +816,9 @@ adw_animation_set_follow_enable_animations_setting (AdwAnimation *self,
   priv->follow_enable_animations_setting = setting;
 
   if (setting &&
-      !adw_get_enable_animations (priv->widget) &&
-      priv->state != ADW_ANIMATION_IDLE)
-    adw_animation_skip (g_object_ref (self));
+      !adap_get_enable_animations (priv->widget) &&
+      priv->state != ADAP_ANIMATION_IDLE)
+    adap_animation_skip (g_object_ref (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_FOLLOW_ENABLE_ANIMATIONS_SETTING]);
 }

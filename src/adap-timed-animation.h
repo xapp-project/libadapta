@@ -6,71 +6,71 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-animation.h"
-#include "adw-easing.h"
+#include "adap-animation.h"
+#include "adap-easing.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_TIMED_ANIMATION (adw_timed_animation_get_type())
+#define ADAP_TYPE_TIMED_ANIMATION (adap_timed_animation_get_type())
 
-ADW_AVAILABLE_IN_ALL
-GDK_DECLARE_INTERNAL_TYPE (AdwTimedAnimation, adw_timed_animation, ADW, TIMED_ANIMATION, AdwAnimation)
+ADAP_AVAILABLE_IN_ALL
+GDK_DECLARE_INTERNAL_TYPE (AdapTimedAnimation, adap_timed_animation, ADAP, TIMED_ANIMATION, AdapAnimation)
 
-ADW_AVAILABLE_IN_ALL
-AdwAnimation *adw_timed_animation_new (GtkWidget          *widget,
+ADAP_AVAILABLE_IN_ALL
+AdapAnimation *adap_timed_animation_new (GtkWidget          *widget,
                                        double              from,
                                        double              to,
                                        guint               duration,
-                                       AdwAnimationTarget *target) G_GNUC_WARN_UNUSED_RESULT;
+                                       AdapAnimationTarget *target) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-double adw_timed_animation_get_value_from (AdwTimedAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void   adw_timed_animation_set_value_from (AdwTimedAnimation *self,
+ADAP_AVAILABLE_IN_ALL
+double adap_timed_animation_get_value_from (AdapTimedAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void   adap_timed_animation_set_value_from (AdapTimedAnimation *self,
                                            double             value);
 
-ADW_AVAILABLE_IN_ALL
-double adw_timed_animation_get_value_to (AdwTimedAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void   adw_timed_animation_set_value_to (AdwTimedAnimation *self,
+ADAP_AVAILABLE_IN_ALL
+double adap_timed_animation_get_value_to (AdapTimedAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void   adap_timed_animation_set_value_to (AdapTimedAnimation *self,
                                          double             value);
 
-ADW_AVAILABLE_IN_ALL
-guint adw_timed_animation_get_duration (AdwTimedAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void  adw_timed_animation_set_duration (AdwTimedAnimation *self,
+ADAP_AVAILABLE_IN_ALL
+guint adap_timed_animation_get_duration (AdapTimedAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void  adap_timed_animation_set_duration (AdapTimedAnimation *self,
                                         guint              duration);
 
-ADW_AVAILABLE_IN_ALL
-AdwEasing adw_timed_animation_get_easing (AdwTimedAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void      adw_timed_animation_set_easing (AdwTimedAnimation *self,
-                                          AdwEasing          easing);
+ADAP_AVAILABLE_IN_ALL
+AdapEasing adap_timed_animation_get_easing (AdapTimedAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void      adap_timed_animation_set_easing (AdapTimedAnimation *self,
+                                          AdapEasing          easing);
 
-ADW_AVAILABLE_IN_ALL
-guint adw_timed_animation_get_repeat_count (AdwTimedAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void  adw_timed_animation_set_repeat_count (AdwTimedAnimation *self,
+ADAP_AVAILABLE_IN_ALL
+guint adap_timed_animation_get_repeat_count (AdapTimedAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void  adap_timed_animation_set_repeat_count (AdapTimedAnimation *self,
                                             guint              repeat_count);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_timed_animation_get_reverse (AdwTimedAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_timed_animation_set_reverse (AdwTimedAnimation *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_timed_animation_get_reverse (AdapTimedAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_timed_animation_set_reverse (AdapTimedAnimation *self,
                                           gboolean           reverse);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_timed_animation_get_alternate (AdwTimedAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_timed_animation_set_alternate (AdwTimedAnimation *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_timed_animation_get_alternate (AdapTimedAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_timed_animation_set_alternate (AdapTimedAnimation *self,
                                             gboolean           alternate);
 
 G_END_DECLS

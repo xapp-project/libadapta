@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwWindow" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapWindow" id="widget">
     <property name="width-request">360</property>
     <property name="height-request">200</property>
     <property name="default-width">360</property>
     <property name="default-height">300</property>
     <child>
-      <object class="AdwBreakpoint">
+      <object class="AdapBreakpoint">
         <condition>max-width: 860sp</condition>
         <setter object="outer_view" property="collapsed">True</setter>
         <setter object="inner_view" property="sidebar-width-fraction">0.33</setter>
       </object>
     </child>
     <child>
-      <object class="AdwBreakpoint">
+      <object class="AdapBreakpoint">
         <condition>max-width: 500sp</condition>
         <setter object="outer_view" property="collapsed">True</setter>
         <setter object="inner_view" property="sidebar-width-fraction">0.33</setter>
@@ -23,30 +23,30 @@
       </object>
     </child>
     <property name="content">
-      <object class="AdwNavigationSplitView" id="outer_view">
+      <object class="AdapNavigationSplitView" id="outer_view">
         <property name="min-sidebar-width">470</property>
         <property name="max-sidebar-width">780</property>
         <property name="sidebar-width-fraction">0.47</property>
         <property name="sidebar">
-          <object class="AdwNavigationPage">
+          <object class="AdapNavigationPage">
             <property name="child">
-              <object class="AdwNavigationSplitView" id="inner_view">
+              <object class="AdapNavigationSplitView" id="inner_view">
                 <property name="max-sidebar-width">260</property>
                 <property name="sidebar-width-fraction">0.38</property>
                 <property name="show-content">True</property>
                 <property name="sidebar">
-                  <object class="AdwNavigationPage">
+                  <object class="AdapNavigationPage">
                     <property name="title">Sidebar</property>
                     <property name="child">
-                      <object class="AdwToolbarView">
+                      <object class="AdapToolbarView">
                         <property name="extend-content-to-top-edge">True</property>
                         <child type="top">
-                          <object class="AdwHeaderBar">
+                          <object class="AdapHeaderBar">
                             <property name="show-title">False</property>
                           </object>
                         </child>
                         <property name="content">
-                          <object class="AdwStatusPage">
+                          <object class="AdapStatusPage">
                             <property name="title">Sidebar</property>
                           </object>
                         </property>
@@ -55,18 +55,18 @@
                   </object>
                 </property>
                 <property name="content">
-                  <object class="AdwNavigationPage">
+                  <object class="AdapNavigationPage">
                     <property name="title">Middle Pane</property>
                     <property name="child">
-                      <object class="AdwToolbarView">
+                      <object class="AdapToolbarView">
                         <property name="extend-content-to-top-edge">True</property>
                         <child type="top">
-                          <object class="AdwHeaderBar">
+                          <object class="AdapHeaderBar">
                             <property name="show-title">False</property>
                           </object>
                         </child>
                         <property name="content">
-                          <object class="AdwStatusPage">
+                          <object class="AdapStatusPage">
                             <property name="title">Middle Pane</property>
                           </object>
                         </property>
@@ -79,18 +79,18 @@
           </object>
         </property>
         <property name="content">
-          <object class="AdwNavigationPage">
+          <object class="AdapNavigationPage">
             <property name="title">Content</property>
             <property name="child">
-              <object class="AdwToolbarView">
+              <object class="AdapToolbarView">
                 <property name="extend-content-to-top-edge">True</property>
                 <child type="top">
-                  <object class="AdwHeaderBar">
+                  <object class="AdapHeaderBar">
                     <property name="show-title">False</property>
                   </object>
                 </child>
                 <property name="content">
-                  <object class="AdwStatusPage">
+                  <object class="AdapStatusPage">
                     <property name="title">Content</property>
                   </object>
                 </property>

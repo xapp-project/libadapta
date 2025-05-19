@@ -7,12 +7,12 @@
  */
 
 #include "config.h"
-#include "adw-tab-private.h"
+#include "adap-tab-private.h"
 
-#include "adw-bidi-private.h"
-#include "adw-fading-label-private.h"
-#include "adw-gizmo-private.h"
-#include "adw-timed-animation.h"
+#include "adap-bidi-private.h"
+#include "adap-fading-label-private.h"
+#include "adap-gizmo-private.h"
+#include "adap-timed-animation.h"
 
 #define FADE_WIDTH 18.0f
 #define CLOSE_BTN_ANIMATION_DURATION 150
@@ -26,7 +26,7 @@
 #define ATTENTION_INDICATOR_MAX_WIDTH 180
 #define ATTENTION_INDICATOR_ANIMATION_DURATION 250
 
-struct _AdwTab
+struct _AdapTab
 {
   GtkWidget parent_instance;
 
@@ -41,8 +41,8 @@ struct _AdwTab
   GtkDropTarget *drop_target;
   GdkDragAction preferred_action;
 
-  AdwTabView *view;
-  AdwTabPage *page;
+  AdapTabView *view;
+  AdapTabPage *page;
   gboolean pinned;
   gboolean dragging;
 
@@ -54,11 +54,11 @@ struct _AdwTab
   gboolean show_close;
   gboolean fully_visible;
 
-  AdwAnimation *close_btn_animation;
-  AdwAnimation *needs_attention_animation;
+  AdapAnimation *close_btn_animation;
+  AdapAnimation *needs_attention_animation;
 };
 
-G_DEFINE_FINAL_TYPE (AdwTab, adw_tab, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (AdapTab, adap_tab, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
@@ -93,7 +93,7 @@ set_style_class (GtkWidget  *widget,
 
 static void
 close_btn_animation_value_cb (double  value,
-                              AdwTab *self)
+                              AdapTab *self)
 {
   gtk_widget_set_opacity (self->close_btn, value);
   gtk_widget_set_can_target (self->close_btn, value > 0);
@@ -102,13 +102,13 @@ close_btn_animation_value_cb (double  value,
 
 static void
 attention_indicator_animation_value_cb (double  value,
-                                        AdwTab *self)
+                                        AdapTab *self)
 {
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
 static void
-update_state (AdwTab *self)
+update_state (AdapTab *self)
 {
   GtkStateFlags new_state;
   gboolean show_close;
@@ -126,36 +126,36 @@ update_state (AdwTab *self)
   if (self->show_close != show_close) {
     self->show_close = show_close;
 
-    adw_timed_animation_set_value_from (ADW_TIMED_ANIMATION (self->close_btn_animation),
+    adap_timed_animation_set_value_from (ADAP_TIMED_ANIMATION (self->close_btn_animation),
                                         gtk_widget_get_opacity (self->close_btn));
-    adw_timed_animation_set_value_to (ADW_TIMED_ANIMATION (self->close_btn_animation),
+    adap_timed_animation_set_value_to (ADAP_TIMED_ANIMATION (self->close_btn_animation),
                                       self->show_close ? 1 : 0);
-    adw_animation_play (self->close_btn_animation);
+    adap_animation_play (self->close_btn_animation);
   }
 }
 
 static void
-update_tooltip (AdwTab *self)
+update_tooltip (AdapTab *self)
 {
-  const char *tooltip = adw_tab_page_get_tooltip (self->page);
+  const char *tooltip = adap_tab_page_get_tooltip (self->page);
 
   if (tooltip && g_strcmp0 (tooltip, "") != 0)
     gtk_widget_set_tooltip_markup (GTK_WIDGET (self), tooltip);
   else
     gtk_widget_set_tooltip_text (GTK_WIDGET (self),
-                                 adw_tab_page_get_title (self->page));
+                                 adap_tab_page_get_title (self->page));
 }
 
 static void
-update_title (AdwTab *self)
+update_title (AdapTab *self)
 {
-  const char *title = adw_tab_page_get_title (self->page);
+  const char *title = adap_tab_page_get_title (self->page);
   PangoDirection title_direction = PANGO_DIRECTION_NEUTRAL;
   GtkTextDirection direction = gtk_widget_get_direction (GTK_WIDGET (self));
   gboolean title_inverted;
 
   if (title)
-    title_direction = adw_find_base_dir (title, -1);
+    title_direction = adap_find_base_dir (title, -1);
 
   title_inverted =
     (title_direction == PANGO_DIRECTION_LTR && direction == GTK_TEXT_DIR_RTL) ||
@@ -170,9 +170,9 @@ update_title (AdwTab *self)
 }
 
 static void
-update_spinner (AdwTab *self)
+update_spinner (AdapTab *self)
 {
-  gboolean loading = self->page && adw_tab_page_get_loading (self->page);
+  gboolean loading = self->page && adap_tab_page_get_loading (self->page);
   gboolean mapped = gtk_widget_get_mapped (GTK_WIDGET (self));
 
   /* Don't use CPU when not needed */
@@ -180,15 +180,15 @@ update_spinner (AdwTab *self)
 }
 
 static void
-update_icons (AdwTab *self)
+update_icons (AdapTab *self)
 {
-  GIcon *gicon = adw_tab_page_get_icon (self->page);
-  gboolean loading = adw_tab_page_get_loading (self->page);
-  GIcon *indicator = adw_tab_page_get_indicator_icon (self->page);
+  GIcon *gicon = adap_tab_page_get_icon (self->page);
+  gboolean loading = adap_tab_page_get_loading (self->page);
+  GIcon *indicator = adap_tab_page_get_indicator_icon (self->page);
   const char *name = loading ? "spinner" : "icon";
 
   if (self->pinned && !gicon)
-    gicon = adw_tab_view_get_default_icon (self->view);
+    gicon = adap_tab_view_get_default_icon (self->view);
 
   gtk_image_set_from_gicon (self->icon, gicon);
   gtk_widget_set_visible (self->icon_stack,
@@ -200,58 +200,58 @@ update_icons (AdwTab *self)
 }
 
 static void
-update_indicator (AdwTab *self)
+update_indicator (AdapTab *self)
 {
-  gboolean activatable = self->page && adw_tab_page_get_indicator_activatable (self->page);
+  gboolean activatable = self->page && adap_tab_page_get_indicator_activatable (self->page);
   gboolean clickable = activatable && (self->selected || (!self->pinned && self->fully_visible));
 
   gtk_widget_set_can_target (self->indicator_btn, clickable);
 }
 
 static void
-update_needs_attention (AdwTab *self)
+update_needs_attention (AdapTab *self)
 {
-  gboolean needs_attention = adw_tab_page_get_needs_attention (self->page);
+  gboolean needs_attention = adap_tab_page_get_needs_attention (self->page);
 
-  adw_timed_animation_set_value_from (ADW_TIMED_ANIMATION (self->needs_attention_animation),
-                                      adw_animation_get_value (self->needs_attention_animation));
-  adw_timed_animation_set_value_to (ADW_TIMED_ANIMATION (self->needs_attention_animation),
+  adap_timed_animation_set_value_from (ADAP_TIMED_ANIMATION (self->needs_attention_animation),
+                                      adap_animation_get_value (self->needs_attention_animation));
+  adap_timed_animation_set_value_to (ADAP_TIMED_ANIMATION (self->needs_attention_animation),
                                     needs_attention ? 1 : 0);
-  adw_animation_play (self->needs_attention_animation);
+  adap_animation_play (self->needs_attention_animation);
 
   set_style_class (GTK_WIDGET (self), "needs-attention", needs_attention);
 }
 
 static void
-update_loading (AdwTab *self)
+update_loading (AdapTab *self)
 {
   update_icons (self);
   update_spinner (self);
   set_style_class (GTK_WIDGET (self), "loading",
-                   adw_tab_page_get_loading (self->page));
+                   adap_tab_page_get_loading (self->page));
 }
 
 static void
-update_selected (AdwTab *self)
+update_selected (AdapTab *self)
 {
   self->selected = self->dragging;
 
   if (self->page)
-    self->selected |= adw_tab_page_get_selected (self->page);
+    self->selected |= adap_tab_page_get_selected (self->page);
 
   update_state (self);
   update_indicator (self);
 }
 
 static void
-close_idle_cb (AdwTab *self)
+close_idle_cb (AdapTab *self)
 {
-  adw_tab_view_close_page (self->view, self->page);
+  adap_tab_view_close_page (self->view, self->page);
   g_object_unref (self);
 }
 
 static void
-close_clicked_cb (AdwTab *self)
+close_clicked_cb (AdapTab *self)
 {
   if (!self->page)
     return;
@@ -263,7 +263,7 @@ close_clicked_cb (AdwTab *self)
 }
 
 static void
-indicator_clicked_cb (AdwTab *self)
+indicator_clicked_cb (AdapTab *self)
 {
   if (!self->page)
     return;
@@ -287,7 +287,7 @@ make_action_unique (GdkDragAction actions)
 }
 
 static void
-enter_cb (AdwTab             *self,
+enter_cb (AdapTab             *self,
           double              x,
           double              y,
           GtkEventController *controller)
@@ -298,7 +298,7 @@ enter_cb (AdwTab             *self,
 }
 
 static void
-motion_cb (AdwTab             *self,
+motion_cb (AdapTab             *self,
            double              x,
            double              y,
            GtkEventController *controller)
@@ -318,7 +318,7 @@ motion_cb (AdwTab             *self,
 }
 
 static void
-leave_cb (AdwTab             *self,
+leave_cb (AdapTab             *self,
           GtkEventController *controller)
 {
   self->hovering = FALSE;
@@ -327,7 +327,7 @@ leave_cb (AdwTab             *self,
 }
 
 static gboolean
-drop_cb (AdwTab *self,
+drop_cb (AdapTab *self,
          GValue *value)
 {
   gboolean ret = GDK_EVENT_PROPAGATE;
@@ -340,7 +340,7 @@ drop_cb (AdwTab *self,
 }
 
 static GdkDragAction
-extra_drag_enter_cb (AdwTab *self)
+extra_drag_enter_cb (AdapTab *self)
 {
   const GValue *value = gtk_drop_target_get_value (self->drop_target);
 
@@ -351,13 +351,13 @@ extra_drag_enter_cb (AdwTab *self)
 }
 
 static GdkDragAction
-extra_drag_motion_cb (AdwTab *self)
+extra_drag_motion_cb (AdapTab *self)
 {
   return self->preferred_action;
 }
 
 static void
-extra_drag_notify_value_cb (AdwTab *self)
+extra_drag_notify_value_cb (AdapTab *self)
 {
   const GValue *value = gtk_drop_target_get_value (self->drop_target);
 
@@ -366,7 +366,7 @@ extra_drag_notify_value_cb (AdwTab *self)
 }
 
 static gboolean
-activate_cb (AdwTab   *self,
+activate_cb (AdapTab   *self,
              GVariant *args)
 {
   GtkWidget *child;
@@ -374,7 +374,7 @@ activate_cb (AdwTab   *self,
   if (!self->page || !self->view)
     return GDK_EVENT_PROPAGATE;
 
-  child = adw_tab_page_get_child (self->page);
+  child = adap_tab_page_get_child (self->page);
 
   gtk_widget_grab_focus (child);
 
@@ -382,7 +382,7 @@ activate_cb (AdwTab   *self,
 }
 
 static void
-adw_tab_measure (GtkWidget      *widget,
+adap_tab_measure (GtkWidget      *widget,
                  GtkOrientation  orientation,
                  int             for_size,
                  int            *minimum,
@@ -390,7 +390,7 @@ adw_tab_measure (GtkWidget      *widget,
                  int            *minimum_baseline,
                  int            *natural_baseline)
 {
-  AdwTab *self = ADW_TAB (widget);
+  AdapTab *self = ADAP_TAB (widget);
   int min = 0, nat = 0;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL) {
@@ -468,7 +468,7 @@ allocate_child (GtkWidget *child,
 }
 
 static int
-get_attention_indicator_width (AdwTab *self,
+get_attention_indicator_width (AdapTab *self,
                                int     center_width)
 {
   double base_width;
@@ -480,16 +480,16 @@ get_attention_indicator_width (AdwTab *self,
     base_width = CLAMP (base_width, ATTENTION_INDICATOR_MIN_WIDTH, ATTENTION_INDICATOR_MAX_WIDTH);
   }
 
-  return base_width * adw_animation_get_value (self->needs_attention_animation);
+  return base_width * adap_animation_get_value (self->needs_attention_animation);
 }
 
 static void
-adw_tab_size_allocate (GtkWidget *widget,
+adap_tab_size_allocate (GtkWidget *widget,
                        int        width,
                        int        height,
                        int        baseline)
 {
-  AdwTab *self = ADW_TAB (widget);
+  AdapTab *self = ADAP_TAB (widget);
   int indicator_width, close_width, icon_width, title_width, needs_attention_width;
   int center_x, center_width = 0;
   int start_width = 0, end_width = 0;
@@ -569,30 +569,30 @@ adw_tab_size_allocate (GtkWidget *widget,
 }
 
 static void
-adw_tab_map (GtkWidget *widget)
+adap_tab_map (GtkWidget *widget)
 {
-  AdwTab *self = ADW_TAB (widget);
+  AdapTab *self = ADAP_TAB (widget);
 
-  GTK_WIDGET_CLASS (adw_tab_parent_class)->map (widget);
+  GTK_WIDGET_CLASS (adap_tab_parent_class)->map (widget);
 
   update_spinner (self);
 }
 
 static void
-adw_tab_unmap (GtkWidget *widget)
+adap_tab_unmap (GtkWidget *widget)
 {
-  AdwTab *self = ADW_TAB (widget);
+  AdapTab *self = ADAP_TAB (widget);
 
-  GTK_WIDGET_CLASS (adw_tab_parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (adap_tab_parent_class)->unmap (widget);
 
   update_spinner (self);
 }
 
 static void
-adw_tab_snapshot (GtkWidget   *widget,
+adap_tab_snapshot (GtkWidget   *widget,
                   GtkSnapshot *snapshot)
 {
-  AdwTab *self = ADW_TAB (widget);
+  AdapTab *self = ADAP_TAB (widget);
   float opacity = gtk_widget_get_opacity (self->close_btn);
   gboolean draw_fade = self->close_overlap && opacity > 0;
 
@@ -635,23 +635,23 @@ adw_tab_snapshot (GtkWidget   *widget,
 }
 
 static void
-adw_tab_direction_changed (GtkWidget        *widget,
+adap_tab_direction_changed (GtkWidget        *widget,
                            GtkTextDirection  previous_direction)
 {
-  AdwTab *self = ADW_TAB (widget);
+  AdapTab *self = ADAP_TAB (widget);
 
   update_title (self);
 
-  GTK_WIDGET_CLASS (adw_tab_parent_class)->direction_changed (widget,
+  GTK_WIDGET_CLASS (adap_tab_parent_class)->direction_changed (widget,
                                                               previous_direction);
 }
 
 static void
-adw_tab_constructed (GObject *object)
+adap_tab_constructed (GObject *object)
 {
-  AdwTab *self = ADW_TAB (object);
+  AdapTab *self = ADAP_TAB (object);
 
-  G_OBJECT_CLASS (adw_tab_parent_class)->constructed (object);
+  G_OBJECT_CLASS (adap_tab_parent_class)->constructed (object);
 
   if (self->pinned) {
     gtk_widget_add_css_class (GTK_WIDGET (self), "pinned");
@@ -667,12 +667,12 @@ adw_tab_constructed (GObject *object)
 }
 
 static void
-adw_tab_get_property (GObject    *object,
+adap_tab_get_property (GObject    *object,
                       guint       prop_id,
                       GValue     *value,
                       GParamSpec *pspec)
 {
-  AdwTab *self = ADW_TAB (object);
+  AdapTab *self = ADAP_TAB (object);
 
   switch (prop_id) {
   case PROP_VIEW:
@@ -680,7 +680,7 @@ adw_tab_get_property (GObject    *object,
     break;
 
   case PROP_PAGE:
-    g_value_set_object (value, adw_tab_get_page (self));
+    g_value_set_object (value, adap_tab_get_page (self));
     break;
 
   case PROP_PINNED:
@@ -688,11 +688,11 @@ adw_tab_get_property (GObject    *object,
     break;
 
   case PROP_DRAGGING:
-    g_value_set_boolean (value, adw_tab_get_dragging (self));
+    g_value_set_boolean (value, adap_tab_get_dragging (self));
     break;
 
   case PROP_INVERTED:
-    g_value_set_boolean (value, adw_tab_get_inverted (self));
+    g_value_set_boolean (value, adap_tab_get_inverted (self));
     break;
 
     default:
@@ -701,12 +701,12 @@ adw_tab_get_property (GObject    *object,
 }
 
 static void
-adw_tab_set_property (GObject      *object,
+adap_tab_set_property (GObject      *object,
                       guint         prop_id,
                       const GValue *value,
                       GParamSpec   *pspec)
 {
-  AdwTab *self = ADW_TAB (object);
+  AdapTab *self = ADAP_TAB (object);
 
   switch (prop_id) {
   case PROP_VIEW:
@@ -714,7 +714,7 @@ adw_tab_set_property (GObject      *object,
     break;
 
   case PROP_PAGE:
-    adw_tab_set_page (self, g_value_get_object (value));
+    adap_tab_set_page (self, g_value_get_object (value));
     break;
 
   case PROP_PINNED:
@@ -722,11 +722,11 @@ adw_tab_set_property (GObject      *object,
     break;
 
   case PROP_DRAGGING:
-    adw_tab_set_dragging (self, g_value_get_boolean (value));
+    adap_tab_set_dragging (self, g_value_get_boolean (value));
     break;
 
   case PROP_INVERTED:
-    adw_tab_set_inverted (self, g_value_get_boolean (value));
+    adap_tab_set_inverted (self, g_value_get_boolean (value));
     break;
 
   default:
@@ -735,41 +735,41 @@ adw_tab_set_property (GObject      *object,
 }
 
 static void
-adw_tab_dispose (GObject *object)
+adap_tab_dispose (GObject *object)
 {
-  AdwTab *self = ADW_TAB (object);
+  AdapTab *self = ADAP_TAB (object);
 
-  adw_tab_set_page (self, NULL);
+  adap_tab_set_page (self, NULL);
 
   g_clear_object (&self->close_btn_animation);
   g_clear_object (&self->needs_attention_animation);
 
-  gtk_widget_dispose_template (GTK_WIDGET (self), ADW_TYPE_TAB);
+  gtk_widget_dispose_template (GTK_WIDGET (self), ADAP_TYPE_TAB);
 
-  G_OBJECT_CLASS (adw_tab_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_tab_parent_class)->dispose (object);
 }
 
 static void
-adw_tab_class_init (AdwTabClass *klass)
+adap_tab_class_init (AdapTabClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_tab_dispose;
-  object_class->constructed = adw_tab_constructed;
-  object_class->get_property = adw_tab_get_property;
-  object_class->set_property = adw_tab_set_property;
+  object_class->dispose = adap_tab_dispose;
+  object_class->constructed = adap_tab_constructed;
+  object_class->get_property = adap_tab_get_property;
+  object_class->set_property = adap_tab_set_property;
 
-  widget_class->measure = adw_tab_measure;
-  widget_class->size_allocate = adw_tab_size_allocate;
-  widget_class->map = adw_tab_map;
-  widget_class->unmap = adw_tab_unmap;
-  widget_class->snapshot = adw_tab_snapshot;
-  widget_class->direction_changed = adw_tab_direction_changed;
+  widget_class->measure = adap_tab_measure;
+  widget_class->size_allocate = adap_tab_size_allocate;
+  widget_class->map = adap_tab_map;
+  widget_class->unmap = adap_tab_unmap;
+  widget_class->snapshot = adap_tab_snapshot;
+  widget_class->direction_changed = adap_tab_direction_changed;
 
   props[PROP_VIEW] =
     g_param_spec_object ("view", NULL, NULL,
-                         ADW_TYPE_TAB_VIEW,
+                         ADAP_TYPE_TAB_VIEW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   props[PROP_PINNED] =
@@ -784,7 +784,7 @@ adw_tab_class_init (AdwTabClass *klass)
 
   props[PROP_PAGE] =
     g_param_spec_object ("page", NULL, NULL,
-                         ADW_TYPE_TAB_PAGE,
+                         ADAP_TYPE_TAB_PAGE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_INVERTED] =
@@ -818,16 +818,16 @@ adw_tab_class_init (AdwTabClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-tab.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwTab, title);
-  gtk_widget_class_bind_template_child (widget_class, AdwTab, icon_stack);
-  gtk_widget_class_bind_template_child (widget_class, AdwTab, icon);
-  gtk_widget_class_bind_template_child (widget_class, AdwTab, spinner);
-  gtk_widget_class_bind_template_child (widget_class, AdwTab, indicator_icon);
-  gtk_widget_class_bind_template_child (widget_class, AdwTab, indicator_btn);
-  gtk_widget_class_bind_template_child (widget_class, AdwTab, close_btn);
-  gtk_widget_class_bind_template_child (widget_class, AdwTab, needs_attention_indicator);
-  gtk_widget_class_bind_template_child (widget_class, AdwTab, drop_target);
+                                               "/org/gnome/Adapta/ui/adap-tab.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapTab, title);
+  gtk_widget_class_bind_template_child (widget_class, AdapTab, icon_stack);
+  gtk_widget_class_bind_template_child (widget_class, AdapTab, icon);
+  gtk_widget_class_bind_template_child (widget_class, AdapTab, spinner);
+  gtk_widget_class_bind_template_child (widget_class, AdapTab, indicator_icon);
+  gtk_widget_class_bind_template_child (widget_class, AdapTab, indicator_btn);
+  gtk_widget_class_bind_template_child (widget_class, AdapTab, close_btn);
+  gtk_widget_class_bind_template_child (widget_class, AdapTab, needs_attention_indicator);
+  gtk_widget_class_bind_template_child (widget_class, AdapTab, drop_target);
   gtk_widget_class_bind_template_callback (widget_class, close_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, indicator_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, enter_cb);
@@ -847,64 +847,64 @@ adw_tab_class_init (AdwTabClass *klass)
   gtk_widget_class_set_css_name (widget_class, "tab");
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TAB);
 
-  g_type_ensure (ADW_TYPE_FADING_LABEL);
-  g_type_ensure (ADW_TYPE_GIZMO);
+  g_type_ensure (ADAP_TYPE_FADING_LABEL);
+  g_type_ensure (ADAP_TYPE_GIZMO);
 }
 
 static void
-adw_tab_init (AdwTab *self)
+adap_tab_init (AdapTab *self)
 {
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               close_btn_animation_value_cb,
                                               self, NULL);
   self->close_btn_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 0, 0,
+    adap_timed_animation_new (GTK_WIDGET (self), 0, 0,
                              CLOSE_BTN_ANIMATION_DURATION, target);
 
-  adw_timed_animation_set_easing (ADW_TIMED_ANIMATION (self->close_btn_animation),
-                                  ADW_EASE_IN_OUT_CUBIC);
+  adap_timed_animation_set_easing (ADAP_TIMED_ANIMATION (self->close_btn_animation),
+                                  ADAP_EASE_IN_OUT_CUBIC);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               attention_indicator_animation_value_cb,
                                               self, NULL);
   self->needs_attention_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 0, 0,
+    adap_timed_animation_new (GTK_WIDGET (self), 0, 0,
                              ATTENTION_INDICATOR_ANIMATION_DURATION, target);
 
-  adw_timed_animation_set_easing (ADW_TIMED_ANIMATION (self->needs_attention_animation),
-                                  ADW_EASE_IN_OUT_CUBIC);
+  adap_timed_animation_set_easing (ADAP_TIMED_ANIMATION (self->needs_attention_animation),
+                                  ADAP_EASE_IN_OUT_CUBIC);
 }
 
-AdwTab *
-adw_tab_new (AdwTabView *view,
+AdapTab *
+adap_tab_new (AdapTabView *view,
              gboolean    pinned)
 {
-  g_return_val_if_fail (ADW_IS_TAB_VIEW (view), NULL);
+  g_return_val_if_fail (ADAP_IS_TAB_VIEW (view), NULL);
 
-  return g_object_new (ADW_TYPE_TAB,
+  return g_object_new (ADAP_TYPE_TAB,
                        "view", view,
                        "pinned", pinned,
                        NULL);
 }
 
-AdwTabPage *
-adw_tab_get_page (AdwTab *self)
+AdapTabPage *
+adap_tab_get_page (AdapTab *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TAB (self), NULL);
 
   return self->page;
 }
 
 void
-adw_tab_set_page (AdwTab     *self,
-                  AdwTabPage *page)
+adap_tab_set_page (AdapTab     *self,
+                  AdapTabPage *page)
 {
-  g_return_if_fail (ADW_IS_TAB (self));
-  g_return_if_fail (page == NULL || ADW_IS_TAB_PAGE (page));
+  g_return_if_fail (ADAP_IS_TAB (self));
+  g_return_if_fail (page == NULL || ADAP_IS_TAB_PAGE (page));
 
   if (self->page == page)
     return;
@@ -962,18 +962,18 @@ adw_tab_set_page (AdwTab     *self,
 }
 
 gboolean
-adw_tab_get_dragging (AdwTab *self)
+adap_tab_get_dragging (AdapTab *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB (self), FALSE);
 
   return self->dragging;
 }
 
 void
-adw_tab_set_dragging (AdwTab   *self,
+adap_tab_set_dragging (AdapTab   *self,
                       gboolean  dragging)
 {
-  g_return_if_fail (ADW_IS_TAB (self));
+  g_return_if_fail (ADAP_IS_TAB (self));
 
   dragging = !!dragging;
 
@@ -989,18 +989,18 @@ adw_tab_set_dragging (AdwTab   *self,
 }
 
 gboolean
-adw_tab_get_inverted (AdwTab *self)
+adap_tab_get_inverted (AdapTab *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB (self), FALSE);
 
   return self->inverted;
 }
 
 void
-adw_tab_set_inverted (AdwTab   *self,
+adap_tab_set_inverted (AdapTab   *self,
                       gboolean  inverted)
 {
-  g_return_if_fail (ADW_IS_TAB (self));
+  g_return_if_fail (ADAP_IS_TAB (self));
 
   inverted = !!inverted;
 
@@ -1015,10 +1015,10 @@ adw_tab_set_inverted (AdwTab   *self,
 }
 
 void
-adw_tab_set_fully_visible (AdwTab   *self,
+adap_tab_set_fully_visible (AdapTab   *self,
                            gboolean  fully_visible)
 {
-  g_return_if_fail (ADW_IS_TAB (self));
+  g_return_if_fail (ADAP_IS_TAB (self));
 
   fully_visible = !!fully_visible;
 
@@ -1032,12 +1032,12 @@ adw_tab_set_fully_visible (AdwTab   *self,
 }
 
 void
-adw_tab_setup_extra_drop_target (AdwTab        *self,
+adap_tab_setup_extra_drop_target (AdapTab        *self,
                                  GdkDragAction  actions,
                                  GType         *types,
                                  gsize          n_types)
 {
-  g_return_if_fail (ADW_IS_TAB (self));
+  g_return_if_fail (ADAP_IS_TAB (self));
   g_return_if_fail (n_types == 0 || types != NULL);
 
   gtk_drop_target_set_actions (self->drop_target, actions);
@@ -1047,22 +1047,22 @@ adw_tab_setup_extra_drop_target (AdwTab        *self,
 }
 
 void
-adw_tab_set_extra_drag_preload (AdwTab   *self,
+adap_tab_set_extra_drag_preload (AdapTab   *self,
                                 gboolean  preload)
 {
-  g_return_if_fail (ADW_IS_TAB (self));
+  g_return_if_fail (ADAP_IS_TAB (self));
 
   gtk_drop_target_set_preload (self->drop_target, preload);
 }
 
 gboolean
-adw_tab_can_click_at (AdwTab *self,
+adap_tab_can_click_at (AdapTab *self,
                       float   x,
                       float   y)
 {
   GtkWidget *picked;
 
-  g_return_val_if_fail (ADW_IS_TAB (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB (self), FALSE);
 
   picked = gtk_widget_pick (GTK_WIDGET (self), x, y, GTK_PICK_DEFAULT);
 

@@ -10,16 +10,16 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
-#include "adw-tab-button.h"
+#include "adap-tab-button.h"
 
-#include "adw-indicator-bin-private.h"
-#include "adw-marshalers.h"
+#include "adap-indicator-bin-private.h"
+#include "adap-marshalers.h"
 
 /* Copied from GtkInspector code */
 #define XFT_DPI_MULTIPLIER (96.0 * PANGO_SCALE)
 
 /**
- * AdwTabButton:
+ * AdapTabButton:
  *
  * A button that displays the number of [class@TabView] pages.
  *
@@ -28,15 +28,15 @@
  *   <img src="tab-button.png" alt="tab-button">
  * </picture>
  *
- * `AdwTabButton` is a button that displays the number of pages in a given
- * `AdwTabView`, as well as whether one of the inactive pages needs attention.
+ * `AdapTabButton` is a button that displays the number of pages in a given
+ * `AdapTabView`, as well as whether one of the inactive pages needs attention.
  *
  * It's intended to be used as a visible indicator when there's no visible tab
  * bar, typically opening an [class@TabOverview] on click, e.g. via the
  * `overview.open` action name:
  *
  * ```xml
- * <object class="AdwTabButton">
+ * <object class="AdapTabButton">
  *   <property name="view">view</property>
  *   <property name="action-name">overview.open</property>
  * </object>
@@ -44,31 +44,31 @@
  *
  * ## CSS nodes
  *
- * `AdwTabButton` has a main CSS node with name `tabbutton`.
+ * `AdapTabButton` has a main CSS node with name `tabbutton`.
  *
  * # Accessibility
  *
- * `AdwTabButton` uses the `GTK_ACCESSIBLE_ROLE_BUTTON` role.
+ * `AdapTabButton` uses the `GTK_ACCESSIBLE_ROLE_BUTTON` role.
  *
  * Since: 1.3
  */
 
-struct _AdwTabButton
+struct _AdapTabButton
 {
   GtkWidget parent_instance;
 
   GtkWidget *button;
   GtkLabel *label;
   GtkImage *icon;
-  AdwIndicatorBin *indicator;
+  AdapIndicatorBin *indicator;
 
-  AdwTabView *view;
+  AdapTabView *view;
 };
 
-static void adw_tab_button_actionable_init (GtkActionableInterface *iface);
+static void adap_tab_button_actionable_init (GtkActionableInterface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwTabButton, adw_tab_button, GTK_TYPE_WIDGET,
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, adw_tab_button_actionable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapTabButton, adap_tab_button, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, adap_tab_button_actionable_init))
 
 enum {
   PROP_0,
@@ -91,19 +91,19 @@ enum {
 static guint signals[SIGNAL_LAST_SIGNAL];
 
 static void
-clicked_cb (AdwTabButton *self)
+clicked_cb (AdapTabButton *self)
 {
   g_signal_emit (self, signals[SIGNAL_CLICKED], 0);
 }
 
 static void
-activate_cb (AdwTabButton *self)
+activate_cb (AdapTabButton *self)
 {
   g_signal_emit_by_name (self->button, "activate");
 }
 
 static void
-update_label_scale (AdwTabButton *self,
+update_label_scale (AdapTabButton *self,
                     GtkSettings  *settings)
 {
   int xft_dpi;
@@ -127,7 +127,7 @@ update_label_scale (AdwTabButton *self,
 }
 
 static void
-xft_dpi_changed (AdwTabButton *self,
+xft_dpi_changed (AdapTabButton *self,
                  GParamSpec   *pspec,
                  GtkSettings  *settings)
 {
@@ -135,15 +135,15 @@ xft_dpi_changed (AdwTabButton *self,
 }
 
 static void
-update_icon (AdwTabButton *self)
+update_icon (AdapTabButton *self)
 {
   gboolean display_label = FALSE;
   gboolean small_label = FALSE;
-  const char *icon_name = "adw-tab-counter-symbolic";
+  const char *icon_name = "adap-tab-counter-symbolic";
   char *label_text = NULL;
 
   if (self->view) {
-    guint n_pages = adw_tab_view_get_n_pages (self->view);
+    guint n_pages = adap_tab_view_get_n_pages (self->view);
 
     small_label = n_pages >= 10;
 
@@ -151,7 +151,7 @@ update_icon (AdwTabButton *self)
       display_label = TRUE;
       label_text = g_strdup_printf ("%u", n_pages);
     } else {
-      icon_name = "adw-tab-overflow-symbolic";
+      icon_name = "adap-tab-overflow-symbolic";
     }
   }
 
@@ -168,22 +168,22 @@ update_icon (AdwTabButton *self)
 }
 
 static void
-update_needs_attention (AdwTabButton *self)
+update_needs_attention (AdapTabButton *self)
 {
   gboolean needs_attention = FALSE;
 
   if (self->view) {
     int i, n;
 
-    n = adw_tab_view_get_n_pages (self->view);
+    n = adap_tab_view_get_n_pages (self->view);
 
     for (i = 0; i < n; i++) {
-      AdwTabPage *page = adw_tab_view_get_nth_page (self->view, i);
+      AdapTabPage *page = adap_tab_view_get_nth_page (self->view, i);
 
-      if (adw_tab_page_get_selected (page))
+      if (adap_tab_page_get_selected (page))
         continue;
 
-      if (!adw_tab_page_get_needs_attention (page))
+      if (!adap_tab_page_get_needs_attention (page))
         continue;
 
       needs_attention = TRUE;
@@ -191,13 +191,13 @@ update_needs_attention (AdwTabButton *self)
     }
   }
 
-  adw_indicator_bin_set_needs_attention (ADW_INDICATOR_BIN (self->indicator),
+  adap_indicator_bin_set_needs_attention (ADAP_INDICATOR_BIN (self->indicator),
                                          needs_attention);
 }
 
 static void
-page_attached_cb (AdwTabButton *self,
-                  AdwTabPage   *page)
+page_attached_cb (AdapTabButton *self,
+                  AdapTabPage   *page)
 {
   g_signal_connect_object (page, "notify::needs-attention",
                            G_CALLBACK (update_needs_attention), self,
@@ -207,8 +207,8 @@ page_attached_cb (AdwTabButton *self,
 }
 
 static void
-page_detached_cb (AdwTabButton *self,
-                  AdwTabPage   *page)
+page_detached_cb (AdapTabButton *self,
+                  AdapTabPage   *page)
 {
   g_signal_handlers_disconnect_by_func (page, update_needs_attention, self);
 
@@ -216,28 +216,28 @@ page_detached_cb (AdwTabButton *self,
 }
 
 static void
-adw_tab_button_dispose (GObject *object)
+adap_tab_button_dispose (GObject *object)
 {
-  AdwTabButton *self = ADW_TAB_BUTTON (object);
+  AdapTabButton *self = ADAP_TAB_BUTTON (object);
 
-  adw_tab_button_set_view (self, NULL);
+  adap_tab_button_set_view (self, NULL);
 
-  gtk_widget_dispose_template (GTK_WIDGET (self), ADW_TYPE_TAB_BUTTON);
+  gtk_widget_dispose_template (GTK_WIDGET (self), ADAP_TYPE_TAB_BUTTON);
 
-  G_OBJECT_CLASS (adw_tab_button_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_tab_button_parent_class)->dispose (object);
 }
 
 static void
-adw_tab_button_get_property (GObject    *object,
+adap_tab_button_get_property (GObject    *object,
                              guint       prop_id,
                              GValue     *value,
                              GParamSpec *pspec)
 {
-  AdwTabButton *self = ADW_TAB_BUTTON (object);
+  AdapTabButton *self = ADAP_TAB_BUTTON (object);
 
   switch (prop_id) {
   case PROP_VIEW:
-    g_value_set_object (value, adw_tab_button_get_view (self));
+    g_value_set_object (value, adap_tab_button_get_view (self));
     break;
   case PROP_ACTION_NAME:
     g_value_set_string (value, gtk_actionable_get_action_name (GTK_ACTIONABLE (self)));
@@ -251,16 +251,16 @@ adw_tab_button_get_property (GObject    *object,
 }
 
 static void
-adw_tab_button_set_property (GObject      *object,
+adap_tab_button_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
-  AdwTabButton *self = ADW_TAB_BUTTON (object);
+  AdapTabButton *self = ADAP_TAB_BUTTON (object);
 
   switch (prop_id) {
   case PROP_VIEW:
-    adw_tab_button_set_view (self, g_value_get_object (value));
+    adap_tab_button_set_view (self, g_value_get_object (value));
     break;
   case PROP_ACTION_NAME:
     gtk_actionable_set_action_name (GTK_ACTIONABLE (self), g_value_get_string (value));
@@ -274,17 +274,17 @@ adw_tab_button_set_property (GObject      *object,
 }
 
 static void
-adw_tab_button_class_init (AdwTabButtonClass *klass)
+adap_tab_button_class_init (AdapTabButtonClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_tab_button_dispose;
-  object_class->get_property = adw_tab_button_get_property;
-  object_class->set_property = adw_tab_button_set_property;
+  object_class->dispose = adap_tab_button_dispose;
+  object_class->get_property = adap_tab_button_get_property;
+  object_class->set_property = adap_tab_button_set_property;
 
   /**
-   * AdwTabButton:view: (attributes org.gtk.Property.get=adw_tab_button_get_view org.gtk.Property.set=adw_tab_button_set_view)
+   * AdapTabButton:view: (attributes org.gtk.Property.get=adap_tab_button_get_view org.gtk.Property.set=adap_tab_button_set_view)
    *
    * The view the tab button displays.
    *
@@ -292,7 +292,7 @@ adw_tab_button_class_init (AdwTabButtonClass *klass)
    */
   props[PROP_VIEW] =
     g_param_spec_object ("view", NULL, NULL,
-                         ADW_TYPE_TAB_VIEW,
+                         ADAP_TYPE_TAB_VIEW,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
@@ -301,7 +301,7 @@ adw_tab_button_class_init (AdwTabButtonClass *klass)
   g_object_class_override_property (object_class, PROP_ACTION_TARGET, "action-target");
 
   /**
-   * AdwTabButton::clicked:
+   * AdapTabButton::clicked:
    * @self: the object that received the signal
    *
    * Emitted when the button has been activated (pressed and released).
@@ -314,15 +314,15 @@ adw_tab_button_class_init (AdwTabButtonClass *klass)
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_CLICKED],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   /**
-   * AdwTabButton::activate:
+   * AdapTabButton::activate:
    * @self: the object which received the signal.
    *
    * Emitted to animate press then release.
@@ -338,12 +338,12 @@ adw_tab_button_class_init (AdwTabButtonClass *klass)
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_ACTIVATE],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   gtk_widget_class_set_activate_signal (widget_class, signals[SIGNAL_ACTIVATE]);
 
@@ -352,23 +352,23 @@ adw_tab_button_class_init (AdwTabButtonClass *klass)
                                    G_CALLBACK (activate_cb));
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-tab-button.ui");
+                                               "/org/gnome/Adapta/ui/adap-tab-button.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, AdwTabButton, button);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabButton, label);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabButton, icon);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabButton, indicator);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabButton, button);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabButton, label);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabButton, icon);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabButton, indicator);
   gtk_widget_class_bind_template_callback (widget_class, clicked_cb);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "tabbutton");
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
 
-  g_type_ensure (ADW_TYPE_INDICATOR_BIN);
+  g_type_ensure (ADAP_TYPE_INDICATOR_BIN);
 }
 
 static void
-adw_tab_button_init (AdwTabButton *self)
+adap_tab_button_init (AdapTabButton *self)
 {
   GtkSettings *settings;
 
@@ -385,67 +385,67 @@ adw_tab_button_init (AdwTabButton *self)
 }
 
 static const char *
-adw_tab_button_get_action_name (GtkActionable *actionable)
+adap_tab_button_get_action_name (GtkActionable *actionable)
 {
-  AdwTabButton *self = ADW_TAB_BUTTON (actionable);
+  AdapTabButton *self = ADAP_TAB_BUTTON (actionable);
 
   return gtk_actionable_get_action_name (GTK_ACTIONABLE (self->button));
 }
 
 static void
-adw_tab_button_set_action_name (GtkActionable *actionable,
+adap_tab_button_set_action_name (GtkActionable *actionable,
                                 const char    *action_name)
 {
-  AdwTabButton *self = ADW_TAB_BUTTON (actionable);
+  AdapTabButton *self = ADAP_TAB_BUTTON (actionable);
 
   gtk_actionable_set_action_name (GTK_ACTIONABLE (self->button),
                                   action_name);
 }
 
 static GVariant *
-adw_tab_button_get_action_target_value (GtkActionable *actionable)
+adap_tab_button_get_action_target_value (GtkActionable *actionable)
 {
-  AdwTabButton *self = ADW_TAB_BUTTON (actionable);
+  AdapTabButton *self = ADAP_TAB_BUTTON (actionable);
 
   return gtk_actionable_get_action_target_value (GTK_ACTIONABLE (self->button));
 }
 
 static void
-adw_tab_button_set_action_target_value (GtkActionable *actionable,
+adap_tab_button_set_action_target_value (GtkActionable *actionable,
                                         GVariant      *action_target)
 {
-  AdwTabButton *self = ADW_TAB_BUTTON (actionable);
+  AdapTabButton *self = ADAP_TAB_BUTTON (actionable);
 
   gtk_actionable_set_action_target_value (GTK_ACTIONABLE (self->button),
                                           action_target);
 }
 
 static void
-adw_tab_button_actionable_init (GtkActionableInterface *iface)
+adap_tab_button_actionable_init (GtkActionableInterface *iface)
 {
-  iface->get_action_name = adw_tab_button_get_action_name;
-  iface->set_action_name = adw_tab_button_set_action_name;
-  iface->get_action_target_value = adw_tab_button_get_action_target_value;
-  iface->set_action_target_value = adw_tab_button_set_action_target_value;
+  iface->get_action_name = adap_tab_button_get_action_name;
+  iface->set_action_name = adap_tab_button_set_action_name;
+  iface->get_action_target_value = adap_tab_button_get_action_target_value;
+  iface->set_action_target_value = adap_tab_button_set_action_target_value;
 }
 
 /**
- * adw_tab_button_new:
+ * adap_tab_button_new:
  *
- * Creates a new `AdwTabButton`.
+ * Creates a new `AdapTabButton`.
  *
- * Returns: the newly created `AdwTabButton`
+ * Returns: the newly created `AdapTabButton`
  *
  * Since: 1.3
  */
 GtkWidget *
-adw_tab_button_new (void)
+adap_tab_button_new (void)
 {
-  return g_object_new (ADW_TYPE_TAB_BUTTON, NULL);
+  return g_object_new (ADAP_TYPE_TAB_BUTTON, NULL);
 }
 
 /**
- * adw_tab_button_get_view: (attributes org.gtk.Method.get_property=view)
+ * adap_tab_button_get_view: (attributes org.gtk.Method.get_property=view)
  * @self: a tab button
  *
  * Gets the tab view @self displays.
@@ -454,16 +454,16 @@ adw_tab_button_new (void)
  *
  * Since: 1.3
  */
-AdwTabView *
-adw_tab_button_get_view (AdwTabButton *self)
+AdapTabView *
+adap_tab_button_get_view (AdapTabButton *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_BUTTON (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TAB_BUTTON (self), NULL);
 
   return self->view;
 }
 
 /**
- * adw_tab_button_set_view: (attributes org.gtk.Method.set_property=view)
+ * adap_tab_button_set_view: (attributes org.gtk.Method.set_property=view)
  * @self: a tab button
  * @view: (nullable): a tab view
  *
@@ -472,11 +472,11 @@ adw_tab_button_get_view (AdwTabButton *self)
  * Since: 1.3
  */
 void
-adw_tab_button_set_view (AdwTabButton *self,
-                         AdwTabView   *view)
+adap_tab_button_set_view (AdapTabButton *self,
+                         AdapTabView   *view)
 {
-  g_return_if_fail (ADW_IS_TAB_BUTTON (self));
-  g_return_if_fail (view == NULL || ADW_IS_TAB_VIEW (view));
+  g_return_if_fail (ADAP_IS_TAB_BUTTON (self));
+  g_return_if_fail (view == NULL || ADAP_IS_TAB_VIEW (view));
 
   if (self->view == view)
     return;
@@ -489,10 +489,10 @@ adw_tab_button_set_view (AdwTabButton *self,
     g_signal_handlers_disconnect_by_func (self->view, page_attached_cb, self);
     g_signal_handlers_disconnect_by_func (self->view, page_detached_cb, self);
 
-    n = adw_tab_view_get_n_pages (self->view);
+    n = adap_tab_view_get_n_pages (self->view);
 
     for (i = 0; i < n; i++)
-      page_detached_cb (self, adw_tab_view_get_nth_page (self->view, i));
+      page_detached_cb (self, adap_tab_view_get_nth_page (self->view, i));
   }
 
   g_set_object (&self->view, view);
@@ -513,10 +513,10 @@ adw_tab_button_set_view (AdwTabButton *self,
                              G_CALLBACK (page_detached_cb), self,
                              G_CONNECT_SWAPPED);
 
-    n = adw_tab_view_get_n_pages (self->view);
+    n = adap_tab_view_get_n_pages (self->view);
 
     for (i = 0; i < n; i++)
-      page_attached_cb (self, adw_tab_view_get_nth_page (self->view, i));
+      page_attached_cb (self, adap_tab_view_get_nth_page (self->view, i));
   }
 
   update_icon (self);

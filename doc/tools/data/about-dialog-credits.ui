@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwBin" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapBin" id="widget">
     <property name="width-request">400</property>
     <property name="child">
-      <object class="AdwPreferencesGroup">
+      <object class="AdapPreferencesGroup">
         <property name="margin-top">12</property>
         <property name="margin-bottom">12</property>
         <property name="margin-start">12</property>
         <property name="margin-end">12</property>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdapActionRow">
             <property name="title">Edgar Allan Poe</property>
             <property name="tooltip-text">mailto:edgar@poe.com</property>
             <property name="activatable">True</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">adw-mail-send-symbolic</property>
+                <property name="icon-name">adap-mail-send-symbolic</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdapActionRow">
             <property name="title">The GNOME Project</property>
             <property name="tooltip-text">https://www.gnome.org</property>
             <property name="activatable">True</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">adw-external-link-symbolic</property>
+                <property name="icon-name">adap-external-link-symbolic</property>
               </object>
             </child>
           </object>

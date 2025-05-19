@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwToastWidget">
+  <template class="AdapToastWidget">
     <property name="hexpand">False</property>
     <child>
       <object class="GtkEventControllerFocus">
@@ -22,7 +22,7 @@
       </object>
     </child>
     <child>
-      <object class="AdwBin" id="title_bin">
+      <object class="AdapBin" id="title_bin">
         <property name="hexpand">True</property>
         <property name="halign">start</property>
       </object>
@@ -35,24 +35,24 @@
         <property name="can-shrink">True</property>
         <binding name="visible">
           <closure type="gboolean" function="string_is_not_empty">
-            <lookup name="button-label" type="AdwToast">
-              <lookup name="toast">AdwToastWidget</lookup>
+            <lookup name="button-label" type="AdapToast">
+              <lookup name="toast">AdapToastWidget</lookup>
             </lookup>
           </closure>
         </binding>
         <binding name="label">
-          <lookup name="button-label" type="AdwToast">
-            <lookup name="toast">AdwToastWidget</lookup>
+          <lookup name="button-label" type="AdapToast">
+            <lookup name="toast">AdapToastWidget</lookup>
           </lookup>
         </binding>
         <binding name="action-name">
-          <lookup name="action-name" type="AdwToast">
-            <lookup name="toast">AdwToastWidget</lookup>
+          <lookup name="action-name" type="AdapToast">
+            <lookup name="toast">AdapToastWidget</lookup>
           </lookup>
         </binding>
         <binding name="action-target">
-          <lookup name="action-target" type="AdwToast">
-            <lookup name="toast">AdwToastWidget</lookup>
+          <lookup name="action-target" type="AdapToast">
+            <lookup name="toast">AdapToastWidget</lookup>
           </lookup>
         </binding>
         <signal name="clicked" handler="action_clicked_cb" swapped="yes"/>

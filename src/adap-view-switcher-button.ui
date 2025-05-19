@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwViewSwitcherButton" parent="GtkToggleButton">
+  <template class="AdapViewSwitcherButton" parent="GtkToggleButton">
     <style>
       <class name="flat"/>
     </style>
@@ -18,19 +18,19 @@
               <class name="wide"/>
             </style>
             <child>
-              <object class="AdwIndicatorBin">
+              <object class="AdapIndicatorBin">
                 <property name="valign">center</property>
                 <binding name="badge">
                   <closure type="gchararray" function="get_badge_text">
-                    <lookup name="badge-number">AdwViewSwitcherButton</lookup>
+                    <lookup name="badge-number">AdapViewSwitcherButton</lookup>
                   </closure>
                 </binding>
                 <binding name="needs-attention">
-                  <lookup name="needs-attention">AdwViewSwitcherButton</lookup>
+                  <lookup name="needs-attention">AdapViewSwitcherButton</lookup>
                 </binding>
                 <property name="child">
                   <object class="GtkImage" id="horizontal_image">
-                    <property name="icon-name" bind-source="AdwViewSwitcherButton" bind-property="icon-name" bind-flags="sync-create" />
+                    <property name="icon-name" bind-source="AdapViewSwitcherButton" bind-property="icon-name" bind-flags="sync-create" />
                     <property name="accessible-role">presentation</property>
                   </object>
                 </property>
@@ -38,8 +38,8 @@
             </child>
             <child>
               <object class="GtkLabel" id="horizontal_label">
-                <property name="label" bind-source="AdwViewSwitcherButton" bind-property="label" bind-flags="sync-create|bidirectional" />
-                <property name="use-underline" bind-source="AdwViewSwitcherButton" bind-property="use-underline" bind-flags="sync-create|bidirectional" />
+                <property name="label" bind-source="AdapViewSwitcherButton" bind-property="label" bind-flags="sync-create|bidirectional" />
+                <property name="use-underline" bind-source="AdapViewSwitcherButton" bind-property="use-underline" bind-flags="sync-create|bidirectional" />
                 <property name="ellipsize">end</property>
               </object>
             </child>
@@ -54,20 +54,20 @@
               <class name="narrow"/>
             </style>
             <child>
-              <object class="AdwIndicatorBin">
+              <object class="AdapIndicatorBin">
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <binding name="badge">
                   <closure type="gchararray" function="get_badge_text">
-                    <lookup name="badge-number">AdwViewSwitcherButton</lookup>
+                    <lookup name="badge-number">AdapViewSwitcherButton</lookup>
                   </closure>
                 </binding>
                 <binding name="needs-attention">
-                  <lookup name="needs-attention">AdwViewSwitcherButton</lookup>
+                  <lookup name="needs-attention">AdapViewSwitcherButton</lookup>
                 </binding>
                 <property name="child">
                   <object class="GtkImage" id="vertical_image">
-                    <property name="icon-name" bind-source="AdwViewSwitcherButton" bind-property="icon-name" bind-flags="sync-create" />
+                    <property name="icon-name" bind-source="AdapViewSwitcherButton" bind-property="icon-name" bind-flags="sync-create" />
                     <property name="accessible-role">presentation</property>
                   </object>
                 </property>
@@ -75,8 +75,8 @@
             </child>
             <child>
               <object class="GtkLabel" id="vertical_label">
-                <property name="label" bind-source="AdwViewSwitcherButton" bind-property="label" bind-flags="sync-create|bidirectional" />
-                <property name="use-underline" bind-source="AdwViewSwitcherButton" bind-property="use-underline" bind-flags="sync-create|bidirectional" />
+                <property name="label" bind-source="AdapViewSwitcherButton" bind-property="label" bind-flags="sync-create|bidirectional" />
+                <property name="use-underline" bind-source="AdapViewSwitcherButton" bind-property="use-underline" bind-flags="sync-create|bidirectional" />
                 <property name="ellipsize">end</property>
               </object>
             </child>

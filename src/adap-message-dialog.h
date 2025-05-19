@@ -8,155 +8,155 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-alert-dialog.h"
+#include "adap-alert-dialog.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_MESSAGE_DIALOG (adw_message_dialog_get_type())
+#define ADAP_TYPE_MESSAGE_DIALOG (adap_message_dialog_get_type())
 
-ADW_AVAILABLE_IN_1_2
-G_DECLARE_DERIVABLE_TYPE (AdwMessageDialog, adw_message_dialog, ADW, MESSAGE_DIALOG, GtkWindow)
+ADAP_AVAILABLE_IN_1_2
+G_DECLARE_DERIVABLE_TYPE (AdapMessageDialog, adap_message_dialog, ADAP, MESSAGE_DIALOG, GtkWindow)
 
-struct _AdwMessageDialogClass
+struct _AdapMessageDialogClass
 {
   GtkWindowClass parent_class;
 
-  void (* response) (AdwMessageDialog *self,
+  void (* response) (AdapMessageDialog *self,
                      const char       *response);
 
   /*< private >*/
   gpointer padding[4];
 };
 
-ADW_AVAILABLE_IN_1_2
-GtkWidget *adw_message_dialog_new (GtkWindow  *parent,
+ADAP_AVAILABLE_IN_1_2
+GtkWidget *adap_message_dialog_new (GtkWindow  *parent,
                                    const char *heading,
                                    const char *body);
 
-ADW_AVAILABLE_IN_1_2
-const char *adw_message_dialog_get_heading (AdwMessageDialog *self);
-ADW_AVAILABLE_IN_1_2
-void        adw_message_dialog_set_heading (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+const char *adap_message_dialog_get_heading (AdapMessageDialog *self);
+ADAP_AVAILABLE_IN_1_2
+void        adap_message_dialog_set_heading (AdapMessageDialog *self,
                                             const char       *heading);
 
-ADW_AVAILABLE_IN_1_2
-gboolean adw_message_dialog_get_heading_use_markup (AdwMessageDialog *self);
-ADW_AVAILABLE_IN_1_2
-void     adw_message_dialog_set_heading_use_markup (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+gboolean adap_message_dialog_get_heading_use_markup (AdapMessageDialog *self);
+ADAP_AVAILABLE_IN_1_2
+void     adap_message_dialog_set_heading_use_markup (AdapMessageDialog *self,
                                                     gboolean          use_markup);
 
-ADW_AVAILABLE_IN_1_2
-void adw_message_dialog_format_heading (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+void adap_message_dialog_format_heading (AdapMessageDialog *self,
                                         const char       *format,
                                         ...) G_GNUC_PRINTF (2, 3);
 
-ADW_AVAILABLE_IN_1_2
-void adw_message_dialog_format_heading_markup (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+void adap_message_dialog_format_heading_markup (AdapMessageDialog *self,
                                                const char       *format,
                                                ...) G_GNUC_PRINTF (2, 3);
 
-ADW_AVAILABLE_IN_1_2
-const char *adw_message_dialog_get_body (AdwMessageDialog *self);
-ADW_AVAILABLE_IN_1_2
-void        adw_message_dialog_set_body (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+const char *adap_message_dialog_get_body (AdapMessageDialog *self);
+ADAP_AVAILABLE_IN_1_2
+void        adap_message_dialog_set_body (AdapMessageDialog *self,
                                          const char       *body);
 
-ADW_AVAILABLE_IN_1_2
-gboolean adw_message_dialog_get_body_use_markup (AdwMessageDialog *self);
-ADW_AVAILABLE_IN_1_2
-void     adw_message_dialog_set_body_use_markup (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+gboolean adap_message_dialog_get_body_use_markup (AdapMessageDialog *self);
+ADAP_AVAILABLE_IN_1_2
+void     adap_message_dialog_set_body_use_markup (AdapMessageDialog *self,
                                                  gboolean          use_markup);
 
-ADW_AVAILABLE_IN_1_2
-void adw_message_dialog_format_body (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+void adap_message_dialog_format_body (AdapMessageDialog *self,
                                      const char       *format,
                                      ...) G_GNUC_PRINTF (2, 3);
 
-ADW_AVAILABLE_IN_1_2
-void adw_message_dialog_format_body_markup (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+void adap_message_dialog_format_body_markup (AdapMessageDialog *self,
                                             const char       *format,
                                             ...) G_GNUC_PRINTF (2, 3);
 
-ADW_AVAILABLE_IN_1_2
-GtkWidget *adw_message_dialog_get_extra_child (AdwMessageDialog *self);
-ADW_AVAILABLE_IN_1_2
-void       adw_message_dialog_set_extra_child (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+GtkWidget *adap_message_dialog_get_extra_child (AdapMessageDialog *self);
+ADAP_AVAILABLE_IN_1_2
+void       adap_message_dialog_set_extra_child (AdapMessageDialog *self,
                                                GtkWidget        *child);
 
-ADW_AVAILABLE_IN_1_2
-void adw_message_dialog_add_response (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+void adap_message_dialog_add_response (AdapMessageDialog *self,
                                       const char       *id,
                                       const char       *label);
 
-ADW_AVAILABLE_IN_1_5
-void adw_message_dialog_remove_response (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_5
+void adap_message_dialog_remove_response (AdapMessageDialog *self,
                                          const char       *id);
 
-ADW_AVAILABLE_IN_1_2
-void adw_message_dialog_add_responses (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+void adap_message_dialog_add_responses (AdapMessageDialog *self,
                                        const char       *first_id,
                                        ...) G_GNUC_NULL_TERMINATED;
 
-ADW_AVAILABLE_IN_1_2
-const char *adw_message_dialog_get_response_label (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+const char *adap_message_dialog_get_response_label (AdapMessageDialog *self,
                                                    const char       *response);
-ADW_AVAILABLE_IN_1_2
-void        adw_message_dialog_set_response_label (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+void        adap_message_dialog_set_response_label (AdapMessageDialog *self,
                                                    const char       *response,
                                                    const char       *label);
 
-ADW_AVAILABLE_IN_1_2
-AdwResponseAppearance adw_message_dialog_get_response_appearance (AdwMessageDialog      *self,
+ADAP_AVAILABLE_IN_1_2
+AdapResponseAppearance adap_message_dialog_get_response_appearance (AdapMessageDialog      *self,
                                                                   const char            *response);
-ADW_AVAILABLE_IN_1_2
-void                  adw_message_dialog_set_response_appearance (AdwMessageDialog      *self,
+ADAP_AVAILABLE_IN_1_2
+void                  adap_message_dialog_set_response_appearance (AdapMessageDialog      *self,
                                                                   const char            *response,
-                                                                  AdwResponseAppearance  appearance);
+                                                                  AdapResponseAppearance  appearance);
 
-ADW_AVAILABLE_IN_1_2
-gboolean adw_message_dialog_get_response_enabled (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+gboolean adap_message_dialog_get_response_enabled (AdapMessageDialog *self,
                                                   const char       *response);
-ADW_AVAILABLE_IN_1_2
-void     adw_message_dialog_set_response_enabled (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+void     adap_message_dialog_set_response_enabled (AdapMessageDialog *self,
                                                   const char       *response,
                                                   gboolean          enabled);
 
-ADW_AVAILABLE_IN_1_2
-const char *adw_message_dialog_get_default_response (AdwMessageDialog *self);
-ADW_AVAILABLE_IN_1_2
-void        adw_message_dialog_set_default_response (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+const char *adap_message_dialog_get_default_response (AdapMessageDialog *self);
+ADAP_AVAILABLE_IN_1_2
+void        adap_message_dialog_set_default_response (AdapMessageDialog *self,
                                                      const char       *response);
 
-ADW_AVAILABLE_IN_1_2
-const char *adw_message_dialog_get_close_response (AdwMessageDialog *self);
-ADW_AVAILABLE_IN_1_2
-void        adw_message_dialog_set_close_response (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+const char *adap_message_dialog_get_close_response (AdapMessageDialog *self);
+ADAP_AVAILABLE_IN_1_2
+void        adap_message_dialog_set_close_response (AdapMessageDialog *self,
                                                    const char       *response);
 
-ADW_AVAILABLE_IN_1_2
-void adw_message_dialog_response (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+void adap_message_dialog_response (AdapMessageDialog *self,
                                   const char       *response);
 
-ADW_AVAILABLE_IN_1_2
-gboolean adw_message_dialog_has_response (AdwMessageDialog *self,
+ADAP_AVAILABLE_IN_1_2
+gboolean adap_message_dialog_has_response (AdapMessageDialog *self,
                                           const char       *response);
 
-ADW_AVAILABLE_IN_1_3
-void        adw_message_dialog_choose        (AdwMessageDialog    *self,
+ADAP_AVAILABLE_IN_1_3
+void        adap_message_dialog_choose        (AdapMessageDialog    *self,
                                               GCancellable        *cancellable,
                                               GAsyncReadyCallback  callback,
                                               gpointer             user_data);
 
-ADW_AVAILABLE_IN_1_3
-const char *adw_message_dialog_choose_finish (AdwMessageDialog    *self,
+ADAP_AVAILABLE_IN_1_3
+const char *adap_message_dialog_choose_finish (AdapMessageDialog    *self,
                                               GAsyncResult        *result);
 
 G_END_DECLS

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0" />
-  <template class="AdwBanner" parent="GtkWidget">
+  <template class="AdapBanner" parent="GtkWidget">
     <accessibility>
       <relation name="labelled-by">title</relation>
     </accessibility>
@@ -9,7 +9,7 @@
       <object class="GtkRevealer" id="revealer">
         <property name="transition-type">slide-down</property>
         <property name="child">
-          <object class="AdwGizmo" id="gizmo">
+          <object class="AdapGizmo" id="gizmo">
             <property name="hexpand">True</property>
             <child>
               <object class="GtkLabel" id="title">

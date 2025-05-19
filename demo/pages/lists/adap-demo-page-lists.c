@@ -1,10 +1,10 @@
-#include "adw-demo-page-lists.h"
+#include "adap-demo-page-lists.h"
 
 #include <glib/gi18n.h>
 
-struct _AdwDemoPageLists
+struct _AdapDemoPageLists
 {
-  AdwBin parent_instance;
+  AdapBin parent_instance;
 };
 
 enum {
@@ -14,18 +14,18 @@ enum {
 
 static guint signals[SIGNAL_LAST_SIGNAL];
 
-G_DEFINE_FINAL_TYPE (AdwDemoPageLists, adw_demo_page_lists, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (AdapDemoPageLists, adap_demo_page_lists, ADAP_TYPE_BIN)
 
 static void
-entry_apply_cb (AdwDemoPageLists *self)
+entry_apply_cb (AdapDemoPageLists *self)
 {
-  AdwToast *toast = adw_toast_new ("Changes applied");
+  AdapToast *toast = adap_toast_new ("Changes applied");
 
   g_signal_emit (self, signals[SIGNAL_ADD_TOAST], 0, toast);
 }
 
 static void
-adw_demo_page_lists_class_init (AdwDemoPageListsClass *klass)
+adap_demo_page_lists_class_init (AdapDemoPageListsClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
@@ -36,15 +36,15 @@ adw_demo_page_lists_class_init (AdwDemoPageListsClass *klass)
                   0,
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
-                  ADW_TYPE_TOAST);
+                  ADAP_TYPE_TOAST);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adwaita1/Demo/ui/pages/lists/adw-demo-page-lists.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adapta1/Demo/ui/pages/lists/adap-demo-page-lists.ui");
 
   gtk_widget_class_bind_template_callback (widget_class, entry_apply_cb);
 }
 
 static void
-adw_demo_page_lists_init (AdwDemoPageLists *self)
+adap_demo_page_lists_init (AdapDemoPageLists *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }

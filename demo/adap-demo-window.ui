@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
+  <requires lib="libadapta" version="1.0"/>
   <menu id="primary_menu">
     <section>
       <item>
@@ -15,42 +15,42 @@
         <attribute name="action">app.preferences</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_About Adwaita Demo</attribute>
+        <attribute name="label" translatable="yes">_About Adapta Demo</attribute>
         <attribute name="action">app.about</attribute>
       </item>
     </section>
   </menu>
-  <template class="AdwDemoWindow" parent="AdwApplicationWindow">
-    <property name="title" translatable="yes">Adwaita Demo</property>
+  <template class="AdapDemoWindow" parent="AdapApplicationWindow">
+    <property name="title" translatable="yes">Adapta Demo</property>
     <property name="default_width">800</property>
     <property name="default_height">576</property>
     <property name="width-request">360</property>
     <property name="height-request">200</property>
     <child>
-      <object class="AdwBreakpoint">
+      <object class="AdapBreakpoint">
         <condition>max-width: 500sp</condition>
         <setter object="split_view" property="collapsed">True</setter>
       </object>
     </child>
     <property name="content">
-      <object class="AdwToastOverlay" id="toast_overlay">
+      <object class="AdapToastOverlay" id="toast_overlay">
         <property name="child">
-          <object class="AdwNavigationSplitView" id="split_view">
+          <object class="AdapNavigationSplitView" id="split_view">
             <property name="min-sidebar-width">200</property>
             <property name="sidebar">
-              <object class="AdwNavigationPage">
-                <property name="title" bind-source="AdwDemoWindow" bind-property="title" bind-flags="sync-create"/>
+              <object class="AdapNavigationPage">
+                <property name="title" bind-source="AdapDemoWindow" bind-property="title" bind-flags="sync-create"/>
                 <property name="child">
-                  <object class="AdwToolbarView">
+                  <object class="AdapToolbarView">
                     <child type="top">
-                      <object class="AdwHeaderBar">
+                      <object class="AdapHeaderBar">
                         <child type="start">
                           <object class="GtkButton" id="color_scheme_button">
                             <binding name="icon-name">
                               <closure type="gchararray" function="get_color_scheme_icon_name">
-                                <lookup name="dark" type="AdwStyleManager">
-                                  <lookup name="style-manager" type="AdwApplication">
-                                    <lookup name="application">AdwDemoWindow</lookup>
+                                <lookup name="dark" type="AdapStyleManager">
+                                  <lookup name="style-manager" type="AdapApplication">
+                                    <lookup name="application">AdapDemoWindow</lookup>
                                   </lookup>
                                 </lookup>
                               </closure>
@@ -78,11 +78,11 @@
               </object>
             </property>
             <property name="content">
-              <object class="AdwNavigationPage" id="content_page">
+              <object class="AdapNavigationPage" id="content_page">
                 <property name="child">
-                  <object class="AdwToolbarView">
+                  <object class="AdapToolbarView">
                     <child type="top">
-                      <object class="AdwHeaderBar">
+                      <object class="AdapHeaderBar">
                         <property name="show-title">False</property>
                       </object>
                     </child>
@@ -94,7 +94,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Welcome</property>
                             <property name="child">
-                              <object class="AdwDemoPageWelcome"/>
+                              <object class="AdapDemoPageWelcome"/>
                             </property>
                           </object>
                         </child>
@@ -102,7 +102,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Navigation View</property>
                             <property name="child">
-                              <object class="AdwDemoPageNavigationView"/>
+                              <object class="AdapDemoPageNavigationView"/>
                             </property>
                           </object>
                         </child>
@@ -110,7 +110,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Clamp</property>
                             <property name="child">
-                              <object class="AdwDemoPageClamp"/>
+                              <object class="AdapDemoPageClamp"/>
                             </property>
                           </object>
                         </child>
@@ -118,8 +118,8 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Lists</property>
                             <property name="child">
-                              <object class="AdwDemoPageLists">
-                                <signal name="add-toast" handler="adw_toast_overlay_add_toast" object="toast_overlay" swapped="yes"/>
+                              <object class="AdapDemoPageLists">
+                                <signal name="add-toast" handler="adap_toast_overlay_add_toast" object="toast_overlay" swapped="yes"/>
                               </object>
                             </property>
                           </object>
@@ -128,7 +128,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">View Switcher</property>
                             <property name="child">
-                              <object class="AdwDemoPageViewSwitcher"/>
+                              <object class="AdapDemoPageViewSwitcher"/>
                             </property>
                           </object>
                         </child>
@@ -136,7 +136,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Carousel</property>
                             <property name="child">
-                              <object class="AdwDemoPageCarousel"/>
+                              <object class="AdapDemoPageCarousel"/>
                             </property>
                           </object>
                         </child>
@@ -144,7 +144,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Avatar</property>
                             <property name="child">
-                              <object class="AdwDemoPageAvatar"/>
+                              <object class="AdapDemoPageAvatar"/>
                             </property>
                           </object>
                         </child>
@@ -152,7 +152,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Split Views</property>
                             <property name="child">
-                              <object class="AdwDemoPageSplitViews"/>
+                              <object class="AdapDemoPageSplitViews"/>
                             </property>
                           </object>
                         </child>
@@ -160,7 +160,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Tab View</property>
                             <property name="child">
-                              <object class="AdwDemoPageTabView"/>
+                              <object class="AdapDemoPageTabView"/>
                             </property>
                           </object>
                         </child>
@@ -168,7 +168,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Buttons</property>
                             <property name="child">
-                              <object class="AdwDemoPageButtons"/>
+                              <object class="AdapDemoPageButtons"/>
                             </property>
                           </object>
                         </child>
@@ -176,7 +176,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Style Classes</property>
                             <property name="child">
-                              <object class="AdwDemoPageStyles"/>
+                              <object class="AdapDemoPageStyles"/>
                             </property>
                           </object>
                         </child>
@@ -184,8 +184,8 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Toasts</property>
                             <property name="child">
-                              <object class="AdwDemoPageToasts" id="toasts_page">
-                                <signal name="add-toast" handler="adw_toast_overlay_add_toast" object="toast_overlay" swapped="yes"/>
+                              <object class="AdapDemoPageToasts" id="toasts_page">
+                                <signal name="add-toast" handler="adap_toast_overlay_add_toast" object="toast_overlay" swapped="yes"/>
                               </object>
                             </property>
                           </object>
@@ -194,7 +194,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Animations</property>
                             <property name="child">
-                              <object class="AdwDemoPageAnimations"/>
+                              <object class="AdapDemoPageAnimations"/>
                             </property>
                           </object>
                         </child>
@@ -202,8 +202,8 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Dialogs</property>
                             <property name="child">
-                              <object class="AdwDemoPageDialogs">
-                                <signal name="add-toast" handler="adw_toast_overlay_add_toast" object="toast_overlay" swapped="yes"/>
+                              <object class="AdapDemoPageDialogs">
+                                <signal name="add-toast" handler="adap_toast_overlay_add_toast" object="toast_overlay" swapped="yes"/>
                               </object>
                             </property>
                           </object>
@@ -212,7 +212,7 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">About Dialog</property>
                             <property name="child">
-                              <object class="AdwDemoPageAbout"/>
+                              <object class="AdapDemoPageAbout"/>
                             </property>
                           </object>
                         </child>
@@ -220,8 +220,8 @@
                           <object class="GtkStackPage">
                             <property name="title" translatable="yes">Banner</property>
                             <property name="child">
-                              <object class="AdwDemoPageBanners">
-                                <signal name="add-toast" handler="adw_toast_overlay_add_toast" object="toast_overlay" swapped="yes"/>
+                              <object class="AdapDemoPageBanners">
+                                <signal name="add-toast" handler="adap_toast_overlay_add_toast" object="toast_overlay" swapped="yes"/>
                               </object>
                             </property>
                           </object>

@@ -6,15 +6,15 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-animation-target.h"
+#include "adap-animation-target.h"
 
 G_BEGIN_DECLS
 
-void adw_animation_target_set_value (AdwAnimationTarget *self,
+void adap_animation_target_set_value (AdapAnimationTarget *self,
                                      double              value);
 
 G_END_DECLS

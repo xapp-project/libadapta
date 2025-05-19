@@ -8,33 +8,33 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_FLOATING_SHEET (adw_floating_sheet_get_type())
+#define ADAP_TYPE_FLOATING_SHEET (adap_floating_sheet_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwFloatingSheet, adw_floating_sheet, ADW, FLOATING_SHEET, GtkWidget)
+G_DECLARE_FINAL_TYPE (AdapFloatingSheet, adap_floating_sheet, ADAP, FLOATING_SHEET, GtkWidget)
 
-GtkWidget *adw_floating_sheet_new (void) G_GNUC_WARN_UNUSED_RESULT;
+GtkWidget *adap_floating_sheet_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-GtkWidget *adw_floating_sheet_get_child (AdwFloatingSheet *self);
-void       adw_floating_sheet_set_child (AdwFloatingSheet *self,
+GtkWidget *adap_floating_sheet_get_child (AdapFloatingSheet *self);
+void       adap_floating_sheet_set_child (AdapFloatingSheet *self,
                                          GtkWidget        *child);
 
-gboolean adw_floating_sheet_get_open (AdwFloatingSheet *self);
-void     adw_floating_sheet_set_open (AdwFloatingSheet *self,
+gboolean adap_floating_sheet_get_open (AdapFloatingSheet *self);
+void     adap_floating_sheet_set_open (AdapFloatingSheet *self,
                                       gboolean          open);
 
-gboolean adw_floating_sheet_get_can_close (AdwFloatingSheet *self);
-void     adw_floating_sheet_set_can_close (AdwFloatingSheet *self,
+gboolean adap_floating_sheet_get_can_close (AdapFloatingSheet *self);
+void     adap_floating_sheet_set_can_close (AdapFloatingSheet *self,
                                            gboolean          can_close);
 
-GtkWidget *adw_floating_sheet_get_sheet_bin (AdwFloatingSheet *self);
+GtkWidget *adap_floating_sheet_get_sheet_bin (AdapFloatingSheet *self);
 G_END_DECLS

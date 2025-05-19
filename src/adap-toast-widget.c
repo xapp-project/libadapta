@@ -6,18 +6,18 @@
 
 #include "config.h"
 
-#include "adw-toast-widget-private.h"
+#include "adap-toast-widget-private.h"
 
-#include "adw-bin.h"
+#include "adap-bin.h"
 
-struct _AdwToastWidget {
+struct _AdapToastWidget {
   GtkWidget parent_instance;
 
-  AdwBin *title_bin;
+  AdapBin *title_bin;
   GtkWidget *action_button;
   GtkWidget *close_button;
 
-  AdwToast *toast;
+  AdapToast *toast;
 
   guint hide_timeout_id;
   gint inhibit_count;
@@ -31,7 +31,7 @@ enum {
 
 static GParamSpec *props[LAST_PROP];
 
-G_DEFINE_FINAL_TYPE (AdwToastWidget, adw_toast_widget, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (AdapToastWidget, adap_toast_widget, GTK_TYPE_WIDGET)
 
 static gboolean
 string_is_not_empty (gpointer    user_data,
@@ -41,17 +41,17 @@ string_is_not_empty (gpointer    user_data,
 }
 
 static void
-timeout_cb (AdwToastWidget *self)
+timeout_cb (AdapToastWidget *self)
 {
   self->hide_timeout_id = 0;
 
-  adw_toast_dismiss (self->toast);
+  adap_toast_dismiss (self->toast);
 }
 
 static void
-start_timeout (AdwToastWidget *self)
+start_timeout (AdapToastWidget *self)
 {
-  guint timeout = adw_toast_get_timeout (self->toast);
+  guint timeout = adap_toast_get_timeout (self->toast);
 
   if (!self->hide_timeout_id && timeout)
     self->hide_timeout_id =
@@ -61,20 +61,20 @@ start_timeout (AdwToastWidget *self)
 }
 
 static void
-end_timeout (AdwToastWidget *self)
+end_timeout (AdapToastWidget *self)
 {
   g_clear_handle_id (&self->hide_timeout_id, g_source_remove);
 }
 
 static void
-inhibit_hide (AdwToastWidget *self)
+inhibit_hide (AdapToastWidget *self)
 {
   if (self->inhibit_count++ == 0)
     end_timeout (self);
 }
 
 static void
-uninhibit_hide (AdwToastWidget  *self)
+uninhibit_hide (AdapToastWidget  *self)
 {
   g_assert (self->inhibit_count);
 
@@ -83,22 +83,22 @@ uninhibit_hide (AdwToastWidget  *self)
 }
 
 static void
-dismiss (AdwToastWidget *self)
+dismiss (AdapToastWidget *self)
 {
   end_timeout (self);
 
-  adw_toast_dismiss (self->toast);
+  adap_toast_dismiss (self->toast);
 }
 
 static void
-close_idle_cb (AdwToastWidget *self)
+close_idle_cb (AdapToastWidget *self)
 {
   dismiss (self);
   g_object_unref (self);
 }
 
 static void
-action_clicked_cb (AdwToastWidget *self)
+action_clicked_cb (AdapToastWidget *self)
 {
   end_timeout (self);
 
@@ -110,19 +110,19 @@ action_clicked_cb (AdwToastWidget *self)
 }
 
 static void
-update_title_widget (AdwToastWidget *self)
+update_title_widget (AdapToastWidget *self)
 {
   GtkWidget *custom_title;
 
   if (!self->toast) {
-    adw_bin_set_child (self->title_bin, NULL);
+    adap_bin_set_child (self->title_bin, NULL);
     return;
   }
 
-  custom_title = adw_toast_get_custom_title (self->toast);
+  custom_title = adap_toast_get_custom_title (self->toast);
 
   if (custom_title) {
-    adw_bin_set_child (self->title_bin, custom_title);
+    adap_bin_set_child (self->title_bin, custom_title);
   } else {
     GtkWidget *title = gtk_label_new (NULL);
 
@@ -139,16 +139,16 @@ update_title_widget (AdwToastWidget *self)
                             title, "label",
                             G_BINDING_SYNC_CREATE);
 
-    adw_bin_set_child (self->title_bin, title);
+    adap_bin_set_child (self->title_bin, title);
   }
 }
 
 static void
-set_toast (AdwToastWidget *self,
-           AdwToast       *toast)
+set_toast (AdapToastWidget *self,
+           AdapToast       *toast)
 {
-  g_assert (ADW_IS_TOAST_WIDGET (self));
-  g_assert (toast == NULL || ADW_IS_TOAST (toast));
+  g_assert (ADAP_IS_TOAST_WIDGET (self));
+  g_assert (toast == NULL || ADAP_IS_TOAST (toast));
 
   if (self->toast) {
     end_timeout (self);
@@ -172,26 +172,26 @@ set_toast (AdwToastWidget *self,
 }
 
 static void
-adw_toast_widget_dispose (GObject *object)
+adap_toast_widget_dispose (GObject *object)
 {
-  AdwToastWidget *self = ADW_TOAST_WIDGET (object);
+  AdapToastWidget *self = ADAP_TOAST_WIDGET (object);
 
   end_timeout (self);
 
   set_toast (self, NULL);
 
-  gtk_widget_dispose_template (GTK_WIDGET (self), ADW_TYPE_TOAST_WIDGET);
+  gtk_widget_dispose_template (GTK_WIDGET (self), ADAP_TYPE_TOAST_WIDGET);
 
-  G_OBJECT_CLASS (adw_toast_widget_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_toast_widget_parent_class)->dispose (object);
 }
 
 static void
-adw_toast_widget_get_property (GObject    *object,
+adap_toast_widget_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  AdwToastWidget *self = ADW_TOAST_WIDGET (object);
+  AdapToastWidget *self = ADAP_TOAST_WIDGET (object);
 
   switch (prop_id) {
   case PROP_TOAST:
@@ -203,12 +203,12 @@ adw_toast_widget_get_property (GObject    *object,
 }
 
 static void
-adw_toast_widget_set_property (GObject      *object,
+adap_toast_widget_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
-  AdwToastWidget *self = ADW_TOAST_WIDGET (object);
+  AdapToastWidget *self = ADAP_TOAST_WIDGET (object);
 
   switch (prop_id) {
   case PROP_TOAST:
@@ -220,28 +220,28 @@ adw_toast_widget_set_property (GObject      *object,
 }
 
 static void
-adw_toast_widget_class_init (AdwToastWidgetClass *klass)
+adap_toast_widget_class_init (AdapToastWidgetClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_toast_widget_dispose;
-  object_class->get_property = adw_toast_widget_get_property;
-  object_class->set_property = adw_toast_widget_set_property;
+  object_class->dispose = adap_toast_widget_dispose;
+  object_class->get_property = adap_toast_widget_get_property;
+  object_class->set_property = adap_toast_widget_set_property;
 
   props[PROP_TOAST] =
     g_param_spec_object ("toast", NULL, NULL,
-                         ADW_TYPE_TOAST,
+                         ADAP_TYPE_TOAST,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-toast-widget.ui");
+                                               "/org/gnome/Adapta/ui/adap-toast-widget.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, AdwToastWidget, title_bin);
-  gtk_widget_class_bind_template_child (widget_class, AdwToastWidget, action_button);
-  gtk_widget_class_bind_template_child (widget_class, AdwToastWidget, close_button);
+  gtk_widget_class_bind_template_child (widget_class, AdapToastWidget, title_bin);
+  gtk_widget_class_bind_template_child (widget_class, AdapToastWidget, action_button);
+  gtk_widget_class_bind_template_child (widget_class, AdapToastWidget, close_button);
 
   gtk_widget_class_bind_template_callback (widget_class, string_is_not_empty);
   gtk_widget_class_bind_template_callback (widget_class, action_clicked_cb);
@@ -254,34 +254,34 @@ adw_toast_widget_class_init (AdwToastWidgetClass *klass)
 }
 
 static void
-adw_toast_widget_init (AdwToastWidget *self)
+adap_toast_widget_init (AdapToastWidget *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 GtkWidget *
-adw_toast_widget_new (AdwToast *toast)
+adap_toast_widget_new (AdapToast *toast)
 {
-  g_assert (ADW_IS_TOAST (toast));
+  g_assert (ADAP_IS_TOAST (toast));
 
-  return g_object_new (ADW_TYPE_TOAST_WIDGET,
+  return g_object_new (ADAP_TYPE_TOAST_WIDGET,
                        "toast", toast,
                        NULL);
 }
 
 void
-adw_toast_widget_reset_timeout (AdwToastWidget *self)
+adap_toast_widget_reset_timeout (AdapToastWidget *self)
 {
-  g_assert (ADW_IS_TOAST_WIDGET (self));
+  g_assert (ADAP_IS_TOAST_WIDGET (self));
 
   end_timeout (self);
   start_timeout (self);
 }
 
 gboolean
-adw_toast_widget_get_button_visible (AdwToastWidget *self)
+adap_toast_widget_get_button_visible (AdapToastWidget *self)
 {
-  g_assert (ADW_IS_TOAST_WIDGET (self));
+  g_assert (ADAP_IS_TOAST_WIDGET (self));
 
   return gtk_widget_get_visible (self->action_button);
 }

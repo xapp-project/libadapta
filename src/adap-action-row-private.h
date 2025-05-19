@@ -8,15 +8,15 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-action-row.h"
+#include "adap-action-row.h"
 
 G_BEGIN_DECLS
 
-void adw_action_row_set_expand_suffixes (AdwActionRow *self,
+void adap_action_row_set_expand_suffixes (AdapActionRow *self,
                                          gboolean      expand);
 
 G_END_DECLS

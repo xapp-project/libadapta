@@ -1,6 +1,6 @@
 #include "config.h"
 
-#include "adw-demo-debug-info.h"
+#include "adap-demo-debug-info.h"
 
 /* Copied and adapted from gtk/inspector/general.c */
 static void
@@ -15,8 +15,8 @@ get_gtk_info (const char **backend,
     *backend = "X11";
   else if (!g_strcmp0 (G_OBJECT_TYPE_NAME (display), "GdkWaylandDisplay"))
     *backend = "Wayland";
-  else if (!g_strcmp0 (G_OBJECT_TYPE_NAME (display), "GdkBroadwayDisplay"))
-    *backend = "Broadway";
+  else if (!g_strcmp0 (G_OBJECT_TYPE_NAME (display), "GdkBroadapayDisplay"))
+    *backend = "Broadapay";
   else if (!g_strcmp0 (G_OBJECT_TYPE_NAME (display), "GdkWin32Display"))
     *backend = "Windows";
   else if (!g_strcmp0 (G_OBJECT_TYPE_NAME (display), "GdkMacosDisplay"))
@@ -60,15 +60,15 @@ get_flatpak_info (const char *group,
 #endif
 
 char *
-adw_demo_generate_debug_info (void)
+adap_demo_generate_debug_info (void)
 {
   GString *string = g_string_new (NULL);
 #ifndef G_OS_WIN32
   gboolean flatpak = g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
 #endif
 
-  g_string_append_printf (string, "Libadwaita demo: %s (%s)\n", ADW_VERSION_S,
-                                                                ADW_DEMO_VCS_TAG);
+  g_string_append_printf (string, "Libadapta demo: %s (%s)\n", ADAP_VERSION_S,
+                                                                ADAP_DEMO_VCS_TAG);
   g_string_append (string, "\n");
 
   g_string_append (string, "Compiled against:\n");
@@ -145,9 +145,9 @@ adw_demo_generate_debug_info (void)
     const char *builder = g_getenv ("INSIDE_GNOME_BUILDER");
     const char *gtk_debug = g_getenv ("GTK_DEBUG");
     const char *gtk_theme = g_getenv ("GTK_THEME");
-    const char *adw_debug_color_scheme = g_getenv ("ADW_DEBUG_COLOR_SCHEME");
-    const char *adw_debug_high_contrast = g_getenv ("ADW_DEBUG_HIGH_CONTRAST");
-    const char *adw_disable_portal = g_getenv ("ADW_DISABLE_PORTAL");
+    const char *adap_debug_color_scheme = g_getenv ("ADAP_DEBUG_COLOR_SCHEME");
+    const char *adap_debug_high_contrast = g_getenv ("ADAP_DEBUG_HIGH_CONTRAST");
+    const char *adap_disable_portal = g_getenv ("ADAP_DISABLE_PORTAL");
 
     g_string_append (string, "Environment:\n");
     g_string_append_printf (string, "- Desktop: %s\n", desktop);
@@ -160,12 +160,12 @@ adw_demo_generate_debug_info (void)
       g_string_append_printf (string, "- GTK_DEBUG: %s\n", gtk_debug);
     if (gtk_theme)
       g_string_append_printf (string, "- GTK_THEME: %s\n", gtk_theme);
-    if (adw_debug_color_scheme)
-      g_string_append_printf (string, "- ADW_DEBUG_COLOR_SCHEME: %s\n", adw_debug_color_scheme);
-    if (adw_debug_high_contrast)
-      g_string_append_printf (string, "- ADW_DEBUG_HIGH_CONTRAST: %s\n", adw_debug_high_contrast);
-    if (adw_disable_portal)
-      g_string_append_printf (string, "- ADW_DISABLE_PORTAL: %s\n", adw_disable_portal);
+    if (adap_debug_color_scheme)
+      g_string_append_printf (string, "- ADAP_DEBUG_COLOR_SCHEME: %s\n", adap_debug_color_scheme);
+    if (adap_debug_high_contrast)
+      g_string_append_printf (string, "- ADAP_DEBUG_HIGH_CONTRAST: %s\n", adap_debug_high_contrast);
+    if (adap_disable_portal)
+      g_string_append_printf (string, "- ADAP_DISABLE_PORTAL: %s\n", adap_disable_portal);
   }
 
   return g_string_free_and_steal (string);

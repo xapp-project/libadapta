@@ -6,21 +6,21 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_SHADOW_HELPER (adw_shadow_helper_get_type())
+#define ADAP_TYPE_SHADOW_HELPER (adap_shadow_helper_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwShadowHelper, adw_shadow_helper, ADW, SHADOW_HELPER, GObject)
+G_DECLARE_FINAL_TYPE (AdapShadowHelper, adap_shadow_helper, ADAP, SHADOW_HELPER, GObject)
 
-AdwShadowHelper *adw_shadow_helper_new (GtkWidget *widget) G_GNUC_WARN_UNUSED_RESULT;
+AdapShadowHelper *adap_shadow_helper_new (GtkWidget *widget) G_GNUC_WARN_UNUSED_RESULT;
 
-void adw_shadow_helper_size_allocate (AdwShadowHelper *self,
+void adap_shadow_helper_size_allocate (AdapShadowHelper *self,
                                       int              width,
                                       int              height,
                                       int              baseline,
@@ -29,7 +29,7 @@ void adw_shadow_helper_size_allocate (AdwShadowHelper *self,
                                       double           progress,
                                       GtkPanDirection  direction);
 
-void adw_shadow_helper_snapshot (AdwShadowHelper *self,
+void adap_shadow_helper_snapshot (AdapShadowHelper *self,
                                  GtkSnapshot     *snapshot);
 
 G_END_DECLS

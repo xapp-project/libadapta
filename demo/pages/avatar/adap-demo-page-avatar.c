@@ -1,18 +1,18 @@
-#include "adw-demo-page-avatar.h"
+#include "adap-demo-page-avatar.h"
 
 #include <glib/gi18n.h>
 
-struct _AdwDemoPageAvatar
+struct _AdapDemoPageAvatar
 {
-  AdwBin parent_instance;
+  AdapBin parent_instance;
 
-  AdwAvatar *avatar;
-  AdwEntryRow *text;
+  AdapAvatar *avatar;
+  AdapEntryRow *text;
   GtkLabel *file_chooser_label;
   GtkListBox *contacts;
 };
 
-G_DEFINE_FINAL_TYPE (AdwDemoPageAvatar, adw_demo_page_avatar, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (AdapDemoPageAvatar, adap_demo_page_avatar, ADAP_TYPE_BIN)
 
 static char *
 create_random_name (void)
@@ -65,18 +65,18 @@ create_random_name (void)
 }
 
 static void
-populate_contacts (AdwDemoPageAvatar *self)
+populate_contacts (AdapDemoPageAvatar *self)
 {
   for (int i = 0; i < 30; i++) {
     char *name = create_random_name ();
-    GtkWidget *contact = adw_action_row_new ();
-    GtkWidget *avatar = adw_avatar_new (40, name, TRUE);
+    GtkWidget *contact = adap_action_row_new ();
+    GtkWidget *avatar = adap_avatar_new (40, name, TRUE);
 
     gtk_widget_set_margin_top (avatar, 12);
     gtk_widget_set_margin_bottom (avatar, 12);
 
-    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (contact), name);
-    adw_action_row_add_prefix (ADW_ACTION_ROW (contact), avatar);
+    adap_preferences_row_set_title (ADAP_PREFERENCES_ROW (contact), name);
+    adap_action_row_add_prefix (ADAP_ACTION_ROW (contact), avatar);
     gtk_list_box_append (self->contacts, contact);
 
     g_free (name);
@@ -86,7 +86,7 @@ populate_contacts (AdwDemoPageAvatar *self)
 static void
 avatar_open_dialog_cb (GtkFileDialog     *dialog,
                        GAsyncResult      *result,
-                       AdwDemoPageAvatar *self)
+                       AdapDemoPageAvatar *self)
 {
   GFile *file = gtk_file_dialog_open_finish (dialog, result, NULL);
 
@@ -113,7 +113,7 @@ avatar_open_dialog_cb (GtkFileDialog     *dialog,
       g_clear_error (&error);
     }
 
-    adw_avatar_set_custom_image (self->avatar, texture ? GDK_PAINTABLE (texture) : NULL);
+    adap_avatar_set_custom_image (self->avatar, texture ? GDK_PAINTABLE (texture) : NULL);
 
     g_clear_object (&info);
     g_clear_object (&texture);
@@ -122,7 +122,7 @@ avatar_open_dialog_cb (GtkFileDialog     *dialog,
 }
 
 static void
-avatar_open_cb (AdwDemoPageAvatar *self)
+avatar_open_cb (AdapDemoPageAvatar *self)
 {
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
   GtkFileDialog *dialog = gtk_file_dialog_new ();
@@ -137,23 +137,23 @@ avatar_open_cb (AdwDemoPageAvatar *self)
 }
 
 static void
-avatar_remove_cb (AdwDemoPageAvatar *self)
+avatar_remove_cb (AdapDemoPageAvatar *self)
 {
   gtk_label_set_label (self->file_chooser_label, _("(None)"));
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "avatar.remove", FALSE);
-  adw_avatar_set_custom_image (self->avatar, NULL);
+  adap_avatar_set_custom_image (self->avatar, NULL);
 }
 
 static void
 avatar_save_dialog_cb (GtkFileDialog     *dialog,
                        GAsyncResult      *result,
-                       AdwDemoPageAvatar *self)
+                       AdapDemoPageAvatar *self)
 {
   GFile *file = gtk_file_dialog_save_finish (dialog, result, NULL);
 
   if (file) {
     GdkTexture *texture =
-      adw_avatar_draw_to_texture (self->avatar,
+      adap_avatar_draw_to_texture (self->avatar,
                                   gtk_widget_get_scale_factor (GTK_WIDGET (self)));
 
     gdk_texture_save_to_png (texture, g_file_peek_path (file));
@@ -164,7 +164,7 @@ avatar_save_dialog_cb (GtkFileDialog     *dialog,
 }
 
 static void
-avatar_save_cb (AdwDemoPageAvatar *self)
+avatar_save_cb (AdapDemoPageAvatar *self)
 {
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
   GtkFileDialog *dialog = gtk_file_dialog_new ();
@@ -179,15 +179,15 @@ avatar_save_cb (AdwDemoPageAvatar *self)
 }
 
 static void
-adw_demo_page_avatar_class_init (AdwDemoPageAvatarClass *klass)
+adap_demo_page_avatar_class_init (AdapDemoPageAvatarClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adwaita1/Demo/ui/pages/avatar/adw-demo-page-avatar.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoPageAvatar, avatar);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoPageAvatar, text);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoPageAvatar, file_chooser_label);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoPageAvatar, contacts);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adapta1/Demo/ui/pages/avatar/adap-demo-page-avatar.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoPageAvatar, avatar);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoPageAvatar, text);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoPageAvatar, file_chooser_label);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoPageAvatar, contacts);
 
   gtk_widget_class_install_action (widget_class, "avatar.open", NULL, (GtkWidgetActionActivateFunc) avatar_open_cb);
   gtk_widget_class_install_action (widget_class, "avatar.remove", NULL, (GtkWidgetActionActivateFunc) avatar_remove_cb);
@@ -195,7 +195,7 @@ adw_demo_page_avatar_class_init (AdwDemoPageAvatarClass *klass)
 }
 
 static void
-adw_demo_page_avatar_init (AdwDemoPageAvatar *self)
+adap_demo_page_avatar_init (AdapDemoPageAvatar *self)
 {
   char *name;
 

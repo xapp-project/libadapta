@@ -1,48 +1,48 @@
-#include "adw-demo-preferences-window.h"
+#include "adap-demo-preferences-window.h"
 
-struct _AdwDemoPreferencesWindow
+struct _AdapDemoPreferencesWindow
 {
-  AdwPreferencesDialog parent_instance;
+  AdapPreferencesDialog parent_instance;
 
-  AdwNavigationPage *subpage1;
-  AdwNavigationPage *subpage2;
+  AdapNavigationPage *subpage1;
+  AdapNavigationPage *subpage2;
 };
 
-G_DEFINE_FINAL_TYPE (AdwDemoPreferencesWindow, adw_demo_preferences_window, ADW_TYPE_PREFERENCES_DIALOG)
+G_DEFINE_FINAL_TYPE (AdapDemoPreferencesWindow, adap_demo_preferences_window, ADAP_TYPE_PREFERENCES_DIALOG)
 
-AdwDemoPreferencesWindow *
-adw_demo_preferences_window_new (void)
+AdapDemoPreferencesWindow *
+adap_demo_preferences_window_new (void)
 {
-  return g_object_new (ADW_TYPE_DEMO_PREFERENCES_WINDOW, NULL);
+  return g_object_new (ADAP_TYPE_DEMO_PREFERENCES_WINDOW, NULL);
 }
 
 static void
-subpage1_activated_cb (AdwDemoPreferencesWindow *self)
+subpage1_activated_cb (AdapDemoPreferencesWindow *self)
 {
-  adw_preferences_dialog_push_subpage (ADW_PREFERENCES_DIALOG (self), self->subpage1);
+  adap_preferences_dialog_push_subpage (ADAP_PREFERENCES_DIALOG (self), self->subpage1);
 }
 
 static void
-subpage2_activated_cb (AdwDemoPreferencesWindow *self)
+subpage2_activated_cb (AdapDemoPreferencesWindow *self)
 {
-  adw_preferences_dialog_push_subpage (ADW_PREFERENCES_DIALOG (self), self->subpage2);
+  adap_preferences_dialog_push_subpage (ADAP_PREFERENCES_DIALOG (self), self->subpage2);
 }
 
 static void
-toast_show_cb (AdwPreferencesDialog *window)
+toast_show_cb (AdapPreferencesDialog *window)
 {
-  adw_preferences_dialog_add_toast (window, adw_toast_new ("Example Toast"));
+  adap_preferences_dialog_add_toast (window, adap_toast_new ("Example Toast"));
 }
 
 static void
-adw_demo_preferences_window_class_init (AdwDemoPreferencesWindowClass *klass)
+adap_demo_preferences_window_class_init (AdapDemoPreferencesWindowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adwaita1/Demo/ui/adw-demo-preferences-window.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adapta1/Demo/ui/adap-demo-preferences-window.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoPreferencesWindow, subpage1);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoPreferencesWindow, subpage2);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoPreferencesWindow, subpage1);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoPreferencesWindow, subpage2);
 
   gtk_widget_class_bind_template_callback (widget_class, subpage1_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, subpage2_activated_cb);
@@ -51,7 +51,7 @@ adw_demo_preferences_window_class_init (AdwDemoPreferencesWindowClass *klass)
 }
 
 static void
-adw_demo_preferences_window_init (AdwDemoPreferencesWindow *self)
+adap_demo_preferences_window_init (AdapDemoPreferencesWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }

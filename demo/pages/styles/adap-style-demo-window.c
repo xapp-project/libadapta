@@ -1,19 +1,19 @@
-#include "adw-style-demo-window.h"
+#include "adap-style-demo-window.h"
 
 #include <glib/gi18n.h>
 
-struct _AdwStyleDemoWindow
+struct _AdapStyleDemoWindow
 {
-  AdwDialog parent_instance;
+  AdapDialog parent_instance;
 
   gboolean progress;
 
-  AdwDialog *status_page_window;
-  AdwDialog *sidebar_window;
-  AdwNavigationSplitView *split_view;
+  AdapDialog *status_page_window;
+  AdapDialog *sidebar_window;
+  AdapNavigationSplitView *split_view;
 };
 
-G_DEFINE_FINAL_TYPE (AdwStyleDemoWindow, adw_style_demo_window, ADW_TYPE_DIALOG)
+G_DEFINE_FINAL_TYPE (AdapStyleDemoWindow, adap_style_demo_window, ADAP_TYPE_DIALOG)
 
 enum {
   PROP_0,
@@ -29,9 +29,9 @@ status_page_cb (GtkWidget  *sender,
                 const char *name,
                 GVariant   *param)
 {
-  AdwStyleDemoWindow *self = ADW_STYLE_DEMO_WINDOW (sender);
+  AdapStyleDemoWindow *self = ADAP_STYLE_DEMO_WINDOW (sender);
 
-  adw_dialog_present (self->status_page_window, GTK_WIDGET (self));
+  adap_dialog_present (self->status_page_window, GTK_WIDGET (self));
 }
 
 static void
@@ -39,9 +39,9 @@ sidebar_cb (GtkWidget  *sender,
             const char *name,
             GVariant   *param)
 {
-  AdwStyleDemoWindow *self = ADW_STYLE_DEMO_WINDOW (sender);
+  AdapStyleDemoWindow *self = ADAP_STYLE_DEMO_WINDOW (sender);
 
-  adw_dialog_present (self->sidebar_window, GTK_WIDGET (self));
+  adap_dialog_present (self->sidebar_window, GTK_WIDGET (self));
 }
 
 static void
@@ -52,7 +52,7 @@ dummy_cb (GtkWidget  *sender,
 }
 
 static gboolean
-get_devel_style (AdwStyleDemoWindow *self)
+get_devel_style (AdapStyleDemoWindow *self)
 {
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
 
@@ -63,7 +63,7 @@ get_devel_style (AdwStyleDemoWindow *self)
 }
 
 static void
-set_devel_style (AdwStyleDemoWindow *self,
+set_devel_style (AdapStyleDemoWindow *self,
                  gboolean            devel)
 {
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
@@ -78,41 +78,41 @@ set_devel_style (AdwStyleDemoWindow *self,
 }
 
 static void
-sidebar_forward_cb (AdwStyleDemoWindow *self)
+sidebar_forward_cb (AdapStyleDemoWindow *self)
 {
-  adw_navigation_split_view_set_show_content (self->split_view, TRUE);
+  adap_navigation_split_view_set_show_content (self->split_view, TRUE);
 }
 
 static void
-adw_style_demo_window_root (GtkWidget *widget)
+adap_style_demo_window_root (GtkWidget *widget)
 {
-  AdwStyleDemoWindow *self = ADW_STYLE_DEMO_WINDOW (widget);
+  AdapStyleDemoWindow *self = ADAP_STYLE_DEMO_WINDOW (widget);
 
-  GTK_WIDGET_CLASS (adw_style_demo_window_parent_class)->root (widget);
+  GTK_WIDGET_CLASS (adap_style_demo_window_parent_class)->root (widget);
 
   if (get_devel_style (self))
     g_object_notify_by_pspec (G_OBJECT (self), props[PROP_DEVEL]);
 }
 
 static void
-adw_style_demo_window_unroot (GtkWidget *widget)
+adap_style_demo_window_unroot (GtkWidget *widget)
 {
-  AdwStyleDemoWindow *self = ADW_STYLE_DEMO_WINDOW (widget);
+  AdapStyleDemoWindow *self = ADAP_STYLE_DEMO_WINDOW (widget);
   gboolean has_devel = get_devel_style (self);
 
-  GTK_WIDGET_CLASS (adw_style_demo_window_parent_class)->unroot (widget);
+  GTK_WIDGET_CLASS (adap_style_demo_window_parent_class)->unroot (widget);
 
   if (has_devel)
     g_object_notify_by_pspec (G_OBJECT (self), props[PROP_DEVEL]);
 }
 
 static void
-adw_style_demo_window_get_property (GObject    *object,
+adap_style_demo_window_get_property (GObject    *object,
                                     guint       prop_id,
                                     GValue     *value,
                                     GParamSpec *pspec)
 {
-  AdwStyleDemoWindow *self = ADW_STYLE_DEMO_WINDOW (object);
+  AdapStyleDemoWindow *self = ADAP_STYLE_DEMO_WINDOW (object);
 
   switch (prop_id) {
   case PROP_DEVEL:
@@ -127,12 +127,12 @@ adw_style_demo_window_get_property (GObject    *object,
 }
 
 static void
-adw_style_demo_window_set_property (GObject      *object,
+adap_style_demo_window_set_property (GObject      *object,
                                     guint         prop_id,
                                     const GValue *value,
                                     GParamSpec   *pspec)
 {
-  AdwStyleDemoWindow *self = ADW_STYLE_DEMO_WINDOW (object);
+  AdapStyleDemoWindow *self = ADAP_STYLE_DEMO_WINDOW (object);
 
   switch (prop_id) {
   case PROP_DEVEL:
@@ -147,15 +147,15 @@ adw_style_demo_window_set_property (GObject      *object,
 }
 
 static void
-adw_style_demo_window_class_init (AdwStyleDemoWindowClass *klass)
+adap_style_demo_window_class_init (AdapStyleDemoWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_style_demo_window_get_property;
-  object_class->set_property = adw_style_demo_window_set_property;
-  widget_class->root = adw_style_demo_window_root;
-  widget_class->unroot = adw_style_demo_window_unroot;
+  object_class->get_property = adap_style_demo_window_get_property;
+  object_class->set_property = adap_style_demo_window_set_property;
+  widget_class->root = adap_style_demo_window_root;
+  widget_class->unroot = adap_style_demo_window_unroot;
 
   props[PROP_DEVEL] =
     g_param_spec_boolean ("devel", NULL, NULL,
@@ -169,10 +169,10 @@ adw_style_demo_window_class_init (AdwStyleDemoWindowClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adwaita1/Demo/ui/pages/styles/adw-style-demo-window.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwStyleDemoWindow, status_page_window);
-  gtk_widget_class_bind_template_child (widget_class, AdwStyleDemoWindow, sidebar_window);
-  gtk_widget_class_bind_template_child (widget_class, AdwStyleDemoWindow, split_view);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adapta1/Demo/ui/pages/styles/adap-style-demo-window.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapStyleDemoWindow, status_page_window);
+  gtk_widget_class_bind_template_child (widget_class, AdapStyleDemoWindow, sidebar_window);
+  gtk_widget_class_bind_template_child (widget_class, AdapStyleDemoWindow, split_view);
   gtk_widget_class_bind_template_callback (widget_class, sidebar_forward_cb);
 
   gtk_widget_class_install_property_action (widget_class, "style.devel", "devel");
@@ -183,13 +183,13 @@ adw_style_demo_window_class_init (AdwStyleDemoWindowClass *klass)
 }
 
 static void
-adw_style_demo_window_init (AdwStyleDemoWindow *self)
+adap_style_demo_window_init (AdapStyleDemoWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
-AdwStyleDemoWindow *
-adw_style_demo_window_new (void)
+AdapStyleDemoWindow *
+adap_style_demo_window_new (void)
 {
-  return g_object_new (ADW_TYPE_STYLE_DEMO_WINDOW, NULL);
+  return g_object_new (ADAP_TYPE_STYLE_DEMO_WINDOW, NULL);
 }

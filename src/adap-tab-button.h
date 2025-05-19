@@ -8,29 +8,29 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
-#include "adw-tab-view.h"
+#include "adap-tab-view.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_TAB_BUTTON (adw_tab_button_get_type())
+#define ADAP_TYPE_TAB_BUTTON (adap_tab_button_get_type())
 
-ADW_AVAILABLE_IN_1_3
-G_DECLARE_FINAL_TYPE (AdwTabButton, adw_tab_button, ADW, TAB_BUTTON, GtkWidget)
+ADAP_AVAILABLE_IN_1_3
+G_DECLARE_FINAL_TYPE (AdapTabButton, adap_tab_button, ADAP, TAB_BUTTON, GtkWidget)
 
-ADW_AVAILABLE_IN_1_3
-GtkWidget *adw_tab_button_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_1_3
+GtkWidget *adap_tab_button_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_3
-AdwTabView *adw_tab_button_get_view (AdwTabButton *self);
-ADW_AVAILABLE_IN_1_3
-void        adw_tab_button_set_view (AdwTabButton *self,
-                                     AdwTabView   *view);
+ADAP_AVAILABLE_IN_1_3
+AdapTabView *adap_tab_button_get_view (AdapTabButton *self);
+ADAP_AVAILABLE_IN_1_3
+void        adap_tab_button_set_view (AdapTabButton *self,
+                                     AdapTabView   *view);
 
 G_END_DECLS

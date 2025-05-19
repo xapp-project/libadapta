@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <template class="AdwInspectorPage" parent="AdwBin">
+  <requires lib="libadapta" version="1.0"/>
+  <template class="AdapInspectorPage" parent="AdapBin">
     <property name="child">
-      <object class="AdwPreferencesPage">
+      <object class="AdapPreferencesPage">
         <child>
-          <object class="AdwPreferencesGroup">
+          <object class="AdapPreferencesGroup">
             <property name="title" translatable="yes">System Appearance</property>
             <property name="description" translatable="yes">Override settings for this application. They will be reset upon closing the inspector.</property>
             <child>
-              <object class="AdwSwitchRow" id="support_color_schemes_row">
+              <object class="AdapSwitchRow" id="support_color_schemes_row">
                 <property name="title" translatable="yes">System Supports Color Schemes</property>
                 <signal name="notify::active" handler="support_color_schemes_changed_cb" swapped="yes"/>
               </object>
             </child>
             <child>
-              <object class="AdwComboRow" id="color_scheme_row">
+              <object class="AdapComboRow" id="color_scheme_row">
                 <property name="title" translatable="yes">Preferred Color Scheme</property>
                 <property name="model">
-                  <object class="AdwEnumListModel">
-                    <property name="enum-type">AdwSystemColorScheme</property>
+                  <object class="AdapEnumListModel">
+                    <property name="enum-type">AdapSystemColorScheme</property>
                   </object>
                 </property>
                 <property name="expression">
@@ -33,7 +33,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwSwitchRow" id="high_contrast_row">
+              <object class="AdapSwitchRow" id="high_contrast_row">
                 <property name="title" translatable="yes">High Contrast</property>
                 <signal name="notify::active" handler="high_contrast_changed_cb" swapped="yes"/>
               </object>

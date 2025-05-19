@@ -1,4 +1,4 @@
-#include <adwaita.h>
+#include <adapta.h>
 #include <glib/gi18n.h>
 
 #define STYLE "" \
@@ -16,7 +16,7 @@ static void
 simple_cb (void)
 {
   GtkWidget *window, *box, *bin;
-  AdwBreakpoint *breakpoint;
+  AdapBreakpoint *breakpoint;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
 
@@ -33,15 +33,15 @@ simple_cb (void)
   gtk_box_append (GTK_BOX (box), gtk_button_new_with_label ("Button 4"));
   gtk_box_append (GTK_BOX (box), gtk_button_new_with_label ("Button 5"));
 
-  bin = adw_breakpoint_bin_new ();
+  bin = adap_breakpoint_bin_new ();
   gtk_widget_set_size_request (bin, 200, 300);
-  adw_breakpoint_bin_set_child (ADW_BREAKPOINT_BIN (bin), box);
+  adap_breakpoint_bin_set_child (ADAP_BREAKPOINT_BIN (bin), box);
 
-  breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("max-width: 420pt"));
-  adw_breakpoint_add_setters (breakpoint,
+  breakpoint = adap_breakpoint_new (adap_breakpoint_condition_parse ("max-width: 420pt"));
+  adap_breakpoint_add_setters (breakpoint,
                               G_OBJECT (box), "orientation", GTK_ORIENTATION_VERTICAL,
                               NULL);
-  adw_breakpoint_bin_add_breakpoint (ADW_BREAKPOINT_BIN (bin), breakpoint);
+  adap_breakpoint_bin_add_breakpoint (ADAP_BREAKPOINT_BIN (bin), breakpoint);
 
   window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Simple");
@@ -57,7 +57,7 @@ browser_cb (void)
   GtkWidget *window, *view, *top_bar, *bottom_bar;
   GtkWidget *clamp, *box, *entry;
   GtkWidget *back, *forward, *refresh, *star;
-  AdwBreakpoint *breakpoint;
+  AdapBreakpoint *breakpoint;
 
   back = gtk_button_new_from_icon_name ("go-previous-symbolic");
   forward = gtk_button_new_from_icon_name ("go-next-symbolic");
@@ -67,20 +67,20 @@ browser_cb (void)
   entry = gtk_entry_new ();
   gtk_editable_set_max_width_chars (GTK_EDITABLE (entry), 200);
 
-  clamp = adw_clamp_new ();
-  adw_clamp_set_maximum_size (ADW_CLAMP (clamp), 600);
-  adw_clamp_set_tightening_threshold (ADW_CLAMP (clamp), 400);
-  adw_clamp_set_child (ADW_CLAMP (clamp), entry);
+  clamp = adap_clamp_new ();
+  adap_clamp_set_maximum_size (ADAP_CLAMP (clamp), 600);
+  adap_clamp_set_tightening_threshold (ADAP_CLAMP (clamp), 400);
+  adap_clamp_set_child (ADAP_CLAMP (clamp), entry);
 
-  top_bar = adw_header_bar_new ();
+  top_bar = adap_header_bar_new ();
 
-  adw_header_bar_pack_start (ADW_HEADER_BAR (top_bar), back);
-  adw_header_bar_pack_start (ADW_HEADER_BAR (top_bar), forward);
-  adw_header_bar_pack_start (ADW_HEADER_BAR (top_bar), refresh);
-  adw_header_bar_set_title_widget (ADW_HEADER_BAR (top_bar), clamp);
-  adw_header_bar_pack_end (ADW_HEADER_BAR (top_bar),
+  adap_header_bar_pack_start (ADAP_HEADER_BAR (top_bar), back);
+  adap_header_bar_pack_start (ADAP_HEADER_BAR (top_bar), forward);
+  adap_header_bar_pack_start (ADAP_HEADER_BAR (top_bar), refresh);
+  adap_header_bar_set_title_widget (ADAP_HEADER_BAR (top_bar), clamp);
+  adap_header_bar_pack_end (ADAP_HEADER_BAR (top_bar),
                            gtk_button_new_from_icon_name ("open-menu-symbolic"));
-  adw_header_bar_pack_end (ADW_HEADER_BAR (top_bar), star);
+  adap_header_bar_pack_end (ADAP_HEADER_BAR (top_bar), star);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
@@ -95,32 +95,32 @@ browser_cb (void)
   gtk_box_append (GTK_BOX (box),
                   gtk_button_new_from_icon_name ("starred-symbolic"));
 
-  bottom_bar = adw_clamp_new ();
-  adw_clamp_set_maximum_size (ADW_CLAMP (bottom_bar), 400);
-  adw_clamp_set_child (ADW_CLAMP (bottom_bar), box);
+  bottom_bar = adap_clamp_new ();
+  adap_clamp_set_maximum_size (ADAP_CLAMP (bottom_bar), 400);
+  adap_clamp_set_child (ADAP_CLAMP (bottom_bar), box);
   gtk_widget_set_visible (bottom_bar, FALSE);
 
-  view = adw_toolbar_view_new ();
-  adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (view), top_bar);
-  adw_toolbar_view_set_top_bar_style (ADW_TOOLBAR_VIEW (view), ADW_TOOLBAR_RAISED);
-  adw_toolbar_view_add_bottom_bar (ADW_TOOLBAR_VIEW (view), bottom_bar);
-  adw_toolbar_view_set_bottom_bar_style (ADW_TOOLBAR_VIEW (view), ADW_TOOLBAR_RAISED);
+  view = adap_toolbar_view_new ();
+  adap_toolbar_view_add_top_bar (ADAP_TOOLBAR_VIEW (view), top_bar);
+  adap_toolbar_view_set_top_bar_style (ADAP_TOOLBAR_VIEW (view), ADAP_TOOLBAR_RAISED);
+  adap_toolbar_view_add_bottom_bar (ADAP_TOOLBAR_VIEW (view), bottom_bar);
+  adap_toolbar_view_set_bottom_bar_style (ADAP_TOOLBAR_VIEW (view), ADAP_TOOLBAR_RAISED);
 
-  window = adw_window_new ();
+  window = adap_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Browser");
   gtk_widget_set_size_request (window, 360, 200);
   gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
-  adw_window_set_content (ADW_WINDOW (window), view);
+  adap_window_set_content (ADAP_WINDOW (window), view);
 
-  breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("max-width: 500px"));
-  adw_breakpoint_add_setters (breakpoint,
+  breakpoint = adap_breakpoint_new (adap_breakpoint_condition_parse ("max-width: 500px"));
+  adap_breakpoint_add_setters (breakpoint,
                               G_OBJECT (back), "visible", FALSE,
                               G_OBJECT (forward), "visible", FALSE,
                               G_OBJECT (refresh), "visible", FALSE,
                               G_OBJECT (star), "visible", FALSE,
                               G_OBJECT (bottom_bar), "visible", TRUE,
                               NULL);
-  adw_window_add_breakpoint (ADW_WINDOW (window), breakpoint);
+  adap_window_add_breakpoint (ADAP_WINDOW (window), breakpoint);
 
   gtk_window_present (GTK_WINDOW (window));
 }
@@ -129,7 +129,7 @@ static void
 camera_cb (void)
 {
   GtkWidget *window, *overlay, *box, *bar1, *bar2, *headerbar;
-  AdwBreakpoint *breakpoint;
+  AdapBreakpoint *breakpoint;
 
   /* Single vertical by default */
 
@@ -152,39 +152,39 @@ camera_cb (void)
   gtk_box_append (GTK_BOX (box), bar2);
   gtk_box_append (GTK_BOX (box), bar1);
 
-  headerbar = adw_header_bar_new ();
+  headerbar = adap_header_bar_new ();
   gtk_widget_set_valign (headerbar, GTK_ALIGN_START);
-  adw_header_bar_set_show_title (ADW_HEADER_BAR (headerbar), FALSE);
+  adap_header_bar_set_show_title (ADAP_HEADER_BAR (headerbar), FALSE);
 
   overlay = gtk_overlay_new ();
   gtk_overlay_set_child (GTK_OVERLAY (overlay), box);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), headerbar);
 
-  window = adw_window_new ();
+  window = adap_window_new ();
   gtk_widget_set_size_request (window, 300, 300);
   gtk_widget_add_css_class (window, "camera");
-  adw_window_set_content (ADW_WINDOW (window), overlay);
+  adap_window_set_content (ADAP_WINDOW (window), overlay);
   gtk_window_set_default_size (GTK_WINDOW (window), 800, 580);
 
   /* Single horizontal */
-  breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("max-aspect-ratio: 4/3"));
-  adw_breakpoint_add_setters (breakpoint,
+  breakpoint = adap_breakpoint_new (adap_breakpoint_condition_parse ("max-aspect-ratio: 4/3"));
+  adap_breakpoint_add_setters (breakpoint,
                               G_OBJECT (box), "orientation", GTK_ORIENTATION_VERTICAL,
                               G_OBJECT (bar1), "halign", GTK_ALIGN_FILL,
                               G_OBJECT (bar1), "valign", GTK_ALIGN_END,
                               NULL);
-  adw_window_add_breakpoint (ADW_WINDOW (window), breakpoint);
+  adap_window_add_breakpoint (ADAP_WINDOW (window), breakpoint);
 
   /* Dual vertical */
-  breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("max-height: 400px"));
-  adw_breakpoint_add_setters (breakpoint,
+  breakpoint = adap_breakpoint_new (adap_breakpoint_condition_parse ("max-height: 400px"));
+  adap_breakpoint_add_setters (breakpoint,
                               G_OBJECT (bar2), "visible", TRUE,
                               NULL);
-  adw_window_add_breakpoint (ADW_WINDOW (window), breakpoint);
+  adap_window_add_breakpoint (ADAP_WINDOW (window), breakpoint);
 
   /* Dual horizontal */
-  breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("max-aspect-ratio: 4/3 and max-width: 450px"));
-  adw_breakpoint_add_setters (breakpoint,
+  breakpoint = adap_breakpoint_new (adap_breakpoint_condition_parse ("max-aspect-ratio: 4/3 and max-width: 450px"));
+  adap_breakpoint_add_setters (breakpoint,
                               G_OBJECT (box), "orientation", GTK_ORIENTATION_VERTICAL,
                               G_OBJECT (bar1), "halign", GTK_ALIGN_FILL,
                               G_OBJECT (bar1), "valign", GTK_ALIGN_END,
@@ -192,7 +192,7 @@ camera_cb (void)
                               G_OBJECT (bar2), "halign", GTK_ALIGN_FILL,
                               G_OBJECT (bar2), "valign", GTK_ALIGN_START,
                               NULL);
-  adw_window_add_breakpoint (ADW_WINDOW (window), breakpoint);
+  adap_window_add_breakpoint (ADAP_WINDOW (window), breakpoint);
 
   gtk_window_present (GTK_WINDOW (window));
 }
@@ -242,7 +242,7 @@ main (int   argc,
   GtkCssProvider *provider;
   gboolean done = FALSE;
 
-  adw_init ();
+  adap_init ();
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_string (provider, STYLE);

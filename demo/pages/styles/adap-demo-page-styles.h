@@ -1,11 +1,11 @@
 #pragma once
 
-#include <adwaita.h>
+#include <adapta.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_DEMO_PAGE_STYLES (adw_demo_page_styles_get_type())
+#define ADAP_TYPE_DEMO_PAGE_STYLES (adap_demo_page_styles_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwDemoPageStyles, adw_demo_page_styles, ADW, DEMO_PAGE_STYLES, AdwBin)
+G_DECLARE_FINAL_TYPE (AdapDemoPageStyles, adap_demo_page_styles, ADAP, DEMO_PAGE_STYLES, AdapBin)
 
 G_END_DECLS

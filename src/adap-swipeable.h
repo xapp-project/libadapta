@@ -6,24 +6,24 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
-#include "adw-navigation-direction.h"
+#include "adap-navigation-direction.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_SWIPEABLE (adw_swipeable_get_type ())
+#define ADAP_TYPE_SWIPEABLE (adap_swipeable_get_type ())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_INTERFACE (AdwSwipeable, adw_swipeable, ADW, SWIPEABLE, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_INTERFACE (AdapSwipeable, adap_swipeable, ADAP, SWIPEABLE, GtkWidget)
 
 /**
- * AdwSwipeableInterface:
+ * AdapSwipeableInterface:
  * @parent: The parent interface.
  * @get_distance: Gets the swipe distance.
  * @get_snap_points: Gets the snap points.
@@ -33,17 +33,17 @@ G_DECLARE_INTERFACE (AdwSwipeable, adw_swipeable, ADW, SWIPEABLE, GtkWidget)
  *
  * An interface for swipeable widgets.
  **/
-struct _AdwSwipeableInterface
+struct _AdapSwipeableInterface
 {
   GTypeInterface parent;
 
-  double  (*get_distance)        (AdwSwipeable *self);
-  double *(*get_snap_points)     (AdwSwipeable *self,
+  double  (*get_distance)        (AdapSwipeable *self);
+  double *(*get_snap_points)     (AdapSwipeable *self,
                                   int          *n_snap_points);
-  double  (*get_progress)        (AdwSwipeable *self);
-  double  (*get_cancel_progress) (AdwSwipeable *self);
-  void    (*get_swipe_area)      (AdwSwipeable           *self,
-                                  AdwNavigationDirection  navigation_direction,
+  double  (*get_progress)        (AdapSwipeable *self);
+  double  (*get_cancel_progress) (AdapSwipeable *self);
+  void    (*get_swipe_area)      (AdapSwipeable           *self,
+                                  AdapNavigationDirection  navigation_direction,
                                   gboolean                is_drag,
                                   GdkRectangle           *rect);
 
@@ -51,22 +51,22 @@ struct _AdwSwipeableInterface
   gpointer padding[4];
 };
 
-ADW_AVAILABLE_IN_ALL
-double adw_swipeable_get_distance (AdwSwipeable *self);
+ADAP_AVAILABLE_IN_ALL
+double adap_swipeable_get_distance (AdapSwipeable *self);
 
-ADW_AVAILABLE_IN_ALL
-double *adw_swipeable_get_snap_points (AdwSwipeable *self,
+ADAP_AVAILABLE_IN_ALL
+double *adap_swipeable_get_snap_points (AdapSwipeable *self,
                                        int          *n_snap_points) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-double adw_swipeable_get_progress (AdwSwipeable *self);
+ADAP_AVAILABLE_IN_ALL
+double adap_swipeable_get_progress (AdapSwipeable *self);
 
-ADW_AVAILABLE_IN_ALL
-double adw_swipeable_get_cancel_progress (AdwSwipeable *self);
+ADAP_AVAILABLE_IN_ALL
+double adap_swipeable_get_cancel_progress (AdapSwipeable *self);
 
-ADW_AVAILABLE_IN_ALL
-void adw_swipeable_get_swipe_area (AdwSwipeable           *self,
-                                   AdwNavigationDirection  navigation_direction,
+ADAP_AVAILABLE_IN_ALL
+void adap_swipeable_get_swipe_area (AdapSwipeable           *self,
+                                   AdapNavigationDirection  navigation_direction,
                                    gboolean                is_drag,
                                    GdkRectangle           *rect);
 

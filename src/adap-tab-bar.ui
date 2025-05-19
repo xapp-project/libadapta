@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk+" version="3.24"/>
-  <template class="AdwTabBar" parent="GtkWidget">
+  <template class="AdapTabBar" parent="GtkWidget">
     <child>
       <object class="GtkRevealer" id="revealer">
         <property name="transition-duration">200</property>
@@ -12,7 +12,7 @@
               <class name="box"/>
             </style>
             <child>
-              <object class="AdwBin" id="start_action_bin">
+              <object class="AdapBin" id="start_action_bin">
                 <property name="visible">False</property>
                 <style>
                   <class name="start-action"/>
@@ -30,9 +30,9 @@
                   <class name="pinned"/>
                 </style>
                 <property name="child">
-                  <object class="AdwTabBox" id="pinned_box">
+                  <object class="AdapTabBox" id="pinned_box">
                     <property name="pinned">True</property>
-                    <property name="tab-bar">AdwTabBar</property>
+                    <property name="tab-bar">AdapTabBar</property>
                     <signal name="notify::resize-frozen" handler="notify_resize_frozen_cb" swapped="true"/>
                     <signal name="stop-kinetic-scrolling" handler="stop_kinetic_scrolling_cb" object="pinned_scrolled_window" swapped="true"/>
                     <signal name="extra-drag-drop" handler="extra_drag_drop_cb" swapped="true"/>
@@ -49,8 +49,8 @@
                 <property name="hexpand">True</property>
                 <property name="min-content-width">100</property>
                 <property name="child">
-                  <object class="AdwTabBox" id="box">
-                    <property name="tab-bar">AdwTabBar</property>
+                  <object class="AdapTabBox" id="box">
+                    <property name="tab-bar">AdapTabBar</property>
                     <signal name="notify::resize-frozen" handler="notify_resize_frozen_cb" swapped="true"/>
                     <signal name="stop-kinetic-scrolling" handler="stop_kinetic_scrolling_cb" object="scrolled_window" swapped="true"/>
                     <signal name="extra-drag-drop" handler="extra_drag_drop_cb" swapped="true"/>
@@ -60,7 +60,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwBin" id="end_action_bin">
+              <object class="AdapBin" id="end_action_bin">
                 <property name="visible">False</property>
                 <style>
                   <class name="end-action"/>

@@ -20,7 +20,7 @@
 
 /* Copied and modified from gtkbuilder.c. */
 
-#include "adw-gtkbuilder-utils-private.h"
+#include "adap-gtkbuilder-utils-private.h"
 
 /*< private >
  * @builder: a `GtkBuilder`

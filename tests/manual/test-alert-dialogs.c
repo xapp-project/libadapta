@@ -1,18 +1,18 @@
-#include <adwaita.h>
+#include <adapta.h>
 #include <glib/gi18n.h>
 
 static void
-response_cb (AdwAlertDialog *dialog,
+response_cb (AdapAlertDialog *dialog,
              const char     *response)
 {
   g_message ("Response: %s", response);
 }
 
 static void
-response_text_cb (AdwAlertDialog *dialog,
+response_text_cb (AdapAlertDialog *dialog,
                   const char     *response)
 {
-  GtkWidget *entry = adw_alert_dialog_get_extra_child (dialog);
+  GtkWidget *entry = adap_alert_dialog_get_extra_child (dialog);
   const char *text;
 
   g_assert (GTK_IS_EDITABLE (entry));
@@ -23,11 +23,11 @@ response_text_cb (AdwAlertDialog *dialog,
 }
 
 static void
-dialog_cb (AdwAlertDialog *dialog,
+dialog_cb (AdapAlertDialog *dialog,
            GAsyncResult   *result,
            gpointer        user_data)
 {
-  const char *response = adw_alert_dialog_choose_finish (dialog, result);
+  const char *response = adap_alert_dialog_choose_finish (dialog, result);
 
   g_message ("Response: %s", response);
 }
@@ -36,93 +36,93 @@ dialog_cb (AdwAlertDialog *dialog,
 static void
 simple_cb (GtkWidget *parent)
 {
-  AdwDialog *dialog =
-    adw_alert_dialog_new (_("Replace File?"),
+  AdapDialog *dialog =
+    adap_alert_dialog_new (_("Replace File?"),
                           _("A file named “example.png” already exists. Do you want to replace it?"));
 
-  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_add_responses (ADAP_ALERT_DIALOG (dialog),
                                   "cancel",  _("_Cancel"),
                                   "replace", _("_Replace"),
                                   NULL);
 
-  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_set_response_appearance (ADAP_ALERT_DIALOG (dialog),
                                             "replace",
-                                            ADW_RESPONSE_DESTRUCTIVE);
+                                            ADAP_RESPONSE_DESTRUCTIVE);
 
-  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "cancel");
-  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
+  adap_alert_dialog_set_default_response (ADAP_ALERT_DIALOG (dialog), "cancel");
+  adap_alert_dialog_set_close_response (ADAP_ALERT_DIALOG (dialog), "cancel");
 
   g_signal_connect (dialog, "response", G_CALLBACK (response_cb), NULL);
 
-  adw_dialog_present (dialog, parent);
+  adap_dialog_present (dialog, parent);
 }
 
 /* This dialog will have horizontal or vertical buttons, depending on the available room */
 static void
 adaptive_cb (GtkWidget *parent)
 {
-  AdwDialog *dialog =
-    adw_alert_dialog_new (_("Save Changes?"),
+  AdapDialog *dialog =
+    adap_alert_dialog_new (_("Save Changes?"),
                           _("Open document contains unsaved changes. Changes which are not saved will be permanently lost."));
 
-  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_add_responses (ADAP_ALERT_DIALOG (dialog),
                                   "cancel",  _("_Cancel"),
                                   "discard", _("_Discard Changes"),
                                   "save",    _("_Save"),
                                   NULL);
 
-  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_set_response_appearance (ADAP_ALERT_DIALOG (dialog),
                                             "discard",
-                                            ADW_RESPONSE_DESTRUCTIVE);
-  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+                                            ADAP_RESPONSE_DESTRUCTIVE);
+  adap_alert_dialog_set_response_appearance (ADAP_ALERT_DIALOG (dialog),
                                             "save",
-                                            ADW_RESPONSE_SUGGESTED);
+                                            ADAP_RESPONSE_SUGGESTED);
 
-  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "save");
-  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
+  adap_alert_dialog_set_default_response (ADAP_ALERT_DIALOG (dialog), "save");
+  adap_alert_dialog_set_close_response (ADAP_ALERT_DIALOG (dialog), "cancel");
 
   g_signal_connect (dialog, "response", G_CALLBACK (response_cb), NULL);
 
-  adw_dialog_present (dialog, parent);
+  adap_dialog_present (dialog, parent);
 }
 
 /* This dialog will always have vertical buttons */
 static void
 wide_cb (GtkWidget *parent)
 {
-  AdwDialog *dialog =
-    adw_alert_dialog_new (_("Do you want to empty the wastebasket before you unmount?"),
+  AdapDialog *dialog =
+    adap_alert_dialog_new (_("Do you want to empty the wastebasket before you unmount?"),
                           _("In order to regain the free space on the volume the wastebasket must be emptied. All deleted items on the volume will be permanently lost."));
 
-  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_add_responses (ADAP_ALERT_DIALOG (dialog),
                                   "ignore", _("Do _not Empty Wastebasket"),
                                   "cancel", _("_Cancel"),
                                   "empty",  _("_Empty Wastebasket"),
                                   NULL);
 
-  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_set_response_appearance (ADAP_ALERT_DIALOG (dialog),
                                             "empty",
-                                            ADW_RESPONSE_DESTRUCTIVE);
+                                            ADAP_RESPONSE_DESTRUCTIVE);
 
-  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "cancel");
-  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
+  adap_alert_dialog_set_default_response (ADAP_ALERT_DIALOG (dialog), "cancel");
+  adap_alert_dialog_set_close_response (ADAP_ALERT_DIALOG (dialog), "cancel");
 
   g_signal_connect (dialog, "response", G_CALLBACK (response_cb), NULL);
 
-  adw_dialog_present (dialog, parent);
+  adap_dialog_present (dialog, parent);
 }
 
 static void
 entry_changed_cb (GtkEditable    *editable,
-                  AdwAlertDialog *dialog)
+                  AdapAlertDialog *dialog)
 {
   const char *text = gtk_editable_get_text (editable);
 
   if (text && *text) {
-    adw_alert_dialog_set_response_enabled (dialog, "add", TRUE);
+    adap_alert_dialog_set_response_enabled (dialog, "add", TRUE);
     gtk_widget_remove_css_class (GTK_WIDGET (editable), "error");
   } else {
-    adw_alert_dialog_set_response_enabled (dialog, "add", FALSE);
+    adap_alert_dialog_set_response_enabled (dialog, "add", FALSE);
     gtk_widget_add_css_class (GTK_WIDGET (editable), "error");
   }
 }
@@ -130,59 +130,59 @@ entry_changed_cb (GtkEditable    *editable,
 static void
 child_cb (GtkWidget *parent)
 {
-  AdwDialog *dialog;
+  AdapDialog *dialog;
   GtkWidget *entry;
 
   dialog =
-    adw_alert_dialog_new (_("Add New Profile"),
+    adap_alert_dialog_new (_("Add New Profile"),
                           _("Enter name of the new profile"));
 
-  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_add_responses (ADAP_ALERT_DIALOG (dialog),
                                   "cancel",  _("_Cancel"),
                                   "add", _("_Add"),
                                   NULL);
 
-  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_set_response_appearance (ADAP_ALERT_DIALOG (dialog),
                                             "add",
-                                            ADW_RESPONSE_SUGGESTED);
+                                            ADAP_RESPONSE_SUGGESTED);
 
-  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "add");
-  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
+  adap_alert_dialog_set_default_response (ADAP_ALERT_DIALOG (dialog), "add");
+  adap_alert_dialog_set_close_response (ADAP_ALERT_DIALOG (dialog), "cancel");
 
-  adw_alert_dialog_set_response_enabled (ADW_ALERT_DIALOG (dialog), "add", FALSE);
+  adap_alert_dialog_set_response_enabled (ADAP_ALERT_DIALOG (dialog), "add", FALSE);
 
   entry = gtk_entry_new ();
   gtk_entry_set_placeholder_text (GTK_ENTRY (entry), _("Name"));
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   g_signal_connect (entry, "changed", G_CALLBACK (entry_changed_cb), dialog);
-  adw_alert_dialog_set_extra_child (ADW_ALERT_DIALOG (dialog), entry);
+  adap_alert_dialog_set_extra_child (ADAP_ALERT_DIALOG (dialog), entry);
 
   g_signal_connect (dialog, "response::add", G_CALLBACK (response_text_cb), NULL);
   g_signal_connect (dialog, "response::cancel", G_CALLBACK (response_cb), NULL);
 
-  adw_dialog_present (dialog, parent);
+  adap_dialog_present (dialog, parent);
 }
 
 static void
 async_cb (GtkWidget *parent)
 {
-  AdwDialog *dialog =
-    adw_alert_dialog_new (_("Replace File?"),
+  AdapDialog *dialog =
+    adap_alert_dialog_new (_("Replace File?"),
                           _("A file named “example.png” already exists. Do you want to replace it?"));
 
-  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_add_responses (ADAP_ALERT_DIALOG (dialog),
                                   "cancel",  _("_Cancel"),
                                   "replace", _("_Replace"),
                                   NULL);
 
-  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_set_response_appearance (ADAP_ALERT_DIALOG (dialog),
                                             "replace",
-                                            ADW_RESPONSE_DESTRUCTIVE);
+                                            ADAP_RESPONSE_DESTRUCTIVE);
 
-  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "cancel");
-  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
+  adap_alert_dialog_set_default_response (ADAP_ALERT_DIALOG (dialog), "cancel");
+  adap_alert_dialog_set_close_response (ADAP_ALERT_DIALOG (dialog), "cancel");
 
-  adw_alert_dialog_choose (ADW_ALERT_DIALOG (dialog), GTK_WIDGET (parent),
+  adap_alert_dialog_choose (ADAP_ALERT_DIALOG (dialog), GTK_WIDGET (parent),
                             NULL, (GAsyncReadyCallback) dialog_cb, NULL);
 }
 
@@ -224,9 +224,9 @@ create_content (GtkWidget *parent)
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (async_cb), parent);
   gtk_box_append (GTK_BOX (box), button);
 
-  view = adw_toolbar_view_new ();
-  adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (view), adw_header_bar_new ());
-  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (view), box);
+  view = adap_toolbar_view_new ();
+  adap_toolbar_view_add_top_bar (ADAP_TOOLBAR_VIEW (view), adap_header_bar_new ());
+  adap_toolbar_view_set_content (ADAP_TOOLBAR_VIEW (view), box);
 
   return view;
 }
@@ -244,12 +244,12 @@ main (int   argc,
   GtkWidget *window;
   gboolean done = FALSE;
 
-  adw_init ();
+  adap_init ();
 
-  window = adw_window_new ();
+  window = adap_window_new ();
   g_signal_connect_swapped (window, "destroy", G_CALLBACK (close_cb), &done);
   gtk_window_set_title (GTK_WINDOW (window), "Alert Dialogs");
-  adw_window_set_content (ADW_WINDOW (window), create_content (window));
+  adap_window_set_content (ADAP_WINDOW (window), create_content (window));
   gtk_widget_set_size_request (window, 360, -1);
   gtk_window_present (GTK_WINDOW (window));
 

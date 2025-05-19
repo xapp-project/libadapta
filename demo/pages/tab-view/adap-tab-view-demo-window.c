@@ -1,32 +1,32 @@
-#include "adw-tab-view-demo-window.h"
+#include "adap-tab-view-demo-window.h"
 
 #include <glib/gi18n.h>
 
-#include "adw-tab-view-demo-page.h"
+#include "adap-tab-view-demo-page.h"
 
-struct _AdwTabViewDemoWindow
+struct _AdapTabViewDemoWindow
 {
-  AdwWindow parent_instance;
-  AdwTabView *view;
-  AdwTabBar *tab_bar;
-  AdwTabOverview *tab_overview;
+  AdapWindow parent_instance;
+  AdapTabView *view;
+  AdapTabBar *tab_bar;
+  AdapTabOverview *tab_overview;
 
   GActionMap *tab_action_group;
 
-  AdwTabPage *menu_page;
+  AdapTabPage *menu_page;
   gboolean in_dispose;
 };
 
-G_DEFINE_FINAL_TYPE (AdwTabViewDemoWindow, adw_tab_view_demo_window, ADW_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (AdapTabViewDemoWindow, adap_tab_view_demo_window, ADAP_TYPE_WINDOW)
 
 static void
 window_new (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
 {
-  AdwTabViewDemoWindow *window = adw_tab_view_demo_window_new ();
+  AdapTabViewDemoWindow *window = adap_tab_view_demo_window_new ();
 
-  adw_tab_view_demo_window_prepopulate (window);
+  adap_tab_view_demo_window_prepopulate (window);
 
   gtk_window_present (GTK_WINDOW (window));
 }
@@ -45,14 +45,14 @@ text_to_tooltip (GBinding     *binding,
   return TRUE;
 }
 
-static AdwTabPage *
-add_page (AdwTabViewDemoWindow *self,
-          AdwTabPage           *parent,
-          AdwTabViewDemoPage   *content)
+static AdapTabPage *
+add_page (AdapTabViewDemoWindow *self,
+          AdapTabPage           *parent,
+          AdapTabViewDemoPage   *content)
 {
-  AdwTabPage *page;
+  AdapTabPage *page;
 
-  page = adw_tab_view_add_page (self->view, GTK_WIDGET (content), parent);
+  page = adap_tab_view_add_page (self->view, GTK_WIDGET (content), parent);
 
   g_object_bind_property (content, "title",
                           page, "title",
@@ -66,24 +66,24 @@ add_page (AdwTabViewDemoWindow *self,
                           page, "icon",
                           G_BINDING_SYNC_CREATE);
 
-  adw_tab_page_set_indicator_activatable (page, TRUE);
-  adw_tab_page_set_thumbnail_xalign (page, 0.5);
-  adw_tab_page_set_thumbnail_yalign (page, 0.5);
+  adap_tab_page_set_indicator_activatable (page, TRUE);
+  adap_tab_page_set_thumbnail_xalign (page, 0.5);
+  adap_tab_page_set_thumbnail_yalign (page, 0.5);
 
   return page;
 }
 
-static AdwTabPage *
-create_tab_cb (AdwTabViewDemoWindow *self)
+static AdapTabPage *
+create_tab_cb (AdapTabViewDemoWindow *self)
 {
   char *title;
-  AdwTabPage *page;
-  AdwTabViewDemoPage *content;
+  AdapTabPage *page;
+  AdapTabViewDemoPage *content;
   static int next_page = 1;
 
   title = g_strdup_printf (_("Tab %d"), next_page);
 
-  content = adw_tab_view_demo_page_new (title);
+  content = adap_tab_view_demo_page_new (title);
   page = add_page (self, NULL, content);
 
   next_page++;
@@ -98,22 +98,22 @@ tab_new (GSimpleAction *action,
          GVariant      *parameter,
          gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
-  AdwTabPage *page = create_tab_cb (self);
-  GtkWidget *content = adw_tab_page_get_child (page);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabPage *page = create_tab_cb (self);
+  GtkWidget *content = adap_tab_page_get_child (page);
 
-  adw_tab_view_set_selected_page (self->view, page);
+  adap_tab_view_set_selected_page (self->view, page);
 
   gtk_widget_grab_focus (content);
 }
 
-static AdwTabPage *
-get_current_page (AdwTabViewDemoWindow *self)
+static AdapTabPage *
+get_current_page (AdapTabViewDemoWindow *self)
 {
   if (self->menu_page)
     return self->menu_page;
 
-  return adw_tab_view_get_selected_page (self->view);
+  return adap_tab_view_get_selected_page (self->view);
 }
 
 static void
@@ -121,9 +121,9 @@ tab_pin (GSimpleAction *action,
          GVariant      *parameter,
          gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
 
-  adw_tab_view_set_page_pinned (self->view, get_current_page (self), TRUE);
+  adap_tab_view_set_page_pinned (self->view, get_current_page (self), TRUE);
 }
 
 static void
@@ -131,9 +131,9 @@ tab_unpin (GSimpleAction *action,
            GVariant      *parameter,
            gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
 
-  adw_tab_view_set_page_pinned (self->view, get_current_page (self), FALSE);
+  adap_tab_view_set_page_pinned (self->view, get_current_page (self), FALSE);
 }
 
 static void
@@ -141,9 +141,9 @@ tab_close (GSimpleAction *action,
            GVariant      *parameter,
            gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
 
-  adw_tab_view_close_page (self->view, get_current_page (self));
+  adap_tab_view_close_page (self->view, get_current_page (self));
 }
 
 static void
@@ -151,9 +151,9 @@ tab_close_other (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
 
-  adw_tab_view_close_other_pages (self->view, get_current_page (self));
+  adap_tab_view_close_other_pages (self->view, get_current_page (self));
 }
 
 static void
@@ -161,9 +161,9 @@ tab_close_before (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
 
-  adw_tab_view_close_pages_before (self->view, get_current_page (self));
+  adap_tab_view_close_pages_before (self->view, get_current_page (self));
 }
 
 static void
@@ -171,9 +171,9 @@ tab_close_after (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
 
-  adw_tab_view_close_pages_after (self->view, get_current_page (self));
+  adap_tab_view_close_pages_after (self->view, get_current_page (self));
 }
 
 static void
@@ -181,11 +181,11 @@ tab_move_to_new_window (GSimpleAction *action,
                         GVariant      *parameter,
                         gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
 
-  AdwTabViewDemoWindow *window = adw_tab_view_demo_window_new ();
+  AdapTabViewDemoWindow *window = adap_tab_view_demo_window_new ();
 
-  adw_tab_view_transfer_page (self->view,
+  adap_tab_view_transfer_page (self->view,
                               self->menu_page,
                               window->view,
                               0);
@@ -198,10 +198,10 @@ tab_change_needs_attention (GSimpleAction *action,
                             GVariant      *parameter,
                             gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
   gboolean need_attention = g_variant_get_boolean (parameter);
 
-  adw_tab_page_set_needs_attention (get_current_page (self), need_attention);
+  adap_tab_page_set_needs_attention (get_current_page (self), need_attention);
   g_simple_action_set_state (action, g_variant_new_boolean (need_attention));
 }
 
@@ -210,20 +210,20 @@ tab_change_loading (GSimpleAction *action,
                     GVariant      *parameter,
                     gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
   gboolean loading = g_variant_get_boolean (parameter);
 
-  adw_tab_page_set_loading (get_current_page (self), loading);
+  adap_tab_page_set_loading (get_current_page (self), loading);
   g_simple_action_set_state (action, g_variant_new_boolean (loading));
 }
 
 static GIcon *
-get_indicator_icon (AdwTabPage *page)
+get_indicator_icon (AdapTabPage *page)
 {
   gboolean muted;
 
   muted = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (page),
-                                              "adw-tab-view-demo-muted"));
+                                              "adap-tab-view-demo-muted"));
 
   if (muted)
     return g_themed_icon_new ("tab-audio-muted-symbolic");
@@ -232,12 +232,12 @@ get_indicator_icon (AdwTabPage *page)
 }
 
 static char *
-get_indicator_tooltip (AdwTabPage *page)
+get_indicator_tooltip (AdapTabPage *page)
 {
   gboolean muted;
 
   muted = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (page),
-                                              "adw-tab-view-demo-muted"));
+                                              "adap-tab-view-demo-muted"));
 
   if (muted)
     return g_strdup (_("Unmute Tab"));
@@ -250,7 +250,7 @@ tab_change_indicator (GSimpleAction *action,
                       GVariant      *parameter,
                       gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
   gboolean indicator = g_variant_get_boolean (parameter);
   GIcon *icon = NULL;
   char *tooltip = NULL;
@@ -262,8 +262,8 @@ tab_change_indicator (GSimpleAction *action,
     tooltip = g_strdup ("");
   }
 
-  adw_tab_page_set_indicator_icon (get_current_page (self), icon);
-  adw_tab_page_set_indicator_tooltip (get_current_page (self), tooltip);
+  adap_tab_page_set_indicator_icon (get_current_page (self), icon);
+  adap_tab_page_set_indicator_tooltip (get_current_page (self), tooltip);
   g_simple_action_set_state (action, g_variant_new_boolean (indicator));
 
   g_clear_pointer (&tooltip, g_free);
@@ -275,12 +275,12 @@ tab_change_icon (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
   gboolean enable_icon = g_variant_get_boolean (parameter);
-  AdwTabPage *page = get_current_page (self);
-  GtkWidget *child = adw_tab_page_get_child (page);
+  AdapTabPage *page = get_current_page (self);
+  GtkWidget *child = adap_tab_page_get_child (page);
 
-  adw_tab_view_demo_page_set_enable_icon (ADW_TAB_VIEW_DEMO_PAGE (child),
+  adap_tab_view_demo_page_set_enable_icon (ADAP_TAB_VIEW_DEMO_PAGE (child),
                                           enable_icon);
 
   g_simple_action_set_state (action, g_variant_new_boolean (enable_icon));
@@ -291,11 +291,11 @@ tab_refresh_icon (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
-  AdwTabPage *page = get_current_page (self);
-  GtkWidget *child = adw_tab_page_get_child (page);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabPage *page = get_current_page (self);
+  GtkWidget *child = adap_tab_page_get_child (page);
 
-  adw_tab_view_demo_page_refresh_icon (ADW_TAB_VIEW_DEMO_PAGE (child));
+  adap_tab_view_demo_page_refresh_icon (ADAP_TAB_VIEW_DEMO_PAGE (child));
 }
 
 static void
@@ -303,26 +303,26 @@ tab_duplicate (GSimpleAction *action,
                GVariant      *parameter,
                gpointer       user_data)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (user_data);
-  AdwTabPage *parent = get_current_page (self);
-  GtkWidget *parent_content = adw_tab_page_get_child (parent);
-  AdwTabViewDemoPage *content;
-  AdwTabPage *page;
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (user_data);
+  AdapTabPage *parent = get_current_page (self);
+  GtkWidget *parent_content = adap_tab_page_get_child (parent);
+  AdapTabViewDemoPage *content;
+  AdapTabPage *page;
 
-  content = adw_tab_view_demo_page_new_duplicate (ADW_TAB_VIEW_DEMO_PAGE (parent_content));
+  content = adap_tab_view_demo_page_new_duplicate (ADAP_TAB_VIEW_DEMO_PAGE (parent_content));
   page = add_page (self, parent, content);
 
-  adw_tab_page_set_indicator_icon (page, adw_tab_page_get_indicator_icon (parent));
-  adw_tab_page_set_indicator_tooltip (page, adw_tab_page_get_indicator_tooltip (parent));
-  adw_tab_page_set_loading (page, adw_tab_page_get_loading (parent));
-  adw_tab_page_set_needs_attention (page, adw_tab_page_get_needs_attention (parent));
+  adap_tab_page_set_indicator_icon (page, adap_tab_page_get_indicator_icon (parent));
+  adap_tab_page_set_indicator_tooltip (page, adap_tab_page_get_indicator_tooltip (parent));
+  adap_tab_page_set_loading (page, adap_tab_page_get_loading (parent));
+  adap_tab_page_set_needs_attention (page, adap_tab_page_get_needs_attention (parent));
 
   g_object_set_data (G_OBJECT (page),
-                     "adw-tab-view-demo-muted",
+                     "adap-tab-view-demo-muted",
                      g_object_get_data (G_OBJECT (parent),
-                                        "adw-tab-view-demo-muted"));
+                                        "adap-tab-view-demo-muted"));
 
-  adw_tab_view_set_selected_page (self->view, page);
+  adap_tab_view_set_selected_page (self->view, page);
 }
 
 static GActionEntry action_entries[] = {
@@ -347,7 +347,7 @@ static GActionEntry tab_action_entries[] = {
 };
 
 static inline void
-set_tab_action_enabled (AdwTabViewDemoWindow *self,
+set_tab_action_enabled (AdapTabViewDemoWindow *self,
                         const char           *name,
                         gboolean              enabled)
 {
@@ -360,7 +360,7 @@ set_tab_action_enabled (AdwTabViewDemoWindow *self,
 }
 
 static inline void
-set_tab_action_state (AdwTabViewDemoWindow *self,
+set_tab_action_state (AdapTabViewDemoWindow *self,
                       const char           *name,
                       gboolean              state)
 {
@@ -373,23 +373,23 @@ set_tab_action_state (AdwTabViewDemoWindow *self,
 }
 
 static void
-page_detached_cb (AdwTabViewDemoWindow *self,
-                  AdwTabPage           *page)
+page_detached_cb (AdapTabViewDemoWindow *self,
+                  AdapTabPage           *page)
 {
   if (self->in_dispose)
     return;
 
-  if (!adw_tab_view_get_n_pages (self->view) &&
-      !adw_tab_overview_get_open (self->tab_overview))
+  if (!adap_tab_view_get_n_pages (self->view) &&
+      !adap_tab_overview_get_open (self->tab_overview))
     gtk_window_close (GTK_WINDOW (self));
 }
 
 static void
-setup_menu_cb (AdwTabViewDemoWindow *self,
-               AdwTabPage           *page,
-               AdwTabView           *view)
+setup_menu_cb (AdapTabViewDemoWindow *self,
+               AdapTabPage           *page,
+               AdapTabView           *view)
 {
-  AdwTabPage *prev = NULL;
+  AdapTabPage *prev = NULL;
   gboolean can_close_before = TRUE, can_close_after = TRUE;
   gboolean pinned = FALSE, prev_pinned;
   gboolean has_icon = FALSE;
@@ -397,21 +397,21 @@ setup_menu_cb (AdwTabViewDemoWindow *self,
 
   self->menu_page = page;
 
-  n_pages = adw_tab_view_get_n_pages (self->view);
+  n_pages = adap_tab_view_get_n_pages (self->view);
 
   if (page) {
-    pos = adw_tab_view_get_page_position (self->view, page);
+    pos = adap_tab_view_get_page_position (self->view, page);
 
     if (pos > 0)
-      prev = adw_tab_view_get_nth_page (self->view, pos - 1);
+      prev = adap_tab_view_get_nth_page (self->view, pos - 1);
 
-    pinned = adw_tab_page_get_pinned (page);
-    prev_pinned = prev && adw_tab_page_get_pinned (prev);
+    pinned = adap_tab_page_get_pinned (page);
+    prev_pinned = prev && adap_tab_page_get_pinned (prev);
 
     can_close_before = !pinned && prev && !prev_pinned;
     can_close_after = pos < n_pages - 1;
 
-    has_icon = adw_tab_page_get_icon (page) != NULL;
+    has_icon = adap_tab_page_get_icon (page) != NULL;
   }
 
   set_tab_action_enabled (self, "pin", !page || !pinned);
@@ -425,16 +425,16 @@ setup_menu_cb (AdwTabViewDemoWindow *self,
 
   if (page) {
     set_tab_action_state (self, "icon", has_icon);
-    set_tab_action_state (self, "loading", adw_tab_page_get_loading (page));
-    set_tab_action_state (self, "needs-attention", adw_tab_page_get_needs_attention (page));
-    set_tab_action_state (self, "indicator", adw_tab_page_get_indicator_icon (page) != NULL);
+    set_tab_action_state (self, "loading", adap_tab_page_get_loading (page));
+    set_tab_action_state (self, "needs-attention", adap_tab_page_get_needs_attention (page));
+    set_tab_action_state (self, "indicator", adap_tab_page_get_indicator_icon (page) != NULL);
   }
 }
 
-static AdwTabView *
-create_window_cb (AdwTabViewDemoWindow *self)
+static AdapTabView *
+create_window_cb (AdapTabViewDemoWindow *self)
 {
-  AdwTabViewDemoWindow *window = adw_tab_view_demo_window_new ();
+  AdapTabViewDemoWindow *window = adap_tab_view_demo_window_new ();
 
   gtk_window_present (GTK_WINDOW (window));
 
@@ -442,64 +442,64 @@ create_window_cb (AdwTabViewDemoWindow *self)
 }
 
 static void
-indicator_activated_cb (AdwTabViewDemoWindow *self,
-                        AdwTabPage           *page)
+indicator_activated_cb (AdapTabViewDemoWindow *self,
+                        AdapTabPage           *page)
 {
   GIcon *icon;
   char *tooltip;
   gboolean muted;
 
   muted = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (page),
-                                              "adw-tab-view-demo-muted"));
+                                              "adap-tab-view-demo-muted"));
 
   g_object_set_data (G_OBJECT (page),
-                     "adw-tab-view-demo-muted",
+                     "adap-tab-view-demo-muted",
                      GINT_TO_POINTER (!muted));
 
   icon = get_indicator_icon (page);
   tooltip = get_indicator_tooltip (page);
 
-  adw_tab_page_set_indicator_icon (page, icon);
-  adw_tab_page_set_indicator_tooltip (page, tooltip);
+  adap_tab_page_set_indicator_icon (page, icon);
+  adap_tab_page_set_indicator_tooltip (page, tooltip);
 
   g_object_unref (icon);
   g_free (tooltip);
 }
 
 static gboolean
-extra_drag_drop_cb (AdwTabViewDemoWindow *self,
-                    AdwTabPage           *page,
+extra_drag_drop_cb (AdapTabViewDemoWindow *self,
+                    AdapTabPage           *page,
                     GValue               *value)
 {
-  adw_tab_page_set_title (page,  g_value_get_string (value));
+  adap_tab_page_set_title (page,  g_value_get_string (value));
 
   return GDK_EVENT_STOP;
 }
 
 static void
-adw_tab_view_demo_window_dispose (GObject *object)
+adap_tab_view_demo_window_dispose (GObject *object)
 {
-  AdwTabViewDemoWindow *self = ADW_TAB_VIEW_DEMO_WINDOW (object);
+  AdapTabViewDemoWindow *self = ADAP_TAB_VIEW_DEMO_WINDOW (object);
 
   self->in_dispose = TRUE;
 
   g_clear_object (&self->tab_action_group);
 
-  G_OBJECT_CLASS (adw_tab_view_demo_window_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_tab_view_demo_window_parent_class)->dispose (object);
 }
 
 static void
-adw_tab_view_demo_window_class_init (AdwTabViewDemoWindowClass *klass)
+adap_tab_view_demo_window_class_init (AdapTabViewDemoWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_tab_view_demo_window_dispose;
+  object_class->dispose = adap_tab_view_demo_window_dispose;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adwaita1/Demo/ui/pages/tab-view/adw-tab-view-demo-window.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwTabViewDemoWindow, view);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabViewDemoWindow, tab_bar);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabViewDemoWindow, tab_overview);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adapta1/Demo/ui/pages/tab-view/adap-tab-view-demo-window.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapTabViewDemoWindow, view);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabViewDemoWindow, tab_bar);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabViewDemoWindow, tab_overview);
   gtk_widget_class_bind_template_callback (widget_class, page_detached_cb);
   gtk_widget_class_bind_template_callback (widget_class, setup_menu_cb);
   gtk_widget_class_bind_template_callback (widget_class, create_tab_cb);
@@ -513,11 +513,11 @@ adw_tab_view_demo_window_class_init (AdwTabViewDemoWindowClass *klass)
 }
 
 static void
-adw_tab_view_demo_window_init (AdwTabViewDemoWindow *self)
+adap_tab_view_demo_window_init (AdapTabViewDemoWindow *self)
 {
   GActionMap *action_map;
   GdkDisplay *display;
-  AdwStyleManager *style_manager;
+  AdapStyleManager *style_manager;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -540,38 +540,38 @@ adw_tab_view_demo_window_init (AdwTabViewDemoWindow *self)
                                   "tab",
                                   G_ACTION_GROUP (self->tab_action_group));
 
-  adw_tab_bar_setup_extra_drop_target (self->tab_bar,
+  adap_tab_bar_setup_extra_drop_target (self->tab_bar,
                                        GDK_ACTION_COPY,
                                        (GType[1]) { G_TYPE_STRING }, 1);
-  adw_tab_overview_setup_extra_drop_target (self->tab_overview,
+  adap_tab_overview_setup_extra_drop_target (self->tab_overview,
                                             GDK_ACTION_COPY,
                                             (GType[1]) { G_TYPE_STRING }, 1);
 
   display = gtk_widget_get_display (GTK_WIDGET (self));
-  style_manager = adw_style_manager_get_for_display (display);
+  style_manager = adap_style_manager_get_for_display (display);
 
   g_signal_connect_object (style_manager, "notify::dark",
-                           G_CALLBACK (adw_tab_view_invalidate_thumbnails),
+                           G_CALLBACK (adap_tab_view_invalidate_thumbnails),
                            self->view,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (style_manager, "notify::high-contrast",
-                           G_CALLBACK (adw_tab_view_invalidate_thumbnails),
+                           G_CALLBACK (adap_tab_view_invalidate_thumbnails),
                            self->view,
                            G_CONNECT_SWAPPED);
 }
 
-AdwTabViewDemoWindow *
-adw_tab_view_demo_window_new (void)
+AdapTabViewDemoWindow *
+adap_tab_view_demo_window_new (void)
 {
-  return g_object_new (ADW_TYPE_TAB_VIEW_DEMO_WINDOW, NULL);
+  return g_object_new (ADAP_TYPE_TAB_VIEW_DEMO_WINDOW, NULL);
 }
 
 void
-adw_tab_view_demo_window_prepopulate (AdwTabViewDemoWindow *self)
+adap_tab_view_demo_window_prepopulate (AdapTabViewDemoWindow *self)
 {
   tab_new (NULL, NULL, self);
   tab_new (NULL, NULL, self);
   tab_new (NULL, NULL, self);
 
-  adw_tab_view_invalidate_thumbnails (self->view);
+  adap_tab_view_invalidate_thumbnails (self->view);
 }

@@ -6,11 +6,11 @@
 
 #include "config.h"
 
-#include "adw-banner.h"
+#include "adap-banner.h"
 
-#include "adw-gizmo-private.h"
-#include "adw-marshalers.h"
-#include "adw-widget-utils-private.h"
+#include "adap-gizmo-private.h"
+#include "adap-marshalers.h"
+#include "adap-widget-utils-private.h"
 
 #define HORZ_SPACING 6
 #define VERT_SPACING 9
@@ -21,7 +21,7 @@
 #define BUTTON_VERT_MIN_WIDTH 160
 
 /**
- * AdwBanner:
+ * AdapBanner:
  *
  * A bar with contextual information.
  *
@@ -44,25 +44,25 @@
  *
  * ## CSS nodes
  *
- * `AdwBanner` has a main CSS node with the name `banner`.
+ * `AdapBanner` has a main CSS node with the name `banner`.
  *
  * Since: 1.3
  */
 
-struct _AdwBanner
+struct _AdapBanner
 {
   GtkWidget parent_instance;
 
-  AdwGizmo *gizmo;
+  AdapGizmo *gizmo;
   GtkLabel *title;
   GtkRevealer *revealer;
   GtkButton *button;
 };
 
-static void adw_banner_actionable_init (GtkActionableInterface *iface);
+static void adap_banner_actionable_init (GtkActionableInterface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwBanner, adw_banner, GTK_TYPE_WIDGET,
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, adw_banner_actionable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapBanner, adap_banner, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, adap_banner_actionable_init))
 
 enum {
   PROP_0,
@@ -87,33 +87,33 @@ enum {
 static guint signals[SIGNAL_LAST_SIGNAL];
 
 static void
-button_clicked (AdwBanner *self)
+button_clicked (AdapBanner *self)
 {
-  g_assert (ADW_IS_BANNER (self));
+  g_assert (ADAP_IS_BANNER (self));
 
   g_signal_emit (self, signals[SIGNAL_BUTTON_CLICKED], 0);
 }
 
 static void
-adw_banner_get_property (GObject    *object,
+adap_banner_get_property (GObject    *object,
                          guint       prop_id,
                          GValue     *value,
                          GParamSpec *pspec)
 {
-  AdwBanner *self = ADW_BANNER (object);
+  AdapBanner *self = ADAP_BANNER (object);
 
   switch (prop_id) {
   case PROP_TITLE:
-    g_value_set_string (value, adw_banner_get_title (self));
+    g_value_set_string (value, adap_banner_get_title (self));
     break;
   case PROP_BUTTON_LABEL:
-    g_value_set_string (value, adw_banner_get_button_label (self));
+    g_value_set_string (value, adap_banner_get_button_label (self));
     break;
   case PROP_REVEALED:
-    g_value_set_boolean (value, adw_banner_get_revealed (self));
+    g_value_set_boolean (value, adap_banner_get_revealed (self));
     break;
   case PROP_USE_MARKUP:
-    g_value_set_boolean (value, adw_banner_get_use_markup (self));
+    g_value_set_boolean (value, adap_banner_get_use_markup (self));
     break;
   case PROP_ACTION_NAME:
     g_value_set_string (value, gtk_actionable_get_action_name (GTK_ACTIONABLE (self)));
@@ -128,25 +128,25 @@ adw_banner_get_property (GObject    *object,
 }
 
 static void
-adw_banner_set_property (GObject      *object,
+adap_banner_set_property (GObject      *object,
                          guint         prop_id,
                          const GValue *value,
                          GParamSpec   *pspec)
 {
-  AdwBanner *self = ADW_BANNER (object);
+  AdapBanner *self = ADAP_BANNER (object);
 
   switch (prop_id) {
   case PROP_TITLE:
-    adw_banner_set_title (self, g_value_get_string (value));
+    adap_banner_set_title (self, g_value_get_string (value));
     break;
   case PROP_BUTTON_LABEL:
-    adw_banner_set_button_label (self, g_value_get_string (value));
+    adap_banner_set_button_label (self, g_value_get_string (value));
     break;
   case PROP_REVEALED:
-    adw_banner_set_revealed (self, g_value_get_boolean (value));
+    adap_banner_set_revealed (self, g_value_get_boolean (value));
     break;
   case PROP_USE_MARKUP:
-    adw_banner_set_use_markup (self, g_value_get_boolean (value));
+    adap_banner_set_use_markup (self, g_value_get_boolean (value));
     break;
   case PROP_ACTION_NAME:
     gtk_actionable_set_action_name (GTK_ACTIONABLE (self), g_value_get_string (value));
@@ -161,13 +161,13 @@ adw_banner_set_property (GObject      *object,
 }
 
 static void
-adw_banner_dispose (GObject *object)
+adap_banner_dispose (GObject *object)
 {
-  AdwBanner *self = ADW_BANNER (object);
+  AdapBanner *self = ADAP_BANNER (object);
 
-  gtk_widget_dispose_template (GTK_WIDGET (self), ADW_TYPE_BANNER);
+  gtk_widget_dispose_template (GTK_WIDGET (self), ADAP_TYPE_BANNER);
 
-  G_OBJECT_CLASS (adw_banner_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_banner_parent_class)->dispose (object);
 }
 
 static void
@@ -179,7 +179,7 @@ measure_content (GtkWidget       *widget,
                  int             *minimum_baseline,
                  int             *natural_baseline)
 {
-  AdwBanner *self = ADW_BANNER (gtk_widget_get_ancestor (widget, ADW_TYPE_BANNER));
+  AdapBanner *self = ADAP_BANNER (gtk_widget_get_ancestor (widget, ADAP_TYPE_BANNER));
   gboolean button_shown = gtk_widget_is_visible (GTK_WIDGET (self->button));
   int label_min, label_nat;
   int button_min, button_nat;
@@ -270,7 +270,7 @@ allocate_content (GtkWidget *widget,
                   int        height,
                   int        baseline)
 {
-  AdwBanner *self = ADW_BANNER (gtk_widget_get_ancestor (widget, ADW_TYPE_BANNER));
+  AdapBanner *self = ADAP_BANNER (gtk_widget_get_ancestor (widget, ADAP_TYPE_BANNER));
   gboolean button_shown = gtk_widget_is_visible (GTK_WIDGET (self->button));
   int button_width, button_height;
   int button_x = 0, button_y = 0;
@@ -341,17 +341,17 @@ get_content_request_mode (GtkWidget *widget)
 }
 
 static void
-adw_banner_class_init (AdwBannerClass *klass)
+adap_banner_class_init (AdapBannerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_banner_get_property;
-  object_class->set_property = adw_banner_set_property;
-  object_class->dispose = adw_banner_dispose;
+  object_class->get_property = adap_banner_get_property;
+  object_class->set_property = adap_banner_set_property;
+  object_class->dispose = adap_banner_dispose;
 
   /**
-   * AdwBanner:title: (attributes org.gtk.Property.get=adw_banner_get_title org.gtk.Property.set=adw_banner_set_title)
+   * AdapBanner:title: (attributes org.gtk.Property.get=adap_banner_get_title org.gtk.Property.set=adap_banner_set_title)
    *
    * The title for this banner.
    *
@@ -365,7 +365,7 @@ adw_banner_class_init (AdwBannerClass *klass)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwBanner:button-label: (attributes org.gtk.Property.get=adw_banner_get_button_label org.gtk.Property.set=adw_banner_set_button_label)
+   * AdapBanner:button-label: (attributes org.gtk.Property.get=adap_banner_get_button_label org.gtk.Property.set=adap_banner_set_button_label)
    *
    * The label to show on the button.
    *
@@ -382,7 +382,7 @@ adw_banner_class_init (AdwBannerClass *klass)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwBanner:use-markup: (attributes org.gtk.Property.get=adw_banner_get_use_markup org.gtk.Property.set=adw_banner_set_use_markup)
+   * AdapBanner:use-markup: (attributes org.gtk.Property.get=adap_banner_get_use_markup org.gtk.Property.set=adap_banner_set_use_markup)
    *
    * Whether to use Pango markup for the banner title.
    *
@@ -396,7 +396,7 @@ adw_banner_class_init (AdwBannerClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwBanner:revealed: (attributes org.gtk.Property.get=adw_banner_get_revealed org.gtk.Property.set=adw_banner_set_revealed)
+   * AdapBanner:revealed: (attributes org.gtk.Property.get=adap_banner_get_revealed org.gtk.Property.set=adap_banner_set_revealed)
    *
    * Whether the banner is currently revealed.
    *
@@ -408,7 +408,7 @@ adw_banner_class_init (AdwBannerClass *klass)
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwBanner::button-clicked:
+   * AdapBanner::button-clicked:
    * 
    * This signal is emitted after the action button has been clicked.
    *
@@ -422,23 +422,23 @@ adw_banner_class_init (AdwBannerClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_BUTTON_CLICKED],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
   g_object_class_override_property (object_class, PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (object_class, PROP_ACTION_TARGET, "action-target");
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-banner.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwBanner, gizmo);
-  gtk_widget_class_bind_template_child (widget_class, AdwBanner, title);
-  gtk_widget_class_bind_template_child (widget_class, AdwBanner, revealer);
-  gtk_widget_class_bind_template_child (widget_class, AdwBanner, button);
+                                               "/org/gnome/Adapta/ui/adap-banner.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapBanner, gizmo);
+  gtk_widget_class_bind_template_child (widget_class, AdapBanner, title);
+  gtk_widget_class_bind_template_child (widget_class, AdapBanner, revealer);
+  gtk_widget_class_bind_template_child (widget_class, AdapBanner, button);
 
   gtk_widget_class_bind_template_callback (widget_class, button_clicked);
 
@@ -446,86 +446,86 @@ adw_banner_class_init (AdwBannerClass *klass)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 
-  g_type_ensure (ADW_TYPE_GIZMO);
+  g_type_ensure (ADAP_TYPE_GIZMO);
 }
 
 static void
-adw_banner_init (AdwBanner *self)
+adap_banner_init (AdapBanner *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
   gtk_widget_set_layout_manager (GTK_WIDGET (self->gizmo), gtk_custom_layout_new (get_content_request_mode,
                                                                                   measure_content,
                                                                                   allocate_content));
 
-  adw_gizmo_set_focus_func (self->gizmo, (AdwGizmoFocusFunc) adw_widget_focus_child);
-  adw_gizmo_set_grab_focus_func (self->gizmo, (AdwGizmoGrabFocusFunc) adw_widget_grab_focus_child);
+  adap_gizmo_set_focus_func (self->gizmo, (AdapGizmoFocusFunc) adap_widget_focus_child);
+  adap_gizmo_set_grab_focus_func (self->gizmo, (AdapGizmoGrabFocusFunc) adap_widget_grab_focus_child);
 }
 
 static const char *
-adw_banner_get_action_name (GtkActionable *actionable)
+adap_banner_get_action_name (GtkActionable *actionable)
 {
-  AdwBanner *self = ADW_BANNER (actionable);
+  AdapBanner *self = ADAP_BANNER (actionable);
 
   return gtk_actionable_get_action_name (GTK_ACTIONABLE (self->button));
 }
 
 static void
-adw_banner_set_action_name (GtkActionable *actionable,
+adap_banner_set_action_name (GtkActionable *actionable,
                             const char    *action_name)
 {
-  AdwBanner *self = ADW_BANNER (actionable);
+  AdapBanner *self = ADAP_BANNER (actionable);
 
   gtk_actionable_set_action_name (GTK_ACTIONABLE (self->button), action_name);
 }
 
 static GVariant *
-adw_banner_get_action_target_value (GtkActionable *actionable)
+adap_banner_get_action_target_value (GtkActionable *actionable)
 {
-  AdwBanner *self = ADW_BANNER (actionable);
+  AdapBanner *self = ADAP_BANNER (actionable);
 
   return gtk_actionable_get_action_target_value (GTK_ACTIONABLE (self->button));
 }
 
 static void
-adw_banner_set_action_target_value (GtkActionable *actionable,
+adap_banner_set_action_target_value (GtkActionable *actionable,
                                     GVariant      *action_target)
 {
-  AdwBanner *self = ADW_BANNER (actionable);
+  AdapBanner *self = ADAP_BANNER (actionable);
 
   gtk_actionable_set_action_target_value (GTK_ACTIONABLE (self->button), action_target);
 }
 
 static void
-adw_banner_actionable_init (GtkActionableInterface *iface)
+adap_banner_actionable_init (GtkActionableInterface *iface)
 {
-  iface->get_action_name = adw_banner_get_action_name;
-  iface->set_action_name = adw_banner_set_action_name;
-  iface->get_action_target_value = adw_banner_get_action_target_value;
-  iface->set_action_target_value = adw_banner_set_action_target_value;
+  iface->get_action_name = adap_banner_get_action_name;
+  iface->set_action_name = adap_banner_set_action_name;
+  iface->get_action_target_value = adap_banner_get_action_target_value;
+  iface->set_action_target_value = adap_banner_set_action_target_value;
 }
 
 /**
- * adw_banner_new:
+ * adap_banner_new:
  * @title: the banner title
  *
- * Creates a new `AdwBanner`.
+ * Creates a new `AdapBanner`.
  *
- * Returns: the newly created `AdwBanner`
+ * Returns: the newly created `AdapBanner`
  *
  * Since: 1.3
  */
 GtkWidget *
-adw_banner_new (const char *title)
+adap_banner_new (const char *title)
 {
   g_return_val_if_fail (title != NULL, NULL);
 
-  return g_object_new (ADW_TYPE_BANNER,
+  return g_object_new (ADAP_TYPE_BANNER,
                        "title", title,
                        NULL);
 }
 
 /**
- * adw_banner_get_title: (attributes org.gtk.Method.get_property=title)
+ * adap_banner_get_title: (attributes org.gtk.Method.get_property=title)
  * @self: a banner
  *
  * Gets the title for @self.
@@ -535,15 +535,15 @@ adw_banner_new (const char *title)
  * Since: 1.3
  */
 const char *
-adw_banner_get_title (AdwBanner *self)
+adap_banner_get_title (AdapBanner *self)
 {
-  g_return_val_if_fail (ADW_IS_BANNER (self), NULL);
+  g_return_val_if_fail (ADAP_IS_BANNER (self), NULL);
 
   return gtk_label_get_label (self->title);
 }
 
 /**
- * adw_banner_set_title: (attributes org.gtk.Method.set_property=title)
+ * adap_banner_set_title: (attributes org.gtk.Method.set_property=title)
  * @self: a banner
  * @title: the title
  *
@@ -554,10 +554,10 @@ adw_banner_get_title (AdwBanner *self)
  * Since: 1.3
  */
 void
-adw_banner_set_title (AdwBanner  *self,
+adap_banner_set_title (AdapBanner  *self,
                       const char *title)
 {
-  g_return_if_fail (ADW_IS_BANNER (self));
+  g_return_if_fail (ADAP_IS_BANNER (self));
   g_return_if_fail (title != NULL);
 
   if (g_strcmp0 (gtk_label_get_label (self->title), title) == 0)
@@ -569,7 +569,7 @@ adw_banner_set_title (AdwBanner  *self,
 }
 
 /**
- * adw_banner_get_button_label: (attributes org.gtk.Method.get_property=button-label)
+ * adap_banner_get_button_label: (attributes org.gtk.Method.get_property=button-label)
  * @self: a banner
  *
  * Gets the button label for @self.
@@ -579,15 +579,15 @@ adw_banner_set_title (AdwBanner  *self,
  * Since: 1.3
  */
 const char *
-adw_banner_get_button_label (AdwBanner *self)
+adap_banner_get_button_label (AdapBanner *self)
 {
-  g_return_val_if_fail (ADW_IS_BANNER (self), NULL);
+  g_return_val_if_fail (ADAP_IS_BANNER (self), NULL);
 
   return gtk_button_get_label (self->button);
 }
 
 /**
- * adw_banner_set_button_label: (attributes org.gtk.Method.set_property=button-label)
+ * adap_banner_set_button_label: (attributes org.gtk.Method.set_property=button-label)
  * @self: a banner
  * @label: (nullable): the label
  *
@@ -601,10 +601,10 @@ adw_banner_get_button_label (AdwBanner *self)
  * Since: 1.3
  */
 void
-adw_banner_set_button_label (AdwBanner  *self,
+adap_banner_set_button_label (AdapBanner  *self,
                              const char *label)
 {
-  g_return_if_fail (ADW_IS_BANNER (self));
+  g_return_if_fail (ADAP_IS_BANNER (self));
 
   if (g_strcmp0 (gtk_button_get_label (self->button), label) == 0)
     return;
@@ -617,7 +617,7 @@ adw_banner_set_button_label (AdwBanner  *self,
 }
 
 /**
- * adw_banner_get_use_markup: (attributes org.gtk.Method.get_property=use-markup)
+ * adap_banner_get_use_markup: (attributes org.gtk.Method.get_property=use-markup)
  * @self: a banner
  *
  * Gets whether to use Pango markup for the banner title.
@@ -627,15 +627,15 @@ adw_banner_set_button_label (AdwBanner  *self,
  * Since: 1.3
  */
 gboolean
-adw_banner_get_use_markup (AdwBanner *self)
+adap_banner_get_use_markup (AdapBanner *self)
 {
-  g_return_val_if_fail (ADW_IS_BANNER (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_BANNER (self), FALSE);
 
   return gtk_label_get_use_markup (self->title);
 }
 
 /**
- * adw_banner_set_use_markup: (attributes org.gtk.Method.set_property=use-markup)
+ * adap_banner_set_use_markup: (attributes org.gtk.Method.set_property=use-markup)
  * @self: a banner
  * @use_markup: whether to use markup
  *
@@ -646,10 +646,10 @@ adw_banner_get_use_markup (AdwBanner *self)
  * Since: 1.3
  */
 void
-adw_banner_set_use_markup (AdwBanner *self,
+adap_banner_set_use_markup (AdapBanner *self,
                            gboolean   use_markup)
 {
-  g_return_if_fail (ADW_IS_BANNER (self));
+  g_return_if_fail (ADAP_IS_BANNER (self));
 
   use_markup = !!use_markup;
 
@@ -662,7 +662,7 @@ adw_banner_set_use_markup (AdwBanner *self,
 }
 
 /**
- * adw_banner_get_revealed: (attributes org.gtk.Method.get_property=revealed)
+ * adap_banner_get_revealed: (attributes org.gtk.Method.get_property=revealed)
  * @self: a banner
  *
  * Gets if a banner is revealed
@@ -672,15 +672,15 @@ adw_banner_set_use_markup (AdwBanner *self,
  * Since: 1.3
  */
 gboolean
-adw_banner_get_revealed (AdwBanner *self)
+adap_banner_get_revealed (AdapBanner *self)
 {
-  g_return_val_if_fail (ADW_IS_BANNER (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_BANNER (self), FALSE);
 
   return gtk_revealer_get_reveal_child (GTK_REVEALER (self->revealer));
 }
 
 /**
- * adw_banner_set_revealed: (attributes org.gtk.Method.set_property=revealed)
+ * adap_banner_set_revealed: (attributes org.gtk.Method.set_property=revealed)
  * @self: a banner
  * @revealed: whether a banner should be revealed
  *
@@ -689,10 +689,10 @@ adw_banner_get_revealed (AdwBanner *self)
  * Since: 1.3
  */
 void
-adw_banner_set_revealed (AdwBanner *self,
+adap_banner_set_revealed (AdapBanner *self,
                          gboolean   revealed)
 {
-  g_return_if_fail (ADW_IS_BANNER (self));
+  g_return_if_fail (ADAP_IS_BANNER (self));
 
   revealed = !!revealed;
 

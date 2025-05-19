@@ -8,55 +8,55 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <glib-object.h>
-#include "adw-enums-private.h"
+#include "adap-enums-private.h"
 
 G_BEGIN_DECLS
 
 typedef enum {
-  ADW_SYSTEM_COLOR_SCHEME_DEFAULT,
-  ADW_SYSTEM_COLOR_SCHEME_PREFER_DARK,
-  ADW_SYSTEM_COLOR_SCHEME_PREFER_LIGHT,
-} AdwSystemColorScheme;
+  ADAP_SYSTEM_COLOR_SCHEME_DEFAULT,
+  ADAP_SYSTEM_COLOR_SCHEME_PREFER_DARK,
+  ADAP_SYSTEM_COLOR_SCHEME_PREFER_LIGHT,
+} AdapSystemColorScheme;
 
-#define ADW_TYPE_SETTINGS (adw_settings_get_type())
+#define ADAP_TYPE_SETTINGS (adap_settings_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwSettings, adw_settings, ADW, SETTINGS, GObject)
+G_DECLARE_FINAL_TYPE (AdapSettings, adap_settings, ADAP, SETTINGS, GObject)
 
-ADW_AVAILABLE_IN_ALL
-AdwSettings *adw_settings_get_default (void);
+ADAP_AVAILABLE_IN_ALL
+AdapSettings *adap_settings_get_default (void);
 
-ADW_AVAILABLE_IN_ALL
-const gchar *adw_settings_get_theme_name (AdwSettings *self);
+ADAP_AVAILABLE_IN_ALL
+const gchar *adap_settings_get_theme_name (AdapSettings *self);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_settings_get_system_supports_color_schemes (AdwSettings *self);
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_settings_get_system_supports_color_schemes (AdapSettings *self);
 
-ADW_AVAILABLE_IN_ALL
-AdwSystemColorScheme adw_settings_get_color_scheme (AdwSettings *self);
+ADAP_AVAILABLE_IN_ALL
+AdapSystemColorScheme adap_settings_get_color_scheme (AdapSettings *self);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_settings_get_high_contrast (AdwSettings *self);
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_settings_get_high_contrast (AdapSettings *self);
 
-ADW_AVAILABLE_IN_ALL
-void adw_settings_start_override (AdwSettings *self);
-ADW_AVAILABLE_IN_ALL
-void adw_settings_end_override   (AdwSettings *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_settings_start_override (AdapSettings *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_settings_end_override   (AdapSettings *self);
 
-ADW_AVAILABLE_IN_ALL
-void adw_settings_override_system_supports_color_schemes (AdwSettings *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_settings_override_system_supports_color_schemes (AdapSettings *self,
                                                           gboolean     system_supports_color_schemes);
 
-ADW_AVAILABLE_IN_ALL
-void adw_settings_override_color_scheme (AdwSettings          *self,
-                                         AdwSystemColorScheme  color_scheme);
+ADAP_AVAILABLE_IN_ALL
+void adap_settings_override_color_scheme (AdapSettings          *self,
+                                         AdapSystemColorScheme  color_scheme);
 
-ADW_AVAILABLE_IN_ALL
-void adw_settings_override_high_contrast (AdwSettings *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_settings_override_high_contrast (AdapSettings *self,
                                           gboolean     high_contrast);
 
 G_END_DECLS

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
+  <requires lib="libadapta" version="1.0"/>
   <menu id="demo_menu"/>
-  <object class="AdwBin" id="widget">
+  <object class="AdapBin" id="widget">
     <style>
       <class name="docs-background"/>
     </style>

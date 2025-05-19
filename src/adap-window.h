@@ -6,25 +6,25 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-breakpoint.h"
-#include "adw-dialog.h"
+#include "adap-breakpoint.h"
+#include "adap-dialog.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_WINDOW (adw_window_get_type())
+#define ADAP_TYPE_WINDOW (adap_window_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_DERIVABLE_TYPE (AdwWindow, adw_window, ADW, WINDOW, GtkWindow)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (AdapWindow, adap_window, ADAP, WINDOW, GtkWindow)
 
-struct _AdwWindowClass
+struct _AdapWindowClass
 {
   GtkWindowClass parent_class;
 
@@ -32,26 +32,26 @@ struct _AdwWindowClass
   gpointer padding[4];
 };
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_window_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_window_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_window_get_content (AdwWindow *self);
-ADW_AVAILABLE_IN_ALL
-void       adw_window_set_content (AdwWindow *self,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_window_get_content (AdapWindow *self);
+ADAP_AVAILABLE_IN_ALL
+void       adap_window_set_content (AdapWindow *self,
                                    GtkWidget *content);
 
-ADW_AVAILABLE_IN_1_4
-void adw_window_add_breakpoint (AdwWindow     *self,
-                                AdwBreakpoint *breakpoint);
+ADAP_AVAILABLE_IN_1_4
+void adap_window_add_breakpoint (AdapWindow     *self,
+                                AdapBreakpoint *breakpoint);
 
-ADW_AVAILABLE_IN_1_4
-AdwBreakpoint *adw_window_get_current_breakpoint (AdwWindow *self);
+ADAP_AVAILABLE_IN_1_4
+AdapBreakpoint *adap_window_get_current_breakpoint (AdapWindow *self);
 
-ADW_AVAILABLE_IN_1_5
-GListModel *adw_window_get_dialogs (AdwWindow *self);
+ADAP_AVAILABLE_IN_1_5
+GListModel *adap_window_get_dialogs (AdapWindow *self);
 
-ADW_AVAILABLE_IN_1_5
-AdwDialog *adw_window_get_visible_dialog (AdwWindow *self);
+ADAP_AVAILABLE_IN_1_5
+AdapDialog *adap_window_get_visible_dialog (AdapWindow *self);
 
 G_END_DECLS

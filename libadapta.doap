@@ -5,17 +5,17 @@
          xmlns:gnome="http://api.gnome.org/doap-extensions#"
          xmlns="http://usefulinc.com/ns/doap#">
 
-  <name>libadwaita</name>
-  <shortname>libadwaita</shortname>
+  <name>libadapta</name>
+  <shortname>libadapta</shortname>
   <shortdesc>Building blocks for modern adaptive GNOME apps</shortdesc>
   <description>
-    libadwaita is a collection of GTK widgets for adaptive applications targeting
+    libadapta is a collection of GTK widgets for adaptive applications targeting
     form-factors from mobile to desktop.
     It also offers innovative widgets following the GNOME design guidelines.
   </description>
-  <homepage rdf:resource="https://gitlab.gnome.org/GNOME/libadwaita" />
+  <homepage rdf:resource="https://gitlab.gnome.org/GNOME/libadapta" />
   <license rdf:resource="http://usefulinc.com/doap/licenses/lgpl" />
-  <developer-forum rdf:resource="https://discourse.gnome.org/tag/libadwaita" />
+  <developer-forum rdf:resource="https://discourse.gnome.org/tag/libadapta" />
 
   <programming-language>C</programming-language>
 

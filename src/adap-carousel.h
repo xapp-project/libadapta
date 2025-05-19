@@ -6,98 +6,98 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-spring-params.h"
+#include "adap-spring-params.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_CAROUSEL (adw_carousel_get_type())
+#define ADAP_TYPE_CAROUSEL (adap_carousel_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwCarousel, adw_carousel, ADW, CAROUSEL, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapCarousel, adap_carousel, ADAP, CAROUSEL, GtkWidget)
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_carousel_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_carousel_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-void adw_carousel_prepend (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_carousel_prepend (AdapCarousel *self,
                            GtkWidget   *child);
-ADW_AVAILABLE_IN_ALL
-void adw_carousel_append  (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_carousel_append  (AdapCarousel *self,
                            GtkWidget   *child);
-ADW_AVAILABLE_IN_ALL
-void adw_carousel_insert  (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_carousel_insert  (AdapCarousel *self,
                            GtkWidget   *child,
                            int          position);
 
-ADW_AVAILABLE_IN_ALL
-void adw_carousel_reorder (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_carousel_reorder (AdapCarousel *self,
                            GtkWidget   *child,
                            int          position);
 
-ADW_AVAILABLE_IN_ALL
-void adw_carousel_remove (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_carousel_remove (AdapCarousel *self,
                           GtkWidget   *child);
 
-ADW_AVAILABLE_IN_ALL
-void adw_carousel_scroll_to (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_carousel_scroll_to (AdapCarousel *self,
                              GtkWidget   *widget,
                              gboolean     animate);
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_carousel_get_nth_page (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_carousel_get_nth_page (AdapCarousel *self,
                                       guint        n);
-ADW_AVAILABLE_IN_ALL
-guint      adw_carousel_get_n_pages  (AdwCarousel *self);
-ADW_AVAILABLE_IN_ALL
-double     adw_carousel_get_position (AdwCarousel *self);
+ADAP_AVAILABLE_IN_ALL
+guint      adap_carousel_get_n_pages  (AdapCarousel *self);
+ADAP_AVAILABLE_IN_ALL
+double     adap_carousel_get_position (AdapCarousel *self);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_carousel_get_interactive (AdwCarousel *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_carousel_set_interactive (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_carousel_get_interactive (AdapCarousel *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_carousel_set_interactive (AdapCarousel *self,
                                        gboolean     interactive);
 
-ADW_AVAILABLE_IN_ALL
-guint adw_carousel_get_spacing (AdwCarousel *self);
-ADW_AVAILABLE_IN_ALL
-void  adw_carousel_set_spacing (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+guint adap_carousel_get_spacing (AdapCarousel *self);
+ADAP_AVAILABLE_IN_ALL
+void  adap_carousel_set_spacing (AdapCarousel *self,
                                 guint        spacing);
 
-ADW_AVAILABLE_IN_ALL
-AdwSpringParams *adw_carousel_get_scroll_params (AdwCarousel     *self);
-ADW_AVAILABLE_IN_ALL
-void             adw_carousel_set_scroll_params (AdwCarousel     *self,
-                                                 AdwSpringParams *params);
+ADAP_AVAILABLE_IN_ALL
+AdapSpringParams *adap_carousel_get_scroll_params (AdapCarousel     *self);
+ADAP_AVAILABLE_IN_ALL
+void             adap_carousel_set_scroll_params (AdapCarousel     *self,
+                                                 AdapSpringParams *params);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_carousel_get_allow_mouse_drag (AdwCarousel *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_carousel_set_allow_mouse_drag (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_carousel_get_allow_mouse_drag (AdapCarousel *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_carousel_set_allow_mouse_drag (AdapCarousel *self,
                                             gboolean     allow_mouse_drag);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_carousel_get_allow_scroll_wheel (AdwCarousel *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_carousel_set_allow_scroll_wheel (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_carousel_get_allow_scroll_wheel (AdapCarousel *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_carousel_set_allow_scroll_wheel (AdapCarousel *self,
                                               gboolean     allow_scroll_wheel);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_carousel_get_allow_long_swipes (AdwCarousel *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_carousel_set_allow_long_swipes (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_carousel_get_allow_long_swipes (AdapCarousel *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_carousel_set_allow_long_swipes (AdapCarousel *self,
                                              gboolean     allow_long_swipes);
 
-ADW_AVAILABLE_IN_ALL
-guint adw_carousel_get_reveal_duration (AdwCarousel *self);
-ADW_AVAILABLE_IN_ALL
-void  adw_carousel_set_reveal_duration (AdwCarousel *self,
+ADAP_AVAILABLE_IN_ALL
+guint adap_carousel_get_reveal_duration (AdapCarousel *self);
+ADAP_AVAILABLE_IN_ALL
+void  adap_carousel_set_reveal_duration (AdapCarousel *self,
                                         guint        reveal_duration);
 G_END_DECLS

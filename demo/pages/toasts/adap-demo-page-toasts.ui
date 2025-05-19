@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <template class="AdwDemoPageToasts" parent="AdwBin">
+  <requires lib="libadapta" version="1.0"/>
+  <template class="AdapDemoPageToasts" parent="AdapBin">
     <property name="child">
-      <object class="AdwStatusPage">
+      <object class="AdapStatusPage">
         <property name="icon-name">widget-toast-symbolic</property>
         <property name="title" translatable="yes">Toasts</property>
         <property name="description" translatable="yes">Transient in-app notifications.</property>
         <property name="child">
-          <object class="AdwClamp">
+          <object class="AdapClamp">
             <property name="maximum-size">400</property>
             <property name="tightening-threshold">300</property>
             <property name="child">
-              <object class="AdwPreferencesGroup">
+              <object class="AdapPreferencesGroup">
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title" translatable="yes">Simple Toast</property>
                     <child>
                       <object class="GtkButton">
@@ -27,7 +27,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title" translatable="yes">Toast With an Action</property>
                     <child>
                       <object class="GtkButton">
@@ -49,7 +49,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title" translatable="yes">Toast With a Long Title</property>
                     <child>
                       <object class="GtkButton">

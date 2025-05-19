@@ -1,36 +1,36 @@
-#include "adw-demo-window.h"
+#include "adap-demo-window.h"
 
 #include <glib/gi18n.h>
 
-#include "pages/about/adw-demo-page-about.h"
-#include "pages/animations/adw-demo-page-animations.h"
-#include "pages/avatar/adw-demo-page-avatar.h"
-#include "pages/banners/adw-demo-page-banners.h"
-#include "pages/buttons/adw-demo-page-buttons.h"
-#include "pages/carousel/adw-demo-page-carousel.h"
-#include "pages/clamp/adw-demo-page-clamp.h"
-#include "pages/dialogs/adw-demo-page-dialogs.h"
-#include "pages/lists/adw-demo-page-lists.h"
-#include "pages/navigation-view/adw-demo-page-navigation-view.h"
-#include "pages/split-views/adw-demo-page-split-views.h"
-#include "pages/styles/adw-demo-page-styles.h"
-#include "pages/tab-view/adw-demo-page-tab-view.h"
-#include "pages/toasts/adw-demo-page-toasts.h"
-#include "pages/view-switcher/adw-demo-page-view-switcher.h"
-#include "pages/welcome/adw-demo-page-welcome.h"
+#include "pages/about/adap-demo-page-about.h"
+#include "pages/animations/adap-demo-page-animations.h"
+#include "pages/avatar/adap-demo-page-avatar.h"
+#include "pages/banners/adap-demo-page-banners.h"
+#include "pages/buttons/adap-demo-page-buttons.h"
+#include "pages/carousel/adap-demo-page-carousel.h"
+#include "pages/clamp/adap-demo-page-clamp.h"
+#include "pages/dialogs/adap-demo-page-dialogs.h"
+#include "pages/lists/adap-demo-page-lists.h"
+#include "pages/navigation-view/adap-demo-page-navigation-view.h"
+#include "pages/split-views/adap-demo-page-split-views.h"
+#include "pages/styles/adap-demo-page-styles.h"
+#include "pages/tab-view/adap-demo-page-tab-view.h"
+#include "pages/toasts/adap-demo-page-toasts.h"
+#include "pages/view-switcher/adap-demo-page-view-switcher.h"
+#include "pages/welcome/adap-demo-page-welcome.h"
 
-struct _AdwDemoWindow
+struct _AdapDemoWindow
 {
-  AdwApplicationWindow parent_instance;
+  AdapApplicationWindow parent_instance;
 
   GtkWidget *color_scheme_button;
-  AdwNavigationSplitView *split_view;
-  AdwNavigationPage *content_page;
+  AdapNavigationSplitView *split_view;
+  AdapNavigationPage *content_page;
   GtkStack *stack;
-  AdwDemoPageToasts *toasts_page;
+  AdapDemoPageToasts *toasts_page;
 };
 
-G_DEFINE_FINAL_TYPE (AdwDemoWindow, adw_demo_window, ADW_TYPE_APPLICATION_WINDOW)
+G_DEFINE_FINAL_TYPE (AdapDemoWindow, adap_demo_window, ADAP_TYPE_APPLICATION_WINDOW)
 
 static char *
 get_color_scheme_icon_name (gpointer user_data,
@@ -40,58 +40,58 @@ get_color_scheme_icon_name (gpointer user_data,
 }
 
 static void
-color_scheme_button_clicked_cb (AdwDemoWindow *self)
+color_scheme_button_clicked_cb (AdapDemoWindow *self)
 {
-  AdwStyleManager *manager = adw_style_manager_get_default ();
+  AdapStyleManager *manager = adap_style_manager_get_default ();
 
-  if (adw_style_manager_get_dark (manager))
-    adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_FORCE_LIGHT);
+  if (adap_style_manager_get_dark (manager))
+    adap_style_manager_set_color_scheme (manager, ADAP_COLOR_SCHEME_FORCE_LIGHT);
   else
-    adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_FORCE_DARK);
+    adap_style_manager_set_color_scheme (manager, ADAP_COLOR_SCHEME_FORCE_DARK);
 }
 
 static void
-notify_system_supports_color_schemes_cb (AdwDemoWindow *self)
+notify_system_supports_color_schemes_cb (AdapDemoWindow *self)
 {
-  AdwStyleManager *manager = adw_style_manager_get_default ();
-  gboolean supports = adw_style_manager_get_system_supports_color_schemes (manager);
+  AdapStyleManager *manager = adap_style_manager_get_default ();
+  gboolean supports = adap_style_manager_get_system_supports_color_schemes (manager);
 
   gtk_widget_set_visible (self->color_scheme_button, !supports);
 
   if (supports)
-    adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_DEFAULT);
+    adap_style_manager_set_color_scheme (manager, ADAP_COLOR_SCHEME_DEFAULT);
 }
 
 static void
-notify_visible_child_cb (AdwDemoWindow *self)
+notify_visible_child_cb (AdapDemoWindow *self)
 {
   GtkWidget *child = gtk_stack_get_visible_child (self->stack);
   GtkStackPage *page = gtk_stack_get_page (self->stack, child);
 
-  adw_navigation_page_set_title (self->content_page,
+  adap_navigation_page_set_title (self->content_page,
                                  gtk_stack_page_get_title (page));
-  adw_navigation_split_view_set_show_content (self->split_view, TRUE);
+  adap_navigation_split_view_set_show_content (self->split_view, TRUE);
 }
 
 static void
-toast_undo_cb (AdwDemoWindow *self)
+toast_undo_cb (AdapDemoWindow *self)
 {
-  adw_demo_page_toasts_undo (self->toasts_page);
+  adap_demo_page_toasts_undo (self->toasts_page);
 }
 
 static void
-adw_demo_window_class_init (AdwDemoWindowClass *klass)
+adap_demo_window_class_init (AdapDemoWindowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_q, GDK_CONTROL_MASK, "window.close", NULL);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adwaita1/Demo/ui/adw-demo-window.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoWindow, color_scheme_button);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoWindow, split_view);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoWindow, content_page);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoWindow, stack);
-  gtk_widget_class_bind_template_child (widget_class, AdwDemoWindow, toasts_page);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adapta1/Demo/ui/adap-demo-window.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoWindow, color_scheme_button);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoWindow, split_view);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoWindow, content_page);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoWindow, stack);
+  gtk_widget_class_bind_template_child (widget_class, AdapDemoWindow, toasts_page);
   gtk_widget_class_bind_template_callback (widget_class, get_color_scheme_icon_name);
   gtk_widget_class_bind_template_callback (widget_class, color_scheme_button_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, notify_visible_child_cb);
@@ -100,26 +100,26 @@ adw_demo_window_class_init (AdwDemoWindowClass *klass)
 }
 
 static void
-adw_demo_window_init (AdwDemoWindow *self)
+adap_demo_window_init (AdapDemoWindow *self)
 {
-  AdwStyleManager *manager = adw_style_manager_get_default ();
+  AdapStyleManager *manager = adap_style_manager_get_default ();
 
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_ABOUT);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_ANIMATIONS);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_BANNERS);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_AVATAR);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_BUTTONS);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_CAROUSEL);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_CLAMP);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_DIALOGS);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_LISTS);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_NAVIGATION_VIEW);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_SPLIT_VIEWS);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_STYLES);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_TAB_VIEW);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_TOASTS);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_VIEW_SWITCHER);
-  g_type_ensure (ADW_TYPE_DEMO_PAGE_WELCOME);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_ABOUT);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_ANIMATIONS);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_BANNERS);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_AVATAR);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_BUTTONS);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_CAROUSEL);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_CLAMP);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_DIALOGS);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_LISTS);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_NAVIGATION_VIEW);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_SPLIT_VIEWS);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_STYLES);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_TAB_VIEW);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_TOASTS);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_VIEW_SWITCHER);
+  g_type_ensure (ADAP_TYPE_DEMO_PAGE_WELCOME);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -134,8 +134,8 @@ adw_demo_window_init (AdwDemoWindow *self)
   notify_visible_child_cb (self);
 }
 
-AdwDemoWindow *
-adw_demo_window_new (GtkApplication *application)
+AdapDemoWindow *
+adap_demo_window_new (GtkApplication *application)
 {
-  return g_object_new (ADW_TYPE_DEMO_WINDOW, "application", application, NULL);
+  return g_object_new (ADAP_TYPE_DEMO_WINDOW, "application", application, NULL);
 }

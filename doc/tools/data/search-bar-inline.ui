@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
+  <requires lib="libadapta" version="1.0"/>
   <object class="GtkSearchBar" id="widget">
     <property name="width-request">600</property>
     <property name="search-mode-enabled">True</property>
     <property name="child">
-      <object class="AdwClamp">
+      <object class="AdapClamp">
         <property name="hexpand">True</property>
         <property name="maximum-size">400</property>
         <property name="child">

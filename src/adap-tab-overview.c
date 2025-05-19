@@ -9,19 +9,19 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
-#include "adw-tab-overview-private.h"
+#include "adap-tab-overview-private.h"
 
-#include "adw-animation-util.h"
-#include "adw-bin.h"
-#include "adw-header-bar.h"
-#include "adw-marshalers.h"
-#include "adw-style-manager.h"
-#include "adw-tab-grid-private.h"
-#include "adw-tab-thumbnail-private.h"
-#include "adw-tab-view-private.h"
-#include "adw-timed-animation.h"
-#include "adw-widget-utils-private.h"
-#include "adw-window-title.h"
+#include "adap-animation-util.h"
+#include "adap-bin.h"
+#include "adap-header-bar.h"
+#include "adap-marshalers.h"
+#include "adap-style-manager.h"
+#include "adap-tab-grid-private.h"
+#include "adap-tab-thumbnail-private.h"
+#include "adap-tab-view-private.h"
+#include "adap-timed-animation.h"
+#include "adap-widget-utils-private.h"
+#include "adap-window-title.h"
 
 #define SCROLL_ANIMATION_DURATION 200
 #define TRANSITION_DURATION 400
@@ -29,7 +29,7 @@
 #define WINDOW_BORDER_RADIUS 12
 
 /**
- * AdwTabOverview:
+ * AdapTabOverview:
  *
  * A tab overview for [class@TabView].
  *
@@ -38,10 +38,10 @@
  *   <img src="tab-overview.png" alt="tab-overview">
  * </picture>
  *
- * `AdwTabOverview` is a widget that can display tabs from an `AdwTabView` in a
+ * `AdapTabOverview` is a widget that can display tabs from an `AdapTabView` in a
  * grid.
  *
- * `AdwTabOverview` shows a thumbnail for each tab. By default thumbnails are
+ * `AdapTabOverview` shows a thumbnail for each tab. By default thumbnails are
  * static for all pages except the selected one. They can be made always live
  * by setting [property@TabPage:live-thumbnail] to `TRUE`, or refreshed with
  * [method@TabPage.invalidate_thumbnail] or
@@ -55,7 +55,7 @@
  * tabs. Unlike in [class@TabBar], they still have titles, as well as an unpin
  * button.
  *
- * `AdwTabOverview` provides search in open tabs. It searches in tab titles and
+ * `AdapTabOverview` provides search in open tabs. It searches in tab titles and
  * tooltips, as well as [property@TabPage:keyword].
  *
  * If [property@TabOverview:enable-new-tab] is set to `TRUE`, a new tab button
@@ -66,11 +66,11 @@
  * for the overview. Use it to add extra actions, e.g. to open a new window or
  * undo closed tab.
  *
- * `AdwTabOverview` is intended to be used as the direct child of the window,
+ * `AdapTabOverview` is intended to be used as the direct child of the window,
  * with the rest of the window contents set as the [property@TabOverview:child].
  * The child is expected to contain an [class@TabView].
  *
- * `AdwTabOverview` shows window buttons by default. They can be disabled by
+ * `AdapTabOverview` shows window buttons by default. They can be disabled by
  * setting [property@TabOverview:show-start-title-buttons] and/or
  * [property@TabOverview:show-start-title-buttons] and/or
  * [property@TabOverview:show-end-title-buttons] to `FALSE`.
@@ -80,18 +80,18 @@
  *
  * ## Actions
  *
- * `AdwTabOverview` defines the `overview.open` and `overview.close` actions for
+ * `AdapTabOverview` defines the `overview.open` and `overview.close` actions for
  * opening and closing itself. They can be convenient when used together with
  * [class@TabButton].
  *
  * ## CSS nodes
  *
- * `AdwTabOverview` has a single CSS node with name `taboverview`.
+ * `AdapTabOverview` has a single CSS node with name `taboverview`.
  *
  * Since: 1.3
  */
 
-struct _AdwTabOverview
+struct _AdapTabOverview
 {
   GtkWidget parent_instance;
 
@@ -107,21 +107,21 @@ struct _AdwTabOverview
   GtkWidget *search_bar;
   GtkWidget *search_entry;
   GtkWidget *secondary_menu_button;
-  AdwTabView *view;
+  AdapTabView *view;
 
-  AdwTabGrid *grid;
-  AdwTabGrid *pinned_grid;
+  AdapTabGrid *grid;
+  AdapTabGrid *pinned_grid;
 
   gboolean enable_search;
   gboolean enable_new_tab;
   gboolean search_active;
 
   gboolean is_open;
-  AdwAnimation *open_animation;
+  AdapAnimation *open_animation;
   double progress;
   gboolean animating;
 
-  AdwTabThumbnail *transition_thumbnail;
+  AdapTabThumbnail *transition_thumbnail;
   GtkWidget *transition_picture;
   gboolean transition_pinned;
 
@@ -130,10 +130,10 @@ struct _AdwTabOverview
   GtkWidget *last_focus;
 };
 
-static void adw_tab_overview_buildable_init (GtkBuildableIface *iface);
+static void adap_tab_overview_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwTabOverview, adw_tab_overview, GTK_TYPE_WIDGET,
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_tab_overview_buildable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapTabOverview, adap_tab_overview, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_tab_overview_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -171,11 +171,11 @@ typedef enum {
 
 static guint signals[SIGNAL_LAST_SIGNAL];
 
-#define ADW_TYPE_TAB_OVERVIEW_SCROLLABLE (adw_tab_overview_scrollable_get_type ())
+#define ADAP_TYPE_TAB_OVERVIEW_SCROLLABLE (adap_tab_overview_scrollable_get_type ())
 
-G_DECLARE_FINAL_TYPE (AdwTabOverviewScrollable, adw_tab_overview_scrollable, ADW, TAB_OVERVIEW_SCROLLABLE, GtkWidget)
+G_DECLARE_FINAL_TYPE (AdapTabOverviewScrollable, adap_tab_overview_scrollable, ADAP, TAB_OVERVIEW_SCROLLABLE, GtkWidget)
 
-struct _AdwTabOverviewScrollable
+struct _AdapTabOverviewScrollable
 {
   GtkWidget parent_instance;
 
@@ -190,8 +190,8 @@ struct _AdwTabOverviewScrollable
   GtkScrollablePolicy hscroll_policy;
   GtkScrollablePolicy vscroll_policy;
 
-  AdwAnimation *scroll_animation;
-  AdwTabGrid *scroll_animation_grid;
+  AdapAnimation *scroll_animation;
+  AdapTabGrid *scroll_animation_grid;
   gboolean scroll_animation_done;
   double scroll_animation_from;
   double scroll_animation_offset;
@@ -204,7 +204,7 @@ struct _AdwTabOverviewScrollable
   gboolean hovering;
 };
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwTabOverviewScrollable, adw_tab_overview_scrollable, GTK_TYPE_WIDGET,
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapTabOverviewScrollable, adap_tab_overview_scrollable, GTK_TYPE_WIDGET,
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 enum {
@@ -224,11 +224,11 @@ enum {
 static GParamSpec *scrollable_props[LAST_SCROLLABLE_PROP];
 
 static void
-vadjustment_value_changed_cb (AdwTabOverviewScrollable *self)
+vadjustment_value_changed_cb (AdapTabOverviewScrollable *self)
 {
   double value = gtk_adjustment_get_value (self->vadjustment);
 
-  adw_tab_grid_adjustment_shifted (ADW_TAB_GRID (self->grid),
+  adap_tab_grid_adjustment_shifted (ADAP_TAB_GRID (self->grid),
                                    value - self->adjustment_prev_value);
 
   self->adjustment_prev_value = value;
@@ -236,7 +236,7 @@ vadjustment_value_changed_cb (AdwTabOverviewScrollable *self)
   if (self->block_scrolling)
     return;
 
-  adw_animation_pause (self->scroll_animation);
+  adap_animation_pause (self->scroll_animation);
 
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
@@ -245,13 +245,13 @@ static void
 vadjustment_weak_notify (gpointer  data,
                          GObject  *object)
 {
-  AdwTabOverviewScrollable *self = data;
+  AdapTabOverviewScrollable *self = data;
 
   self->vadjustment = NULL;
 }
 
 static void
-set_vadjustment (AdwTabOverviewScrollable *self,
+set_vadjustment (AdapTabOverviewScrollable *self,
                  GtkAdjustment            *adjustment)
 {
   if (self->vadjustment) {
@@ -271,20 +271,20 @@ set_vadjustment (AdwTabOverviewScrollable *self,
 }
 
 static inline int
-get_grid_offset (AdwTabOverviewScrollable *self,
-                 AdwTabGrid               *grid)
+get_grid_offset (AdapTabOverviewScrollable *self,
+                 AdapTabGrid               *grid)
 {
-  if (grid == ADW_TAB_GRID (self->grid))
+  if (grid == ADAP_TAB_GRID (self->grid))
     return self->grid_pos;
 
-  if (grid == ADW_TAB_GRID (self->pinned_grid))
+  if (grid == ADAP_TAB_GRID (self->pinned_grid))
     return self->pinned_grid_pos;
 
   g_assert_not_reached ();
 }
 
 static double
-get_scroll_animation_value (AdwTabOverviewScrollable *self,
+get_scroll_animation_value (AdapTabOverviewScrollable *self,
                             double                    final_upper)
 {
   double to, value;
@@ -292,13 +292,13 @@ get_scroll_animation_value (AdwTabOverviewScrollable *self,
 
   g_assert (self->scroll_animation);
 
-  if (adw_animation_get_state (self->scroll_animation) != ADW_ANIMATION_PLAYING &&
-      adw_animation_get_state (self->scroll_animation) != ADW_ANIMATION_FINISHED)
+  if (adap_animation_get_state (self->scroll_animation) != ADAP_ANIMATION_PLAYING &&
+      adap_animation_get_state (self->scroll_animation) != ADAP_ANIMATION_FINISHED)
     return gtk_adjustment_get_value (self->vadjustment);
 
   to = self->scroll_animation_offset;
 
-  scrolled_y = adw_tab_grid_get_scrolled_tab_y (self->scroll_animation_grid);
+  scrolled_y = adap_tab_grid_get_scrolled_tab_y (self->scroll_animation_grid);
   if (!isnan (scrolled_y)) {
     double page_size = gtk_adjustment_get_page_size (self->vadjustment);
 
@@ -306,27 +306,27 @@ get_scroll_animation_value (AdwTabOverviewScrollable *self,
     to = CLAMP (to, 0, final_upper - page_size);
   }
 
-  value = adw_animation_get_value (self->scroll_animation);
+  value = adap_animation_get_value (self->scroll_animation);
 
-  return round (adw_lerp (self->scroll_animation_from, to, value));
+  return round (adap_lerp (self->scroll_animation_from, to, value));
 }
 
 static void
 scroll_animation_cb (double                    value,
-                     AdwTabOverviewScrollable *self)
+                     AdapTabOverviewScrollable *self)
 {
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
 static void
-scroll_animation_done_cb (AdwTabOverviewScrollable *self)
+scroll_animation_done_cb (AdapTabOverviewScrollable *self)
 {
   self->scroll_animation_done = TRUE;
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
 static void
-stop_kinetic_scrolling (AdwTabOverviewScrollable *self)
+stop_kinetic_scrolling (AdapTabOverviewScrollable *self)
 {
   GtkWidget *window = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_SCROLLED_WINDOW);
 
@@ -339,8 +339,8 @@ stop_kinetic_scrolling (AdwTabOverviewScrollable *self)
 }
 
 static void
-animate_scroll (AdwTabOverviewScrollable *self,
-                AdwTabGrid               *grid,
+animate_scroll (AdapTabOverviewScrollable *self,
+                AdapTabGrid               *grid,
                 double                    offset,
                 guint                     duration)
 {
@@ -351,21 +351,21 @@ animate_scroll (AdwTabOverviewScrollable *self,
   self->scroll_animation_from = gtk_adjustment_get_value (self->vadjustment);
   self->scroll_animation_offset = offset;
 
-  adw_timed_animation_set_duration (ADW_TIMED_ANIMATION (self->scroll_animation),
+  adap_timed_animation_set_duration (ADAP_TIMED_ANIMATION (self->scroll_animation),
                                     duration);
-  adw_animation_play (self->scroll_animation);
+  adap_animation_play (self->scroll_animation);
 }
 
 static void
-scroll_relative_cb (AdwTabOverviewScrollable *self,
+scroll_relative_cb (AdapTabOverviewScrollable *self,
                     double                    delta,
                     guint                     duration,
-                    AdwTabGrid               *grid)
+                    AdapTabGrid               *grid)
 {
   double current_value = gtk_adjustment_get_value (self->vadjustment);
 
-  if (adw_animation_get_state (self->scroll_animation) == ADW_ANIMATION_PLAYING) {
-    double tab_y = adw_tab_grid_get_scrolled_tab_y (self->scroll_animation_grid);
+  if (adap_animation_get_state (self->scroll_animation) == ADAP_ANIMATION_PLAYING) {
+    double tab_y = adap_tab_grid_get_scrolled_tab_y (self->scroll_animation_grid);
 
     current_value = self->scroll_animation_offset;
 
@@ -377,18 +377,18 @@ scroll_relative_cb (AdwTabOverviewScrollable *self,
 }
 
 static void
-scroll_to_tab_cb (AdwTabOverviewScrollable *self,
+scroll_to_tab_cb (AdapTabOverviewScrollable *self,
                   double                    offset,
                   guint                     duration,
-                  AdwTabGrid               *grid)
+                  AdapTabGrid               *grid)
 {
   animate_scroll (self, grid, offset, duration);
 }
 
 static void
-set_grid (AdwTabOverviewScrollable  *self,
+set_grid (AdapTabOverviewScrollable  *self,
           GtkWidget                **field,
-          AdwTabGrid                *grid)
+          AdapTabGrid                *grid)
 {
   if (*field) {
     g_signal_handlers_disconnect_by_func (*field, scroll_relative_cb, self);
@@ -410,17 +410,17 @@ set_grid (AdwTabOverviewScrollable  *self,
 }
 
 static void
-set_hovering (AdwTabOverviewScrollable *self,
+set_hovering (AdapTabOverviewScrollable *self,
               gboolean                  hovering)
 {
   self->hovering = hovering;
 
-  adw_tab_grid_set_hovering (ADW_TAB_GRID (self->grid), hovering);
-  adw_tab_grid_set_hovering (ADW_TAB_GRID (self->pinned_grid), hovering);
+  adap_tab_grid_set_hovering (ADAP_TAB_GRID (self->grid), hovering);
+  adap_tab_grid_set_hovering (ADAP_TAB_GRID (self->pinned_grid), hovering);
 }
 
 static void
-motion_cb (AdwTabOverviewScrollable *self,
+motion_cb (AdapTabOverviewScrollable *self,
            double                    x,
            double                    y,
            GtkEventController       *controller)
@@ -438,24 +438,24 @@ motion_cb (AdwTabOverviewScrollable *self,
 }
 
 static void
-leave_cb (AdwTabOverviewScrollable *self,
+leave_cb (AdapTabOverviewScrollable *self,
           GtkEventController       *controller)
 {
   set_hovering (self, FALSE);
 }
 
 static void
-adw_tab_overview_scrollable_unmap (GtkWidget *widget)
+adap_tab_overview_scrollable_unmap (GtkWidget *widget)
 {
-  AdwTabOverviewScrollable *self = ADW_TAB_OVERVIEW_SCROLLABLE (widget);
+  AdapTabOverviewScrollable *self = ADAP_TAB_OVERVIEW_SCROLLABLE (widget);
 
   set_hovering (self, FALSE);
 
-  GTK_WIDGET_CLASS (adw_tab_overview_scrollable_parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (adap_tab_overview_scrollable_parent_class)->unmap (widget);
 }
 
 static void
-adw_tab_overview_scrollable_measure (GtkWidget      *widget,
+adap_tab_overview_scrollable_measure (GtkWidget      *widget,
                                      GtkOrientation  orientation,
                                      int             for_size,
                                      int            *minimum,
@@ -490,12 +490,12 @@ adw_tab_overview_scrollable_measure (GtkWidget      *widget,
 }
 
 static void
-adw_tab_overview_scrollable_size_allocate (GtkWidget *widget,
+adap_tab_overview_scrollable_size_allocate (GtkWidget *widget,
                                            int        width,
                                            int        height,
                                            int        baseline)
 {
-  AdwTabOverviewScrollable *self = ADW_TAB_OVERVIEW_SCROLLABLE (widget);
+  AdapTabOverviewScrollable *self = ADAP_TAB_OVERVIEW_SCROLLABLE (widget);
   double value;
   int grid_height, pinned_height, new_button_height;
   int final_grid_height, final_pinned_height;
@@ -505,8 +505,8 @@ adw_tab_overview_scrollable_size_allocate (GtkWidget *widget,
   gtk_widget_measure (self->pinned_grid, GTK_ORIENTATION_VERTICAL, width,
                       &pinned_height, NULL, NULL, NULL);
 
-  final_grid_height = adw_tab_grid_measure_height_final (ADW_TAB_GRID (self->grid), width);
-  final_pinned_height = adw_tab_grid_measure_height_final (ADW_TAB_GRID (self->pinned_grid), width);
+  final_grid_height = adap_tab_grid_measure_height_final (ADAP_TAB_GRID (self->grid), width);
+  final_pinned_height = adap_tab_grid_measure_height_final (ADAP_TAB_GRID (self->pinned_grid), width);
 
   if (gtk_widget_should_layout (self->new_button))
     gtk_widget_measure (self->new_button, GTK_ORIENTATION_VERTICAL, width,
@@ -537,13 +537,13 @@ adw_tab_overview_scrollable_size_allocate (GtkWidget *widget,
   /* The value may have changed during gtk_adjustment_configure() */
   value = floor (gtk_adjustment_get_value (self->vadjustment));
 
-  adw_tab_grid_set_visible_range (ADW_TAB_GRID (self->pinned_grid),
+  adap_tab_grid_set_visible_range (ADAP_TAB_GRID (self->pinned_grid),
                                   CLAMP (value - self->pinned_grid_pos, 0, pinned_height),
                                   CLAMP (value - self->pinned_grid_pos + height - new_button_height, 0, pinned_height),
                                   height - new_button_height,
                                   0,
                                   CLAMP (self->pinned_grid_pos + pinned_height - height + new_button_height - value, 0, new_button_height));
-  adw_tab_grid_set_visible_range (ADW_TAB_GRID (self->grid),
+  adap_tab_grid_set_visible_range (ADAP_TAB_GRID (self->grid),
                                   CLAMP (value - self->grid_pos, 0, grid_height),
                                   CLAMP (value - self->grid_pos + height - new_button_height, 0, grid_height),
                                   height - new_button_height,
@@ -551,9 +551,9 @@ adw_tab_overview_scrollable_size_allocate (GtkWidget *widget,
                                   CLAMP (self->grid_pos + grid_height - height + new_button_height - value, 0, new_button_height));
 
   if (self->scroll_animation_done) {
-    g_clear_pointer (&self->scroll_animation_grid, adw_tab_grid_reset_scrolled_tab);
+    g_clear_pointer (&self->scroll_animation_grid, adap_tab_grid_reset_scrolled_tab);
     self->scroll_animation_done = FALSE;
-    adw_animation_reset (self->scroll_animation);
+    adap_animation_reset (self->scroll_animation);
   }
 
   gtk_widget_allocate (self->pinned_grid, width, pinned_height, baseline,
@@ -563,9 +563,9 @@ adw_tab_overview_scrollable_size_allocate (GtkWidget *widget,
 }
 
 static void
-adw_tab_overview_scrollable_dispose (GObject *object)
+adap_tab_overview_scrollable_dispose (GObject *object)
 {
-  AdwTabOverviewScrollable *self = ADW_TAB_OVERVIEW_SCROLLABLE (object);
+  AdapTabOverviewScrollable *self = ADAP_TAB_OVERVIEW_SCROLLABLE (object);
 
   g_clear_object (&self->scroll_animation);
 
@@ -577,16 +577,16 @@ adw_tab_overview_scrollable_dispose (GObject *object)
   self->overview = NULL;
   self->new_button = NULL;
 
-  G_OBJECT_CLASS (adw_tab_overview_scrollable_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_tab_overview_scrollable_parent_class)->dispose (object);
 }
 
 static void
-adw_tab_overview_scrollable_get_property (GObject    *object,
+adap_tab_overview_scrollable_get_property (GObject    *object,
                                           guint       prop_id,
                                           GValue     *value,
                                           GParamSpec *pspec)
 {
-  AdwTabOverviewScrollable *self = ADW_TAB_OVERVIEW_SCROLLABLE (object);
+  AdapTabOverviewScrollable *self = ADAP_TAB_OVERVIEW_SCROLLABLE (object);
 
   switch (prop_id) {
   case SCROLLABLE_PROP_GRID:
@@ -619,12 +619,12 @@ adw_tab_overview_scrollable_get_property (GObject    *object,
 }
 
 static void
-adw_tab_overview_scrollable_set_property (GObject      *object,
+adap_tab_overview_scrollable_set_property (GObject      *object,
                                           guint         prop_id,
                                           const GValue *value,
                                           GParamSpec   *pspec)
 {
-  AdwTabOverviewScrollable *self = ADW_TAB_OVERVIEW_SCROLLABLE (object);
+  AdapTabOverviewScrollable *self = ADAP_TAB_OVERVIEW_SCROLLABLE (object);
 
   switch (prop_id) {
   case SCROLLABLE_PROP_GRID:
@@ -657,27 +657,27 @@ adw_tab_overview_scrollable_set_property (GObject      *object,
 }
 
 static void
-adw_tab_overview_scrollable_class_init (AdwTabOverviewScrollableClass *klass)
+adap_tab_overview_scrollable_class_init (AdapTabOverviewScrollableClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_tab_overview_scrollable_dispose;
-  object_class->get_property = adw_tab_overview_scrollable_get_property;
-  object_class->set_property = adw_tab_overview_scrollable_set_property;
+  object_class->dispose = adap_tab_overview_scrollable_dispose;
+  object_class->get_property = adap_tab_overview_scrollable_get_property;
+  object_class->set_property = adap_tab_overview_scrollable_set_property;
 
-  widget_class->unmap = adw_tab_overview_scrollable_unmap;
-  widget_class->measure = adw_tab_overview_scrollable_measure;
-  widget_class->size_allocate = adw_tab_overview_scrollable_size_allocate;
+  widget_class->unmap = adap_tab_overview_scrollable_unmap;
+  widget_class->measure = adap_tab_overview_scrollable_measure;
+  widget_class->size_allocate = adap_tab_overview_scrollable_size_allocate;
 
   scrollable_props[SCROLLABLE_PROP_GRID] =
     g_param_spec_object ("grid", NULL, NULL,
-                         ADW_TYPE_TAB_GRID,
+                         ADAP_TYPE_TAB_GRID,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   scrollable_props[SCROLLABLE_PROP_PINNED_GRID] =
     g_param_spec_object ("pinned-grid", NULL, NULL,
-                         ADW_TYPE_TAB_GRID,
+                         ADAP_TYPE_TAB_GRID,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   scrollable_props[SCROLLABLE_PROP_OVERVIEW] =
@@ -707,10 +707,10 @@ adw_tab_overview_scrollable_class_init (AdwTabOverviewScrollableClass *klass)
 }
 
 static void
-adw_tab_overview_scrollable_init (AdwTabOverviewScrollable *self)
+adap_tab_overview_scrollable_init (AdapTabOverviewScrollable *self)
 {
   GtkEventController *controller;
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 
@@ -723,18 +723,18 @@ adw_tab_overview_scrollable_init (AdwTabOverviewScrollable *self)
    * finishes, don't remove it right away, it will be done in size-allocate as
    * well after one last update, so that we don't miss the last frame.
    */
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               scroll_animation_cb,
                                               self, NULL);
   self->scroll_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 0, 1,
+    adap_timed_animation_new (GTK_WIDGET (self), 0, 1,
                              SCROLL_ANIMATION_DURATION, target);
   g_signal_connect_swapped (self->scroll_animation, "done",
                             G_CALLBACK (scroll_animation_done_cb), self);
 }
 
 static void
-set_extra_drag_preferred_action (AdwTabOverview *self,
+set_extra_drag_preferred_action (AdapTabOverview *self,
                                  GdkDragAction   preferred_action)
 {
   self->extra_drag_preferred_action = preferred_action;
@@ -744,8 +744,8 @@ set_extra_drag_preferred_action (AdwTabOverview *self,
 
 
 static gboolean
-extra_drag_drop_cb (AdwTabOverview *self,
-                    AdwTabPage     *page,
+extra_drag_drop_cb (AdapTabOverview *self,
+                    AdapTabPage     *page,
                     GValue         *value,
                     GdkDragAction   preferred_action)
 {
@@ -759,8 +759,8 @@ extra_drag_drop_cb (AdwTabOverview *self,
 }
 
 static GdkDragAction
-extra_drag_value_cb (AdwTabOverview *self,
-                     AdwTabPage     *page,
+extra_drag_value_cb (AdapTabOverview *self,
+                     AdapTabPage     *page,
                      GValue         *value)
 {
   GdkDragAction preferred_action;
@@ -771,28 +771,28 @@ extra_drag_value_cb (AdwTabOverview *self,
 }
 
 static GdkDragAction
-extra_drag_value_notify (AdwTabOverview *self,
+extra_drag_value_notify (AdapTabOverview *self,
                          GValue         *value)
 {
   return GDK_ACTION_ALL;
 }
 
 static void
-empty_changed_cb (AdwTabOverview *self)
+empty_changed_cb (AdapTabOverview *self)
 {
   gboolean empty =
-    adw_tab_grid_get_empty (self->grid) &&
-    adw_tab_grid_get_empty (self->pinned_grid);
+    adap_tab_grid_get_empty (self->grid) &&
+    adap_tab_grid_get_empty (self->pinned_grid);
 
   gtk_widget_set_visible (self->empty_state, empty && !self->search_active);
   gtk_widget_set_visible (self->search_empty_state, empty && self->search_active);
 }
 
 static void
-update_actions (AdwTabOverview *self)
+update_actions (AdapTabOverview *self)
 {
   gboolean has_view = self->view != NULL;
-  gboolean has_pages = has_view && adw_tab_view_get_n_pages (self->view) > 0;
+  gboolean has_pages = has_view && adap_tab_view_get_n_pages (self->view) > 0;
 
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "overview.open",
                                  !self->is_open && has_view);
@@ -801,17 +801,17 @@ update_actions (AdwTabOverview *self)
 }
 
 static void
-update_header_bar (AdwTabOverview *self)
+update_header_bar (AdapTabOverview *self)
 {
   gtk_widget_set_visible (self->header_bar,
                           self->enable_search ||
-                          adw_tab_overview_get_secondary_menu (self) ||
-                          adw_tab_overview_get_show_start_title_buttons (self) ||
-                          adw_tab_overview_get_show_end_title_buttons (self));
+                          adap_tab_overview_get_secondary_menu (self) ||
+                          adap_tab_overview_get_show_start_title_buttons (self) ||
+                          adap_tab_overview_get_show_end_title_buttons (self));
 }
 
 static void
-update_new_tab_button (AdwTabOverview *self)
+update_new_tab_button (AdapTabOverview *self)
 {
   gtk_widget_set_visible (self->new_tab_button,
                           self->enable_new_tab && !self->search_active);
@@ -819,7 +819,7 @@ update_new_tab_button (AdwTabOverview *self)
 }
 
 static void
-set_search_active (AdwTabOverview *self,
+set_search_active (AdapTabOverview *self,
                    gboolean        search_active)
 {
   if (search_active == self->search_active)
@@ -834,36 +834,36 @@ set_search_active (AdwTabOverview *self,
 }
 
 static void
-search_changed_cb (AdwTabOverview *self)
+search_changed_cb (AdapTabOverview *self)
 {
   const char *text = gtk_editable_get_text (GTK_EDITABLE (self->search_entry));
 
-  adw_tab_grid_set_search_terms (self->grid, text);
-  adw_tab_grid_set_search_terms (self->pinned_grid, text);
+  adap_tab_grid_set_search_terms (self->grid, text);
+  adap_tab_grid_set_search_terms (self->pinned_grid, text);
 
   set_search_active (self, text && *text);
 }
 
 static void
-stop_search_cb (AdwTabOverview *self)
+stop_search_cb (AdapTabOverview *self)
 {
   gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
 
-  adw_tab_grid_set_search_terms (self->grid, "");
-  adw_tab_grid_set_search_terms (self->pinned_grid, "");
+  adap_tab_grid_set_search_terms (self->grid, "");
+  adap_tab_grid_set_search_terms (self->pinned_grid, "");
 
   set_search_active (self, FALSE);
 }
 
-static AdwTabPage *
-create_tab (AdwTabOverview *self)
+static AdapTabPage *
+create_tab (AdapTabOverview *self)
 {
-  AdwTabPage *new_page = NULL;
+  AdapTabPage *new_page = NULL;
 
   g_signal_emit (self, signals[SIGNAL_CREATE_TAB], 0, &new_page);
 
   if (!new_page) {
-    g_critical ("AdwTabOverview::create-tab handler must not return NULL");
+    g_critical ("AdapTabOverview::create-tab handler must not return NULL");
 
     return NULL;
   }
@@ -872,74 +872,74 @@ create_tab (AdwTabOverview *self)
 }
 
 static void
-new_tab_clicked_cb (AdwTabOverview *self)
+new_tab_clicked_cb (AdapTabOverview *self)
 {
-  AdwTabPage *new_page = create_tab (self);
+  AdapTabPage *new_page = create_tab (self);
   GtkWidget *child;
 
   if (!new_page)
     return;
 
-  child = adw_tab_page_get_child (new_page);
+  child = adap_tab_page_get_child (new_page);
 
-  adw_tab_view_set_selected_page (self->view, new_page);
-  adw_tab_overview_set_open (self, FALSE);
+  adap_tab_view_set_selected_page (self->view, new_page);
+  adap_tab_overview_set_open (self, FALSE);
 
   gtk_widget_grab_focus (child);
 }
 
 static void
-view_destroy_cb (AdwTabOverview *self)
+view_destroy_cb (AdapTabOverview *self)
 {
-  adw_tab_overview_set_view (self, NULL);
+  adap_tab_overview_set_view (self, NULL);
 }
 
 static void
-notify_selected_page_cb (AdwTabOverview *self)
+notify_selected_page_cb (AdapTabOverview *self)
 {
-  AdwTabPage *page = adw_tab_view_get_selected_page (self->view);
+  AdapTabPage *page = adap_tab_view_get_selected_page (self->view);
 
   if (!page)
     return;
 
-  if (adw_tab_page_get_pinned (page)) {
-    adw_tab_grid_select_page (self->pinned_grid, page);
-    adw_tab_grid_select_page (self->grid, page);
+  if (adap_tab_page_get_pinned (page)) {
+    adap_tab_grid_select_page (self->pinned_grid, page);
+    adap_tab_grid_select_page (self->grid, page);
   } else {
-    adw_tab_grid_select_page (self->grid, page);
-    adw_tab_grid_select_page (self->pinned_grid, page);
+    adap_tab_grid_select_page (self->grid, page);
+    adap_tab_grid_select_page (self->pinned_grid, page);
   }
 }
 
 static void
-notify_n_pages_cb (AdwTabOverview *self)
+notify_n_pages_cb (AdapTabOverview *self)
 {
   guint n_pages;
   char *title_str;
 
   if (!self->view) {
-    adw_window_title_set_title (ADW_WINDOW_TITLE (self->title), "");
+    adap_window_title_set_title (ADAP_WINDOW_TITLE (self->title), "");
     return;
   }
 
-  n_pages = adw_tab_view_get_n_pages (self->view);
+  n_pages = adap_tab_view_get_n_pages (self->view);
 
   /* Translators: Tab overview title, %u is the number of open tabs */
   title_str = g_strdup_printf (dngettext (GETTEXT_PACKAGE, "%u Tab", "%u Tabs", n_pages), n_pages);
 
-  adw_window_title_set_title (ADW_WINDOW_TITLE (self->title), title_str);
+  adap_window_title_set_title (ADAP_WINDOW_TITLE (self->title), title_str);
 
   g_free (title_str);
 }
 
 static void
-notify_pinned_cb (AdwTabPage     *page,
+notify_pinned_cb (AdapTabPage     *page,
                   GParamSpec     *pspec,
-                  AdwTabOverview *self)
+                  AdapTabOverview *self)
 {
-  AdwTabGrid *from, *to;
+  AdapTabGrid *from, *to;
 
-  if (adw_tab_page_get_pinned (page)) {
+  if (adap_tab_page_get_pinned (page)) {
     from = self->grid;
     to = self->pinned_grid;
   } else {
@@ -947,17 +947,17 @@ notify_pinned_cb (AdwTabPage     *page,
     to = self->grid;
   }
 
-  adw_tab_grid_detach_page (from, page);
-  adw_tab_grid_attach_page (to, page, adw_tab_view_get_n_pinned_pages (self->view));
+  adap_tab_grid_detach_page (from, page);
+  adap_tab_grid_attach_page (to, page, adap_tab_view_get_n_pinned_pages (self->view));
 
-  adw_tab_grid_scroll_to_page (to, page, TRUE);
+  adap_tab_grid_scroll_to_page (to, page, TRUE);
 
-  adw_tab_grid_focus_page (to, page);
+  adap_tab_grid_focus_page (to, page);
 }
 
 static void
-page_attached_cb (AdwTabOverview *self,
-                  AdwTabPage     *page,
+page_attached_cb (AdapTabOverview *self,
+                  AdapTabPage     *page,
                   int             position)
 {
   g_signal_connect_object (page, "notify::pinned",
@@ -967,8 +967,8 @@ page_attached_cb (AdwTabOverview *self,
 }
 
 static void
-page_detached_cb (AdwTabOverview *self,
-                  AdwTabPage     *page,
+page_detached_cb (AdapTabOverview *self,
+                  AdapTabPage     *page,
                   int             position)
 {
   g_signal_handlers_disconnect_by_func (page, notify_pinned_cb, self);
@@ -977,14 +977,14 @@ page_detached_cb (AdwTabOverview *self,
 
 static void
 open_animation_value_cb (double          value,
-                         AdwTabOverview *self)
+                         AdapTabOverview *self)
 {
   self->progress = value;
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
 static void
-set_overview_visible (AdwTabOverview     *self,
+set_overview_visible (AdapTabOverview     *self,
                       gboolean            visible,
                       AnimationDirection  direction)
 {
@@ -1003,19 +1003,19 @@ set_overview_visible (AdwTabOverview     *self,
 }
 
 static void
-open_animation_done_cb (AdwTabOverview *self)
+open_animation_done_cb (AdapTabOverview *self)
 {
   if (self->transition_picture) {
     g_clear_object (&self->transition_picture);
 
-    adw_tab_thumbnail_fade_in (self->transition_thumbnail);
+    adap_tab_thumbnail_fade_in (self->transition_thumbnail);
     self->transition_thumbnail = NULL;
   }
 
   set_overview_visible (self, self->is_open, ANIMATION_NONE);
 
   if (!self->is_open) {
-    adw_tab_view_close_overview (self->view);
+    adap_tab_view_close_overview (self->view);
 
     gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (self->search_bar), FALSE);
 
@@ -1041,7 +1041,7 @@ inverse_lerp (double a,
 }
 
 static void
-calculate_bounds (AdwTabOverview  *self,
+calculate_bounds (AdapTabOverview  *self,
                   graphene_rect_t *bounds,
                   graphene_rect_t *transition_bounds,
                   graphene_rect_t *clip_bounds,
@@ -1050,10 +1050,10 @@ calculate_bounds (AdwTabOverview  *self,
   GtkWidget *widget = GTK_WIDGET (self);
   graphene_rect_t view_bounds, thumbnail_bounds;
   double view_ratio, thumb_ratio;
-  AdwTabPage *page = adw_tab_view_get_selected_page (self->view);
+  AdapTabPage *page = adap_tab_view_get_selected_page (self->view);
 
   if (!gtk_widget_compute_bounds (GTK_WIDGET (self->view), widget, &view_bounds))
-    g_error ("AdwTabView %p must be inside its AdwTabOverview %p", self->view, self);
+    g_error ("AdapTabView %p must be inside its AdapTabOverview %p", self->view, self);
 
   if (!gtk_widget_compute_bounds (self->transition_picture, widget, &thumbnail_bounds))
     graphene_rect_init (&thumbnail_bounds, 0, 0, 0, 0);
@@ -1067,7 +1067,7 @@ calculate_bounds (AdwTabOverview  *self,
 
   if (view_ratio > thumb_ratio) {
     double new_width = view_bounds.size.height * thumb_ratio;
-    double xalign = adw_tab_page_get_thumbnail_xalign (page);
+    double xalign = adap_tab_page_get_thumbnail_xalign (page);
 
     if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
       xalign = 1 - xalign;
@@ -1076,7 +1076,7 @@ calculate_bounds (AdwTabOverview  *self,
     view_bounds.size.width = new_width;
   } else if (view_ratio < thumb_ratio) {
     double new_height = view_bounds.size.width / thumb_ratio;
-    double yalign = adw_tab_page_get_thumbnail_yalign (page);
+    double yalign = adap_tab_page_get_thumbnail_yalign (page);
 
     view_bounds.origin.y += (float) (view_bounds.size.height - new_height) * yalign;
     view_bounds.size.height = new_height;
@@ -1086,25 +1086,25 @@ calculate_bounds (AdwTabOverview  *self,
                              self->progress, clip_bounds);
 
   graphene_size_init (clip_scale,
-                      adw_lerp (1, thumbnail_bounds.size.width / view_bounds.size.width, self->progress),
-                      adw_lerp (1, thumbnail_bounds.size.height / view_bounds.size.height, self->progress));
+                      adap_lerp (1, thumbnail_bounds.size.width / view_bounds.size.width, self->progress),
+                      adap_lerp (1, thumbnail_bounds.size.height / view_bounds.size.height, self->progress));
 
   graphene_size_init (&transition_bounds->size,
                       clip_bounds->size.width * clip_scale->width,
                       clip_bounds->size.height * clip_scale->height);
   graphene_point_init (&transition_bounds->origin,
-                       adw_lerp (0, thumbnail_bounds.origin.x,
+                       adap_lerp (0, thumbnail_bounds.origin.x,
                                  inverse_lerp (bounds->size.width,
                                                thumbnail_bounds.size.width,
                                                transition_bounds->size.width)),
-                       adw_lerp (0, thumbnail_bounds.origin.y,
+                       adap_lerp (0, thumbnail_bounds.origin.y,
                                  inverse_lerp (bounds->size.height,
                                                thumbnail_bounds.size.height,
                                                transition_bounds->size.height)));
 }
 
 static void
-should_round_corners (AdwTabOverview *self,
+should_round_corners (AdapTabOverview *self,
                       gboolean       *round_top_left,
                       gboolean       *round_top_right,
                       gboolean       *round_bottom_left,
@@ -1173,10 +1173,10 @@ should_round_corners (AdwTabOverview *self,
 }
 
 static void
-adw_tab_overview_snapshot (GtkWidget   *widget,
+adap_tab_overview_snapshot (GtkWidget   *widget,
                            GtkSnapshot *snapshot)
 {
-  AdwTabOverview *self = ADW_TAB_OVERVIEW (widget);
+  AdapTabOverview *self = ADAP_TAB_OVERVIEW (widget);
   graphene_rect_t bounds, transition_bounds, clip_bounds;
   graphene_size_t clip_scale, corner_size, window_corner_size;
   GskRoundedRect transition_rect;
@@ -1184,7 +1184,7 @@ adw_tab_overview_snapshot (GtkWidget   *widget,
   gboolean round_bottom_left, round_bottom_right;
   GdkRGBA rgba;
   GdkDisplay *display;
-  AdwStyleManager *style_manager;
+  AdapStyleManager *style_manager;
   gboolean hc;
 
   if (!self->animating) {
@@ -1212,13 +1212,13 @@ adw_tab_overview_snapshot (GtkWidget   *widget,
                         &round_bottom_left, &round_bottom_right);
 
   graphene_size_init (&corner_size,
-                      adw_lerp (0, THUMBNAIL_BORDER_RADIUS, self->progress),
-                      adw_lerp (0, THUMBNAIL_BORDER_RADIUS, self->progress));
+                      adap_lerp (0, THUMBNAIL_BORDER_RADIUS, self->progress),
+                      adap_lerp (0, THUMBNAIL_BORDER_RADIUS, self->progress));
 
   graphene_size_init (&window_corner_size,
-                      adw_lerp (WINDOW_BORDER_RADIUS,
+                      adap_lerp (WINDOW_BORDER_RADIUS,
                                 THUMBNAIL_BORDER_RADIUS, self->progress),
-                      adw_lerp (WINDOW_BORDER_RADIUS,
+                      adap_lerp (WINDOW_BORDER_RADIUS,
                                 THUMBNAIL_BORDER_RADIUS, self->progress));
 
   gsk_rounded_rect_init (&transition_rect, &transition_bounds,
@@ -1228,14 +1228,14 @@ adw_tab_overview_snapshot (GtkWidget   *widget,
                          round_bottom_left  ? &window_corner_size : &corner_size);
 
   display = gtk_widget_get_display (widget);
-  style_manager = adw_style_manager_get_for_display (display);
-  hc = adw_style_manager_get_high_contrast (style_manager);
+  style_manager = adap_style_manager_get_for_display (display);
+  hc = adap_style_manager_get_high_contrast (style_manager);
 
   /* Draw overview */
   gtk_widget_snapshot_child (widget, self->overview, snapshot);
 
   /* Draw dim layer */
-  if (!adw_widget_lookup_color (widget, "shade_color", &rgba))
+  if (!adap_widget_lookup_color (widget, "shade_color", &rgba))
     rgba.alpha = 0;
 
   rgba.alpha *= 1 - self->progress;
@@ -1248,7 +1248,7 @@ adw_tab_overview_snapshot (GtkWidget   *widget,
   gtk_snapshot_push_rounded_clip (snapshot, &transition_rect);
 
   if (self->transition_pinned)
-    gtk_snapshot_push_cross_fade (snapshot, adw_easing_ease (ADW_EASE_IN_EXPO, self->progress));
+    gtk_snapshot_push_cross_fade (snapshot, adap_easing_ease (ADAP_EASE_IN_EXPO, self->progress));
 
   gtk_snapshot_translate (snapshot, &transition_bounds.origin);
   gtk_snapshot_scale (snapshot, clip_scale.width, clip_scale.height);
@@ -1257,7 +1257,7 @@ adw_tab_overview_snapshot (GtkWidget   *widget,
   gtk_widget_snapshot_child (widget, self->child_bin, snapshot);
 
   if (self->transition_pinned) {
-    if (!adw_widget_lookup_color (self->transition_picture,
+    if (!adap_widget_lookup_color (self->transition_picture,
                                   "thumbnail_bg_color", &rgba))
       rgba.red = rgba.green = rgba.blue = rgba.alpha = 1;
 
@@ -1273,11 +1273,11 @@ adw_tab_overview_snapshot (GtkWidget   *widget,
     rgba.red = rgba.green = rgba.blue = 0;
     rgba.alpha = 0.5;
   } else {
-    if (!adw_widget_lookup_color (widget, "shade_color", &rgba))
+    if (!adap_widget_lookup_color (widget, "shade_color", &rgba))
       rgba.alpha = 0;
   }
 
-  rgba.alpha *= adw_easing_ease (ADW_EASE_OUT_EXPO, self->progress);
+  rgba.alpha *= adap_easing_ease (ADAP_EASE_OUT_EXPO, self->progress);
 
   gtk_snapshot_append_outset_shadow (snapshot, &transition_rect,
                                      &rgba, 0, 0, 1, 0);
@@ -1288,7 +1288,7 @@ adw_tab_overview_snapshot (GtkWidget   *widget,
     rgba.red = rgba.green = rgba.blue = 1;
     rgba.alpha = hc ? 0.3 : 0.07;
 
-    rgba.alpha *= adw_easing_ease (ADW_EASE_OUT_EXPO, self->progress);
+    rgba.alpha *= adap_easing_ease (ADAP_EASE_OUT_EXPO, self->progress);
 
     gtk_snapshot_append_inset_shadow (snapshot, &transition_rect,
                                       &rgba, 0, 0, 1, 0);
@@ -1296,41 +1296,41 @@ adw_tab_overview_snapshot (GtkWidget   *widget,
 }
 
 static gboolean
-adw_tab_overview_focus (GtkWidget        *widget,
+adap_tab_overview_focus (GtkWidget        *widget,
                         GtkDirectionType  direction)
 {
-  AdwTabOverview *self = ADW_TAB_OVERVIEW (widget);
+  AdapTabOverview *self = ADAP_TAB_OVERVIEW (widget);
   GtkWidget *focus;
 
   if (!self->is_open)
-    return GTK_WIDGET_CLASS (adw_tab_overview_parent_class)->focus (widget, direction);
+    return GTK_WIDGET_CLASS (adap_tab_overview_parent_class)->focus (widget, direction);
 
   focus = gtk_root_get_focus (gtk_widget_get_root (widget));
   if (!focus)
-    return GTK_WIDGET_CLASS (adw_tab_overview_parent_class)->focus (widget, direction);
+    return GTK_WIDGET_CLASS (adap_tab_overview_parent_class)->focus (widget, direction);
 
   if (direction != GTK_DIR_UP && direction != GTK_DIR_DOWN)
-    return GTK_WIDGET_CLASS (adw_tab_overview_parent_class)->focus (widget, direction);
+    return GTK_WIDGET_CLASS (adap_tab_overview_parent_class)->focus (widget, direction);
 
   if (direction == GTK_DIR_DOWN) {
     if ((focus == self->search_button ||
          gtk_widget_is_ancestor (focus, self->search_button)) &&
         !gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (self->search_bar))) {
-      return adw_tab_grid_focus_first_row (self->pinned_grid, 0) ||
-             adw_tab_grid_focus_first_row (self->grid, 0);
+      return adap_tab_grid_focus_first_row (self->pinned_grid, 0) ||
+             adap_tab_grid_focus_first_row (self->grid, 0);
     }
 
     if ((focus == self->secondary_menu_button ||
          gtk_widget_is_ancestor (focus, self->secondary_menu_button)) &&
         !gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (self->search_bar))) {
-      return adw_tab_grid_focus_first_row (self->pinned_grid, -1) ||
-             adw_tab_grid_focus_first_row (self->grid, -1);
+      return adap_tab_grid_focus_first_row (self->pinned_grid, -1) ||
+             adap_tab_grid_focus_first_row (self->grid, -1);
     }
 
     if ((focus == self->search_bar ||
          gtk_widget_is_ancestor (focus, self->search_bar))) {
-      return adw_tab_grid_focus_first_row (self->pinned_grid, 0) ||
-             adw_tab_grid_focus_first_row (self->grid, 0);
+      return adap_tab_grid_focus_first_row (self->pinned_grid, 0) ||
+             adap_tab_grid_focus_first_row (self->grid, 0);
     }
 
     if ((focus == self->new_tab_button ||
@@ -1343,7 +1343,7 @@ adw_tab_overview_focus (GtkWidget        *widget,
     }
 
     if (gtk_widget_is_ancestor (focus, GTK_WIDGET (self->pinned_grid)) &&
-        adw_tab_grid_get_empty (self->grid)) {
+        adap_tab_grid_get_empty (self->grid)) {
       return gtk_widget_child_focus (GTK_WIDGET (self->pinned_grid), direction) ||
              gtk_widget_grab_focus (self->new_tab_button);
     }
@@ -1352,17 +1352,17 @@ adw_tab_overview_focus (GtkWidget        *widget,
   if (direction == GTK_DIR_UP &&
       (focus == self->new_tab_button ||
        gtk_widget_is_ancestor (focus, self->new_tab_button))) {
-    return adw_tab_grid_focus_last_row (self->grid, -1) ||
-           adw_tab_grid_focus_last_row (self->pinned_grid, -1);
+    return adap_tab_grid_focus_last_row (self->grid, -1) ||
+           adap_tab_grid_focus_last_row (self->pinned_grid, -1);
   }
 
-  return adw_widget_focus_child (widget, direction);
+  return adap_widget_focus_child (widget, direction);
 }
 
 static void
-adw_tab_overview_dispose (GObject *object)
+adap_tab_overview_dispose (GObject *object)
 {
-  AdwTabOverview *self = ADW_TAB_OVERVIEW (object);
+  AdapTabOverview *self = ADAP_TAB_OVERVIEW (object);
 
   if (self->last_focus) {
     g_object_remove_weak_pointer (G_OBJECT (self->last_focus),
@@ -1370,59 +1370,59 @@ adw_tab_overview_dispose (GObject *object)
     self->last_focus = NULL;
   }
 
-  adw_tab_overview_set_view (self, NULL);
+  adap_tab_overview_set_view (self, NULL);
 
   g_clear_object (&self->open_animation);
 
-  gtk_widget_dispose_template (GTK_WIDGET (self), ADW_TYPE_TAB_OVERVIEW);
+  gtk_widget_dispose_template (GTK_WIDGET (self), ADAP_TYPE_TAB_OVERVIEW);
 
-  G_OBJECT_CLASS (adw_tab_overview_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_tab_overview_parent_class)->dispose (object);
 }
 
 static void
-adw_tab_overview_get_property (GObject    *object,
+adap_tab_overview_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  AdwTabOverview *self = ADW_TAB_OVERVIEW (object);
+  AdapTabOverview *self = ADAP_TAB_OVERVIEW (object);
 
   switch (prop_id) {
   case PROP_VIEW:
-    g_value_set_object (value, adw_tab_overview_get_view (self));
+    g_value_set_object (value, adap_tab_overview_get_view (self));
     break;
   case PROP_CHILD:
-    g_value_set_object (value, adw_tab_overview_get_child (self));
+    g_value_set_object (value, adap_tab_overview_get_child (self));
     break;
   case PROP_OPEN:
-    g_value_set_boolean (value, adw_tab_overview_get_open (self));
+    g_value_set_boolean (value, adap_tab_overview_get_open (self));
     break;
   case PROP_INVERTED:
-    g_value_set_boolean (value, adw_tab_overview_get_inverted (self));
+    g_value_set_boolean (value, adap_tab_overview_get_inverted (self));
     break;
   case PROP_ENABLE_SEARCH:
-    g_value_set_boolean (value, adw_tab_overview_get_enable_search (self));
+    g_value_set_boolean (value, adap_tab_overview_get_enable_search (self));
     break;
   case PROP_SEARCH_ACTIVE:
-    g_value_set_boolean (value, adw_tab_overview_get_search_active (self));
+    g_value_set_boolean (value, adap_tab_overview_get_search_active (self));
     break;
   case PROP_ENABLE_NEW_TAB:
-    g_value_set_boolean (value, adw_tab_overview_get_enable_new_tab (self));
+    g_value_set_boolean (value, adap_tab_overview_get_enable_new_tab (self));
     break;
   case PROP_SECONDARY_MENU:
-    g_value_set_object (value, adw_tab_overview_get_secondary_menu (self));
+    g_value_set_object (value, adap_tab_overview_get_secondary_menu (self));
     break;
   case PROP_SHOW_START_TITLE_BUTTONS:
-    g_value_set_boolean (value, adw_tab_overview_get_show_start_title_buttons (self));
+    g_value_set_boolean (value, adap_tab_overview_get_show_start_title_buttons (self));
     break;
   case PROP_SHOW_END_TITLE_BUTTONS:
-    g_value_set_boolean (value, adw_tab_overview_get_show_end_title_buttons (self));
+    g_value_set_boolean (value, adap_tab_overview_get_show_end_title_buttons (self));
     break;
   case PROP_EXTRA_DRAG_PREFERRED_ACTION:
-    g_value_set_flags (value, adw_tab_overview_get_extra_drag_preferred_action (self));
+    g_value_set_flags (value, adap_tab_overview_get_extra_drag_preferred_action (self));
     break;
   case PROP_EXTRA_DRAG_PRELOAD:
-    g_value_set_boolean (value, adw_tab_overview_get_extra_drag_preload (self));
+    g_value_set_boolean (value, adap_tab_overview_get_extra_drag_preload (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1430,43 +1430,43 @@ adw_tab_overview_get_property (GObject    *object,
 }
 
 static void
-adw_tab_overview_set_property (GObject      *object,
+adap_tab_overview_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
-  AdwTabOverview *self = ADW_TAB_OVERVIEW (object);
+  AdapTabOverview *self = ADAP_TAB_OVERVIEW (object);
 
   switch (prop_id) {
   case PROP_VIEW:
-    adw_tab_overview_set_view (self, g_value_get_object (value));
+    adap_tab_overview_set_view (self, g_value_get_object (value));
     break;
   case PROP_CHILD:
-    adw_tab_overview_set_child (self, g_value_get_object (value));
+    adap_tab_overview_set_child (self, g_value_get_object (value));
     break;
   case PROP_OPEN:
-    adw_tab_overview_set_open (self, g_value_get_boolean (value));
+    adap_tab_overview_set_open (self, g_value_get_boolean (value));
     break;
   case PROP_INVERTED:
-    adw_tab_overview_set_inverted (self, g_value_get_boolean (value));
+    adap_tab_overview_set_inverted (self, g_value_get_boolean (value));
     break;
   case PROP_ENABLE_SEARCH:
-    adw_tab_overview_set_enable_search (self, g_value_get_boolean (value));
+    adap_tab_overview_set_enable_search (self, g_value_get_boolean (value));
     break;
   case PROP_ENABLE_NEW_TAB:
-    adw_tab_overview_set_enable_new_tab (self, g_value_get_boolean (value));
+    adap_tab_overview_set_enable_new_tab (self, g_value_get_boolean (value));
     break;
   case PROP_SECONDARY_MENU:
-    adw_tab_overview_set_secondary_menu (self, g_value_get_object (value));
+    adap_tab_overview_set_secondary_menu (self, g_value_get_object (value));
     break;
   case PROP_SHOW_START_TITLE_BUTTONS:
-    adw_tab_overview_set_show_start_title_buttons (self, g_value_get_boolean (value));
+    adap_tab_overview_set_show_start_title_buttons (self, g_value_get_boolean (value));
     break;
   case PROP_SHOW_END_TITLE_BUTTONS:
-    adw_tab_overview_set_show_end_title_buttons (self, g_value_get_boolean (value));
+    adap_tab_overview_set_show_end_title_buttons (self, g_value_get_boolean (value));
     break;
   case PROP_EXTRA_DRAG_PRELOAD:
-    adw_tab_overview_set_extra_drag_preload (self, g_value_get_boolean (value));
+    adap_tab_overview_set_extra_drag_preload (self, g_value_get_boolean (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1474,19 +1474,19 @@ adw_tab_overview_set_property (GObject      *object,
 }
 
 static void
-overview_open_cb (AdwTabOverview *self)
+overview_open_cb (AdapTabOverview *self)
 {
-  adw_tab_overview_set_open (self, TRUE);
+  adap_tab_overview_set_open (self, TRUE);
 }
 
 static void
-overview_close_cb (AdwTabOverview *self)
+overview_close_cb (AdapTabOverview *self)
 {
-  adw_tab_overview_set_open (self, FALSE);
+  adap_tab_overview_set_open (self, FALSE);
 }
 
 static gboolean
-escape_cb (AdwTabOverview *self)
+escape_cb (AdapTabOverview *self)
 {
   if (!self->is_open)
     return GDK_EVENT_PROPAGATE;
@@ -1496,14 +1496,14 @@ escape_cb (AdwTabOverview *self)
     return GDK_EVENT_STOP;
   }
 
-  if (!adw_tab_view_get_n_pages (self->view)) {
-    AdwTabPage *page = create_tab (self);
+  if (!adap_tab_view_get_n_pages (self->view)) {
+    AdapTabPage *page = create_tab (self);
 
     if (!page)
       return GDK_EVENT_PROPAGATE;
   }
 
-  adw_tab_overview_set_open (self, FALSE);
+  adap_tab_overview_set_open (self, FALSE);
 
   return GDK_EVENT_STOP;
 }
@@ -1522,21 +1522,21 @@ object_handled_accumulator (GSignalInvocationHint *ihint,
 }
 
 static void
-adw_tab_overview_class_init (AdwTabOverviewClass *klass)
+adap_tab_overview_class_init (AdapTabOverviewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_tab_overview_dispose;
-  object_class->get_property = adw_tab_overview_get_property;
-  object_class->set_property = adw_tab_overview_set_property;
+  object_class->dispose = adap_tab_overview_dispose;
+  object_class->get_property = adap_tab_overview_get_property;
+  object_class->set_property = adap_tab_overview_set_property;
 
-  widget_class->snapshot = adw_tab_overview_snapshot;
-  widget_class->compute_expand = adw_widget_compute_expand;
-  widget_class->focus = adw_tab_overview_focus;
+  widget_class->snapshot = adap_tab_overview_snapshot;
+  widget_class->compute_expand = adap_widget_compute_expand;
+  widget_class->focus = adap_tab_overview_focus;
 
   /**
-   * AdwTabOverview:view: (attributes org.gtk.Property.get=adw_tab_overview_get_view org.gtk.Property.set=adw_tab_overview_set_view)
+   * AdapTabOverview:view: (attributes org.gtk.Property.get=adap_tab_overview_get_view org.gtk.Property.set=adap_tab_overview_set_view)
    *
    * The tab view the overview controls.
    *
@@ -1546,11 +1546,11 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
    */
   props[PROP_VIEW] =
     g_param_spec_object ("view", NULL, NULL,
-                         ADW_TYPE_TAB_VIEW,
+                         ADAP_TYPE_TAB_VIEW,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwTabOverview:child: (attributes org.gtk.Property.get=adw_tab_overview_get_child org.gtk.Property.set=adw_tab_overview_set_child)
+   * AdapTabOverview:child: (attributes org.gtk.Property.get=adap_tab_overview_get_child org.gtk.Property.set=adap_tab_overview_set_child)
    *
    * The child widget.
    *
@@ -1562,7 +1562,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwTabOverview:open: (attributes org.gtk.Property.get=adw_tab_overview_get_open org.gtk.Property.set=adw_tab_overview_set_open)
+   * AdapTabOverview:open: (attributes org.gtk.Property.get=adap_tab_overview_get_open org.gtk.Property.set=adap_tab_overview_set_open)
    *
    * Whether the overview is open.
    *
@@ -1574,7 +1574,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwTabOverview:inverted: (attributes org.gtk.Property.get=adw_tab_overview_get_inverted org.gtk.Property.set=adw_tab_overview_set_inverted)
+   * AdapTabOverview:inverted: (attributes org.gtk.Property.get=adap_tab_overview_get_inverted org.gtk.Property.set=adap_tab_overview_set_inverted)
    *
    * Whether thumbnails use inverted layout.
    *
@@ -1589,7 +1589,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwTabOverview:enable-search: (attributes org.gtk.Property.get=adw_tab_overview_get_enable_search org.gtk.Property.set=adw_tab_overview_set_enable_search)
+   * AdapTabOverview:enable-search: (attributes org.gtk.Property.get=adap_tab_overview_get_enable_search org.gtk.Property.set=adap_tab_overview_set_enable_search)
    *
    * Whether to enable search in tabs.
    *
@@ -1610,7 +1610,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwTabOverview:search-active: (attributes org.gtk.Property.get=adw_tab_overview_get_search_active)
+   * AdapTabOverview:search-active: (attributes org.gtk.Property.get=adap_tab_overview_get_search_active)
    *
    * Whether search is currently active.
    *
@@ -1624,7 +1624,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwTabOverview:enable-new-tab: (attributes org.gtk.Property.get=adw_tab_overview_get_enable_new_tab org.gtk.Property.set=adw_tab_overview_set_enable_new_tab)
+   * AdapTabOverview:enable-new-tab: (attributes org.gtk.Property.get=adap_tab_overview_get_enable_new_tab org.gtk.Property.set=adap_tab_overview_set_enable_new_tab)
    *
    * Whether to enable new tab button.
    *
@@ -1638,7 +1638,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwTabOverview:secondary-menu: (attributes org.gtk.Property.get=adw_tab_overview_get_secondary_menu org.gtk.Property.set=adw_tab_overview_set_secondary_menu)
+   * AdapTabOverview:secondary-menu: (attributes org.gtk.Property.get=adap_tab_overview_get_secondary_menu org.gtk.Property.set=adap_tab_overview_set_secondary_menu)
    *
    * The secondary menu model.
    *
@@ -1652,7 +1652,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwTabOverview:show-start-title-buttons: (attributes org.gtk.Property.get=adw_tab_overview_get_show_start_title_buttons org.gtk.Property.set=adw_tab_overview_set_show_start_title_buttons)
+   * AdapTabOverview:show-start-title-buttons: (attributes org.gtk.Property.get=adap_tab_overview_get_show_start_title_buttons org.gtk.Property.set=adap_tab_overview_set_show_start_title_buttons)
    *
    * Whether to show start title buttons in the overview's header bar.
    *
@@ -1666,7 +1666,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwTabOverview:show-end-title-buttons: (attributes org.gtk.Property.get=adw_tab_overview_get_show_end_title_buttons org.gtk.Property.set=adw_tab_overview_set_show_end_title_buttons)
+   * AdapTabOverview:show-end-title-buttons: (attributes org.gtk.Property.get=adap_tab_overview_get_show_end_title_buttons org.gtk.Property.set=adap_tab_overview_set_show_end_title_buttons)
    *
    * Whether to show end title buttons in the overview's header bar.
    *
@@ -1680,7 +1680,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwTabOverview:extra-drag-preferred-action: (attributes org.gtk.Property.get=adw_tab_overview_get_extra_drag_preferred_action)
+   * AdapTabOverview:extra-drag-preferred-action: (attributes org.gtk.Property.get=adap_tab_overview_get_extra_drag_preferred_action)
    *
    * The unique action on the `current-drop` of the
    * [signal@TabOverview::extra-drag-drop].
@@ -1697,7 +1697,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwTabOverview:extra-drag-preload: (attributes org.gtk.Property.get=adw_tab_overview_get_extra_drag_preload org.gtk.Property.set=adw_tab_overview_set_extra_drag_preload)
+   * AdapTabOverview:extra-drag-preload: (attributes org.gtk.Property.get=adap_tab_overview_get_extra_drag_preload org.gtk.Property.set=adap_tab_overview_set_extra_drag_preload)
    *
    * Whether the drop data should be preloaded on hover.
    *
@@ -1713,7 +1713,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
-   * AdwTabOverview::create-tab:
+   * AdapTabOverview::create-tab:
    * @self: a tab overview
    *
    * Emitted when a tab needs to be created.
@@ -1735,15 +1735,15 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                   0,
                   object_handled_accumulator,
                   NULL,
-                  adw_marshal_OBJECT__VOID,
-                  ADW_TYPE_TAB_PAGE,
+                  adap_marshal_OBJECT__VOID,
+                  ADAP_TYPE_TAB_PAGE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_CREATE_TAB],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_OBJECT__VOIDv);
+                              adap_marshal_OBJECT__VOIDv);
 
   /**
-   * AdwTabOverview::extra-drag-drop:
+   * AdapTabOverview::extra-drag-drop:
    * @self: a tab overview
    * @page: the page matching the tab the content was dropped onto
    * @value: the `GValue` being dropped
@@ -1768,11 +1768,11 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                   NULL, NULL,
                   G_TYPE_BOOLEAN,
                   2,
-                  ADW_TYPE_TAB_PAGE,
+                  ADAP_TYPE_TAB_PAGE,
                   G_TYPE_VALUE);
 
   /**
-   * AdwTabOverview::extra-drag-value:
+   * AdapTabOverview::extra-drag-value:
    * @self: a tab overview
    * @page: the page matching the tab the content was dropped onto
    * @value: the `GValue` being dropped
@@ -1800,7 +1800,7 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                   NULL, NULL,
                   GDK_TYPE_DRAG_ACTION,
                   2,
-                  ADW_TYPE_TAB_PAGE,
+                  ADAP_TYPE_TAB_PAGE,
                   G_TYPE_VALUE);
 
   gtk_widget_class_install_action (widget_class, "overview.open", NULL,
@@ -1811,22 +1811,22 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
                                 (GtkShortcutFunc) escape_cb, NULL);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-tab-overview.ui");
+                                               "/org/gnome/Adapta/ui/adap-tab-overview.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, overview);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, empty_state);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, search_empty_state);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, scrollable);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, child_bin);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, header_bar);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, title);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, new_tab_button);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, search_button);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, search_bar);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, search_entry);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, secondary_menu_button);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, grid);
-  gtk_widget_class_bind_template_child (widget_class, AdwTabOverview, pinned_grid);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, overview);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, empty_state);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, search_empty_state);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, scrollable);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, child_bin);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, title);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, new_tab_button);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, search_button);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, search_bar);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, secondary_menu_button);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, grid);
+  gtk_widget_class_bind_template_child (widget_class, AdapTabOverview, pinned_grid);
   gtk_widget_class_bind_template_callback (widget_class, extra_drag_drop_cb);
   gtk_widget_class_bind_template_callback (widget_class, extra_drag_value_cb);
   gtk_widget_class_bind_template_callback (widget_class, empty_changed_cb);
@@ -1840,14 +1840,14 @@ adw_tab_overview_class_init (AdwTabOverviewClass *klass)
   g_signal_override_class_handler ("extra-drag-value", G_TYPE_FROM_CLASS (klass),
                                    G_CALLBACK (extra_drag_value_notify));
 
-  g_type_ensure (ADW_TYPE_TAB_GRID);
-  g_type_ensure (ADW_TYPE_TAB_OVERVIEW_SCROLLABLE);
+  g_type_ensure (ADAP_TYPE_TAB_GRID);
+  g_type_ensure (ADAP_TYPE_TAB_OVERVIEW_SCROLLABLE);
 }
 
 static void
-adw_tab_overview_init (AdwTabOverview *self)
+adap_tab_overview_init (AdapTabOverview *self)
 {
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
 
   self->enable_search = TRUE;
 
@@ -1858,11 +1858,11 @@ adw_tab_overview_init (AdwTabOverview *self)
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (self->search_bar),
                                 GTK_EDITABLE (self->search_entry));
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc) open_animation_value_cb,
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc) open_animation_value_cb,
                                               self, NULL);
 
   self->open_animation =
-    adw_timed_animation_new (GTK_WIDGET (self),
+    adap_timed_animation_new (GTK_WIDGET (self),
                              0, 0,
                              TRANSITION_DURATION,
                              target);
@@ -1872,46 +1872,46 @@ adw_tab_overview_init (AdwTabOverview *self)
 }
 
 static void
-adw_tab_overview_buildable_add_child (GtkBuildable *buildable,
+adap_tab_overview_buildable_add_child (GtkBuildable *buildable,
                                       GtkBuilder   *builder,
                                       GObject      *child,
                                       const char   *type)
 {
-  AdwTabOverview *self = ADW_TAB_OVERVIEW (buildable);
+  AdapTabOverview *self = ADAP_TAB_OVERVIEW (buildable);
 
   if (!self->overview)
     parent_buildable_iface->add_child (buildable, builder, child, type);
   else if (GTK_IS_WIDGET (child))
-    adw_tab_overview_set_child (self, GTK_WIDGET (child));
+    adap_tab_overview_set_child (self, GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_tab_overview_buildable_init (GtkBuildableIface *iface)
+adap_tab_overview_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_tab_overview_buildable_add_child;
+  iface->add_child = adap_tab_overview_buildable_add_child;
 }
 
 /**
- * adw_tab_overview_new:
+ * adap_tab_overview_new:
  *
- * Creates a new `AdwTabOverview`.
+ * Creates a new `AdapTabOverview`.
  *
- * Returns: the newly created `AdwTabOverview`
+ * Returns: the newly created `AdapTabOverview`
  *
  * Since: 1.3
  */
 GtkWidget *
-adw_tab_overview_new (void)
+adap_tab_overview_new (void)
 {
-  return g_object_new (ADW_TYPE_TAB_OVERVIEW, NULL);
+  return g_object_new (ADAP_TYPE_TAB_OVERVIEW, NULL);
 }
 
 /**
- * adw_tab_overview_get_view: (attributes org.gtk.Method.get_property=view)
+ * adap_tab_overview_get_view: (attributes org.gtk.Method.get_property=view)
  * @self: a tab overview
  *
  * Gets the tab view @self controls.
@@ -1920,16 +1920,16 @@ adw_tab_overview_new (void)
  *
  * Since: 1.3
  */
-AdwTabView *
-adw_tab_overview_get_view (AdwTabOverview *self)
+AdapTabView *
+adap_tab_overview_get_view (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), NULL);
 
   return self->view;
 }
 
 /**
- * adw_tab_overview_set_view: (attributes org.gtk.Method.set_property=view)
+ * adap_tab_overview_set_view: (attributes org.gtk.Method.set_property=view)
  * @self: a tab overview
  * @view: (nullable): a tab view
  *
@@ -1940,11 +1940,11 @@ adw_tab_overview_get_view (AdwTabOverview *self)
  * Since: 1.3
  */
 void
-adw_tab_overview_set_view (AdwTabOverview *self,
-                           AdwTabView     *view)
+adap_tab_overview_set_view (AdapTabOverview *self,
+                           AdapTabView     *view)
 {
-  g_return_if_fail (ADW_IS_TAB_OVERVIEW (self));
-  g_return_if_fail (view == NULL || ADW_IS_TAB_VIEW (view));
+  g_return_if_fail (ADAP_IS_TAB_OVERVIEW (self));
+  g_return_if_fail (view == NULL || ADAP_IS_TAB_VIEW (view));
 
   if (self->view == view)
     return;
@@ -1958,13 +1958,13 @@ adw_tab_overview_set_view (AdwTabOverview *self,
     g_signal_handlers_disconnect_by_func (self->view, page_detached_cb, self);
     g_signal_handlers_disconnect_by_func (self->view, view_destroy_cb, self);
 
-    n = adw_tab_view_get_n_pages (self->view);
+    n = adap_tab_view_get_n_pages (self->view);
 
     for (i = 0; i < n; i++)
-      page_detached_cb (self, adw_tab_view_get_nth_page (self->view, i), i);
+      page_detached_cb (self, adap_tab_view_get_nth_page (self->view, i), i);
 
-    adw_tab_grid_set_view (self->grid, NULL);
-    adw_tab_grid_set_view (self->pinned_grid, NULL);
+    adap_tab_grid_set_view (self->grid, NULL);
+    adap_tab_grid_set_view (self->pinned_grid, NULL);
 
     notify_n_pages_cb (self);
   }
@@ -1974,8 +1974,8 @@ adw_tab_overview_set_view (AdwTabOverview *self,
   if (self->view) {
     int i, n;
 
-    adw_tab_grid_set_view (self->grid, view);
-    adw_tab_grid_set_view (self->pinned_grid, view);
+    adap_tab_grid_set_view (self->grid, view);
+    adap_tab_grid_set_view (self->pinned_grid, view);
 
     g_signal_connect_object (self->view, "notify::selected-page",
                              G_CALLBACK (notify_selected_page_cb), self,
@@ -1993,10 +1993,10 @@ adw_tab_overview_set_view (AdwTabOverview *self,
                              G_CALLBACK (view_destroy_cb), self,
                              G_CONNECT_SWAPPED);
 
-    n = adw_tab_view_get_n_pages (self->view);
+    n = adap_tab_view_get_n_pages (self->view);
 
     for (i = 0; i < n; i++)
-      page_attached_cb (self, adw_tab_view_get_nth_page (self->view, i), i);
+      page_attached_cb (self, adap_tab_view_get_nth_page (self->view, i), i);
 
     notify_n_pages_cb (self);
   }
@@ -2007,8 +2007,8 @@ adw_tab_overview_set_view (AdwTabOverview *self,
 }
 
 /**
- * adw_tab_overview_get_child: (attributes org.gtk.Method.get_property=child)
- * @self: a `AdwTabOveview`
+ * adap_tab_overview_get_child: (attributes org.gtk.Method.get_property=child)
+ * @self: a `AdapTabOveview`
  *
  * Gets the child widget of @self.
  *
@@ -2017,15 +2017,15 @@ adw_tab_overview_set_view (AdwTabOverview *self,
  * Since: 1.3
  */
 GtkWidget *
-adw_tab_overview_get_child (AdwTabOverview *self)
+adap_tab_overview_get_child (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), NULL);
 
-  return adw_bin_get_child (ADW_BIN (self->child_bin));
+  return adap_bin_get_child (ADAP_BIN (self->child_bin));
 }
 
 /**
- * adw_tab_overview_set_child: (attributes org.gtk.Method.set_property=child)
+ * adap_tab_overview_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a tab overview
  * @child: (nullable): the child widget
  *
@@ -2034,25 +2034,25 @@ adw_tab_overview_get_child (AdwTabOverview *self)
  * Since: 1.3
  */
 void
-adw_tab_overview_set_child (AdwTabOverview *self,
+adap_tab_overview_set_child (AdapTabOverview *self,
                             GtkWidget      *child)
 {
-  g_return_if_fail (ADW_IS_TAB_OVERVIEW (self));
+  g_return_if_fail (ADAP_IS_TAB_OVERVIEW (self));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
   if (child)
     g_return_if_fail (gtk_widget_get_parent (child) == NULL);
 
-  if (child == adw_tab_overview_get_child (self))
+  if (child == adap_tab_overview_get_child (self))
     return;
 
-  adw_bin_set_child (ADW_BIN (self->child_bin), child);
+  adap_bin_set_child (ADAP_BIN (self->child_bin), child);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CHILD]);
 }
 
 /**
- * adw_tab_overview_get_open: (attributes org.gtk.Method.get_property=open)
+ * adap_tab_overview_get_open: (attributes org.gtk.Method.get_property=open)
  * @self: a tab overview
  *
  * Gets whether @self is open.
@@ -2062,15 +2062,15 @@ adw_tab_overview_set_child (AdwTabOverview *self,
  * Since: 1.3
  */
 gboolean
-adw_tab_overview_get_open (AdwTabOverview *self)
+adap_tab_overview_get_open (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), FALSE);
 
   return self->is_open;
 }
 
 /**
- * adw_tab_overview_set_open: (attributes org.gtk.Method.set_property=open)
+ * adap_tab_overview_set_open: (attributes org.gtk.Method.set_property=open)
  * @self: a tab overview
  * @open: whether the overview is open
  *
@@ -2079,13 +2079,13 @@ adw_tab_overview_get_open (AdwTabOverview *self)
  * Since: 1.3
  */
 void
-adw_tab_overview_set_open (AdwTabOverview *self,
+adap_tab_overview_set_open (AdapTabOverview *self,
                            gboolean        open)
 {
-  AdwTabPage *selected_page;
-  AdwTabGrid *grid;
+  AdapTabPage *selected_page;
+  AdapTabGrid *grid;
 
-  g_return_if_fail (ADW_IS_TAB_OVERVIEW (self));
+  g_return_if_fail (ADAP_IS_TAB_OVERVIEW (self));
 
   open = !!open;
 
@@ -2093,22 +2093,22 @@ adw_tab_overview_set_open (AdwTabOverview *self,
     return;
 
   if (open && !self->view) {
-    g_warning ("Trying to open AdwTabOverview %p, but it doesn't have a view set", self);
+    g_warning ("Trying to open AdapTabOverview %p, but it doesn't have a view set", self);
     return;
   }
 
-  if (!adw_tab_view_get_n_pages (self->view)) {
+  if (!adap_tab_view_get_n_pages (self->view)) {
     if (open)
-      g_warning ("Trying to open AdwTabOverview %p with no pages in its AdwTabView", self);
+      g_warning ("Trying to open AdapTabOverview %p with no pages in its AdapTabView", self);
     else
-      g_warning ("Trying to close AdwTabOverview %p with no pages in its AdwTabView", self);
+      g_warning ("Trying to close AdapTabOverview %p with no pages in its AdapTabView", self);
 
     return;
   }
 
-  selected_page = adw_tab_view_get_selected_page (self->view);
+  selected_page = adap_tab_view_get_selected_page (self->view);
 
-  self->transition_pinned = adw_tab_page_get_pinned (selected_page);
+  self->transition_pinned = adap_tab_page_get_pinned (selected_page);
 
   if (self->transition_pinned)
     grid = self->pinned_grid;
@@ -2116,8 +2116,8 @@ adw_tab_overview_set_open (AdwTabOverview *self,
     grid = self->grid;
 
   if (self->transition_thumbnail &&
-      self->transition_thumbnail != adw_tab_grid_get_transition_thumbnail (grid))
-    adw_animation_skip (self->open_animation);
+      self->transition_thumbnail != adap_tab_grid_get_transition_thumbnail (grid))
+    adap_animation_skip (self->open_animation);
 
   self->is_open = open;
 
@@ -2140,35 +2140,35 @@ adw_tab_overview_set_open (AdwTabOverview *self,
                                  (gpointer *) &self->last_focus);
     }
 
-    adw_tab_view_open_overview (self->view);
+    adap_tab_view_open_overview (self->view);
 
     set_overview_visible (self, self->is_open, ANIMATION_IN);
 
-    adw_tab_grid_try_focus_selected_tab (grid, FALSE);
+    adap_tab_grid_try_focus_selected_tab (grid, FALSE);
   } else {
     set_overview_visible (self, self->is_open, ANIMATION_OUT);
   }
 
   if (self->transition_picture)
-    adw_tab_thumbnail_fade_in (self->transition_thumbnail);
+    adap_tab_thumbnail_fade_in (self->transition_thumbnail);
 
-  self->transition_thumbnail = adw_tab_grid_get_transition_thumbnail (grid);
-  self->transition_picture = g_object_ref (adw_tab_thumbnail_get_thumbnail (self->transition_thumbnail));
-  adw_tab_thumbnail_fade_out (self->transition_thumbnail);
+  self->transition_thumbnail = adap_tab_grid_get_transition_thumbnail (grid);
+  self->transition_picture = g_object_ref (adap_tab_thumbnail_get_thumbnail (self->transition_thumbnail));
+  adap_tab_thumbnail_fade_out (self->transition_thumbnail);
 
-  adw_timed_animation_set_value_from (ADW_TIMED_ANIMATION (self->open_animation),
+  adap_timed_animation_set_value_from (ADAP_TIMED_ANIMATION (self->open_animation),
                                       self->progress);
-  adw_timed_animation_set_value_to (ADW_TIMED_ANIMATION (self->open_animation),
+  adap_timed_animation_set_value_to (ADAP_TIMED_ANIMATION (self->open_animation),
                                     open ? 1 : 0);
 
   self->animating = TRUE;
-  adw_animation_play (self->open_animation);
+  adap_animation_play (self->open_animation);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_OPEN]);
 }
 
 /**
- * adw_tab_overview_get_inverted: (attributes org.gtk.Method.get_property=inverted)
+ * adap_tab_overview_get_inverted: (attributes org.gtk.Method.get_property=inverted)
  * @self: a tab overview
  *
  * Gets whether thumbnails use inverted layout.
@@ -2178,15 +2178,15 @@ adw_tab_overview_set_open (AdwTabOverview *self,
  * Since: 1.3
  */
 gboolean
-adw_tab_overview_get_inverted (AdwTabOverview *self)
+adap_tab_overview_get_inverted (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), FALSE);
 
-  return adw_tab_grid_get_inverted (self->grid);
+  return adap_tab_grid_get_inverted (self->grid);
 }
 
 /**
- * adw_tab_overview_set_inverted: (attributes org.gtk.Method.set_property=inverted)
+ * adap_tab_overview_set_inverted: (attributes org.gtk.Method.set_property=inverted)
  * @self: a tab overview
  * @inverted: whether thumbnails use inverted layout
  *
@@ -2198,24 +2198,24 @@ adw_tab_overview_get_inverted (AdwTabOverview *self)
  * Since: 1.3
  */
 void
-adw_tab_overview_set_inverted (AdwTabOverview *self,
+adap_tab_overview_set_inverted (AdapTabOverview *self,
                                gboolean        inverted)
 {
-  g_return_if_fail (ADW_IS_TAB_OVERVIEW (self));
+  g_return_if_fail (ADAP_IS_TAB_OVERVIEW (self));
 
   inverted = !!inverted;
 
-  if (adw_tab_overview_get_inverted (self) == inverted)
+  if (adap_tab_overview_get_inverted (self) == inverted)
     return;
 
-  adw_tab_grid_set_inverted (self->grid, inverted);
-  adw_tab_grid_set_inverted (self->pinned_grid, inverted);
+  adap_tab_grid_set_inverted (self->grid, inverted);
+  adap_tab_grid_set_inverted (self->pinned_grid, inverted);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_INVERTED]);
 }
 
 /**
- * adw_tab_overview_get_enable_search: (attributes org.gtk.Method.get_property=enable-search)
+ * adap_tab_overview_get_enable_search: (attributes org.gtk.Method.get_property=enable-search)
  * @self: a tab overview
  *
  * Gets whether search in tabs is enabled for @self.
@@ -2225,15 +2225,15 @@ adw_tab_overview_set_inverted (AdwTabOverview *self,
  * Since: 1.3
  */
 gboolean
-adw_tab_overview_get_enable_search (AdwTabOverview *self)
+adap_tab_overview_get_enable_search (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), FALSE);
 
   return self->enable_search;
 }
 
 /**
- * adw_tab_overview_set_enable_search: (attributes org.gtk.Method.set_property=enable-search)
+ * adap_tab_overview_set_enable_search: (attributes org.gtk.Method.set_property=enable-search)
  * @self: a tab overview
  * @enable_search: whether to enable search
  *
@@ -2251,10 +2251,10 @@ adw_tab_overview_get_enable_search (AdwTabOverview *self)
  * Since: 1.3
  */
 void
-adw_tab_overview_set_enable_search (AdwTabOverview *self,
+adap_tab_overview_set_enable_search (AdapTabOverview *self,
                                     gboolean        enable_search)
 {
-  g_return_if_fail (ADW_IS_TAB_OVERVIEW (self));
+  g_return_if_fail (ADAP_IS_TAB_OVERVIEW (self));
 
   enable_search = !!enable_search;
 
@@ -2275,7 +2275,7 @@ adw_tab_overview_set_enable_search (AdwTabOverview *self,
 }
 
 /**
- * adw_tab_overview_get_search_active: (attributes org.gtk.Method.get_property=search-active)
+ * adap_tab_overview_get_search_active: (attributes org.gtk.Method.get_property=search-active)
  * @self: a tab overview
  *
  * Gets whether search is currently active for @self.
@@ -2287,15 +2287,15 @@ adw_tab_overview_set_enable_search (AdwTabOverview *self,
  * Since: 1.3
  */
 gboolean
-adw_tab_overview_get_search_active (AdwTabOverview *self)
+adap_tab_overview_get_search_active (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), FALSE);
 
   return self->search_active;
 }
 
 /**
- * adw_tab_overview_get_enable_new_tab: (attributes org.gtk.Method.get_property=enable-new-tab)
+ * adap_tab_overview_get_enable_new_tab: (attributes org.gtk.Method.get_property=enable-new-tab)
  * @self: a tab overview
  *
  * Gets whether to new tab button is enabled for @self.
@@ -2305,15 +2305,15 @@ adw_tab_overview_get_search_active (AdwTabOverview *self)
  * Since: 1.3
  */
 gboolean
-adw_tab_overview_get_enable_new_tab (AdwTabOverview *self)
+adap_tab_overview_get_enable_new_tab (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), FALSE);
 
   return self->enable_new_tab;
 }
 
 /**
- * adw_tab_overview_set_enable_new_tab: (attributes org.gtk.Method.set_property=enable-new-tab)
+ * adap_tab_overview_set_enable_new_tab: (attributes org.gtk.Method.set_property=enable-new-tab)
  * @self: a tab overview
  * @enable_new_tab: whether to enable new tab button
  *
@@ -2324,10 +2324,10 @@ adw_tab_overview_get_enable_new_tab (AdwTabOverview *self)
  * Since: 1.3
  */
 void
-adw_tab_overview_set_enable_new_tab (AdwTabOverview *self,
+adap_tab_overview_set_enable_new_tab (AdapTabOverview *self,
                                      gboolean        enable_new_tab)
 {
-  g_return_if_fail (ADW_IS_TAB_OVERVIEW (self));
+  g_return_if_fail (ADAP_IS_TAB_OVERVIEW (self));
 
   enable_new_tab = !!enable_new_tab;
 
@@ -2342,7 +2342,7 @@ adw_tab_overview_set_enable_new_tab (AdwTabOverview *self,
 }
 
 /**
- * adw_tab_overview_get_secondary_menu: (attributes org.gtk.Method.get_property=secondary-menu)
+ * adap_tab_overview_get_secondary_menu: (attributes org.gtk.Method.get_property=secondary-menu)
  * @self: a tab overview
  *
  * Gets the secondary menu model for @self.
@@ -2352,15 +2352,15 @@ adw_tab_overview_set_enable_new_tab (AdwTabOverview *self,
  * Since: 1.3
  */
 GMenuModel *
-adw_tab_overview_get_secondary_menu (AdwTabOverview *self)
+adap_tab_overview_get_secondary_menu (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), NULL);
 
   return gtk_menu_button_get_menu_model (GTK_MENU_BUTTON (self->secondary_menu_button));
 }
 
 /**
- * adw_tab_overview_set_secondary_menu: (attributes org.gtk.Method.set_property=secondary-menu)
+ * adap_tab_overview_set_secondary_menu: (attributes org.gtk.Method.set_property=secondary-menu)
  * @self: a tab overview
  * @secondary_menu: (nullable): a menu model
  *
@@ -2371,13 +2371,13 @@ adw_tab_overview_get_secondary_menu (AdwTabOverview *self)
  * Since: 1.3
  */
 void
-adw_tab_overview_set_secondary_menu (AdwTabOverview *self,
+adap_tab_overview_set_secondary_menu (AdapTabOverview *self,
                                      GMenuModel     *secondary_menu)
 {
-  g_return_if_fail (ADW_IS_TAB_OVERVIEW (self));
+  g_return_if_fail (ADAP_IS_TAB_OVERVIEW (self));
   g_return_if_fail (secondary_menu == NULL || G_IS_MENU_MODEL (secondary_menu));
 
-  if (secondary_menu == adw_tab_overview_get_secondary_menu (self))
+  if (secondary_menu == adap_tab_overview_get_secondary_menu (self))
     return;
 
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (self->secondary_menu_button),
@@ -2389,7 +2389,7 @@ adw_tab_overview_set_secondary_menu (AdwTabOverview *self,
 }
 
 /**
- * adw_tab_overview_get_show_start_title_buttons: (attributes org.gtk.Method.get_property=show-start-title-buttons)
+ * adap_tab_overview_get_show_start_title_buttons: (attributes org.gtk.Method.get_property=show-start-title-buttons)
  * @self: a tab overview
  *
  * Gets whether start title buttons are shown in @self's header bar.
@@ -2399,15 +2399,15 @@ adw_tab_overview_set_secondary_menu (AdwTabOverview *self,
  * Since: 1.3
  */
 gboolean
-adw_tab_overview_get_show_start_title_buttons (AdwTabOverview *self)
+adap_tab_overview_get_show_start_title_buttons (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), FALSE);
 
-  return adw_header_bar_get_show_start_title_buttons (ADW_HEADER_BAR (self->header_bar));
+  return adap_header_bar_get_show_start_title_buttons (ADAP_HEADER_BAR (self->header_bar));
 }
 
 /**
- * adw_tab_overview_set_show_start_title_buttons: (attributes org.gtk.Method.set_property=show-start-title-buttons)
+ * adap_tab_overview_set_show_start_title_buttons: (attributes org.gtk.Method.set_property=show-start-title-buttons)
  * @self: a tab overview
  * @show_start_title_buttons: whether to show start title buttons
  *
@@ -2418,17 +2418,17 @@ adw_tab_overview_get_show_start_title_buttons (AdwTabOverview *self)
  * Since: 1.3
  */
 void
-adw_tab_overview_set_show_start_title_buttons (AdwTabOverview *self,
+adap_tab_overview_set_show_start_title_buttons (AdapTabOverview *self,
                                                gboolean        show_start_title_buttons)
 {
-  g_return_if_fail (ADW_IS_TAB_OVERVIEW (self));
+  g_return_if_fail (ADAP_IS_TAB_OVERVIEW (self));
 
   show_start_title_buttons = !!show_start_title_buttons;
 
-  if (adw_tab_overview_get_show_start_title_buttons (self) == show_start_title_buttons)
+  if (adap_tab_overview_get_show_start_title_buttons (self) == show_start_title_buttons)
     return;
 
-  adw_header_bar_set_show_start_title_buttons (ADW_HEADER_BAR (self->header_bar),
+  adap_header_bar_set_show_start_title_buttons (ADAP_HEADER_BAR (self->header_bar),
                                                show_start_title_buttons);
 
   update_header_bar (self);
@@ -2437,7 +2437,7 @@ adw_tab_overview_set_show_start_title_buttons (AdwTabOverview *self,
 }
 
 /**
- * adw_tab_overview_get_show_end_title_buttons: (attributes org.gtk.Method.get_property=show-end-title-buttons)
+ * adap_tab_overview_get_show_end_title_buttons: (attributes org.gtk.Method.get_property=show-end-title-buttons)
  * @self: a tab overview
  *
  * Gets whether end title buttons are shown in @self's header bar.
@@ -2447,15 +2447,15 @@ adw_tab_overview_set_show_start_title_buttons (AdwTabOverview *self,
  * Since: 1.3
  */
 gboolean
-adw_tab_overview_get_show_end_title_buttons (AdwTabOverview *self)
+adap_tab_overview_get_show_end_title_buttons (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), FALSE);
 
-  return adw_header_bar_get_show_end_title_buttons (ADW_HEADER_BAR (self->header_bar));
+  return adap_header_bar_get_show_end_title_buttons (ADAP_HEADER_BAR (self->header_bar));
 }
 
 /**
- * adw_tab_overview_set_show_end_title_buttons: (attributes org.gtk.Method.set_property=show-end-title-buttons)
+ * adap_tab_overview_set_show_end_title_buttons: (attributes org.gtk.Method.set_property=show-end-title-buttons)
  * @self: a tab overview
  * @show_end_title_buttons: whether to show end title buttons
  *
@@ -2466,17 +2466,17 @@ adw_tab_overview_get_show_end_title_buttons (AdwTabOverview *self)
  * Since: 1.3
  */
 void
-adw_tab_overview_set_show_end_title_buttons (AdwTabOverview *self,
+adap_tab_overview_set_show_end_title_buttons (AdapTabOverview *self,
                                              gboolean        show_end_title_buttons)
 {
-  g_return_if_fail (ADW_IS_TAB_OVERVIEW (self));
+  g_return_if_fail (ADAP_IS_TAB_OVERVIEW (self));
 
   show_end_title_buttons = !!show_end_title_buttons;
 
-  if (adw_tab_overview_get_show_end_title_buttons (self) == show_end_title_buttons)
+  if (adap_tab_overview_get_show_end_title_buttons (self) == show_end_title_buttons)
     return;
 
-  adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (self->header_bar),
+  adap_header_bar_set_show_end_title_buttons (ADAP_HEADER_BAR (self->header_bar),
                                              show_end_title_buttons);
 
   update_header_bar (self);
@@ -2485,7 +2485,7 @@ adw_tab_overview_set_show_end_title_buttons (AdwTabOverview *self,
 }
 
 /**
- * adw_tab_overview_setup_extra_drop_target:
+ * adap_tab_overview_setup_extra_drop_target:
  * @self: a tab overview
  * @actions: the supported actions
  * @types: (nullable) (transfer none) (array length=n_types):
@@ -2508,36 +2508,36 @@ adw_tab_overview_set_show_end_title_buttons (AdwTabOverview *self,
  * Since: 1.3
  */
 void
-adw_tab_overview_setup_extra_drop_target (AdwTabOverview *self,
+adap_tab_overview_setup_extra_drop_target (AdapTabOverview *self,
                                           GdkDragAction   actions,
                                           GType          *types,
                                           gsize           n_types)
 {
-  g_return_if_fail (ADW_IS_TAB_OVERVIEW (self));
+  g_return_if_fail (ADAP_IS_TAB_OVERVIEW (self));
   g_return_if_fail (n_types == 0 || types != NULL);
 
-  adw_tab_grid_setup_extra_drop_target (self->grid, actions, types, n_types);
-  adw_tab_grid_setup_extra_drop_target (self->pinned_grid, actions, types, n_types);
+  adap_tab_grid_setup_extra_drop_target (self->grid, actions, types, n_types);
+  adap_tab_grid_setup_extra_drop_target (self->pinned_grid, actions, types, n_types);
 }
 
-AdwTabGrid *
-adw_tab_overview_get_tab_grid (AdwTabOverview *self)
+AdapTabGrid *
+adap_tab_overview_get_tab_grid (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), NULL);
 
   return self->grid;
 }
 
-AdwTabGrid *
-adw_tab_overview_get_pinned_tab_grid (AdwTabOverview *self)
+AdapTabGrid *
+adap_tab_overview_get_pinned_tab_grid (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), NULL);
 
   return self->pinned_grid;
 }
 
 /**
- * adw_tab_overview_get_extra_drag_preferred_action:
+ * adap_tab_overview_get_extra_drag_preferred_action:
  * @self: a tab overview
  *
  * Gets the current action during a drop on the extra_drop_target.
@@ -2547,15 +2547,15 @@ adw_tab_overview_get_pinned_tab_grid (AdwTabOverview *self)
  * Since: 1.4
  */
 GdkDragAction
-adw_tab_overview_get_extra_drag_preferred_action (AdwTabOverview *self)
+adap_tab_overview_get_extra_drag_preferred_action (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), 0);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), 0);
 
   return self->extra_drag_preferred_action;
 }
 
 /**
- * adw_tab_overview_get_extra_drag_preload: (attributes org.gtk.Method.get_property=extra-drag-preload)
+ * adap_tab_overview_get_extra_drag_preload: (attributes org.gtk.Method.get_property=extra-drag-preload)
  * @self: a tab overview
  *
  * Gets whether drop data should be preloaded on hover.
@@ -2565,15 +2565,15 @@ adw_tab_overview_get_extra_drag_preferred_action (AdwTabOverview *self)
  * Since: 1.3
  */
 gboolean
-adw_tab_overview_get_extra_drag_preload (AdwTabOverview *self)
+adap_tab_overview_get_extra_drag_preload (AdapTabOverview *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_OVERVIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_OVERVIEW (self), FALSE);
 
-  return adw_tab_grid_get_extra_drag_preload (self->grid);
+  return adap_tab_grid_get_extra_drag_preload (self->grid);
 }
 
 /**
- * adw_tab_overview_set_extra_drag_preload: (attributes org.gtk.Method.set_property=extra-drag-preload)
+ * adap_tab_overview_set_extra_drag_preload: (attributes org.gtk.Method.set_property=extra-drag-preload)
  * @self: a tab overview
  * @preload: whether to preload drop data
  *
@@ -2584,16 +2584,16 @@ adw_tab_overview_get_extra_drag_preload (AdwTabOverview *self)
  * Since: 1.3
  */
 void
-adw_tab_overview_set_extra_drag_preload (AdwTabOverview *self,
+adap_tab_overview_set_extra_drag_preload (AdapTabOverview *self,
                                          gboolean        preload)
 {
-  g_return_if_fail (ADW_IS_TAB_OVERVIEW (self));
+  g_return_if_fail (ADAP_IS_TAB_OVERVIEW (self));
 
-  if (adw_tab_overview_get_extra_drag_preload (self) == preload)
+  if (adap_tab_overview_get_extra_drag_preload (self) == preload)
     return;
 
-  adw_tab_grid_set_extra_drag_preload (self->grid, preload);
-  adw_tab_grid_set_extra_drag_preload (self->pinned_grid, preload);
+  adap_tab_grid_set_extra_drag_preload (self->grid, preload);
+  adap_tab_grid_set_extra_drag_preload (self->pinned_grid, preload);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_EXTRA_DRAG_PRELOAD]);
 }

@@ -6,18 +6,18 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <glib-object.h>
-#include "adw-enums.h"
+#include "adap-enums.h"
 
 G_BEGIN_DECLS
 
 typedef enum {
-  ADW_NAVIGATION_DIRECTION_BACK,
-  ADW_NAVIGATION_DIRECTION_FORWARD,
-} AdwNavigationDirection;
+  ADAP_NAVIGATION_DIRECTION_BACK,
+  ADAP_NAVIGATION_DIRECTION_FORWARD,
+} AdapNavigationDirection;
 
 G_END_DECLS

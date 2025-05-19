@@ -7,71 +7,71 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-animation-target.h"
-#include "adw-enums.h"
+#include "adap-animation-target.h"
+#include "adap-enums.h"
 
 G_BEGIN_DECLS
 
 /**
- * ADW_DURATION_INFINITE:
+ * ADAP_DURATION_INFINITE:
  *
  * Indicates an [class@Animation] with an infinite duration.
  *
  * This value is mostly used internally.
  */
 
-#define ADW_DURATION_INFINITE ((guint) 0xffffffff)
+#define ADAP_DURATION_INFINITE ((guint) 0xffffffff)
 
-#define ADW_TYPE_ANIMATION (adw_animation_get_type())
+#define ADAP_TYPE_ANIMATION (adap_animation_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_DERIVABLE_TYPE (AdwAnimation, adw_animation, ADW, ANIMATION, GObject)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (AdapAnimation, adap_animation, ADAP, ANIMATION, GObject)
 
 typedef enum {
-  ADW_ANIMATION_IDLE,
-  ADW_ANIMATION_PAUSED,
-  ADW_ANIMATION_PLAYING,
-  ADW_ANIMATION_FINISHED,
-} AdwAnimationState;
+  ADAP_ANIMATION_IDLE,
+  ADAP_ANIMATION_PAUSED,
+  ADAP_ANIMATION_PLAYING,
+  ADAP_ANIMATION_FINISHED,
+} AdapAnimationState;
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_animation_get_widget (AdwAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_animation_get_widget (AdapAnimation *self);
 
-ADW_AVAILABLE_IN_ALL
-AdwAnimationTarget *adw_animation_get_target (AdwAnimation       *self);
-ADW_AVAILABLE_IN_ALL
-void                adw_animation_set_target (AdwAnimation       *self,
-                                              AdwAnimationTarget *target);
+ADAP_AVAILABLE_IN_ALL
+AdapAnimationTarget *adap_animation_get_target (AdapAnimation       *self);
+ADAP_AVAILABLE_IN_ALL
+void                adap_animation_set_target (AdapAnimation       *self,
+                                              AdapAnimationTarget *target);
 
-ADW_AVAILABLE_IN_ALL
-double adw_animation_get_value (AdwAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+double adap_animation_get_value (AdapAnimation *self);
 
-ADW_AVAILABLE_IN_ALL
-AdwAnimationState adw_animation_get_state (AdwAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+AdapAnimationState adap_animation_get_state (AdapAnimation *self);
 
-ADW_AVAILABLE_IN_ALL
-void adw_animation_play   (AdwAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void adw_animation_pause  (AdwAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void adw_animation_resume (AdwAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void adw_animation_reset  (AdwAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void adw_animation_skip   (AdwAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_animation_play   (AdapAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_animation_pause  (AdapAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_animation_resume (AdapAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_animation_reset  (AdapAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_animation_skip   (AdapAnimation *self);
 
-ADW_AVAILABLE_IN_1_3
-gboolean adw_animation_get_follow_enable_animations_setting (AdwAnimation *self);
-ADW_AVAILABLE_IN_1_3
-void     adw_animation_set_follow_enable_animations_setting (AdwAnimation *self,
+ADAP_AVAILABLE_IN_1_3
+gboolean adap_animation_get_follow_enable_animations_setting (AdapAnimation *self);
+ADAP_AVAILABLE_IN_1_3
+void     adap_animation_set_follow_enable_animations_setting (AdapAnimation *self,
                                                              gboolean      setting);
 
 G_END_DECLS

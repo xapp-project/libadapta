@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwWindow" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapWindow" id="widget">
     <property name="title">View Switcher Bar</property>
     <property name="default-height">150</property>
     <property name="content">
-      <object class="AdwToolbarView">
+      <object class="AdapToolbarView">
         <child type="top">
           <object class="GtkHeaderBar"/>
         </child>
         <property name="content">
-          <object class="AdwViewStack" id="stack">
+          <object class="AdapViewStack" id="stack">
             <child>
-              <object class="AdwViewStackPage">
+              <object class="AdapViewStackPage">
                 <property name="title">Page 1</property>
                 <property name="icon-name">applications-system-symbolic</property>
                 <property name="child">
-                  <object class="AdwBin"/>
+                  <object class="AdapBin"/>
                 </property>
               </object>
             </child>
             <child>
-              <object class="AdwViewStackPage">
+              <object class="AdapViewStackPage">
                 <property name="title">Page 2</property>
                 <property name="icon-name">applications-system-symbolic</property>
                 <property name="child">
-                  <object class="AdwBin"/>
+                  <object class="AdapBin"/>
                 </property>
               </object>
             </child>
             <child>
-              <object class="AdwViewStackPage">
+              <object class="AdapViewStackPage">
                 <property name="title">Page 3</property>
                 <property name="icon-name">applications-system-symbolic</property>
                 <property name="child">
-                  <object class="AdwBin"/>
+                  <object class="AdapBin"/>
                 </property>
               </object>
             </child>
           </object>
         </property>
         <child type="bottom">
-          <object class="AdwViewSwitcherBar">
+          <object class="AdapViewSwitcherBar">
             <property name="stack">stack</property>
             <property name="reveal">True</property>
           </object>

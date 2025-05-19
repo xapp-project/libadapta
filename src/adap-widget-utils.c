@@ -15,10 +15,10 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "adw-widget-utils-private.h"
+#include "adap-widget-utils-private.h"
 
-#include "adw-bottom-sheet-private.h"
-#include "adw-floating-sheet-private.h"
+#include "adap-bottom-sheet-private.h"
+#include "adap-floating-sheet-private.h"
 
 typedef struct _CompareInfo CompareInfo;
 
@@ -449,14 +449,14 @@ focus_move (GtkWidget        *widget,
 }
 
 gboolean
-adw_widget_focus_child (GtkWidget        *widget,
+adap_widget_focus_child (GtkWidget        *widget,
                         GtkDirectionType  direction)
 {
   return focus_move (widget, direction);
 }
 
 gboolean
-adw_widget_grab_focus_self (GtkWidget *widget)
+adap_widget_grab_focus_self (GtkWidget *widget)
 {
   if (!gtk_widget_get_focusable (widget))
     return FALSE;
@@ -467,7 +467,7 @@ adw_widget_grab_focus_self (GtkWidget *widget)
 }
 
 gboolean
-adw_widget_grab_focus_child (GtkWidget *widget)
+adap_widget_grab_focus_child (GtkWidget *widget)
 {
   GtkWidget *child;
 
@@ -481,16 +481,16 @@ adw_widget_grab_focus_child (GtkWidget *widget)
 }
 
 gboolean
-adw_widget_grab_focus_child_or_self (GtkWidget *widget)
+adap_widget_grab_focus_child_or_self (GtkWidget *widget)
 {
-  if (adw_widget_grab_focus_child (widget))
+  if (adap_widget_grab_focus_child (widget))
     return TRUE;
 
-  return adw_widget_grab_focus_self (widget);
+  return adap_widget_grab_focus_self (widget);
 }
 
 void
-adw_widget_compute_expand (GtkWidget *widget,
+adap_widget_compute_expand (GtkWidget *widget,
                            gboolean  *hexpand_p,
                            gboolean  *vexpand_p)
 {
@@ -510,7 +510,7 @@ adw_widget_compute_expand (GtkWidget *widget,
 }
 
 void
-adw_widget_compute_expand_horizontal_only (GtkWidget *widget,
+adap_widget_compute_expand_horizontal_only (GtkWidget *widget,
                                            gboolean  *hexpand_p,
                                            gboolean  *vexpand_p)
 {
@@ -527,7 +527,7 @@ adw_widget_compute_expand_horizontal_only (GtkWidget *widget,
 }
 
 GtkSizeRequestMode
-adw_widget_get_request_mode (GtkWidget *widget)
+adap_widget_get_request_mode (GtkWidget *widget)
 {
   GtkWidget *child;
   int wfh = 0, hfw = 0;
@@ -559,7 +559,7 @@ adw_widget_get_request_mode (GtkWidget *widget)
 }
 
 gboolean
-adw_widget_contains_passthrough (GtkWidget *widget,
+adap_widget_contains_passthrough (GtkWidget *widget,
                                  double     x,
                                  double     y)
 {
@@ -568,7 +568,7 @@ adw_widget_contains_passthrough (GtkWidget *widget,
 
 /* FIXME: Replace this with public color API and make public */
 gboolean
-adw_widget_lookup_color (GtkWidget  *widget,
+adap_widget_lookup_color (GtkWidget  *widget,
                          const char *name,
                          GdkRGBA    *rgba)
 {
@@ -580,7 +580,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 GtkWidget *
-adw_widget_get_ancestor (GtkWidget *widget,
+adap_widget_get_ancestor (GtkWidget *widget,
                          GType      widget_type,
                          gboolean   same_native,
                          gboolean   same_sheet)
@@ -589,7 +589,7 @@ adw_widget_get_ancestor (GtkWidget *widget,
     if (same_native && GTK_IS_NATIVE (widget))
       return NULL;
 
-    if (same_sheet && (ADW_IS_FLOATING_SHEET (widget) || ADW_IS_BOTTOM_SHEET (widget)))
+    if (same_sheet && (ADAP_IS_FLOATING_SHEET (widget) || ADAP_IS_BOTTOM_SHEET (widget)))
       return NULL;
 
     widget = gtk_widget_get_parent (widget);
@@ -599,7 +599,7 @@ adw_widget_get_ancestor (GtkWidget *widget,
 }
 
 gboolean
-adw_decoration_layout_prefers_start (const char *layout)
+adap_decoration_layout_prefers_start (const char *layout)
 {
   int counts[2];
   char **sides;

@@ -8,81 +8,81 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
-#include "adw-enums.h"
-#include "adw-tab-view.h"
+#include "adap-enums.h"
+#include "adap-tab-view.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_TAB_BAR (adw_tab_bar_get_type())
+#define ADAP_TYPE_TAB_BAR (adap_tab_bar_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwTabBar, adw_tab_bar, ADW, TAB_BAR, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapTabBar, adap_tab_bar, ADAP, TAB_BAR, GtkWidget)
 
-ADW_AVAILABLE_IN_ALL
-AdwTabBar *adw_tab_bar_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+AdapTabBar *adap_tab_bar_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-AdwTabView *adw_tab_bar_get_view (AdwTabBar  *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_tab_bar_set_view (AdwTabBar  *self,
-                                  AdwTabView *view);
+ADAP_AVAILABLE_IN_ALL
+AdapTabView *adap_tab_bar_get_view (AdapTabBar  *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_tab_bar_set_view (AdapTabBar  *self,
+                                  AdapTabView *view);
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_tab_bar_get_start_action_widget (AdwTabBar *self);
-ADW_AVAILABLE_IN_ALL
-void       adw_tab_bar_set_start_action_widget (AdwTabBar *self,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_tab_bar_get_start_action_widget (AdapTabBar *self);
+ADAP_AVAILABLE_IN_ALL
+void       adap_tab_bar_set_start_action_widget (AdapTabBar *self,
                                                 GtkWidget *widget);
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_tab_bar_get_end_action_widget (AdwTabBar *self);
-ADW_AVAILABLE_IN_ALL
-void       adw_tab_bar_set_end_action_widget (AdwTabBar *self,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_tab_bar_get_end_action_widget (AdapTabBar *self);
+ADAP_AVAILABLE_IN_ALL
+void       adap_tab_bar_set_end_action_widget (AdapTabBar *self,
                                               GtkWidget *widget);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_tab_bar_get_autohide (AdwTabBar *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_tab_bar_set_autohide (AdwTabBar *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_tab_bar_get_autohide (AdapTabBar *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_tab_bar_set_autohide (AdapTabBar *self,
                                    gboolean   autohide);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_tab_bar_get_tabs_revealed (AdwTabBar *self);
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_tab_bar_get_tabs_revealed (AdapTabBar *self);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_tab_bar_get_expand_tabs (AdwTabBar *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_tab_bar_set_expand_tabs (AdwTabBar *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_tab_bar_get_expand_tabs (AdapTabBar *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_tab_bar_set_expand_tabs (AdapTabBar *self,
                                       gboolean   expand_tabs);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_tab_bar_get_inverted (AdwTabBar *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_tab_bar_set_inverted (AdwTabBar *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_tab_bar_get_inverted (AdapTabBar *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_tab_bar_set_inverted (AdapTabBar *self,
                                    gboolean   inverted);
 
-ADW_AVAILABLE_IN_ALL
-void adw_tab_bar_setup_extra_drop_target (AdwTabBar     *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_tab_bar_setup_extra_drop_target (AdapTabBar     *self,
                                           GdkDragAction  actions,
                                           GType         *types,
                                           gsize          n_types);
 
-ADW_AVAILABLE_IN_1_4
-GdkDragAction adw_tab_bar_get_extra_drag_preferred_action (AdwTabBar *self);
+ADAP_AVAILABLE_IN_1_4
+GdkDragAction adap_tab_bar_get_extra_drag_preferred_action (AdapTabBar *self);
 
-ADW_AVAILABLE_IN_1_3
-gboolean adw_tab_bar_get_extra_drag_preload (AdwTabBar *self);
-ADW_AVAILABLE_IN_1_3
-void     adw_tab_bar_set_extra_drag_preload (AdwTabBar *self,
+ADAP_AVAILABLE_IN_1_3
+gboolean adap_tab_bar_get_extra_drag_preload (AdapTabBar *self);
+ADAP_AVAILABLE_IN_1_3
+void     adap_tab_bar_set_extra_drag_preload (AdapTabBar *self,
                                              gboolean   preload);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_tab_bar_get_is_overflowing (AdwTabBar *self);
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_tab_bar_get_is_overflowing (AdapTabBar *self);
 
 G_END_DECLS

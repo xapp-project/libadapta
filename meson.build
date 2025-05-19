@@ -1,4 +1,4 @@
-project('libadwaita', 'c',
+project('libadapta', 'c',
           version: '1.5.8',
           license: 'LGPL-2.1-or-later',
     meson_version: '>= 0.59.0',
@@ -6,18 +6,18 @@ project('libadwaita', 'c',
 )
 
 version_arr = meson.project_version().split('-')[0].split('.')
-adwaita_version_major = version_arr[0].to_int()
-adwaita_version_minor = version_arr[1].to_int()
-adwaita_version_short = '@0@.@1@'.format(adwaita_version_major, adwaita_version_minor)
+adapta_version_major = version_arr[0].to_int()
+adapta_version_minor = version_arr[1].to_int()
+adapta_version_short = '@0@.@1@'.format(adapta_version_major, adapta_version_minor)
 
 if version_arr[2].startswith('alpha') or version_arr[2].startswith('beta') or version_arr[2].startswith('rc')
-  adwaita_version_micro = 0
+  adapta_version_micro = 0
 else
-  adwaita_version_micro = version_arr[2].to_int()
+  adapta_version_micro = version_arr[2].to_int()
 endif
 
 # The major api version as encoded in the libraries name
-apiversion = adwaita_version_major.to_string()
+apiversion = adapta_version_major.to_string()
 package_api_name = '@0@-@1@'.format(meson.project_name(), apiversion)
 
 # Before making a release, the libversion string should be modified.
@@ -36,7 +36,7 @@ soversion = 0
 
 add_project_arguments([
   '-DHAVE_CONFIG_H',
-  '-DADWAITA_COMPILATION',
+  '-DADAPTA_COMPILATION',
 ], language: 'c')
 
 root_inc = include_directories('.')
@@ -126,7 +126,7 @@ if package_subdir != ''
   datadir    = get_option('datadir') / package_subdir
   libdir     = get_option('libdir')  / package_subdir
   girdir     = get_option('datadir') / package_subdir / 'gir-1.0'
-  theme_dir  = get_option('datadir') / package_subdir / 'themes' / 'LibAdwaita-Example' / 'libadwaita-@0@'.format(adwaita_version_short)
+  theme_dir  = get_option('datadir') / package_subdir / 'themes' / 'LibAdapta-Example' / 'libadapta-@0@'.format(adapta_version_short)
   typelibdir = get_option('libdir')  / package_subdir / 'girepository-1.0'
   vapidir    = get_option('datadir') / package_subdir / 'vapi'
 
@@ -134,7 +134,7 @@ else
   datadir    = get_option('datadir')
   libdir     = get_option('libdir')
   girdir     = get_option('datadir') / 'gir-1.0'
-  theme_dir  = get_option('datadir') / 'themes' / 'LibAdwaita-Example' / 'libadwaita-@0@'.format(adwaita_version_short)
+  theme_dir  = get_option('datadir') / 'themes' / 'LibAdapta-Example' / 'libadapta-@0@'.format(adapta_version_short)
   typelibdir = get_option('libdir')  / 'girepository-1.0'
   vapidir    = get_option('datadir') / 'vala' / 'vapi'
 endif

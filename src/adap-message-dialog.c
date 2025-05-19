@@ -7,15 +7,15 @@
  */
 
 #include "config.h"
-#include "adw-message-dialog.h"
+#include "adap-message-dialog.h"
 
-#include "adw-gizmo-private.h"
-#include "adw-gtkbuilder-utils-private.h"
-#include "adw-marshalers.h"
-#include "adw-widget-utils-private.h"
+#include "adap-gizmo-private.h"
+#include "adap-gtkbuilder-utils-private.h"
+#include "adap-marshalers.h"
+#include "adap-widget-utils-private.h"
 
 /**
- * AdwMessageDialog:
+ * AdapMessageDialog:
  *
  * A dialog presenting a message or a question.
  *
@@ -41,28 +41,28 @@
  * Response buttons can be presented horizontally or vertically depending on
  * available space.
  *
- * When a response is activated, `AdwMessageDialog` is closed automatically.
+ * When a response is activated, `AdapMessageDialog` is closed automatically.
  *
  * An example of using a message dialog:
  *
  * ```c
  * GtkWidget *dialog;
  *
- * dialog = adw_message_dialog_new (parent, _("Replace File?"), NULL);
+ * dialog = adap_message_dialog_new (parent, _("Replace File?"), NULL);
  *
- * adw_message_dialog_format_body (ADW_MESSAGE_DIALOG (dialog),
+ * adap_message_dialog_format_body (ADAP_MESSAGE_DIALOG (dialog),
  *                                 _("A file named “%s” already exists. Do you want to replace it?"),
  *                                 filename);
  *
- * adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+ * adap_message_dialog_add_responses (ADAP_MESSAGE_DIALOG (dialog),
  *                                   "cancel",  _("_Cancel"),
  *                                   "replace", _("_Replace"),
  *                                   NULL);
  *
- * adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog), "replace", ADW_RESPONSE_DESTRUCTIVE);
+ * adap_message_dialog_set_response_appearance (ADAP_MESSAGE_DIALOG (dialog), "replace", ADAP_RESPONSE_DESTRUCTIVE);
  *
- * adw_message_dialog_set_default_response (ADW_MESSAGE_DIALOG (dialog), "cancel");
- * adw_message_dialog_set_close_response (ADW_MESSAGE_DIALOG (dialog), "cancel");
+ * adap_message_dialog_set_default_response (ADAP_MESSAGE_DIALOG (dialog), "cancel");
+ * adap_message_dialog_set_close_response (ADAP_MESSAGE_DIALOG (dialog), "cancel");
  *
  * g_signal_connect (dialog, "response", G_CALLBACK (response_cb), self);
  *
@@ -71,17 +71,17 @@
  *
  * ## Async API
  *
- * `AdwMessageDialog` can also be used via the [method@MessageDialog.choose]
+ * `AdapMessageDialog` can also be used via the [method@MessageDialog.choose]
  * method. This API follows the GIO async pattern, and the result can be
  * obtained by calling [method@MessageDialog.choose_finish], for example:
  *
  * ```c
  * static void
- * dialog_cb (AdwMessageDialog *dialog,
+ * dialog_cb (AdapMessageDialog *dialog,
  *            GAsyncResult     *result,
  *            MyWindow         *self)
  * {
- *   const char *response = adw_message_dialog_choose_finish (dialog, result);
+ *   const char *response = adap_message_dialog_choose_finish (dialog, result);
  *
  *   // ...
  * }
@@ -91,29 +91,29 @@
  * {
  *   GtkWidget *dialog;
  *
- *   dialog = adw_message_dialog_new (GTK_WINDOW (self), _("Replace File?"), NULL);
+ *   dialog = adap_message_dialog_new (GTK_WINDOW (self), _("Replace File?"), NULL);
  *
- *   adw_message_dialog_format_body (ADW_MESSAGE_DIALOG (dialog),
+ *   adap_message_dialog_format_body (ADAP_MESSAGE_DIALOG (dialog),
  *                                   _("A file named “%s” already exists. Do you want to replace it?"),
  *                                   filename);
  *
- *   adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+ *   adap_message_dialog_add_responses (ADAP_MESSAGE_DIALOG (dialog),
  *                                     "cancel",  _("_Cancel"),
  *                                     "replace", _("_Replace"),
  *                                     NULL);
  *
- *   adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog), "replace", ADW_RESPONSE_DESTRUCTIVE);
+ *   adap_message_dialog_set_response_appearance (ADAP_MESSAGE_DIALOG (dialog), "replace", ADAP_RESPONSE_DESTRUCTIVE);
  *
- *   adw_message_dialog_set_default_response (ADW_MESSAGE_DIALOG (dialog), "cancel");
- *   adw_message_dialog_set_close_response (ADW_MESSAGE_DIALOG (dialog), "cancel");
+ *   adap_message_dialog_set_default_response (ADAP_MESSAGE_DIALOG (dialog), "cancel");
+ *   adap_message_dialog_set_close_response (ADAP_MESSAGE_DIALOG (dialog), "cancel");
  *
- *   adw_message_dialog_choose (ADW_MESSAGE_DIALOG (dialog), NULL, (GAsyncReadyCallback) dialog_cb, self);
+ *   adap_message_dialog_choose (ADAP_MESSAGE_DIALOG (dialog), NULL, (GAsyncReadyCallback) dialog_cb, self);
  * }
  * ```
  *
- * ## AdwMessageDialog as GtkBuildable
+ * ## AdapMessageDialog as GtkBuildable
  *
- * `AdwMessageDialog` supports adding responses in UI definitions by via the
+ * `AdapMessageDialog` supports adding responses in UI definitions by via the
  * `<responses>` element that may contain multiple `<response>` elements, each
  * respresenting a response.
  *
@@ -127,10 +127,10 @@
  * attributes. See [method@MessageDialog.set_response_enabled] and
  * [method@MessageDialog.set_response_appearance] for details.
  *
- * Example of an `AdwMessageDialog` UI definition:
+ * Example of an `AdapMessageDialog` UI definition:
  *
  * ```xml
- * <object class="AdwMessageDialog" id="dialog">
+ * <object class="AdapMessageDialog" id="dialog">
  *   <property name="heading" translatable="yes">Save Changes?</property>
  *   <property name="body" translatable="yes">Open documents contain unsaved changes. Changes which are not saved will be permanently lost.</property>
  *   <property name="default-response">save</property>
@@ -146,7 +146,7 @@
  *
  * ## Accessibility
  *
- * `AdwMessageDialog` uses the `GTK_ACCESSIBLE_ROLE_DIALOG` role.
+ * `AdapMessageDialog` uses the `GTK_ACCESSIBLE_ROLE_DIALOG` role.
  *
  * Since: 1.2
  */
@@ -156,10 +156,10 @@
 #define DIALOG_MIN_WIDTH 300
 
 typedef struct {
-  AdwMessageDialog *dialog;
+  AdapMessageDialog *dialog;
   GQuark id;
   char *label;
-  AdwResponseAppearance appearance;
+  AdapResponseAppearance appearance;
   gboolean enabled;
 
   GtkWidget *button;
@@ -191,13 +191,13 @@ typedef struct
   int parent_height;
 
   guint parent_state_idle_id;
-} AdwMessageDialogPrivate;
+} AdapMessageDialogPrivate;
 
-static void adw_message_dialog_buildable_init (GtkBuildableIface *iface);
+static void adap_message_dialog_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (AdwMessageDialog, adw_message_dialog, GTK_TYPE_WINDOW,
-                         G_ADD_PRIVATE (AdwMessageDialog)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_message_dialog_buildable_init))
+G_DEFINE_TYPE_WITH_CODE (AdapMessageDialog, adap_message_dialog, GTK_TYPE_WINDOW,
+                         G_ADD_PRIVATE (AdapMessageDialog)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_message_dialog_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -229,18 +229,18 @@ response_info_free (ResponseInfo *info)
 }
 
 static inline ResponseInfo *
-find_response (AdwMessageDialog *self,
+find_response (AdapMessageDialog *self,
                const char       *id)
 {
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
 
   return g_hash_table_lookup (priv->id_to_response, id);
 }
 
 static void
-parent_size_cb (AdwMessageDialog *self)
+parent_size_cb (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
   int w = gtk_widget_get_width (GTK_WIDGET (priv->parent_window));
   int h = gtk_widget_get_height (GTK_WIDGET (priv->parent_window));
 
@@ -253,9 +253,9 @@ parent_size_cb (AdwMessageDialog *self)
 }
 
 static void
-parent_state_idle_cb (AdwMessageDialog *self)
+parent_state_idle_cb (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
 
   parent_size_cb (self);
 
@@ -263,9 +263,9 @@ parent_state_idle_cb (AdwMessageDialog *self)
 }
 
 static void
-parent_state_cb (AdwMessageDialog *self)
+parent_state_cb (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
 
   g_clear_handle_id (&priv->parent_state_idle_id, g_source_remove);
 
@@ -274,9 +274,9 @@ parent_state_cb (AdwMessageDialog *self)
 }
 
 static void
-parent_realize_cb (AdwMessageDialog *self)
+parent_realize_cb (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
   GdkSurface *surface;
 
   g_assert (GTK_IS_NATIVE (priv->parent_window));
@@ -296,9 +296,9 @@ parent_realize_cb (AdwMessageDialog *self)
 }
 
 static void
-parent_unrealize_cb (AdwMessageDialog *self)
+parent_unrealize_cb (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
   GdkSurface *surface;
 
   g_assert (GTK_IS_NATIVE (priv->parent_window));
@@ -317,9 +317,9 @@ parent_unrealize_cb (AdwMessageDialog *self)
 }
 
 static void
-parent_window_notify_cb (AdwMessageDialog *self)
+parent_window_notify_cb (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
 
   g_clear_handle_id (&priv->parent_state_idle_id, g_source_remove);
 
@@ -329,10 +329,10 @@ parent_window_notify_cb (AdwMessageDialog *self)
 }
 
 static void
-set_parent (AdwMessageDialog *self,
+set_parent (AdapMessageDialog *self,
             GtkWindow        *parent)
 {
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
 
   if (priv->parent_window == parent)
     return;
@@ -373,7 +373,7 @@ set_parent (AdwMessageDialog *self,
 }
 
 static void
-parent_changed_cb (AdwMessageDialog *self)
+parent_changed_cb (AdapMessageDialog *self)
 {
   GtkWindow *transient_for = gtk_window_get_transient_for (GTK_WINDOW (self));
 
@@ -383,8 +383,8 @@ parent_changed_cb (AdwMessageDialog *self)
 static void
 button_clicked_cb (ResponseInfo *info)
 {
-  AdwMessageDialog *self = info->dialog;
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialog *self = info->dialog;
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
 
   g_object_ref (self);
   priv->block_close_response = TRUE;
@@ -397,7 +397,7 @@ button_clicked_cb (ResponseInfo *info)
 }
 
 static GtkWidget *
-create_response_button (AdwMessageDialog *self,
+create_response_button (AdapMessageDialog *self,
                         ResponseInfo     *info)
 {
   GtkWidget *button = gtk_button_new_with_mnemonic (info->label);
@@ -406,13 +406,13 @@ create_response_button (AdwMessageDialog *self,
   gtk_button_set_can_shrink (GTK_BUTTON (button), TRUE);
 
   switch (info->appearance) {
-  case ADW_RESPONSE_SUGGESTED:
+  case ADAP_RESPONSE_SUGGESTED:
     gtk_widget_add_css_class (button, "suggested");
     break;
-  case ADW_RESPONSE_DESTRUCTIVE:
+  case ADAP_RESPONSE_DESTRUCTIVE:
     gtk_widget_add_css_class (button, "destructive");
     break;
-  case ADW_RESPONSE_DEFAULT:
+  case ADAP_RESPONSE_DEFAULT:
   default:
     break;
   }
@@ -425,9 +425,9 @@ create_response_button (AdwMessageDialog *self,
 }
 
 static void
-update_window_title (AdwMessageDialog *self)
+update_window_title (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
 
   if (priv->heading_use_markup) {
     char *heading = NULL;
@@ -451,30 +451,30 @@ update_window_title (AdwMessageDialog *self)
 }
 
 static gboolean
-adw_message_dialog_close_request (GtkWindow *window)
+adap_message_dialog_close_request (GtkWindow *window)
 {
-  AdwMessageDialog *self = ADW_MESSAGE_DIALOG (window);
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialog *self = ADAP_MESSAGE_DIALOG (window);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
 
   if (!priv->block_close_response)
     g_signal_emit (self, signals[SIGNAL_RESPONSE],
                    priv->close_response,
                    g_quark_to_string (priv->close_response));
 
-  return GTK_WINDOW_CLASS (adw_message_dialog_parent_class)->close_request (window);
+  return GTK_WINDOW_CLASS (adap_message_dialog_parent_class)->close_request (window);
 }
 
 static void
-adw_message_dialog_map (GtkWidget *widget)
+adap_message_dialog_map (GtkWidget *widget)
 {
-  AdwMessageDialog *self = ADW_MESSAGE_DIALOG (widget);
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialog *self = ADAP_MESSAGE_DIALOG (widget);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
   GtkWidget *focus, *default_widget;
 
   if (gtk_window_get_transient_for (GTK_WINDOW (self)) == NULL)
-    g_message ("AdwMessageDialog mapped without a transient parent. This is discouraged.");
+    g_message ("AdapMessageDialog mapped without a transient parent. This is discouraged.");
 
-  GTK_WIDGET_CLASS (adw_message_dialog_parent_class)->map (widget);
+  GTK_WIDGET_CLASS (adap_message_dialog_parent_class)->map (widget);
 
   /* The rest of the function was copied from gtkdialog.c */
   focus = gtk_window_get_focus (GTK_WINDOW (self));
@@ -514,13 +514,13 @@ adw_message_dialog_map (GtkWidget *widget)
 }
 
 static void
-measure_responses_do (AdwMessageDialog *self,
+measure_responses_do (AdapMessageDialog *self,
                       gboolean          compact,
                       GtkOrientation    orientation,
                       int              *minimum,
                       int              *natural)
 {
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
   GList *l;
   int min = 0, nat = 0;
   int button_min = 0, button_nat = 0;
@@ -586,7 +586,7 @@ measure_responses (GtkWidget      *widget,
                    int            *minimum_baseline,
                    int            *natural_baseline)
 {
-  AdwMessageDialog *self = ADW_MESSAGE_DIALOG (gtk_widget_get_root (widget));
+  AdapMessageDialog *self = ADAP_MESSAGE_DIALOG (gtk_widget_get_root (widget));
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL) {
     measure_responses_do (self, TRUE, orientation, minimum, NULL);
@@ -613,8 +613,8 @@ allocate_responses (GtkWidget *widget,
                     int        height,
                     int        baseline)
 {
-  AdwMessageDialog *self = ADW_MESSAGE_DIALOG (gtk_widget_get_root (widget));
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialog *self = ADAP_MESSAGE_DIALOG (gtk_widget_get_root (widget));
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
   gboolean compact;
   int wide_nat;
 
@@ -712,7 +712,7 @@ allocate_responses (GtkWidget *widget,
 }
 
 static void
-adw_message_dialog_measure (GtkWidget      *widget,
+adap_message_dialog_measure (GtkWidget      *widget,
                             GtkOrientation  orientation,
                             int             for_size,
                             int            *min,
@@ -720,11 +720,11 @@ adw_message_dialog_measure (GtkWidget      *widget,
                             int            *min_baseline,
                             int            *nat_baseline)
 {
-  AdwMessageDialog *self = ADW_MESSAGE_DIALOG (widget);
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialog *self = ADAP_MESSAGE_DIALOG (widget);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
   int max_size, min_size, base_nat;
 
-  GTK_WIDGET_CLASS (adw_message_dialog_parent_class)->measure (widget,
+  GTK_WIDGET_CLASS (adap_message_dialog_parent_class)->measure (widget,
                                                                orientation,
                                                                for_size,
                                                                &min_size,
@@ -767,34 +767,34 @@ adw_message_dialog_measure (GtkWidget      *widget,
 }
 
 static void
-adw_message_dialog_get_property (GObject    *object,
+adap_message_dialog_get_property (GObject    *object,
                                  guint       prop_id,
                                  GValue     *value,
                                  GParamSpec *pspec)
 {
-  AdwMessageDialog *self = ADW_MESSAGE_DIALOG (object);
+  AdapMessageDialog *self = ADAP_MESSAGE_DIALOG (object);
 
   switch (prop_id) {
   case PROP_HEADING:
-    g_value_set_string (value, adw_message_dialog_get_heading (self));
+    g_value_set_string (value, adap_message_dialog_get_heading (self));
     break;
   case PROP_HEADING_USE_MARKUP:
-    g_value_set_boolean (value, adw_message_dialog_get_heading_use_markup (self));
+    g_value_set_boolean (value, adap_message_dialog_get_heading_use_markup (self));
     break;
   case PROP_BODY:
-    g_value_set_string (value, adw_message_dialog_get_body (self));
+    g_value_set_string (value, adap_message_dialog_get_body (self));
     break;
   case PROP_BODY_USE_MARKUP:
-    g_value_set_boolean (value, adw_message_dialog_get_body_use_markup (self));
+    g_value_set_boolean (value, adap_message_dialog_get_body_use_markup (self));
     break;
   case PROP_EXTRA_CHILD:
-    g_value_set_object (value, adw_message_dialog_get_extra_child (self));
+    g_value_set_object (value, adap_message_dialog_get_extra_child (self));
     break;
   case PROP_DEFAULT_RESPONSE:
-    g_value_set_string (value, adw_message_dialog_get_default_response (self));
+    g_value_set_string (value, adap_message_dialog_get_default_response (self));
     break;
   case PROP_CLOSE_RESPONSE:
-    g_value_set_string (value, adw_message_dialog_get_close_response (self));
+    g_value_set_string (value, adap_message_dialog_get_close_response (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -802,34 +802,34 @@ adw_message_dialog_get_property (GObject    *object,
 }
 
 static void
-adw_message_dialog_set_property (GObject      *object,
+adap_message_dialog_set_property (GObject      *object,
                                  guint         prop_id,
                                  const GValue *value,
                                  GParamSpec   *pspec)
 {
-  AdwMessageDialog *self = ADW_MESSAGE_DIALOG (object);
+  AdapMessageDialog *self = ADAP_MESSAGE_DIALOG (object);
 
   switch (prop_id) {
   case PROP_HEADING:
-    adw_message_dialog_set_heading (self, g_value_get_string (value));
+    adap_message_dialog_set_heading (self, g_value_get_string (value));
     break;
   case PROP_HEADING_USE_MARKUP:
-    adw_message_dialog_set_heading_use_markup (self, g_value_get_boolean (value));
+    adap_message_dialog_set_heading_use_markup (self, g_value_get_boolean (value));
     break;
   case PROP_BODY:
-    adw_message_dialog_set_body (self, g_value_get_string (value));
+    adap_message_dialog_set_body (self, g_value_get_string (value));
     break;
   case PROP_BODY_USE_MARKUP:
-    adw_message_dialog_set_body_use_markup (self, g_value_get_boolean (value));
+    adap_message_dialog_set_body_use_markup (self, g_value_get_boolean (value));
     break;
   case PROP_EXTRA_CHILD:
-    adw_message_dialog_set_extra_child (self, g_value_get_object (value));
+    adap_message_dialog_set_extra_child (self, g_value_get_object (value));
     break;
   case PROP_DEFAULT_RESPONSE:
-    adw_message_dialog_set_default_response (self, g_value_get_string (value));
+    adap_message_dialog_set_default_response (self, g_value_get_string (value));
     break;
   case PROP_CLOSE_RESPONSE:
-    adw_message_dialog_set_close_response (self, g_value_get_string (value));
+    adap_message_dialog_set_close_response (self, g_value_get_string (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -837,10 +837,10 @@ adw_message_dialog_set_property (GObject      *object,
 }
 
 static void
-adw_message_dialog_dispose (GObject *object)
+adap_message_dialog_dispose (GObject *object)
 {
-  AdwMessageDialog *self = ADW_MESSAGE_DIALOG (object);
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialog *self = ADAP_MESSAGE_DIALOG (object);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
 
   set_parent (self, NULL);
 
@@ -853,40 +853,40 @@ adw_message_dialog_dispose (GObject *object)
 
   g_clear_pointer (&priv->id_to_response, g_hash_table_unref);
 
-  G_OBJECT_CLASS (adw_message_dialog_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_message_dialog_parent_class)->dispose (object);
 }
 
 static void
-adw_message_dialog_finalize (GObject *object)
+adap_message_dialog_finalize (GObject *object)
 {
-  AdwMessageDialog *self = ADW_MESSAGE_DIALOG (object);
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialog *self = ADAP_MESSAGE_DIALOG (object);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
 
   g_clear_pointer (&priv->heading, g_free);
   g_clear_pointer (&priv->body, g_free);
 
-  G_OBJECT_CLASS (adw_message_dialog_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_message_dialog_parent_class)->finalize (object);
 }
 
 static void
-adw_message_dialog_class_init (AdwMessageDialogClass *klass)
+adap_message_dialog_class_init (AdapMessageDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
 
-  object_class->get_property = adw_message_dialog_get_property;
-  object_class->set_property = adw_message_dialog_set_property;
-  object_class->dispose = adw_message_dialog_dispose;
-  object_class->finalize = adw_message_dialog_finalize;
+  object_class->get_property = adap_message_dialog_get_property;
+  object_class->set_property = adap_message_dialog_set_property;
+  object_class->dispose = adap_message_dialog_dispose;
+  object_class->finalize = adap_message_dialog_finalize;
 
-  widget_class->map = adw_message_dialog_map;
-  widget_class->measure = adw_message_dialog_measure;
+  widget_class->map = adap_message_dialog_map;
+  widget_class->measure = adap_message_dialog_measure;
 
-  window_class->close_request = adw_message_dialog_close_request;
+  window_class->close_request = adap_message_dialog_close_request;
 
   /**
-   * AdwMessageDialog:heading: (attributes org.gtk.Property.get=adw_message_dialog_get_heading org.gtk.Property.set=adw_message_dialog_set_heading)
+   * AdapMessageDialog:heading: (attributes org.gtk.Property.get=adap_message_dialog_get_heading org.gtk.Property.set=adap_message_dialog_set_heading)
    *
    * The heading of the dialog.
    *
@@ -898,7 +898,7 @@ adw_message_dialog_class_init (AdwMessageDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwMessageDialog:heading-use-markup: (attributes org.gtk.Property.get=adw_message_dialog_get_heading_use_markup org.gtk.Property.set=adw_message_dialog_set_heading_use_markup)
+   * AdapMessageDialog:heading-use-markup: (attributes org.gtk.Property.get=adap_message_dialog_get_heading_use_markup org.gtk.Property.set=adap_message_dialog_set_heading_use_markup)
    *
    * Whether the heading includes Pango markup.
    *
@@ -912,7 +912,7 @@ adw_message_dialog_class_init (AdwMessageDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwMessageDialog:body: (attributes org.gtk.Property.get=adw_message_dialog_get_body org.gtk.Property.set=adw_message_dialog_set_body)
+   * AdapMessageDialog:body: (attributes org.gtk.Property.get=adap_message_dialog_get_body org.gtk.Property.set=adap_message_dialog_set_body)
    *
    * The body text of the dialog.
    *
@@ -924,7 +924,7 @@ adw_message_dialog_class_init (AdwMessageDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwMessageDialog:body-use-markup: (attributes org.gtk.Property.get=adw_message_dialog_get_body_use_markup org.gtk.Property.set=adw_message_dialog_set_body_use_markup)
+   * AdapMessageDialog:body-use-markup: (attributes org.gtk.Property.get=adap_message_dialog_get_body_use_markup org.gtk.Property.set=adap_message_dialog_set_body_use_markup)
    *
    * Whether the body text includes Pango markup.
    *
@@ -938,7 +938,7 @@ adw_message_dialog_class_init (AdwMessageDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwMessageDialog:extra-child: (attributes org.gtk.Property.get=adw_message_dialog_get_extra_child org.gtk.Property.set=adw_message_dialog_set_extra_child)
+   * AdapMessageDialog:extra-child: (attributes org.gtk.Property.get=adap_message_dialog_get_extra_child org.gtk.Property.set=adap_message_dialog_set_extra_child)
    *
    * The child widget.
    *
@@ -952,7 +952,7 @@ adw_message_dialog_class_init (AdwMessageDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwMessageDialog:default-response: (attributes org.gtk.Property.get=adw_message_dialog_get_default_response org.gtk.Property.set=adw_message_dialog_set_default_response)
+   * AdapMessageDialog:default-response: (attributes org.gtk.Property.get=adap_message_dialog_get_default_response org.gtk.Property.set=adap_message_dialog_set_default_response)
    *
    * The response ID of the default response.
    *
@@ -969,7 +969,7 @@ adw_message_dialog_class_init (AdwMessageDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwMessageDialog:close-response: (attributes org.gtk.Property.get=adw_message_dialog_get_close_response org.gtk.Property.set=adw_message_dialog_set_close_response)
+   * AdapMessageDialog:close-response: (attributes org.gtk.Property.get=adap_message_dialog_get_close_response org.gtk.Property.set=adap_message_dialog_set_close_response)
    *
    * The ID of the close response.
    *
@@ -990,7 +990,7 @@ adw_message_dialog_class_init (AdwMessageDialogClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
-   * AdwMessageDialog::response:
+   * AdapMessageDialog::response:
    * @self: a message dialog
    * @response: the response ID
    *
@@ -1009,35 +1009,35 @@ adw_message_dialog_class_init (AdwMessageDialogClass *klass)
     g_signal_new ("response",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
-                  G_STRUCT_OFFSET (AdwMessageDialogClass, response),
+                  G_STRUCT_OFFSET (AdapMessageDialogClass, response),
                   NULL, NULL,
-                  adw_marshal_VOID__STRING,
+                  adap_marshal_VOID__STRING,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRING);
   g_signal_set_va_marshaller (signals[SIGNAL_RESPONSE],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__STRINGv);
+                              adap_marshal_VOID__STRINGv);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-message-dialog.ui");
+                                               "/org/gnome/Adapta/ui/adap-message-dialog.ui");
 
-  gtk_widget_class_bind_template_child_private (widget_class, AdwMessageDialog, heading_label);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwMessageDialog, body_label);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwMessageDialog, message_area);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwMessageDialog, response_area);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapMessageDialog, heading_label);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapMessageDialog, body_label);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapMessageDialog, message_area);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapMessageDialog, response_area);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_DIALOG);
 
-  g_type_ensure (ADW_TYPE_GIZMO);
+  g_type_ensure (ADAP_TYPE_GIZMO);
 }
 
 static void
-adw_message_dialog_init (AdwMessageDialog *self)
+adap_message_dialog_init (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv = adw_message_dialog_get_instance_private (self);
+  AdapMessageDialogPrivate *priv = adap_message_dialog_get_instance_private (self);
 
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
   gtk_window_set_modal (GTK_WINDOW (self), TRUE);
@@ -1058,10 +1058,10 @@ adw_message_dialog_init (AdwMessageDialog *self)
                                                         measure_responses,
                                                         allocate_responses));
 
-  adw_gizmo_set_focus_func (ADW_GIZMO (priv->response_area),
-                            (AdwGizmoFocusFunc) adw_widget_focus_child);
-  adw_gizmo_set_grab_focus_func (ADW_GIZMO (priv->response_area),
-                            (AdwGizmoGrabFocusFunc) adw_widget_grab_focus_child);
+  adap_gizmo_set_focus_func (ADAP_GIZMO (priv->response_area),
+                            (AdapGizmoFocusFunc) adap_widget_focus_child);
+  adap_gizmo_set_grab_focus_func (ADAP_GIZMO (priv->response_area),
+                            (AdapGizmoGrabFocusFunc) adap_widget_grab_focus_child);
 
   parent_changed_cb (self);
   g_signal_connect (self, "notify::transient-for",
@@ -1084,7 +1084,7 @@ typedef struct {
   char *context;
   gboolean translatable;
 
-  AdwResponseAppearance appearance;
+  AdapResponseAppearance appearance;
   gboolean enabled;
 
   int line;
@@ -1117,7 +1117,7 @@ response_start_element (GtkBuildableParseContext  *context,
     const char *msg_context = NULL;
     gboolean translatable = FALSE;
     const char *appearance_str = NULL;
-    AdwResponseAppearance appearance = ADW_RESPONSE_DEFAULT;
+    AdapResponseAppearance appearance = ADAP_RESPONSE_DEFAULT;
     gboolean enabled = TRUE;
     ResponseData *response;
 
@@ -1139,7 +1139,7 @@ response_start_element (GtkBuildableParseContext  *context,
     if (appearance_str) {
       GValue gvalue = G_VALUE_INIT;
 
-      if (!gtk_builder_value_from_string_type (data->builder, ADW_TYPE_RESPONSE_APPEARANCE, appearance_str, &gvalue, error)) {
+      if (!gtk_builder_value_from_string_type (data->builder, ADAP_TYPE_RESPONSE_APPEARANCE, appearance_str, &gvalue, error)) {
         _gtk_builder_prefix_error (data->builder, context, error);
         return;
       }
@@ -1170,7 +1170,7 @@ response_start_element (GtkBuildableParseContext  *context,
       _gtk_builder_prefix_error (data->builder, context, error);
   } else {
     _gtk_builder_error_unhandled_tag (data->builder, context,
-                                      "AdwMessageDialog", element_name,
+                                      "AdapMessageDialog", element_name,
                                       error);
   }
 }
@@ -1199,7 +1199,7 @@ static const GtkBuildableParser response_parser = {
 };
 
 static gboolean
-adw_message_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
+adap_message_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                GtkBuilder         *builder,
                                                GObject            *child,
                                                const char         *tagname,
@@ -1228,7 +1228,7 @@ adw_message_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
 }
 
 static void
-adw_message_dialog_buildable_custom_finished (GtkBuildable *buildable,
+adap_message_dialog_buildable_custom_finished (GtkBuildable *buildable,
                                               GtkBuilder   *builder,
                                               GObject      *child,
                                               const char   *tagname,
@@ -1257,15 +1257,15 @@ adw_message_dialog_buildable_custom_finished (GtkBuildable *buildable,
     else
       label = response->label->str;
 
-    adw_message_dialog_add_response (ADW_MESSAGE_DIALOG (data->object),
+    adap_message_dialog_add_response (ADAP_MESSAGE_DIALOG (data->object),
                                      response->id, label);
 
-    if (response->appearance != ADW_RESPONSE_DEFAULT)
-      adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (data->object),
+    if (response->appearance != ADAP_RESPONSE_DEFAULT)
+      adap_message_dialog_set_response_appearance (ADAP_MESSAGE_DIALOG (data->object),
                                                   response->id, response->appearance);
 
     if (!response->enabled)
-      adw_message_dialog_set_response_enabled (ADW_MESSAGE_DIALOG (data->object),
+      adap_message_dialog_set_response_enabled (ADAP_MESSAGE_DIALOG (data->object),
                                                response->id, FALSE);
   }
 
@@ -1274,36 +1274,36 @@ adw_message_dialog_buildable_custom_finished (GtkBuildable *buildable,
 }
 
 static void
-adw_message_dialog_buildable_add_child (GtkBuildable *buildable,
+adap_message_dialog_buildable_add_child (GtkBuildable *buildable,
                                         GtkBuilder   *builder,
                                         GObject      *child,
                                         const char   *type)
 {
-  AdwMessageDialog *self = ADW_MESSAGE_DIALOG (buildable);
+  AdapMessageDialog *self = ADAP_MESSAGE_DIALOG (buildable);
 
   if (GTK_IS_WIDGET (child))
-    adw_message_dialog_set_extra_child (self, GTK_WIDGET (child));
+    adap_message_dialog_set_extra_child (self, GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_message_dialog_buildable_init (GtkBuildableIface *iface)
+adap_message_dialog_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_message_dialog_buildable_add_child;
-  iface->custom_tag_start = adw_message_dialog_buildable_custom_tag_start;
-  iface->custom_finished = adw_message_dialog_buildable_custom_finished;
+  iface->add_child = adap_message_dialog_buildable_add_child;
+  iface->custom_tag_start = adap_message_dialog_buildable_custom_tag_start;
+  iface->custom_finished = adap_message_dialog_buildable_custom_finished;
 }
 
 /**
- * adw_message_dialog_new:
+ * adap_message_dialog_new:
  * @parent: (nullable): transient parent
  * @heading: (nullable): the heading
  * @body: (nullable): the body text
  *
- * Creates a new `AdwMessageDialog`.
+ * Creates a new `AdapMessageDialog`.
  *
  * @heading and @body can be set to `NULL`. This can be useful if they need to
  * be formatted or use markup. In that case, set them to `NULL` and call
@@ -1312,18 +1312,18 @@ adw_message_dialog_buildable_init (GtkBuildableIface *iface)
  * ```c
  * GtkWidget *dialog;
  *
- * dialog = adw_message_dialog_new (parent, _("Replace File?"), NULL);
- * adw_message_dialog_format_body (ADW_MESSAGE_DIALOG (dialog),
+ * dialog = adap_message_dialog_new (parent, _("Replace File?"), NULL);
+ * adap_message_dialog_format_body (ADAP_MESSAGE_DIALOG (dialog),
  *                                 _("A file named “%s” already exists.  Do you want to replace it?"),
  *                                 filename);
  * ```
  *
- * Returns: the newly created `AdwMessageDialog`
+ * Returns: the newly created `AdapMessageDialog`
  *
  * Since: 1.2
  */
 GtkWidget *
-adw_message_dialog_new (GtkWindow  *parent,
+adap_message_dialog_new (GtkWindow  *parent,
                         const char *heading,
                         const char *body)
 {
@@ -1331,21 +1331,21 @@ adw_message_dialog_new (GtkWindow  *parent,
 
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
 
-  dialog = g_object_new (ADW_TYPE_MESSAGE_DIALOG,
+  dialog = g_object_new (ADAP_TYPE_MESSAGE_DIALOG,
                          "transient-for", parent,
                          NULL);
 
   if (heading)
-    adw_message_dialog_set_heading (ADW_MESSAGE_DIALOG (dialog), heading);
+    adap_message_dialog_set_heading (ADAP_MESSAGE_DIALOG (dialog), heading);
 
   if (body)
-    adw_message_dialog_set_body (ADW_MESSAGE_DIALOG (dialog), body);
+    adap_message_dialog_set_body (ADAP_MESSAGE_DIALOG (dialog), body);
 
   return dialog;
 }
 
 /**
- * adw_message_dialog_get_heading: (attributes org.gtk.Method.get_property=heading)
+ * adap_message_dialog_get_heading: (attributes org.gtk.Method.get_property=heading)
  * @self: a message dialog
  *
  * Gets the heading of @self.
@@ -1355,19 +1355,19 @@ adw_message_dialog_new (GtkWindow  *parent,
  * Since: 1.2
  */
 const char *
-adw_message_dialog_get_heading (AdwMessageDialog *self)
+adap_message_dialog_get_heading (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), NULL);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   return priv->heading;
 }
 
 /**
- * adw_message_dialog_set_heading: (attributes org.gtk.Method.set_property=heading)
+ * adap_message_dialog_set_heading: (attributes org.gtk.Method.set_property=heading)
  * @self: a message dialog
  * @heading: (nullable): the heading of @self
  *
@@ -1376,15 +1376,15 @@ adw_message_dialog_get_heading (AdwMessageDialog *self)
  * Since: 1.2
  */
 void
-adw_message_dialog_set_heading (AdwMessageDialog *self,
+adap_message_dialog_set_heading (AdapMessageDialog *self,
                                 const char       *heading)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (heading != NULL);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   if (!g_set_str (&priv->heading, heading))
     return;
@@ -1403,7 +1403,7 @@ adw_message_dialog_set_heading (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_get_heading_use_markup: (attributes org.gtk.Method.get_property=heading-use-markup)
+ * adap_message_dialog_get_heading_use_markup: (attributes org.gtk.Method.get_property=heading-use-markup)
  * @self: a message dialog
  *
  * Gets whether the heading of @self includes Pango markup.
@@ -1413,19 +1413,19 @@ adw_message_dialog_set_heading (AdwMessageDialog *self,
  * Since: 1.2
  */
 gboolean
-adw_message_dialog_get_heading_use_markup (AdwMessageDialog *self)
+adap_message_dialog_get_heading_use_markup (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), FALSE);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   return priv->heading_use_markup;
 }
 
 /**
- * adw_message_dialog_set_heading_use_markup: (attributes org.gtk.Method.set_property=heading-use-markup)
+ * adap_message_dialog_set_heading_use_markup: (attributes org.gtk.Method.set_property=heading-use-markup)
  * @self: a message dialog
  * @use_markup: whether to use markup for heading
  *
@@ -1436,14 +1436,14 @@ adw_message_dialog_get_heading_use_markup (AdwMessageDialog *self)
  * Since: 1.2
  */
 void
-adw_message_dialog_set_heading_use_markup (AdwMessageDialog *self,
+adap_message_dialog_set_heading_use_markup (AdapMessageDialog *self,
                                            gboolean          use_markup)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   use_markup = !!use_markup;
 
@@ -1461,7 +1461,7 @@ adw_message_dialog_set_heading_use_markup (AdwMessageDialog *self,
 
 
 /**
- * adw_message_dialog_format_heading:
+ * adap_message_dialog_format_heading:
  * @self: a message dialog
  * @format: the formatted string for the heading
  * @...: the parameters to insert into @format
@@ -1473,18 +1473,18 @@ adw_message_dialog_set_heading_use_markup (AdwMessageDialog *self,
  * Since: 1.2
  */
 void
-adw_message_dialog_format_heading (AdwMessageDialog *self,
+adap_message_dialog_format_heading (AdapMessageDialog *self,
                                    const char       *format,
                                    ...)
 {
   va_list args;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (format != NULL);
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  adw_message_dialog_set_heading_use_markup (self, FALSE);
+  adap_message_dialog_set_heading_use_markup (self, FALSE);
 
   if (format) {
     char *heading;
@@ -1493,18 +1493,18 @@ adw_message_dialog_format_heading (AdwMessageDialog *self,
     heading = g_strdup_vprintf (format, args);
     va_end (args);
 
-    adw_message_dialog_set_heading (self, heading);
+    adap_message_dialog_set_heading (self, heading);
 
     g_free (heading);
   } else {
-    adw_message_dialog_set_heading (self, NULL);
+    adap_message_dialog_set_heading (self, NULL);
   }
 
   g_object_thaw_notify (G_OBJECT (self));
 }
 
 /**
- * adw_message_dialog_format_heading_markup:
+ * adap_message_dialog_format_heading_markup:
  * @self: a message dialog
  * @format: the formatted string for the heading with Pango markup
  * @...: the parameters to insert into @format
@@ -1522,18 +1522,18 @@ adw_message_dialog_format_heading (AdwMessageDialog *self,
  * Since: 1.2
  */
 void
-adw_message_dialog_format_heading_markup (AdwMessageDialog *self,
+adap_message_dialog_format_heading_markup (AdapMessageDialog *self,
                                           const char       *format,
                                           ...)
 {
   va_list args;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (format != NULL);
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  adw_message_dialog_set_heading_use_markup (self, TRUE);
+  adap_message_dialog_set_heading_use_markup (self, TRUE);
 
   if (format) {
     char *heading;
@@ -1542,18 +1542,18 @@ adw_message_dialog_format_heading_markup (AdwMessageDialog *self,
     heading = g_markup_vprintf_escaped (format, args);
     va_end (args);
 
-    adw_message_dialog_set_heading (self, heading);
+    adap_message_dialog_set_heading (self, heading);
 
     g_free (heading);
   } else {
-    adw_message_dialog_set_heading (self, "");
+    adap_message_dialog_set_heading (self, "");
   }
 
   g_object_thaw_notify (G_OBJECT (self));
 }
 
 /**
- * adw_message_dialog_get_body: (attributes org.gtk.Method.get_property=body)
+ * adap_message_dialog_get_body: (attributes org.gtk.Method.get_property=body)
  * @self: a message dialog
  *
  * Gets the body text of @self.
@@ -1563,19 +1563,19 @@ adw_message_dialog_format_heading_markup (AdwMessageDialog *self,
  * Since: 1.2
  */
 const char *
-adw_message_dialog_get_body (AdwMessageDialog *self)
+adap_message_dialog_get_body (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), NULL);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   return priv->body;
 }
 
 /**
- * adw_message_dialog_set_body: (attributes org.gtk.Method.set_property=body)
+ * adap_message_dialog_set_body: (attributes org.gtk.Method.set_property=body)
  * @self: a message dialog
  * @body: the body of @self
  *
@@ -1584,15 +1584,15 @@ adw_message_dialog_get_body (AdwMessageDialog *self)
  * Since: 1.2
  */
 void
-adw_message_dialog_set_body (AdwMessageDialog *self,
+adap_message_dialog_set_body (AdapMessageDialog *self,
                              const char       *body)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (body != NULL);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   if (!g_set_str (&priv->body, body))
     return;
@@ -1609,7 +1609,7 @@ adw_message_dialog_set_body (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_get_body_use_markup: (attributes org.gtk.Method.get_property=body-use-markup)
+ * adap_message_dialog_get_body_use_markup: (attributes org.gtk.Method.get_property=body-use-markup)
  * @self: a message dialog
  *
  * Gets whether the body text of @self includes Pango markup.
@@ -1619,19 +1619,19 @@ adw_message_dialog_set_body (AdwMessageDialog *self,
  * Since: 1.2
  */
 gboolean
-adw_message_dialog_get_body_use_markup (AdwMessageDialog *self)
+adap_message_dialog_get_body_use_markup (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), FALSE);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   return priv->body_use_markup;
 }
 
 /**
- * adw_message_dialog_set_body_use_markup: (attributes org.gtk.Method.set_property=body-use-markup)
+ * adap_message_dialog_set_body_use_markup: (attributes org.gtk.Method.set_property=body-use-markup)
  * @self: a message dialog
  * @use_markup: whether to use markup for body text
  *
@@ -1642,14 +1642,14 @@ adw_message_dialog_get_body_use_markup (AdwMessageDialog *self)
  * Since: 1.2
  */
 void
-adw_message_dialog_set_body_use_markup (AdwMessageDialog *self,
+adap_message_dialog_set_body_use_markup (AdapMessageDialog *self,
                                         gboolean          use_markup)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   use_markup = !!use_markup;
 
@@ -1664,7 +1664,7 @@ adw_message_dialog_set_body_use_markup (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_format_body:
+ * adap_message_dialog_format_body:
  * @self: a message dialog
  * @format: the formatted string for the body text
  * @...: the parameters to insert into @format
@@ -1676,18 +1676,18 @@ adw_message_dialog_set_body_use_markup (AdwMessageDialog *self,
  * Since: 1.2
  */
 void
-adw_message_dialog_format_body (AdwMessageDialog *self,
+adap_message_dialog_format_body (AdapMessageDialog *self,
                                 const char       *format,
                                 ...)
 {
   va_list args;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (format != NULL);
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  adw_message_dialog_set_body_use_markup (self, FALSE);
+  adap_message_dialog_set_body_use_markup (self, FALSE);
 
   if (format) {
     char *body;
@@ -1696,18 +1696,18 @@ adw_message_dialog_format_body (AdwMessageDialog *self,
     body = g_strdup_vprintf (format, args);
     va_end (args);
 
-    adw_message_dialog_set_body (self, body);
+    adap_message_dialog_set_body (self, body);
 
     g_free (body);
   } else {
-    adw_message_dialog_set_body (self, "");
+    adap_message_dialog_set_body (self, "");
   }
 
   g_object_thaw_notify (G_OBJECT (self));
 }
 
 /**
- * adw_message_dialog_format_body_markup:
+ * adap_message_dialog_format_body_markup:
  * @self: a message dialog
  * @format: the formatted string for the body text with Pango markup
  * @...: the parameters to insert into @format
@@ -1725,18 +1725,18 @@ adw_message_dialog_format_body (AdwMessageDialog *self,
  * Since: 1.2
  */
 void
-adw_message_dialog_format_body_markup (AdwMessageDialog *self,
+adap_message_dialog_format_body_markup (AdapMessageDialog *self,
                                        const char       *format,
                                        ...)
 {
   va_list args;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (format != NULL);
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  adw_message_dialog_set_body_use_markup (self, TRUE);
+  adap_message_dialog_set_body_use_markup (self, TRUE);
 
   if (format) {
     char *body;
@@ -1745,18 +1745,18 @@ adw_message_dialog_format_body_markup (AdwMessageDialog *self,
     body = g_markup_vprintf_escaped (format, args);
     va_end (args);
 
-    adw_message_dialog_set_body (self, body);
+    adap_message_dialog_set_body (self, body);
 
     g_free (body);
   } else {
-    adw_message_dialog_set_body (self, NULL);
+    adap_message_dialog_set_body (self, NULL);
   }
 
   g_object_thaw_notify (G_OBJECT (self));
 }
 
 /**
- * adw_message_dialog_get_extra_child: (attributes org.gtk.Method.get_property=extra-child)
+ * adap_message_dialog_get_extra_child: (attributes org.gtk.Method.get_property=extra-child)
  * @self: a message dialog
  *
  * Gets the child widget of @self.
@@ -1766,19 +1766,19 @@ adw_message_dialog_format_body_markup (AdwMessageDialog *self,
  * Since: 1.2
  */
 GtkWidget *
-adw_message_dialog_get_extra_child (AdwMessageDialog *self)
+adap_message_dialog_get_extra_child (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), NULL);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   return priv->child;
 }
 
 /**
- * adw_message_dialog_set_extra_child: (attributes org.gtk.Method.set_property=extra-child)
+ * adap_message_dialog_set_extra_child: (attributes org.gtk.Method.set_property=extra-child)
  * @self: a message dialog
  * @child: (nullable): the child widget
  *
@@ -1789,18 +1789,18 @@ adw_message_dialog_get_extra_child (AdwMessageDialog *self)
  * Since: 1.2
  */
 void
-adw_message_dialog_set_extra_child (AdwMessageDialog *self,
+adap_message_dialog_set_extra_child (AdapMessageDialog *self,
                                     GtkWidget        *child)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
   if (child)
     g_return_if_fail (gtk_widget_get_parent (child) == NULL);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   if (child == priv->child)
     return;
@@ -1817,7 +1817,7 @@ adw_message_dialog_set_extra_child (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_add_response:
+ * adap_message_dialog_add_response:
  * @self: a message dialog
  * @id: the response ID
  * @label: the response label
@@ -1842,22 +1842,22 @@ adw_message_dialog_set_extra_child (AdwMessageDialog *self,
  * Since: 1.2
  */
 void
-adw_message_dialog_add_response (AdwMessageDialog *self,
+adap_message_dialog_add_response (AdapMessageDialog *self,
                                  const char       *id,
                                  const char       *label)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (id != NULL);
   g_return_if_fail (label != NULL);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   if (find_response (self, id)) {
     g_critical ("Trying to add a response with id '%s' to an "
-                "AdwMessageDialog, but such a response already exists", id);
+                "AdapMessageDialog, but such a response already exists", id);
     return;
   }
 
@@ -1866,7 +1866,7 @@ adw_message_dialog_add_response (AdwMessageDialog *self,
   info->dialog = self;
   info->id = g_quark_from_string (id);
   info->label = g_strdup (label);
-  info->appearance = ADW_RESPONSE_DEFAULT;
+  info->appearance = ADAP_RESPONSE_DEFAULT;
   info->enabled = TRUE;
 
   if (priv->responses) {
@@ -1885,7 +1885,7 @@ adw_message_dialog_add_response (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_add_responses: (skip)
+ * adap_message_dialog_add_responses: (skip)
  * @self: a message dialog
  * @first_id: response id
  * @...: label for first response, then more id-label pairs
@@ -1899,7 +1899,7 @@ adw_message_dialog_add_response (AdwMessageDialog *self,
  * Example:
  *
  * ```c
- * adw_message_dialog_add_responses (dialog,
+ * adap_message_dialog_add_responses (dialog,
  *                                   "cancel",  _("_Cancel"),
  *                                   "discard", _("_Discard"),
  *                                   "save",    _("_Save"),
@@ -1909,14 +1909,14 @@ adw_message_dialog_add_response (AdwMessageDialog *self,
  * Since: 1.2
  */
 void
-adw_message_dialog_add_responses (AdwMessageDialog *self,
+adap_message_dialog_add_responses (AdapMessageDialog *self,
                                   const char       *first_id,
                                   ...)
 {
   va_list args;
   const char *id, *label;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
 
   if (!first_id)
     return;
@@ -1927,7 +1927,7 @@ adw_message_dialog_add_responses (AdwMessageDialog *self,
   label = va_arg (args, const char *);
 
   while (id) {
-    adw_message_dialog_add_response (self, id, label);
+    adap_message_dialog_add_response (self, id, label);
 
     id = va_arg (args, const char *);
     if (!id)
@@ -1940,7 +1940,7 @@ adw_message_dialog_add_responses (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_remove_response:
+ * adap_message_dialog_remove_response:
  * @self: a message dialog
  * @id: the response ID
  *
@@ -1949,21 +1949,21 @@ adw_message_dialog_add_responses (AdwMessageDialog *self,
  * Since: 1.5
  */
 void
-adw_message_dialog_remove_response (AdwMessageDialog *self,
+adap_message_dialog_remove_response (AdapMessageDialog *self,
                                     const char       *id)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (id != NULL);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
   info = find_response (self, id);
 
   if (!info) {
     g_critical ("Trying to remove a response with id '%s' from an "
-                "AdwMessageDialog, but such a response does not exist",
+                "AdapMessageDialog, but such a response does not exist",
                 id);
     return;
   }
@@ -1987,7 +1987,7 @@ adw_message_dialog_remove_response (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_get_response_label:
+ * adap_message_dialog_get_response_label:
  * @self: a message dialog
  * @response: a response ID
  *
@@ -2000,14 +2000,14 @@ adw_message_dialog_remove_response (AdwMessageDialog *self,
  * Since: 1.2
  */
 const char *
-adw_message_dialog_get_response_label (AdwMessageDialog *self,
+adap_message_dialog_get_response_label (AdapMessageDialog *self,
                                        const char       *response)
 {
   ResponseInfo *info;
 
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), NULL);
   g_return_val_if_fail (response != NULL, NULL);
-  g_return_val_if_fail (adw_message_dialog_has_response (self, response), NULL);
+  g_return_val_if_fail (adap_message_dialog_has_response (self, response), NULL);
 
   info = find_response (self, response);
 
@@ -2015,7 +2015,7 @@ adw_message_dialog_get_response_label (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_set_response_label:
+ * adap_message_dialog_set_response_label:
  * @self: a message dialog
  * @response: a response ID
  * @label: the label of @response
@@ -2028,16 +2028,16 @@ adw_message_dialog_get_response_label (AdwMessageDialog *self,
  * Since: 1.2
  */
 void
-adw_message_dialog_set_response_label (AdwMessageDialog *self,
+adap_message_dialog_set_response_label (AdapMessageDialog *self,
                                        const char       *response,
                                        const char       *label)
 {
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (response != NULL);
   g_return_if_fail (label != NULL);
-  g_return_if_fail (adw_message_dialog_has_response (self, response));
+  g_return_if_fail (adap_message_dialog_has_response (self, response));
 
   info = find_response (self, response);
 
@@ -2047,7 +2047,7 @@ adw_message_dialog_set_response_label (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_get_response_appearance:
+ * adap_message_dialog_get_response_appearance:
  * @self: a message dialog
  * @response: a response ID
  *
@@ -2059,15 +2059,15 @@ adw_message_dialog_set_response_label (AdwMessageDialog *self,
  *
  * Since: 1.2
  */
-AdwResponseAppearance
-adw_message_dialog_get_response_appearance (AdwMessageDialog *self,
+AdapResponseAppearance
+adap_message_dialog_get_response_appearance (AdapMessageDialog *self,
                                             const char       *response)
 {
   ResponseInfo *info;
 
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), FALSE);
   g_return_val_if_fail (response != NULL, FALSE);
-  g_return_val_if_fail (adw_message_dialog_has_response (self, response), FALSE);
+  g_return_val_if_fail (adap_message_dialog_has_response (self, response), FALSE);
 
   info = find_response (self, response);
 
@@ -2075,7 +2075,7 @@ adw_message_dialog_get_response_appearance (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_set_response_appearance:
+ * adap_message_dialog_set_response_appearance:
  * @self: a message dialog
  * @response: a response ID
  * @appearance: appearance for @response
@@ -2087,31 +2087,31 @@ adw_message_dialog_get_response_appearance (AdwMessageDialog *self,
  *   <img src="message-dialog-appearance.png" alt="message-dialog-appearance">
  * </picture>
  *
- * Use `ADW_RESPONSE_SUGGESTED` to mark important responses such as the
+ * Use `ADAP_RESPONSE_SUGGESTED` to mark important responses such as the
  * affirmative action, like the Save button in the example.
  *
- * Use `ADW_RESPONSE_DESTRUCTIVE` to draw attention to the potentially damaging
+ * Use `ADAP_RESPONSE_DESTRUCTIVE` to draw attention to the potentially damaging
  * consequences of using @response. This appearance acts as a warning to the
  * user. The Discard button in the example is using this appearance.
  *
- * The default appearance is `ADW_RESPONSE_DEFAULT`.
+ * The default appearance is `ADAP_RESPONSE_DEFAULT`.
  *
  * Negative responses like Cancel or Close should use the default appearance.
  *
  * Since: 1.2
  */
 void
-adw_message_dialog_set_response_appearance (AdwMessageDialog      *self,
+adap_message_dialog_set_response_appearance (AdapMessageDialog      *self,
                                             const char            *response,
-                                            AdwResponseAppearance  appearance)
+                                            AdapResponseAppearance  appearance)
 {
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (response != NULL);
-  g_return_if_fail (appearance >= ADW_RESPONSE_DEFAULT &&
-                    appearance <= ADW_RESPONSE_DESTRUCTIVE);
-  g_return_if_fail (adw_message_dialog_has_response (self, response));
+  g_return_if_fail (appearance >= ADAP_RESPONSE_DEFAULT &&
+                    appearance <= ADAP_RESPONSE_DESTRUCTIVE);
+  g_return_if_fail (adap_message_dialog_has_response (self, response));
 
   info = find_response (self, response);
 
@@ -2120,19 +2120,19 @@ adw_message_dialog_set_response_appearance (AdwMessageDialog      *self,
 
   info->appearance = appearance;
 
-  if (info->appearance == ADW_RESPONSE_SUGGESTED)
+  if (info->appearance == ADAP_RESPONSE_SUGGESTED)
     gtk_widget_add_css_class (info->button, "suggested");
   else
     gtk_widget_remove_css_class (info->button, "suggested");
 
-  if (info->appearance == ADW_RESPONSE_DESTRUCTIVE)
+  if (info->appearance == ADAP_RESPONSE_DESTRUCTIVE)
     gtk_widget_add_css_class (info->button, "destructive");
   else
     gtk_widget_remove_css_class (info->button, "destructive");
 }
 
 /**
- * adw_message_dialog_get_response_enabled:
+ * adap_message_dialog_get_response_enabled:
  * @self: a message dialog
  * @response: a response ID
  *
@@ -2145,14 +2145,14 @@ adw_message_dialog_set_response_appearance (AdwMessageDialog      *self,
  * Since: 1.2
  */
 gboolean
-adw_message_dialog_get_response_enabled (AdwMessageDialog *self,
+adap_message_dialog_get_response_enabled (AdapMessageDialog *self,
                                          const char       *response)
 {
   ResponseInfo *info;
 
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), FALSE);
   g_return_val_if_fail (response != NULL, FALSE);
-  g_return_val_if_fail (adw_message_dialog_has_response (self, response), FALSE);
+  g_return_val_if_fail (adap_message_dialog_has_response (self, response), FALSE);
 
   info = find_response (self, response);
 
@@ -2160,7 +2160,7 @@ adw_message_dialog_get_response_enabled (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_set_response_enabled:
+ * adap_message_dialog_set_response_enabled:
  * @self: a message dialog
  * @response: a response ID
  * @enabled: whether to enable @response
@@ -2179,15 +2179,15 @@ adw_message_dialog_get_response_enabled (AdwMessageDialog *self,
  * Since: 1.2
  */
 void
-adw_message_dialog_set_response_enabled (AdwMessageDialog *self,
+adap_message_dialog_set_response_enabled (AdapMessageDialog *self,
                                          const char       *response,
                                          gboolean          enabled)
 {
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (response != NULL);
-  g_return_if_fail (adw_message_dialog_has_response (self, response));
+  g_return_if_fail (adap_message_dialog_has_response (self, response));
 
   info = find_response (self, response);
 
@@ -2202,7 +2202,7 @@ adw_message_dialog_set_response_enabled (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_get_default_response: (attributes org.gtk.Method.get_property=default-response)
+ * adap_message_dialog_get_default_response: (attributes org.gtk.Method.get_property=default-response)
  * @self: a message dialog
  *
  * Gets the ID of the default response of @self.
@@ -2212,13 +2212,13 @@ adw_message_dialog_set_response_enabled (AdwMessageDialog *self,
  * Since: 1.2
  */
 const char *
-adw_message_dialog_get_default_response (AdwMessageDialog *self)
+adap_message_dialog_get_default_response (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), NULL);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   if (!priv->default_response)
     return NULL;
@@ -2227,7 +2227,7 @@ adw_message_dialog_get_default_response (AdwMessageDialog *self)
 }
 
 /**
- * adw_message_dialog_set_default_response: (attributes org.gtk.Method.set_property=default-response)
+ * adap_message_dialog_set_default_response: (attributes org.gtk.Method.set_property=default-response)
  * @self: a message dialog
  * @response: (nullable): the default response ID
  *
@@ -2241,16 +2241,16 @@ adw_message_dialog_get_default_response (AdwMessageDialog *self)
  * Since: 1.2
  */
 void
-adw_message_dialog_set_default_response (AdwMessageDialog *self,
+adap_message_dialog_set_default_response (AdapMessageDialog *self,
                                          const char       *response)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
   GQuark quark;
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
   quark = g_quark_from_string (response);
 
   if (quark == priv->default_response)
@@ -2267,7 +2267,7 @@ adw_message_dialog_set_default_response (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_get_close_response: (attributes org.gtk.Method.get_property=close-response)
+ * adap_message_dialog_get_close_response: (attributes org.gtk.Method.get_property=close-response)
  * @self: a message dialog
  *
  * Gets the ID of the close response of @self.
@@ -2277,19 +2277,19 @@ adw_message_dialog_set_default_response (AdwMessageDialog *self,
  * Since: 1.2
  */
 const char *
-adw_message_dialog_get_close_response (AdwMessageDialog *self)
+adap_message_dialog_get_close_response (AdapMessageDialog *self)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), NULL);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
 
   return g_quark_to_string (priv->close_response);
 }
 
 /**
- * adw_message_dialog_set_close_response: (attributes org.gtk.Method.set_property=close-response)
+ * adap_message_dialog_set_close_response: (attributes org.gtk.Method.set_property=close-response)
  * @self: a message dialog
  * @response: the close response ID
  *
@@ -2305,16 +2305,16 @@ adw_message_dialog_get_close_response (AdwMessageDialog *self)
  * Since: 1.2
  */
 void
-adw_message_dialog_set_close_response (AdwMessageDialog *self,
+adap_message_dialog_set_close_response (AdapMessageDialog *self,
                                        const char       *response)
 {
-  AdwMessageDialogPrivate *priv;
+  AdapMessageDialogPrivate *priv;
   GQuark quark;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (response != NULL);
 
-  priv = adw_message_dialog_get_instance_private (self);
+  priv = adap_message_dialog_get_instance_private (self);
   quark = g_quark_from_string (response);
 
   if (quark == priv->close_response)
@@ -2326,7 +2326,7 @@ adw_message_dialog_set_close_response (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_response: (attributes org.gtk.Method.signal=response)
+ * adap_message_dialog_response: (attributes org.gtk.Method.signal=response)
  * @self: a message dialog
  * @response: response ID
  *
@@ -2337,10 +2337,10 @@ adw_message_dialog_set_close_response (AdwMessageDialog *self,
  * Since: 1.2
  */
 void
-adw_message_dialog_response (AdwMessageDialog *self,
+adap_message_dialog_response (AdapMessageDialog *self,
                              const char       *response)
 {
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
   g_return_if_fail (response != NULL);
 
   g_signal_emit (self, signals[SIGNAL_RESPONSE],
@@ -2348,7 +2348,7 @@ adw_message_dialog_response (AdwMessageDialog *self,
 }
 
 /**
- * adw_message_dialog_has_response:
+ * adap_message_dialog_has_response:
  * @self: a message dialog
  * @response: response ID
  *
@@ -2359,10 +2359,10 @@ adw_message_dialog_response (AdwMessageDialog *self,
  * Since: 1.2
  */
 gboolean
-adw_message_dialog_has_response (AdwMessageDialog *self,
+adap_message_dialog_has_response (AdapMessageDialog *self,
                                  const char       *response)
 {
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), FALSE);
   g_return_val_if_fail (response != NULL, FALSE);
 
   return find_response (self, response) != NULL;
@@ -2372,7 +2372,7 @@ static void choose_cancelled_cb (GCancellable *cancellable,
                                  GTask        *task);
 
 static void
-choose_response_cb (AdwMessageDialog *dialog,
+choose_response_cb (AdapMessageDialog *dialog,
                     const char       *response,
                     GTask            *task)
 {
@@ -2392,13 +2392,13 @@ static void
 choose_cancelled_cb (GCancellable *cancellable,
                      GTask        *task)
 {
-  AdwMessageDialog *self = g_task_get_source_object (task);
+  AdapMessageDialog *self = g_task_get_source_object (task);
 
-  choose_response_cb (self, adw_message_dialog_get_close_response (self), task);
+  choose_response_cb (self, adap_message_dialog_get_close_response (self), task);
 }
 
 /**
- * adw_message_dialog_choose:
+ * adap_message_dialog_choose:
  * @self: a message dialog
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
  * @callback: (scope async): a callback to call when the operation is complete
@@ -2412,17 +2412,17 @@ choose_cancelled_cb (GCancellable *cancellable,
  * Since: 1.3
  */
 void
-adw_message_dialog_choose (AdwMessageDialog    *self,
+adap_message_dialog_choose (AdapMessageDialog    *self,
                            GCancellable        *cancellable,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
 {
   GTask *task;
 
-  g_return_if_fail (ADW_IS_MESSAGE_DIALOG (self));
+  g_return_if_fail (ADAP_IS_MESSAGE_DIALOG (self));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, adw_message_dialog_choose);
+  g_task_set_source_tag (task, adap_message_dialog_choose);
 
   if (cancellable)
     g_signal_connect (cancellable, "cancelled", G_CALLBACK (choose_cancelled_cb), task);
@@ -2433,7 +2433,7 @@ adw_message_dialog_choose (AdwMessageDialog    *self,
 }
 
 /**
- * adw_message_dialog_choose_finish:
+ * adap_message_dialog_choose_finish:
  * @self: a message dialog
  * @result: a `GAsyncResult`
  *
@@ -2445,13 +2445,13 @@ adw_message_dialog_choose (AdwMessageDialog    *self,
  * Since: 1.3
  */
 const char *
-adw_message_dialog_choose_finish (AdwMessageDialog *self,
+adap_message_dialog_choose_finish (AdapMessageDialog *self,
                                   GAsyncResult     *result)
 {
   GQuark id;
-  g_return_val_if_fail (ADW_IS_MESSAGE_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_MESSAGE_DIALOG (self), NULL);
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == adw_message_dialog_choose, NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == adap_message_dialog_choose, NULL);
 
   id = g_task_propagate_int (G_TASK (result), NULL);
 

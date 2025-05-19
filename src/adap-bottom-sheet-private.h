@@ -8,53 +8,53 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_BOTTOM_SHEET (adw_bottom_sheet_get_type())
+#define ADAP_TYPE_BOTTOM_SHEET (adap_bottom_sheet_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwBottomSheet, adw_bottom_sheet, ADW, BOTTOM_SHEET, GtkWidget)
+G_DECLARE_FINAL_TYPE (AdapBottomSheet, adap_bottom_sheet, ADAP, BOTTOM_SHEET, GtkWidget)
 
-GtkWidget *adw_bottom_sheet_new (void);
+GtkWidget *adap_bottom_sheet_new (void);
 
-GtkWidget *adw_bottom_sheet_get_child (AdwBottomSheet *self);
-void       adw_bottom_sheet_set_child (AdwBottomSheet *self,
+GtkWidget *adap_bottom_sheet_get_child (AdapBottomSheet *self);
+void       adap_bottom_sheet_set_child (AdapBottomSheet *self,
                                        GtkWidget      *child);
 
-GtkWidget *adw_bottom_sheet_get_sheet (AdwBottomSheet *self);
-void       adw_bottom_sheet_set_sheet (AdwBottomSheet *self,
+GtkWidget *adap_bottom_sheet_get_sheet (AdapBottomSheet *self);
+void       adap_bottom_sheet_set_sheet (AdapBottomSheet *self,
                                        GtkWidget      *sheet);
 
-gboolean adw_bottom_sheet_get_open (AdwBottomSheet *self);
-void     adw_bottom_sheet_set_open (AdwBottomSheet *self,
+gboolean adap_bottom_sheet_get_open (AdapBottomSheet *self);
+void     adap_bottom_sheet_set_open (AdapBottomSheet *self,
                                     gboolean        open);
 
-float adw_bottom_sheet_get_align (AdwBottomSheet *self);
-void  adw_bottom_sheet_set_align (AdwBottomSheet *self,
+float adap_bottom_sheet_get_align (AdapBottomSheet *self);
+void  adap_bottom_sheet_set_align (AdapBottomSheet *self,
                                   float           align);
 
-gboolean adw_bottom_sheet_get_show_drag_handle (AdwBottomSheet *self);
-void     adw_bottom_sheet_set_show_drag_handle (AdwBottomSheet *self,
+gboolean adap_bottom_sheet_get_show_drag_handle (AdapBottomSheet *self);
+void     adap_bottom_sheet_set_show_drag_handle (AdapBottomSheet *self,
                                                 gboolean        show_drag_handle);
 
-gboolean adw_bottom_sheet_get_modal (AdwBottomSheet *self);
-void     adw_bottom_sheet_set_modal (AdwBottomSheet *self,
+gboolean adap_bottom_sheet_get_modal (AdapBottomSheet *self);
+void     adap_bottom_sheet_set_modal (AdapBottomSheet *self,
                                      gboolean        modal);
 
-gboolean adw_bottom_sheet_get_can_close (AdwBottomSheet *self);
-void     adw_bottom_sheet_set_can_close (AdwBottomSheet *self,
+gboolean adap_bottom_sheet_get_can_close (AdapBottomSheet *self);
+void     adap_bottom_sheet_set_can_close (AdapBottomSheet *self,
                                          gboolean        can_close);
 
-void adw_bottom_sheet_set_min_natural_width (AdwBottomSheet *self,
+void adap_bottom_sheet_set_min_natural_width (AdapBottomSheet *self,
                                              int             min_natural_width);
 
-GtkWidget *adw_bottom_sheet_get_sheet_bin (AdwBottomSheet *self);
+GtkWidget *adap_bottom_sheet_get_sheet_bin (AdapBottomSheet *self);
 
 G_END_DECLS

@@ -9,66 +9,66 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_GIZMO (adw_gizmo_get_type())
+#define ADAP_TYPE_GIZMO (adap_gizmo_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwGizmo, adw_gizmo, ADW, GIZMO, GtkWidget)
+G_DECLARE_FINAL_TYPE (AdapGizmo, adap_gizmo, ADAP, GIZMO, GtkWidget)
 
-typedef void     (* AdwGizmoMeasureFunc)  (AdwGizmo       *self,
+typedef void     (* AdapGizmoMeasureFunc)  (AdapGizmo       *self,
                                            GtkOrientation  orientation,
                                            int             for_size,
                                            int            *minimum,
                                            int            *natural,
                                            int            *minimum_baseline,
                                            int            *natural_baseline);
-typedef void     (* AdwGizmoAllocateFunc) (AdwGizmo *self,
+typedef void     (* AdapGizmoAllocateFunc) (AdapGizmo *self,
                                            int       width,
                                            int       height,
                                            int       baseline);
-typedef void     (* AdwGizmoSnapshotFunc) (AdwGizmo    *self,
+typedef void     (* AdapGizmoSnapshotFunc) (AdapGizmo    *self,
                                            GtkSnapshot *snapshot);
-typedef gboolean (* AdwGizmoContainsFunc) (AdwGizmo *self,
+typedef gboolean (* AdapGizmoContainsFunc) (AdapGizmo *self,
                                            double    x,
                                            double    y);
-typedef gboolean (* AdwGizmoFocusFunc)    (AdwGizmo         *self,
+typedef gboolean (* AdapGizmoFocusFunc)    (AdapGizmo         *self,
                                            GtkDirectionType  direction);
-typedef gboolean (* AdwGizmoGrabFocusFunc)(AdwGizmo         *self);
+typedef gboolean (* AdapGizmoGrabFocusFunc)(AdapGizmo         *self);
 
-GtkWidget *adw_gizmo_new (const char            *css_name,
-                          AdwGizmoMeasureFunc    measure_func,
-                          AdwGizmoAllocateFunc   allocate_func,
-                          AdwGizmoSnapshotFunc   snapshot_func,
-                          AdwGizmoContainsFunc   contains_func,
-                          AdwGizmoFocusFunc      focus_func,
-                          AdwGizmoGrabFocusFunc  grab_focus_func) G_GNUC_WARN_UNUSED_RESULT;
+GtkWidget *adap_gizmo_new (const char            *css_name,
+                          AdapGizmoMeasureFunc    measure_func,
+                          AdapGizmoAllocateFunc   allocate_func,
+                          AdapGizmoSnapshotFunc   snapshot_func,
+                          AdapGizmoContainsFunc   contains_func,
+                          AdapGizmoFocusFunc      focus_func,
+                          AdapGizmoGrabFocusFunc  grab_focus_func) G_GNUC_WARN_UNUSED_RESULT;
 
-GtkWidget *adw_gizmo_new_with_role (const char            *css_name,
+GtkWidget *adap_gizmo_new_with_role (const char            *css_name,
                                     GtkAccessibleRole      role,
-                                    AdwGizmoMeasureFunc    measure_func,
-                                    AdwGizmoAllocateFunc   allocate_func,
-                                    AdwGizmoSnapshotFunc   snapshot_func,
-                                    AdwGizmoContainsFunc   contains_func,
-                                    AdwGizmoFocusFunc      focus_func,
-                                    AdwGizmoGrabFocusFunc  grab_focus_func) G_GNUC_WARN_UNUSED_RESULT;
+                                    AdapGizmoMeasureFunc    measure_func,
+                                    AdapGizmoAllocateFunc   allocate_func,
+                                    AdapGizmoSnapshotFunc   snapshot_func,
+                                    AdapGizmoContainsFunc   contains_func,
+                                    AdapGizmoFocusFunc      focus_func,
+                                    AdapGizmoGrabFocusFunc  grab_focus_func) G_GNUC_WARN_UNUSED_RESULT;
 
-void adw_gizmo_set_measure_func    (AdwGizmo              *self,
-                                    AdwGizmoMeasureFunc    measure_func);
-void adw_gizmo_set_allocate_func   (AdwGizmo              *self,
-                                    AdwGizmoAllocateFunc   allocate_func);
-void adw_gizmo_set_snapshot_func   (AdwGizmo              *self,
-                                    AdwGizmoSnapshotFunc   snapshot_func);
-void adw_gizmo_set_contains_func   (AdwGizmo              *self,
-                                    AdwGizmoContainsFunc   contains_func);
-void adw_gizmo_set_focus_func      (AdwGizmo              *self,
-                                    AdwGizmoFocusFunc      focus_func);
-void adw_gizmo_set_grab_focus_func (AdwGizmo              *self,
-                                    AdwGizmoGrabFocusFunc  grab_focus_func);
+void adap_gizmo_set_measure_func    (AdapGizmo              *self,
+                                    AdapGizmoMeasureFunc    measure_func);
+void adap_gizmo_set_allocate_func   (AdapGizmo              *self,
+                                    AdapGizmoAllocateFunc   allocate_func);
+void adap_gizmo_set_snapshot_func   (AdapGizmo              *self,
+                                    AdapGizmoSnapshotFunc   snapshot_func);
+void adap_gizmo_set_contains_func   (AdapGizmo              *self,
+                                    AdapGizmoContainsFunc   contains_func);
+void adap_gizmo_set_focus_func      (AdapGizmo              *self,
+                                    AdapGizmoFocusFunc      focus_func);
+void adap_gizmo_set_grab_focus_func (AdapGizmo              *self,
+                                    AdapGizmoGrabFocusFunc  grab_focus_func);
 
 G_END_DECLS

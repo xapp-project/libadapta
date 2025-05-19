@@ -7,12 +7,12 @@
  */
 
 #include "config.h"
-#include "adw-bin.h"
+#include "adap-bin.h"
 
-#include "adw-widget-utils-private.h"
+#include "adap-widget-utils-private.h"
 
 /**
- * AdwBin:
+ * AdapBin:
  *
  * A widget with one child.
  *
@@ -21,7 +21,7 @@
  *   <img src="bin.png" alt="bin">
  * </picture>
  *
- * The `AdwBin` widget has only one child, set with the [property@Bin:child]
+ * The `AdapBin` widget has only one child, set with the [property@Bin:child]
  * property.
  *
  * It is useful for deriving subclasses, since it provides common code needed
@@ -31,13 +31,13 @@
 typedef struct
 {
   GtkWidget *child;
-} AdwBinPrivate;
+} AdapBinPrivate;
 
-static void adw_bin_buildable_init (GtkBuildableIface *iface);
+static void adap_bin_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (AdwBin, adw_bin, GTK_TYPE_WIDGET,
-                         G_ADD_PRIVATE (AdwBin)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_bin_buildable_init))
+G_DEFINE_TYPE_WITH_CODE (AdapBin, adap_bin, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (AdapBin)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_bin_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -50,27 +50,27 @@ enum {
 static GParamSpec *props[LAST_PROP];
 
 static void
-adw_bin_dispose (GObject *object)
+adap_bin_dispose (GObject *object)
 {
-  AdwBin *self = ADW_BIN (object);
-  AdwBinPrivate *priv = adw_bin_get_instance_private (self);
+  AdapBin *self = ADAP_BIN (object);
+  AdapBinPrivate *priv = adap_bin_get_instance_private (self);
 
   g_clear_pointer (&priv->child, gtk_widget_unparent);
 
-  G_OBJECT_CLASS (adw_bin_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_bin_parent_class)->dispose (object);
 }
 
 static void
-adw_bin_get_property (GObject    *object,
+adap_bin_get_property (GObject    *object,
                       guint       prop_id,
                       GValue     *value,
                       GParamSpec *pspec)
 {
-  AdwBin *self = ADW_BIN (object);
+  AdapBin *self = ADAP_BIN (object);
 
   switch (prop_id) {
   case PROP_CHILD:
-    g_value_set_object (value, adw_bin_get_child (self));
+    g_value_set_object (value, adap_bin_get_child (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -78,16 +78,16 @@ adw_bin_get_property (GObject    *object,
 }
 
 static void
-adw_bin_set_property (GObject      *object,
+adap_bin_set_property (GObject      *object,
                       guint         prop_id,
                       const GValue *value,
                       GParamSpec   *pspec)
 {
-  AdwBin *self = ADW_BIN (object);
+  AdapBin *self = ADAP_BIN (object);
 
   switch (prop_id) {
   case PROP_CHILD:
-    adw_bin_set_child (self, g_value_get_object (value));
+    adap_bin_set_child (self, g_value_get_object (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -95,22 +95,22 @@ adw_bin_set_property (GObject      *object,
 }
 
 static void
-adw_bin_class_init (AdwBinClass *klass)
+adap_bin_class_init (AdapBinClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_bin_dispose;
-  object_class->get_property = adw_bin_get_property;
-  object_class->set_property = adw_bin_set_property;
+  object_class->dispose = adap_bin_dispose;
+  object_class->get_property = adap_bin_get_property;
+  object_class->set_property = adap_bin_set_property;
 
-  widget_class->compute_expand = adw_widget_compute_expand;
-  widget_class->focus = adw_widget_focus_child;
+  widget_class->compute_expand = adap_widget_compute_expand;
+  widget_class->focus = adap_widget_focus_child;
 
   /**
-   * AdwBin:child: (attributes org.gtk.Property.get=adw_bin_get_child org.gtk.Property.set=adw_bin_set_child)
+   * AdapBin:child: (attributes org.gtk.Property.get=adap_bin_get_child org.gtk.Property.set=adap_bin_set_child)
    *
-   * The child widget of the `AdwBin`.
+   * The child widget of the `AdapBin`.
    */
   props[PROP_CHILD] =
     g_param_spec_object ("child", NULL, NULL,
@@ -123,45 +123,45 @@ adw_bin_class_init (AdwBinClass *klass)
 }
 
 static void
-adw_bin_init (AdwBin *self)
+adap_bin_init (AdapBin *self)
 {
 }
 
 static void
-adw_bin_buildable_add_child (GtkBuildable *buildable,
+adap_bin_buildable_add_child (GtkBuildable *buildable,
                              GtkBuilder   *builder,
                              GObject      *child,
                              const char   *type)
 {
   if (GTK_IS_WIDGET (child))
-    adw_bin_set_child (ADW_BIN (buildable), GTK_WIDGET (child));
+    adap_bin_set_child (ADAP_BIN (buildable), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_bin_buildable_init (GtkBuildableIface *iface)
+adap_bin_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_bin_buildable_add_child;
+  iface->add_child = adap_bin_buildable_add_child;
 }
 
 /**
- * adw_bin_new:
+ * adap_bin_new:
  *
- * Creates a new `AdwBin`.
+ * Creates a new `AdapBin`.
  *
- * Returns: the new created `AdwBin`
+ * Returns: the new created `AdapBin`
  */
 GtkWidget *
-adw_bin_new (void)
+adap_bin_new (void)
 {
-  return g_object_new (ADW_TYPE_BIN, NULL);
+  return g_object_new (ADAP_TYPE_BIN, NULL);
 }
 
 /**
- * adw_bin_get_child: (attributes org.gtk.Method.get_property=child)
+ * adap_bin_get_child: (attributes org.gtk.Method.get_property=child)
  * @self: a bin
  *
  * Gets the child widget of @self.
@@ -169,37 +169,37 @@ adw_bin_new (void)
  * Returns: (nullable) (transfer none): the child widget of @self
  */
 GtkWidget *
-adw_bin_get_child (AdwBin *self)
+adap_bin_get_child (AdapBin *self)
 {
-  AdwBinPrivate *priv;
+  AdapBinPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_BIN (self), NULL);
+  g_return_val_if_fail (ADAP_IS_BIN (self), NULL);
 
-  priv = adw_bin_get_instance_private (self);
+  priv = adap_bin_get_instance_private (self);
 
   return priv->child;
 }
 
 /**
- * adw_bin_set_child: (attributes org.gtk.Method.set_property=child)
+ * adap_bin_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a bin
  * @child: (nullable): the child widget
  *
  * Sets the child widget of @self.
  */
 void
-adw_bin_set_child (AdwBin    *self,
+adap_bin_set_child (AdapBin    *self,
                    GtkWidget *child)
 {
-  AdwBinPrivate *priv;
+  AdapBinPrivate *priv;
 
-  g_return_if_fail (ADW_IS_BIN (self));
+  g_return_if_fail (ADAP_IS_BIN (self));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
   if (child)
     g_return_if_fail (gtk_widget_get_parent (child) == NULL);
 
-  priv = adw_bin_get_instance_private (self);
+  priv = adap_bin_get_instance_private (self);
 
   if (priv->child == child)
     return;

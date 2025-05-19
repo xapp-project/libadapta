@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwTab" parent="GtkWidget">
+  <template class="AdapTab" parent="GtkWidget">
     <property name="focusable">true</property>
     <accessibility>
       <relation name="labelled-by">title</relation>
@@ -48,12 +48,12 @@
       </object>
     </child>
     <child>
-      <object class="AdwFadingLabel" id="title">
+      <object class="AdapFadingLabel" id="title">
         <property name="margin-start">4</property>
         <property name="margin-end">4</property>
         <binding name="label">
-          <lookup name="title" type="AdwTabPage">
-            <lookup name="page">AdwTab</lookup>
+          <lookup name="title" type="AdapTabPage">
+            <lookup name="page">AdapTab</lookup>
           </lookup>
         </binding>
         <style>
@@ -66,8 +66,8 @@
         <property name="can-focus">False</property>
         <property name="valign">center</property>
         <binding name="tooltip-markup">
-          <lookup name="indicator-tooltip" type="AdwTabPage">
-            <lookup name="page">AdwTab</lookup>
+          <lookup name="indicator-tooltip" type="AdapTabPage">
+            <lookup name="page">AdapTab</lookup>
           </lookup>
         </binding>
         <signal name="clicked" handler="indicator_clicked_cb" swapped="true"/>
@@ -79,8 +79,8 @@
         <property name="child">
           <object class="GtkImage" id="indicator_icon">
             <binding name="gicon">
-              <lookup name="indicator-icon" type="AdwTabPage">
-                <lookup name="page">AdwTab</lookup>
+              <lookup name="indicator-icon" type="AdapTabPage">
+                <lookup name="page">AdapTab</lookup>
               </lookup>
             </binding>
           </object>
@@ -102,7 +102,7 @@
       </object>
     </child>
     <child>
-      <object class="AdwGizmo" id="needs_attention_indicator">
+      <object class="AdapGizmo" id="needs_attention_indicator">
         <property name="css-name">indicator</property>
         <property name="valign">end</property>
       </object>

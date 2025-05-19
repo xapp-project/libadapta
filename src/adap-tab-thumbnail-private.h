@@ -8,42 +8,42 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <gtk/gtk.h>
 
-#include "adw-tab-view.h"
+#include "adap-tab-view.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_TAB_THUMBNAIL (adw_tab_thumbnail_get_type())
+#define ADAP_TYPE_TAB_THUMBNAIL (adap_tab_thumbnail_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwTabThumbnail, adw_tab_thumbnail, ADW, TAB_THUMBNAIL, GtkWidget)
+G_DECLARE_FINAL_TYPE (AdapTabThumbnail, adap_tab_thumbnail, ADAP, TAB_THUMBNAIL, GtkWidget)
 
-AdwTabThumbnail *adw_tab_thumbnail_new (AdwTabView *view,
+AdapTabThumbnail *adap_tab_thumbnail_new (AdapTabView *view,
                                         gboolean    pinned) G_GNUC_WARN_UNUSED_RESULT;
 
-AdwTabPage *adw_tab_thumbnail_get_page (AdwTabThumbnail *self);
-void        adw_tab_thumbnail_set_page (AdwTabThumbnail *self,
-                                        AdwTabPage      *page);
+AdapTabPage *adap_tab_thumbnail_get_page (AdapTabThumbnail *self);
+void        adap_tab_thumbnail_set_page (AdapTabThumbnail *self,
+                                        AdapTabPage      *page);
 
-gboolean adw_tab_thumbnail_get_inverted (AdwTabThumbnail *self);
-void     adw_tab_thumbnail_set_inverted (AdwTabThumbnail *self,
+gboolean adap_tab_thumbnail_get_inverted (AdapTabThumbnail *self);
+void     adap_tab_thumbnail_set_inverted (AdapTabThumbnail *self,
                                          gboolean         inverted);
 
-void adw_tab_thumbnail_setup_extra_drop_target (AdwTabThumbnail *self,
+void adap_tab_thumbnail_setup_extra_drop_target (AdapTabThumbnail *self,
                                                 GdkDragAction    actions,
                                                 GType           *types,
                                                 gsize            n_types);
 
-void adw_tab_thumbnail_set_extra_drag_preload (AdwTabThumbnail *self,
+void adap_tab_thumbnail_set_extra_drag_preload (AdapTabThumbnail *self,
                                                gboolean         preload);
 
-GtkWidget *adw_tab_thumbnail_get_thumbnail (AdwTabThumbnail *self);
+GtkWidget *adap_tab_thumbnail_get_thumbnail (AdapTabThumbnail *self);
 
-void adw_tab_thumbnail_fade_out (AdwTabThumbnail *self);
-void adw_tab_thumbnail_fade_in  (AdwTabThumbnail *self);
+void adap_tab_thumbnail_fade_out (AdapTabThumbnail *self);
+void adap_tab_thumbnail_fade_in  (AdapTabThumbnail *self);
 
 G_END_DECLS

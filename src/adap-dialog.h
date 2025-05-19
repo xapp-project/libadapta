@@ -8,113 +8,113 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-breakpoint.h"
-#include "adw-enums.h"
+#include "adap-breakpoint.h"
+#include "adap-enums.h"
 
 G_BEGIN_DECLS
 
 typedef enum {
-  ADW_DIALOG_AUTO,
-  ADW_DIALOG_FLOATING,
-  ADW_DIALOG_BOTTOM_SHEET,
-} AdwDialogPresentationMode;
+  ADAP_DIALOG_AUTO,
+  ADAP_DIALOG_FLOATING,
+  ADAP_DIALOG_BOTTOM_SHEET,
+} AdapDialogPresentationMode;
 
-#define ADW_TYPE_DIALOG (adw_dialog_get_type())
+#define ADAP_TYPE_DIALOG (adap_dialog_get_type())
 
-ADW_AVAILABLE_IN_1_5
-G_DECLARE_DERIVABLE_TYPE (AdwDialog, adw_dialog, ADW, DIALOG, GtkWidget)
+ADAP_AVAILABLE_IN_1_5
+G_DECLARE_DERIVABLE_TYPE (AdapDialog, adap_dialog, ADAP, DIALOG, GtkWidget)
 
-struct _AdwDialogClass
+struct _AdapDialogClass
 {
   GtkWidgetClass parent_class;
 
-  void (* close_attempt) (AdwDialog *dialog);
-  void (* closed)        (AdwDialog *dialog);
+  void (* close_attempt) (AdapDialog *dialog);
+  void (* closed)        (AdapDialog *dialog);
 
   /*< private >*/
   gpointer padding[4];
 };
 
-ADW_AVAILABLE_IN_1_5
-AdwDialog *adw_dialog_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_1_5
+AdapDialog *adap_dialog_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_5
-GtkWidget *adw_dialog_get_child (AdwDialog *self);
-ADW_AVAILABLE_IN_1_5
-void       adw_dialog_set_child (AdwDialog *self,
+ADAP_AVAILABLE_IN_1_5
+GtkWidget *adap_dialog_get_child (AdapDialog *self);
+ADAP_AVAILABLE_IN_1_5
+void       adap_dialog_set_child (AdapDialog *self,
                                  GtkWidget *child);
 
-ADW_AVAILABLE_IN_1_5
-const char *adw_dialog_get_title (AdwDialog  *self);
-ADW_AVAILABLE_IN_1_5
-void        adw_dialog_set_title (AdwDialog  *self,
+ADAP_AVAILABLE_IN_1_5
+const char *adap_dialog_get_title (AdapDialog  *self);
+ADAP_AVAILABLE_IN_1_5
+void        adap_dialog_set_title (AdapDialog  *self,
                                   const char *title);
 
-ADW_AVAILABLE_IN_1_5
-gboolean adw_dialog_get_can_close (AdwDialog  *self);
-ADW_AVAILABLE_IN_1_5
-void     adw_dialog_set_can_close (AdwDialog *self,
+ADAP_AVAILABLE_IN_1_5
+gboolean adap_dialog_get_can_close (AdapDialog  *self);
+ADAP_AVAILABLE_IN_1_5
+void     adap_dialog_set_can_close (AdapDialog *self,
                                    gboolean   can_close);
 
-ADW_AVAILABLE_IN_1_5
-int  adw_dialog_get_content_width (AdwDialog  *self);
-ADW_AVAILABLE_IN_1_5
-void adw_dialog_set_content_width (AdwDialog *self,
+ADAP_AVAILABLE_IN_1_5
+int  adap_dialog_get_content_width (AdapDialog  *self);
+ADAP_AVAILABLE_IN_1_5
+void adap_dialog_set_content_width (AdapDialog *self,
                                    int        content_width);
 
-ADW_AVAILABLE_IN_1_5
-int  adw_dialog_get_content_height (AdwDialog  *self);
-ADW_AVAILABLE_IN_1_5
-void adw_dialog_set_content_height (AdwDialog *self,
+ADAP_AVAILABLE_IN_1_5
+int  adap_dialog_get_content_height (AdapDialog  *self);
+ADAP_AVAILABLE_IN_1_5
+void adap_dialog_set_content_height (AdapDialog *self,
                                     int        content_height);
 
-ADW_AVAILABLE_IN_1_5
-gboolean adw_dialog_get_follows_content_size (AdwDialog *self);
-ADW_AVAILABLE_IN_1_5
-void     adw_dialog_set_follows_content_size (AdwDialog *self,
+ADAP_AVAILABLE_IN_1_5
+gboolean adap_dialog_get_follows_content_size (AdapDialog *self);
+ADAP_AVAILABLE_IN_1_5
+void     adap_dialog_set_follows_content_size (AdapDialog *self,
                                               gboolean   follows_content_size);
 
-ADW_AVAILABLE_IN_1_5
-AdwDialogPresentationMode adw_dialog_get_presentation_mode (AdwDialog                 *self);
-ADW_AVAILABLE_IN_1_5
-void                      adw_dialog_set_presentation_mode (AdwDialog                 *self,
-                                                            AdwDialogPresentationMode  presentation_mode);
+ADAP_AVAILABLE_IN_1_5
+AdapDialogPresentationMode adap_dialog_get_presentation_mode (AdapDialog                 *self);
+ADAP_AVAILABLE_IN_1_5
+void                      adap_dialog_set_presentation_mode (AdapDialog                 *self,
+                                                            AdapDialogPresentationMode  presentation_mode);
 
-ADW_AVAILABLE_IN_1_5
-GtkWidget *adw_dialog_get_focus (AdwDialog *self);
-ADW_AVAILABLE_IN_1_5
-void       adw_dialog_set_focus (AdwDialog *self,
+ADAP_AVAILABLE_IN_1_5
+GtkWidget *adap_dialog_get_focus (AdapDialog *self);
+ADAP_AVAILABLE_IN_1_5
+void       adap_dialog_set_focus (AdapDialog *self,
                                  GtkWidget *focus);
 
-ADW_AVAILABLE_IN_1_5
-GtkWidget *adw_dialog_get_default_widget (AdwDialog *self);
-ADW_AVAILABLE_IN_1_5
-void       adw_dialog_set_default_widget (AdwDialog *self,
+ADAP_AVAILABLE_IN_1_5
+GtkWidget *adap_dialog_get_default_widget (AdapDialog *self);
+ADAP_AVAILABLE_IN_1_5
+void       adap_dialog_set_default_widget (AdapDialog *self,
                                           GtkWidget *default_widget);
 
-ADW_AVAILABLE_IN_1_5
-gboolean adw_dialog_close (AdwDialog *self);
+ADAP_AVAILABLE_IN_1_5
+gboolean adap_dialog_close (AdapDialog *self);
 
-ADW_AVAILABLE_IN_1_5
-void adw_dialog_force_close (AdwDialog *self);
+ADAP_AVAILABLE_IN_1_5
+void adap_dialog_force_close (AdapDialog *self);
 
-ADW_AVAILABLE_IN_1_5
-void adw_dialog_add_breakpoint (AdwDialog     *self,
-                                AdwBreakpoint *breakpoint);
+ADAP_AVAILABLE_IN_1_5
+void adap_dialog_add_breakpoint (AdapDialog     *self,
+                                AdapBreakpoint *breakpoint);
 
-ADW_AVAILABLE_IN_1_5
-AdwBreakpoint *adw_dialog_get_current_breakpoint (AdwDialog *self);
+ADAP_AVAILABLE_IN_1_5
+AdapBreakpoint *adap_dialog_get_current_breakpoint (AdapDialog *self);
 
-ADW_AVAILABLE_IN_1_5
-void adw_dialog_present (AdwDialog *self,
+ADAP_AVAILABLE_IN_1_5
+void adap_dialog_present (AdapDialog *self,
                          GtkWidget *parent);
 
 G_END_DECLS

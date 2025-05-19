@@ -12,14 +12,14 @@ subprojects/gi-docgen
 subprojects/gtk
 
 debian/tmp
-debian/gir1.2-adw-1
-debian/libadwaita-1-0
-debian/libadwaita-1-dev
-debian/libadwaita-1-doc
-debian/libadwaita-1-examples
+debian/gir1.2-adap-1
+debian/libadapta-1-0
+debian/libadapta-1-dev
+debian/libadapta-1-doc
+debian/libadapta-1-examples
 debian/.debhelper
 debian/*.debhelper.log
 debian/*.substvars
 debian/debhelper-build-stamp
 debian/files
-po/libadwaita.pot
+po/libadapta.pot

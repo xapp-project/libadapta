@@ -8,19 +8,19 @@
 
 #include "config.h"
 
-#include "adw-settings-impl-private.h"
+#include "adap-settings-impl-private.h"
 
 #include <gio/gio.h>
 
-struct _AdwSettingsImplGSettings
+struct _AdapSettingsImplGSettings
 {
-  AdwSettingsImpl parent_instance;
+  AdapSettingsImpl parent_instance;
 
   GSettings *interface_settings;
   GSettings *a11y_settings;
 };
 
-G_DEFINE_FINAL_TYPE (AdwSettingsImplGSettings, adw_settings_impl_gsettings, ADW_TYPE_SETTINGS_IMPL)
+G_DEFINE_FINAL_TYPE (AdapSettingsImplGSettings, adap_settings_impl_gsettings, ADAP_TYPE_SETTINGS_IMPL)
 
 static gboolean
 is_running_in_flatpak (void)
@@ -33,62 +33,62 @@ is_running_in_flatpak (void)
 }
 
 static void
-theme_name_changed_cb (AdwSettingsImplGSettings *self)
+theme_name_changed_cb (AdapSettingsImplGSettings *self)
 {
   gchar *theme_name = g_settings_get_string (self->interface_settings, "gtk-theme");
 
-  adw_settings_impl_set_theme_name (ADW_SETTINGS_IMPL (self), theme_name);
+  adap_settings_impl_set_theme_name (ADAP_SETTINGS_IMPL (self), theme_name);
   g_free (theme_name);
 }
 
 static void
-color_scheme_changed_cb (AdwSettingsImplGSettings *self)
+color_scheme_changed_cb (AdapSettingsImplGSettings *self)
 {
-  AdwSystemColorScheme color_scheme =
+  AdapSystemColorScheme color_scheme =
     g_settings_get_enum (self->interface_settings, "color-scheme");
 
-  adw_settings_impl_set_color_scheme (ADW_SETTINGS_IMPL (self), color_scheme);
+  adap_settings_impl_set_color_scheme (ADAP_SETTINGS_IMPL (self), color_scheme);
 }
 
 static void
-high_contrast_changed_cb (AdwSettingsImplGSettings *self)
+high_contrast_changed_cb (AdapSettingsImplGSettings *self)
 {
   gboolean high_contrast =
     g_settings_get_boolean (self->a11y_settings, "high-contrast");
 
-  adw_settings_impl_set_high_contrast (ADW_SETTINGS_IMPL (self), high_contrast);
+  adap_settings_impl_set_high_contrast (ADAP_SETTINGS_IMPL (self), high_contrast);
 }
 
 static void
-adw_settings_impl_gsettings_dispose (GObject *object)
+adap_settings_impl_gsettings_dispose (GObject *object)
 {
-  AdwSettingsImplGSettings *self = ADW_SETTINGS_IMPL_GSETTINGS (object);
+  AdapSettingsImplGSettings *self = ADAP_SETTINGS_IMPL_GSETTINGS (object);
 
   g_clear_object (&self->interface_settings);
   g_clear_object (&self->a11y_settings);
 
-  G_OBJECT_CLASS (adw_settings_impl_gsettings_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_settings_impl_gsettings_parent_class)->dispose (object);
 }
 
 static void
-adw_settings_impl_gsettings_class_init (AdwSettingsImplGSettingsClass *klass)
+adap_settings_impl_gsettings_class_init (AdapSettingsImplGSettingsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = adw_settings_impl_gsettings_dispose;
+  object_class->dispose = adap_settings_impl_gsettings_dispose;
 }
 
 static void
-adw_settings_impl_gsettings_init (AdwSettingsImplGSettings *self)
+adap_settings_impl_gsettings_init (AdapSettingsImplGSettings *self)
 {
 }
 
-AdwSettingsImpl *
-adw_settings_impl_gsettings_new (gboolean enable_theme_name,
+AdapSettingsImpl *
+adap_settings_impl_gsettings_new (gboolean enable_theme_name,
                                  gboolean enable_color_scheme,
                                  gboolean enable_high_contrast)
 {
-  AdwSettingsImplGSettings *self = g_object_new (ADW_TYPE_SETTINGS_IMPL_GSETTINGS, NULL);
+  AdapSettingsImplGSettings *self = g_object_new (ADAP_TYPE_SETTINGS_IMPL_GSETTINGS, NULL);
   GSettingsSchemaSource *source;
   gboolean found_theme_name = FALSE;
   gboolean found_color_scheme = FALSE;
@@ -97,7 +97,7 @@ adw_settings_impl_gsettings_new (gboolean enable_theme_name,
   /* While we can access gsettings in flatpak, we can't do anything useful with
    * them as they aren't propagated from the system. */
   if (is_running_in_flatpak ())
-    return ADW_SETTINGS_IMPL (self);
+    return ADAP_SETTINGS_IMPL (self);
 
   source = g_settings_schema_source_get_default ();
 
@@ -119,7 +119,7 @@ adw_settings_impl_gsettings_new (gboolean enable_theme_name,
     g_clear_pointer (&schema, g_settings_schema_unref);
   }
 
-  if (enable_color_scheme && adw_get_disable_portal ()) {
+  if (enable_color_scheme && adap_get_disable_portal ()) {
     GSettingsSchema *schema =
       g_settings_schema_source_lookup (source, "org.gnome.desktop.interface", TRUE);
 
@@ -157,10 +157,10 @@ adw_settings_impl_gsettings_new (gboolean enable_theme_name,
     g_clear_pointer (&schema, g_settings_schema_unref);
   }
 
-  adw_settings_impl_set_features (ADW_SETTINGS_IMPL (self),
+  adap_settings_impl_set_features (ADAP_SETTINGS_IMPL (self),
                                   found_theme_name,
                                   found_color_scheme,
                                   found_high_contrast);
 
-  return ADW_SETTINGS_IMPL (self);
+  return ADAP_SETTINGS_IMPL (self);
 }

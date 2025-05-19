@@ -4,35 +4,35 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#include <adwaita.h>
+#include <adapta.h>
 
 static void
-test_adw_preferences_window_add_remove (void)
+test_adap_preferences_window_add_remove (void)
 {
-  AdwPreferencesWindow *window = ADW_PREFERENCES_WINDOW (adw_preferences_window_new ());
-  AdwPreferencesPage *page;
+  AdapPreferencesWindow *window = ADAP_PREFERENCES_WINDOW (adap_preferences_window_new ());
+  AdapPreferencesPage *page;
 
   g_assert_nonnull (window);
 
-  page = ADW_PREFERENCES_PAGE (adw_preferences_page_new ());
+  page = ADAP_PREFERENCES_PAGE (adap_preferences_page_new ());
   g_assert_nonnull (page);
-  adw_preferences_window_add (window, page);
+  adap_preferences_window_add (window, page);
 
-  adw_preferences_window_remove (window, page);
+  adap_preferences_window_remove (window, page);
 
   g_assert_finalize_object (window);
 }
 
 static void
-test_adw_preferences_window_add_toast (void)
+test_adap_preferences_window_add_toast (void)
 {
-  AdwPreferencesWindow *window = ADW_PREFERENCES_WINDOW (adw_preferences_window_new ());
-  AdwToast *toast = adw_toast_new ("Test Notification");
+  AdapPreferencesWindow *window = ADAP_PREFERENCES_WINDOW (adap_preferences_window_new ());
+  AdapToast *toast = adap_toast_new ("Test Notification");
 
   g_assert_nonnull (window);
   g_assert_nonnull (toast);
 
-  adw_preferences_window_add_toast (window, g_object_ref (toast));
+  adap_preferences_window_add_toast (window, g_object_ref (toast));
 
   g_assert_finalize_object (window);
   g_assert_finalize_object (toast);
@@ -43,10 +43,10 @@ main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
-  adw_init ();
+  adap_init ();
 
-  g_test_add_func("/Adwaita/PreferencesWindow/add_remove", test_adw_preferences_window_add_remove);
-  g_test_add_func("/Adwaita/PreferencesWindow/add_toast", test_adw_preferences_window_add_toast);
+  g_test_add_func("/Adapta/PreferencesWindow/add_remove", test_adap_preferences_window_add_remove);
+  g_test_add_func("/Adapta/PreferencesWindow/add_toast", test_adap_preferences_window_add_toast);
 
   return g_test_run();
 }

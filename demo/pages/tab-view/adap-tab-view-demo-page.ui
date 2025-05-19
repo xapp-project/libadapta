@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <template class="AdwTabViewDemoPage" parent="AdwBin">
+  <requires lib="libadapta" version="1.0"/>
+  <template class="AdapTabViewDemoPage" parent="AdapBin">
     <property name="child">
       <object class="GtkEntry" id="title_entry">
         <property name="halign">center</property>
         <property name="valign">center</property>
-        <property name="text" bind-source="AdwTabViewDemoPage" bind-property="title" bind-flags="bidirectional"/>
+        <property name="text" bind-source="AdapTabViewDemoPage" bind-property="title" bind-flags="bidirectional"/>
       </object>
     </property>
   </template>

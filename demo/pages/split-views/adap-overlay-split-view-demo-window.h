@@ -1,13 +1,13 @@
 #pragma once
 
-#include <adwaita.h>
+#include <adapta.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_OVERLAY_SPLIT_VIEW_DEMO_WINDOW (adw_overlay_split_view_demo_window_get_type())
+#define ADAP_TYPE_OVERLAY_SPLIT_VIEW_DEMO_WINDOW (adap_overlay_split_view_demo_window_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwOverlaySplitViewDemoWindow, adw_overlay_split_view_demo_window, ADW, OVERLAY_SPLIT_VIEW_DEMO_WINDOW, AdwDialog)
+G_DECLARE_FINAL_TYPE (AdapOverlaySplitViewDemoWindow, adap_overlay_split_view_demo_window, ADAP, OVERLAY_SPLIT_VIEW_DEMO_WINDOW, AdapDialog)
 
-AdwOverlaySplitViewDemoWindow *adw_overlay_split_view_demo_window_new (void);
+AdapOverlaySplitViewDemoWindow *adap_overlay_split_view_demo_window_new (void);
 
 G_END_DECLS

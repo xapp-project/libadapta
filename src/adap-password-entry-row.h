@@ -6,24 +6,24 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-entry-row.h"
+#include "adap-entry-row.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_PASSWORD_ENTRY_ROW (adw_password_entry_row_get_type())
+#define ADAP_TYPE_PASSWORD_ENTRY_ROW (adap_password_entry_row_get_type())
 
-ADW_AVAILABLE_IN_1_2
-G_DECLARE_FINAL_TYPE (AdwPasswordEntryRow, adw_password_entry_row, ADW, PASSWORD_ENTRY_ROW, AdwEntryRow)
+ADAP_AVAILABLE_IN_1_2
+G_DECLARE_FINAL_TYPE (AdapPasswordEntryRow, adap_password_entry_row, ADAP, PASSWORD_ENTRY_ROW, AdapEntryRow)
 
-ADW_AVAILABLE_IN_1_2
-GtkWidget *adw_password_entry_row_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_1_2
+GtkWidget *adap_password_entry_row_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
 G_END_DECLS

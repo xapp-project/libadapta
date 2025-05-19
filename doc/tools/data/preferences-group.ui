@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwBin" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapBin" id="widget">
     <property name="width-request">400</property>
     <property name="child">
-      <object class="AdwPreferencesGroup">
+      <object class="AdapPreferencesGroup">
         <property name="title">Group Title</property>
         <property name="description">Group description.</property>
         <property name="margin-top">12</property>
@@ -16,7 +16,7 @@
           <object class="GtkButton">
             <property name="valign">center</property>
             <property name="child">
-              <object class="AdwButtonContent">
+              <object class="AdapButtonContent">
                 <property name="icon-name">list-add-symbolic</property>
                 <property name="label" translatable="yes">Suffix</property>
               </object>
@@ -27,17 +27,17 @@
           </object>
         </property>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdapActionRow">
             <property name="title">Row Title</property>
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdapActionRow">
             <property name="title">Row Title</property>
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdapActionRow">
             <property name="title">Row Title</property>
           </object>
         </child>

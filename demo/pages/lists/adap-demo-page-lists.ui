@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <template class="AdwDemoPageLists" parent="AdwBin">
+  <requires lib="libadapta" version="1.0"/>
+  <template class="AdapDemoPageLists" parent="AdapBin">
     <property name="child">
-      <object class="AdwStatusPage">
+      <object class="AdapStatusPage">
         <property name="icon-name">widget-list-symbolic</property>
         <property name="title" translatable="yes">Lists</property>
         <property name="description" translatable="yes">Rows and helpers for GtkListBox.</property>
         <property name="child">
-          <object class="AdwClamp">
+          <object class="AdapClamp">
             <property name="maximum-size">400</property>
             <property name="tightening-threshold">300</property>
             <property name="child">
@@ -17,15 +17,15 @@
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="AdwPreferencesGroup">
+                  <object class="AdapPreferencesGroup">
                     <child>
-                      <object class="AdwActionRow">
+                      <object class="AdapActionRow">
                         <property name="subtitle" translatable="yes">They also have a subtitle</property>
                         <property name="title" translatable="yes">Rows have a title</property>
                       </object>
                     </child>
                     <child>
-                      <object class="AdwActionRow">
+                      <object class="AdapActionRow">
                         <property name="title" translatable="yes">Rows can have suffix widgets</property>
                         <child>
                           <object class="GtkButton">
@@ -38,9 +38,9 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwPreferencesGroup">
+                  <object class="AdapPreferencesGroup">
                     <child>
-                      <object class="AdwActionRow">
+                      <object class="AdapActionRow">
                         <property name="activatable_widget">radio_button_1</property>
                         <property name="title" translatable="yes">Rows can have prefix widgets</property>
                         <child type="prefix">
@@ -52,7 +52,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="AdwActionRow">
+                      <object class="AdapActionRow">
                         <property name="activatable_widget">radio_button_2</property>
                         <property name="title" translatable="yes">Rows can have prefix widgets</property>
                         <child type="prefix">
@@ -66,10 +66,10 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwPreferencesGroup">
+                  <object class="AdapPreferencesGroup">
                     <property name="title" translatable="yes">Entry Rows</property>
                     <child>
-                      <object class="AdwEntryRow">
+                      <object class="AdapEntryRow">
                         <property name="title" translatable="yes">Entry Row</property>
                         <property name="use_underline">True</property>
                       </object>
@@ -77,16 +77,16 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwPreferencesGroup">
+                  <object class="AdapPreferencesGroup">
                     <child>
-                      <object class="AdwEntryRow">
+                      <object class="AdapEntryRow">
                         <property name="title" translatable="yes">Entry With Confirmation</property>
                         <property name="show-apply-button">True</property>
                         <signal name="apply" handler="entry_apply_cb" swapped="yes"/>
                       </object>
                     </child>
                     <child>
-                      <object class="AdwEntryRow">
+                      <object class="AdapEntryRow">
                         <property name="title" translatable="yes">Entry With Suffix</property>
                         <child>
                           <object class="GtkButton">
@@ -101,17 +101,17 @@
                       </object>
                     </child>
                     <child>
-                      <object class="AdwPasswordEntryRow">
+                      <object class="AdapPasswordEntryRow">
                         <property name="title" translatable="yes">Password Entry</property>
                       </object>
                     </child>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwPreferencesGroup">
+                  <object class="AdapPreferencesGroup">
                     <property name="title" translatable="yes">Spin Rows</property>
                     <child>
-                      <object class="AdwSpinRow">
+                      <object class="AdapSpinRow">
                         <property name="title" translatable="yes">Spin Row</property>
                         <property name="adjustment">
                           <object class="GtkAdjustment">
@@ -127,20 +127,20 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwPreferencesGroup">
+                  <object class="AdapPreferencesGroup">
                     <property name="title" translatable="yes">Switch Rows</property>
                     <child>
-                      <object class="AdwSwitchRow" id="switch_row">
+                      <object class="AdapSwitchRow" id="switch_row">
                         <property name="title" translatable="yes">Switch Row</property>
                       </object>
                     </child>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwPreferencesGroup">
+                  <object class="AdapPreferencesGroup">
                     <property name="title" translatable="yes">Combo Rows</property>
                     <child>
-                      <object class="AdwComboRow" id="combo_row">
+                      <object class="AdapComboRow" id="combo_row">
                         <property name="title" translatable="yes">Combo Row</property>
                         <property name="model">
                           <object class="GtkStringList">
@@ -154,42 +154,42 @@
                       </object>
                     </child>
                     <child>
-                      <object class="AdwComboRow" id="enum_combo_row">
+                      <object class="AdapComboRow" id="enum_combo_row">
                         <property name="subtitle" translatable="yes">This combo row was created from an enumeration</property>
                         <property name="title" translatable="yes">Enumeration Combo Row</property>
                         <property name="enable-search">True</property>
                         <property name="model">
-                          <object class="AdwEnumListModel">
+                          <object class="AdapEnumListModel">
                             <property name="enum-type">GtkLicense</property>
                           </object>
                         </property>
                         <property name="expression">
-                          <lookup type="AdwEnumListItem" name="nick"/>
+                          <lookup type="AdapEnumListItem" name="nick"/>
                         </property>
                       </object>
                     </child>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwPreferencesGroup">
+                  <object class="AdapPreferencesGroup">
                     <property name="title" translatable="yes">Expander Rows</property>
                     <child>
-                      <object class="AdwExpanderRow" id="expander_row">
+                      <object class="AdapExpanderRow" id="expander_row">
                         <property name="title" translatable="yes">Expander Row</property>
                         <child>
-                          <object class="AdwActionRow">
+                          <object class="AdapActionRow">
                             <property name="title" translatable="yes">A Nested Row</property>
                           </object>
                         </child>
                         <child>
-                          <object class="AdwActionRow">
+                          <object class="AdapActionRow">
                             <property name="title" translatable="yes">Another Nested Row</property>
                           </object>
                         </child>
                       </object>
                     </child>
                     <child>
-                      <object class="AdwExpanderRow" id="action_expander_row">
+                      <object class="AdapExpanderRow" id="action_expander_row">
                         <property name="title" translatable="yes">Expander Row With an Action</property>
                         <child type="suffix">
                           <object class="GtkButton">
@@ -202,28 +202,28 @@
                           </object>
                         </child>
                         <child>
-                          <object class="AdwActionRow">
+                          <object class="AdapActionRow">
                             <property name="title" translatable="yes">A Nested Row</property>
                           </object>
                         </child>
                         <child>
-                          <object class="AdwActionRow">
+                          <object class="AdapActionRow">
                             <property name="title" translatable="yes">Another Nested Row</property>
                           </object>
                         </child>
                       </object>
                     </child>
                     <child>
-                      <object class="AdwExpanderRow" id="enable_expander_row">
+                      <object class="AdapExpanderRow" id="enable_expander_row">
                         <property name="show_enable_switch">True</property>
                         <property name="title" translatable="yes">Toggleable Expander Row</property>
                         <child>
-                          <object class="AdwActionRow">
+                          <object class="AdapActionRow">
                             <property name="title" translatable="yes">A Nested Row</property>
                           </object>
                         </child>
                         <child>
-                          <object class="AdwActionRow">
+                          <object class="AdapActionRow">
                             <property name="title" translatable="yes">Another Nested Row</property>
                           </object>
                         </child>
@@ -232,10 +232,10 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwPreferencesGroup">
+                  <object class="AdapPreferencesGroup">
                     <property name="title" translatable="yes">Property Rows</property>
                     <child>
-                      <object class="AdwActionRow">
+                      <object class="AdapActionRow">
                         <property name="title" translatable="yes">Property Row</property>
                         <property name="subtitle">Value</property>
                         <property name="subtitle-selectable">True</property>
@@ -247,12 +247,12 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwPreferencesGroup">
+                  <object class="AdapPreferencesGroup">
                     <property name="title" translatable="yes">Groups with Suffix</property>
                     <property name="header-suffix">
                       <object class="GtkButton">
                         <property name="child">
-                          <object class="AdwButtonContent">
+                          <object class="AdapButtonContent">
                             <property name="icon-name">list-add-symbolic</property>
                             <property name="label" translatable="yes">Suffix</property>
                           </object>
@@ -263,7 +263,7 @@
                       </object>
                     </property>
                     <child>
-                      <object class="AdwActionRow">
+                      <object class="AdapActionRow">
                         <property name="title" translatable="yes">Groups can have a header suffix</property>
                       </object>
                     </child>

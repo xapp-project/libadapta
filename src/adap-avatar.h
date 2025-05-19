@@ -6,58 +6,58 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_AVATAR (adw_avatar_get_type())
+#define ADAP_TYPE_AVATAR (adap_avatar_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwAvatar, adw_avatar, ADW, AVATAR, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapAvatar, adap_avatar, ADAP, AVATAR, GtkWidget)
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_avatar_new (int         size,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_avatar_new (int         size,
                            const char *text,
                            gboolean    show_initials) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_avatar_get_icon_name (AdwAvatar  *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_avatar_set_icon_name (AdwAvatar  *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_avatar_get_icon_name (AdapAvatar  *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_avatar_set_icon_name (AdapAvatar  *self,
                                       const char *icon_name);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_avatar_get_text (AdwAvatar  *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_avatar_set_text (AdwAvatar  *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_avatar_get_text (AdapAvatar  *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_avatar_set_text (AdapAvatar  *self,
                                  const char *text);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_avatar_get_show_initials (AdwAvatar *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_avatar_set_show_initials (AdwAvatar *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_avatar_get_show_initials (AdapAvatar *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_avatar_set_show_initials (AdapAvatar *self,
                                        gboolean   show_initials);
 
-ADW_AVAILABLE_IN_ALL
-GdkPaintable *adw_avatar_get_custom_image (AdwAvatar    *self);
-ADW_AVAILABLE_IN_ALL
-void          adw_avatar_set_custom_image (AdwAvatar    *self,
+ADAP_AVAILABLE_IN_ALL
+GdkPaintable *adap_avatar_get_custom_image (AdapAvatar    *self);
+ADAP_AVAILABLE_IN_ALL
+void          adap_avatar_set_custom_image (AdapAvatar    *self,
                                            GdkPaintable *custom_image);
 
-ADW_AVAILABLE_IN_ALL
-int  adw_avatar_get_size (AdwAvatar *self);
-ADW_AVAILABLE_IN_ALL
-void adw_avatar_set_size (AdwAvatar *self,
+ADAP_AVAILABLE_IN_ALL
+int  adap_avatar_get_size (AdapAvatar *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_avatar_set_size (AdapAvatar *self,
                           int        size);
 
-ADW_AVAILABLE_IN_ALL
-GdkTexture *adw_avatar_draw_to_texture (AdwAvatar *self,
+ADAP_AVAILABLE_IN_ALL
+GdkTexture *adap_avatar_draw_to_texture (AdapAvatar *self,
                                         int        scale_factor) G_GNUC_WARN_UNUSED_RESULT;
 
 G_END_DECLS

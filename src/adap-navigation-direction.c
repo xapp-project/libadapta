@@ -5,12 +5,12 @@
  */
 
 #include "config.h"
-#include "adw-navigation-direction.h"
+#include "adap-navigation-direction.h"
 
 /**
- * AdwNavigationDirection:
- * @ADW_NAVIGATION_DIRECTION_BACK: Corresponds to start or top, depending on orientation and text direction
- * @ADW_NAVIGATION_DIRECTION_FORWARD: Corresponds to end or bottom, depending on orientation and text direction
+ * AdapNavigationDirection:
+ * @ADAP_NAVIGATION_DIRECTION_BACK: Corresponds to start or top, depending on orientation and text direction
+ * @ADAP_NAVIGATION_DIRECTION_FORWARD: Corresponds to end or bottom, depending on orientation and text direction
  *
  * Describes the direction of a swipe navigation gesture.
  */

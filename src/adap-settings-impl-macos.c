@@ -6,26 +6,26 @@
 
 #include "config.h"
 
-#include "adw-settings-impl-private.h"
+#include "adap-settings-impl-private.h"
 
 #include <AppKit/AppKit.h>
 
-struct _AdwSettingsImplMacOS
+struct _AdapSettingsImplMacOS
 {
-  AdwSettingsImpl parent_instance;
+  AdapSettingsImpl parent_instance;
 };
 
-G_DEFINE_FINAL_TYPE (AdwSettingsImplMacOS, adw_settings_impl_macos, ADW_TYPE_SETTINGS_IMPL)
+G_DEFINE_FINAL_TYPE (AdapSettingsImplMacOS, adap_settings_impl_macos, ADAP_TYPE_SETTINGS_IMPL)
 
 @interface ThemeChangedObserver : NSObject
 {
-  AdwSettingsImpl *impl;
+  AdapSettingsImpl *impl;
 }
 @end
 
 @implementation ThemeChangedObserver
 
--(instancetype)initWithSettings:(AdwSettingsImpl *)_impl
+-(instancetype)initWithSettings:(AdapSettingsImpl *)_impl
 {
   [self init];
   g_set_weak_pointer (&self->impl, _impl);
@@ -38,7 +38,7 @@ G_DEFINE_FINAL_TYPE (AdwSettingsImplMacOS, adw_settings_impl_macos, ADW_TYPE_SET
   [super dealloc];
 }
 
-static AdwSystemColorScheme
+static AdapSystemColorScheme
 get_ns_color_scheme (void)
 {
   if (@available(*, macOS 10.14)) {
@@ -58,43 +58,43 @@ get_ns_color_scheme (void)
 #endif
 
     return isDark ?
-      ADW_SYSTEM_COLOR_SCHEME_PREFER_DARK :
-      ADW_SYSTEM_COLOR_SCHEME_DEFAULT;
+      ADAP_SYSTEM_COLOR_SCHEME_PREFER_DARK :
+      ADAP_SYSTEM_COLOR_SCHEME_DEFAULT;
   }
 
-  return ADW_SYSTEM_COLOR_SCHEME_DEFAULT;
+  return ADAP_SYSTEM_COLOR_SCHEME_DEFAULT;
 }
 
 -(void)appDidChangeTheme:(NSNotification *)notification
 {
   if (self->impl != NULL)
-    adw_settings_impl_set_color_scheme (self->impl, get_ns_color_scheme ());
+    adap_settings_impl_set_color_scheme (self->impl, get_ns_color_scheme ());
 }
 @end
 
 static void
-adw_settings_impl_macos_class_init (AdwSettingsImplMacOSClass *klass)
+adap_settings_impl_macos_class_init (AdapSettingsImplMacOSClass *klass)
 {
 }
 
 static void
-adw_settings_impl_macos_init (AdwSettingsImplMacOS *self)
+adap_settings_impl_macos_init (AdapSettingsImplMacOS *self)
 {
 }
 
-AdwSettingsImpl *
-adw_settings_impl_macos_new (gboolean enable_color_scheme,
+AdapSettingsImpl *
+adap_settings_impl_macos_new (gboolean enable_color_scheme,
                              gboolean enable_high_contrast)
 {
-  AdwSettingsImplMacOS *self = g_object_new (ADW_TYPE_SETTINGS_IMPL_MACOS, NULL);
+  AdapSettingsImplMacOS *self = g_object_new (ADAP_TYPE_SETTINGS_IMPL_MACOS, NULL);
 
   if (!enable_color_scheme)
-    return ADW_SETTINGS_IMPL (self);
+    return ADAP_SETTINGS_IMPL (self);
 
   if (@available(*, macOS 10.14)) {
     static ThemeChangedObserver *observer;
 
-    observer = [[ThemeChangedObserver alloc] initWithSettings:(AdwSettingsImpl *)self];
+    observer = [[ThemeChangedObserver alloc] initWithSettings:(AdapSettingsImpl *)self];
 
     [[NSDistributedNotificationCenter defaultCenter]
       addObserver:observer
@@ -104,10 +104,10 @@ adw_settings_impl_macos_new (gboolean enable_color_scheme,
 
     [observer appDidChangeTheme:nil];
 
-    adw_settings_impl_set_features (ADW_SETTINGS_IMPL (self),
+    adap_settings_impl_set_features (ADAP_SETTINGS_IMPL (self),
                                     /* has_color_scheme */ TRUE,
                                     /* has_high_contrast */ FALSE);
   }
 
-  return ADW_SETTINGS_IMPL (self);
+  return ADAP_SETTINGS_IMPL (self);
 }

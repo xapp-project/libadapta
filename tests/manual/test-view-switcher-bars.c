@@ -1,4 +1,4 @@
-#include <adwaita.h>
+#include <adapta.h>
 
 static GtkWidget *
 create_content (void)
@@ -14,7 +14,7 @@ create_content (void)
     GtkWidget *stack, *switcher;
     int page;
 
-    stack = adw_view_stack_new ();
+    stack = adap_view_stack_new ();
 
     gtk_widget_set_visible (stack, FALSE);
     gtk_box_prepend (box, stack);
@@ -22,7 +22,7 @@ create_content (void)
     for (page = 0; page < i; page++) {
       char *title = g_strdup_printf ("Page %d", page + 1);
 
-      adw_view_stack_add_titled_with_icon (ADW_VIEW_STACK (stack),
+      adap_view_stack_add_titled_with_icon (ADAP_VIEW_STACK (stack),
                                            gtk_button_new (),
                                            NULL,
                                            title,
@@ -31,10 +31,10 @@ create_content (void)
       g_free (title);
     }
 
-    switcher = adw_view_switcher_bar_new ();
-    adw_view_switcher_bar_set_reveal (ADW_VIEW_SWITCHER_BAR (switcher), TRUE);
-    adw_view_switcher_bar_set_stack (ADW_VIEW_SWITCHER_BAR (switcher),
-                                     ADW_VIEW_STACK (stack));
+    switcher = adap_view_switcher_bar_new ();
+    adap_view_switcher_bar_set_reveal (ADAP_VIEW_SWITCHER_BAR (switcher), TRUE);
+    adap_view_switcher_bar_set_stack (ADAP_VIEW_SWITCHER_BAR (switcher),
+                                     ADAP_VIEW_STACK (stack));
 
     gtk_box_append (box, switcher);
   }
@@ -55,7 +55,7 @@ main (int   argc,
   GtkWidget *window;
   gboolean done = FALSE;
 
-  adw_init ();
+  adap_init ();
 
   window = gtk_window_new ();
   g_signal_connect_swapped (window, "destroy", G_CALLBACK (close_cb), &done);

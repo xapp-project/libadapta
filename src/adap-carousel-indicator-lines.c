@@ -6,10 +6,10 @@
 
 #include "config.h"
 
-#include "adw-carousel-indicator-lines.h"
+#include "adap-carousel-indicator-lines.h"
 
-#include "adw-swipeable.h"
-#include "adw-timed-animation.h"
+#include "adap-swipeable.h"
+#include "adap-timed-animation.h"
 
 #include <math.h>
 
@@ -21,7 +21,7 @@
 #define LINE_MARGIN 2
 
 /**
- * AdwCarouselIndicatorLines:
+ * AdapCarouselIndicatorLines:
  *
  * A lines indicator for [class@Carousel].
  *
@@ -30,7 +30,7 @@
  *   <img src="carousel-indicator-lines.png" alt="carousel-indicator-lines">
  * </picture>
  *
- * The `AdwCarouselIndicatorLines` widget shows a set of lines for each page of
+ * The `AdapCarouselIndicatorLines` widget shows a set of lines for each page of
  * a given [class@Carousel]. The carousel's active page is shown as another line
  * that moves between them to match the carousel's position.
  *
@@ -38,22 +38,22 @@
  *
  * ## CSS nodes
  *
- * `AdwCarouselIndicatorLines` has a single CSS node with name
+ * `AdapCarouselIndicatorLines` has a single CSS node with name
  * `carouselindicatorlines`.
  */
 
-struct _AdwCarouselIndicatorLines
+struct _AdapCarouselIndicatorLines
 {
   GtkWidget parent_instance;
 
-  AdwCarousel *carousel;
+  AdapCarousel *carousel;
   GtkOrientation orientation;
 
-  AdwAnimation *animation;
+  AdapAnimation *animation;
   GBinding *duration_binding;
 };
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwCarouselIndicatorLines, adw_carousel_indicator_lines, GTK_TYPE_WIDGET,
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapCarouselIndicatorLines, adap_carousel_indicator_lines, GTK_TYPE_WIDGET,
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 enum {
@@ -149,7 +149,7 @@ animation_cb (double     value,
 }
 
 static void
-adw_carousel_indicator_lines_measure (GtkWidget      *widget,
+adap_carousel_indicator_lines_measure (GtkWidget      *widget,
                                       GtkOrientation  orientation,
                                       int             for_size,
                                       int            *minimum,
@@ -157,7 +157,7 @@ adw_carousel_indicator_lines_measure (GtkWidget      *widget,
                                       int            *minimum_baseline,
                                       int            *natural_baseline)
 {
-  AdwCarouselIndicatorLines *self = ADW_CAROUSEL_INDICATOR_LINES (widget);
+  AdapCarouselIndicatorLines *self = ADAP_CAROUSEL_INDICATOR_LINES (widget);
   int size = 0;
 
   if (orientation == self->orientation) {
@@ -166,7 +166,7 @@ adw_carousel_indicator_lines_measure (GtkWidget      *widget,
     double *points = NULL, *sizes;
 
     if (self->carousel)
-      points = adw_swipeable_get_snap_points (ADW_SWIPEABLE (self->carousel), &n_points);
+      points = adap_swipeable_get_snap_points (ADAP_SWIPEABLE (self->carousel), &n_points);
 
     sizes = g_new0 (double, n_points);
 
@@ -204,10 +204,10 @@ adw_carousel_indicator_lines_measure (GtkWidget      *widget,
 }
 
 static void
-adw_carousel_indicator_lines_snapshot (GtkWidget   *widget,
+adap_carousel_indicator_lines_snapshot (GtkWidget   *widget,
                                        GtkSnapshot *snapshot)
 {
-  AdwCarouselIndicatorLines *self = ADW_CAROUSEL_INDICATOR_LINES (widget);
+  AdapCarouselIndicatorLines *self = ADAP_CAROUSEL_INDICATOR_LINES (widget);
   int i, n_points;
   double position;
   double *points, *sizes;
@@ -215,8 +215,8 @@ adw_carousel_indicator_lines_snapshot (GtkWidget   *widget,
   if (!self->carousel)
     return;
 
-  points = adw_swipeable_get_snap_points (ADW_SWIPEABLE (self->carousel), &n_points);
-  position = adw_carousel_get_position (self->carousel);
+  points = adap_swipeable_get_snap_points (ADAP_SWIPEABLE (self->carousel), &n_points);
+  position = adap_carousel_get_position (self->carousel);
 
   if (n_points < 2) {
     g_free (points);
@@ -241,28 +241,28 @@ adw_carousel_indicator_lines_snapshot (GtkWidget   *widget,
 }
 
 static void
-adw_carousel_dispose (GObject *object)
+adap_carousel_dispose (GObject *object)
 {
-  AdwCarouselIndicatorLines *self = ADW_CAROUSEL_INDICATOR_LINES (object);
+  AdapCarouselIndicatorLines *self = ADAP_CAROUSEL_INDICATOR_LINES (object);
 
-  adw_carousel_indicator_lines_set_carousel (self, NULL);
+  adap_carousel_indicator_lines_set_carousel (self, NULL);
 
   g_clear_object (&self->animation);
 
-  G_OBJECT_CLASS (adw_carousel_indicator_lines_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_carousel_indicator_lines_parent_class)->dispose (object);
 }
 
 static void
-adw_carousel_indicator_lines_get_property (GObject    *object,
+adap_carousel_indicator_lines_get_property (GObject    *object,
                                            guint       prop_id,
                                            GValue     *value,
                                            GParamSpec *pspec)
 {
-  AdwCarouselIndicatorLines *self = ADW_CAROUSEL_INDICATOR_LINES (object);
+  AdapCarouselIndicatorLines *self = ADAP_CAROUSEL_INDICATOR_LINES (object);
 
   switch (prop_id) {
   case PROP_CAROUSEL:
-    g_value_set_object (value, adw_carousel_indicator_lines_get_carousel (self));
+    g_value_set_object (value, adap_carousel_indicator_lines_get_carousel (self));
     break;
 
   case PROP_ORIENTATION:
@@ -275,16 +275,16 @@ adw_carousel_indicator_lines_get_property (GObject    *object,
 }
 
 static void
-adw_carousel_indicator_lines_set_property (GObject      *object,
+adap_carousel_indicator_lines_set_property (GObject      *object,
                                            guint         prop_id,
                                            const GValue *value,
                                            GParamSpec   *pspec)
 {
-  AdwCarouselIndicatorLines *self = ADW_CAROUSEL_INDICATOR_LINES (object);
+  AdapCarouselIndicatorLines *self = ADAP_CAROUSEL_INDICATOR_LINES (object);
 
   switch (prop_id) {
   case PROP_CAROUSEL:
-    adw_carousel_indicator_lines_set_carousel (self, g_value_get_object (value));
+    adap_carousel_indicator_lines_set_carousel (self, g_value_get_object (value));
     break;
 
   case PROP_ORIENTATION:
@@ -304,26 +304,26 @@ adw_carousel_indicator_lines_set_property (GObject      *object,
 }
 
 static void
-adw_carousel_indicator_lines_class_init (AdwCarouselIndicatorLinesClass *klass)
+adap_carousel_indicator_lines_class_init (AdapCarouselIndicatorLinesClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_carousel_dispose;
-  object_class->get_property = adw_carousel_indicator_lines_get_property;
-  object_class->set_property = adw_carousel_indicator_lines_set_property;
+  object_class->dispose = adap_carousel_dispose;
+  object_class->get_property = adap_carousel_indicator_lines_get_property;
+  object_class->set_property = adap_carousel_indicator_lines_set_property;
 
-  widget_class->measure = adw_carousel_indicator_lines_measure;
-  widget_class->snapshot = adw_carousel_indicator_lines_snapshot;
+  widget_class->measure = adap_carousel_indicator_lines_measure;
+  widget_class->snapshot = adap_carousel_indicator_lines_snapshot;
 
   /**
-   * AdwCarouselIndicatorLines:carousel: (attributes org.gtk.Property.get=adw_carousel_indicator_lines_get_carousel org.gtk.Property.set=adw_carousel_indicator_lines_set_carousel)
+   * AdapCarouselIndicatorLines:carousel: (attributes org.gtk.Property.get=adap_carousel_indicator_lines_get_carousel org.gtk.Property.set=adap_carousel_indicator_lines_set_carousel)
    *
    * The displayed carousel.
    */
   props[PROP_CAROUSEL] =
     g_param_spec_object ("carousel", NULL, NULL,
-                         ADW_TYPE_CAROUSEL,
+                         ADAP_TYPE_CAROUSEL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_override_property (object_class,
@@ -336,69 +336,69 @@ adw_carousel_indicator_lines_class_init (AdwCarouselIndicatorLinesClass *klass)
 }
 
 static void
-adw_carousel_indicator_lines_init (AdwCarouselIndicatorLines *self)
+adap_carousel_indicator_lines_init (AdapCarouselIndicatorLines *self)
 {
-  AdwAnimationTarget *target
-    = adw_callback_animation_target_new ((AdwAnimationTargetFunc) animation_cb,
+  AdapAnimationTarget *target
+    = adap_callback_animation_target_new ((AdapAnimationTargetFunc) animation_cb,
                                          self, NULL);
 
   self->animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 0, 1, 0, target);
+    adap_timed_animation_new (GTK_WIDGET (self), 0, 1, 0, target);
 }
 
 /**
- * adw_carousel_indicator_lines_new:
+ * adap_carousel_indicator_lines_new:
  *
- * Creates a new `AdwCarouselIndicatorLines`.
+ * Creates a new `AdapCarouselIndicatorLines`.
  *
- * Returns: the newly created `AdwCarouselIndicatorLines`
+ * Returns: the newly created `AdapCarouselIndicatorLines`
  */
 GtkWidget *
-adw_carousel_indicator_lines_new (void)
+adap_carousel_indicator_lines_new (void)
 {
-  return g_object_new (ADW_TYPE_CAROUSEL_INDICATOR_LINES, NULL);
+  return g_object_new (ADAP_TYPE_CAROUSEL_INDICATOR_LINES, NULL);
 }
 
 /**
- * adw_carousel_indicator_lines_get_carousel: (attributes org.gtk.Method.get_property=carousel)
+ * adap_carousel_indicator_lines_get_carousel: (attributes org.gtk.Method.get_property=carousel)
  * @self: an indicator
  *
  * Gets the displayed carousel.
  *
  * Returns: (nullable) (transfer none): the displayed carousel
  */
-AdwCarousel *
-adw_carousel_indicator_lines_get_carousel (AdwCarouselIndicatorLines *self)
+AdapCarousel *
+adap_carousel_indicator_lines_get_carousel (AdapCarouselIndicatorLines *self)
 {
-  g_return_val_if_fail (ADW_IS_CAROUSEL_INDICATOR_LINES (self), NULL);
+  g_return_val_if_fail (ADAP_IS_CAROUSEL_INDICATOR_LINES (self), NULL);
 
   return self->carousel;
 }
 
 /**
- * adw_carousel_indicator_lines_set_carousel: (attributes org.gtk.Method.set_property=carousel)
+ * adap_carousel_indicator_lines_set_carousel: (attributes org.gtk.Method.set_property=carousel)
  * @self: an indicator
  * @carousel: (nullable): a carousel
  *
  * Sets the displayed carousel.
  */
 void
-adw_carousel_indicator_lines_set_carousel (AdwCarouselIndicatorLines *self,
-                                           AdwCarousel               *carousel)
+adap_carousel_indicator_lines_set_carousel (AdapCarouselIndicatorLines *self,
+                                           AdapCarousel               *carousel)
 {
-  g_return_if_fail (ADW_IS_CAROUSEL_INDICATOR_LINES (self));
-  g_return_if_fail (carousel == NULL || ADW_IS_CAROUSEL (carousel));
+  g_return_if_fail (ADAP_IS_CAROUSEL_INDICATOR_LINES (self));
+  g_return_if_fail (carousel == NULL || ADAP_IS_CAROUSEL (carousel));
 
   if (self->carousel == carousel)
     return;
 
-  adw_animation_reset (self->animation);
+  adap_animation_reset (self->animation);
 
   if (self->carousel) {
     g_signal_handlers_disconnect_by_func (self->carousel,
                                           gtk_widget_queue_draw, self);
     g_signal_handlers_disconnect_by_func (self->carousel,
-                                          adw_animation_play, self->animation);
+                                          adap_animation_play, self->animation);
     g_clear_object (&self->duration_binding);
   }
 
@@ -409,7 +409,7 @@ adw_carousel_indicator_lines_set_carousel (AdwCarouselIndicatorLines *self,
                              G_CALLBACK (gtk_widget_queue_draw), self,
                              G_CONNECT_SWAPPED);
     g_signal_connect_object (self->carousel, "notify::n-pages",
-                             G_CALLBACK (adw_animation_play), self->animation,
+                             G_CALLBACK (adap_animation_play), self->animation,
                              G_CONNECT_SWAPPED);
     self->duration_binding =
       g_object_bind_property (self->carousel, "reveal-duration",

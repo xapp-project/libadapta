@@ -8,19 +8,19 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-tab-bar.h"
+#include "adap-tab-bar.h"
 
-#include "adw-tab-box-private.h"
+#include "adap-tab-box-private.h"
 
 G_BEGIN_DECLS
 
-gboolean adw_tab_bar_tabs_have_visible_focus (AdwTabBar *self);
+gboolean adap_tab_bar_tabs_have_visible_focus (AdapTabBar *self);
 
-AdwTabBox *adw_tab_bar_get_tab_box        (AdwTabBar *self);
-AdwTabBox *adw_tab_bar_get_pinned_tab_box (AdwTabBar *self);
+AdapTabBox *adap_tab_bar_get_tab_box        (AdapTabBar *self);
+AdapTabBox *adap_tab_bar_get_pinned_tab_box (AdapTabBar *self);
 
 G_END_DECLS

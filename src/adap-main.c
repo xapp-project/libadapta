@@ -5,78 +5,78 @@
  */
 #include "config.h"
 
-#include "adw-main-private.h"
+#include "adap-main-private.h"
 
-#include "adw-inspector-page-private.h"
-#include "adw-style-manager-private.h"
+#include "adap-inspector-page-private.h"
+#include "adap-style-manager-private.h"
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
-static int adw_initialized = FALSE;
+static int adap_initialized = FALSE;
 
 /**
- * adw_init:
+ * adap_init:
  *
- * Initializes Libadwaita.
+ * Initializes Libadapta.
  *
  * This function can be used instead of [func@Gtk.init] as it initializes GTK
  * implicitly.
  *
  * There's no need to call this function if you're using [class@Application].
  *
- * If Libadwaita has already been initialized, the function will simply return.
+ * If Libadapta has already been initialized, the function will simply return.
  *
- * This makes sure translations, types, themes, and icons for the Adwaita
+ * This makes sure translations, types, themes, and icons for the Adapta
  * library are set up properly.
  */
 void
-adw_init (void)
+adap_init (void)
 {
-  if (adw_initialized)
+  if (adap_initialized)
     return;
 
   gtk_init ();
 
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-  adw_init_public_types ();
+  adap_init_public_types ();
 
-  if (!adw_is_granite_present ()) {
+  if (!adap_is_granite_present ()) {
     gtk_icon_theme_add_resource_path (gtk_icon_theme_get_for_display (gdk_display_get_default ()),
-                                      "/org/gnome/Adwaita/icons");
+                                      "/org/gnome/Adapta/icons");
 
-    adw_style_manager_ensure ();
+    adap_style_manager_ensure ();
 
     if (g_io_extension_point_lookup ("gtk-inspector-page"))
       g_io_extension_point_implement ("gtk-inspector-page",
-                                      ADW_TYPE_INSPECTOR_PAGE,
-                                      "libadwaita",
+                                      ADAP_TYPE_INSPECTOR_PAGE,
+                                      "libadapta",
                                       10);
   }
 
-  adw_initialized = TRUE;
+  adap_initialized = TRUE;
 }
 
 /**
- * adw_is_initialized:
+ * adap_is_initialized:
  *
- * Use this function to check if libadwaita has been initialized with
+ * Use this function to check if libadapta has been initialized with
  * [func@init].
  *
  * Returns: the initialization status
  */
 gboolean
-adw_is_initialized (void)
+adap_is_initialized (void)
 {
-  return adw_initialized;
+  return adap_initialized;
 }
 
 /*
  * Some applications, like Epiphany, are used on both GNOME and elementary.
- * Make it possible to integrate those apps with it while still using libadwaita.
+ * Make it possible to integrate those apps with it while still using libadapta.
  */
 gboolean
-adw_is_granite_present (void)
+adap_is_granite_present (void)
 {
   static int present = -1;
 

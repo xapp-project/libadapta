@@ -8,39 +8,39 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-dialog.h"
+#include "adap-dialog.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_DIALOG_HOST (adw_dialog_host_get_type())
+#define ADAP_TYPE_DIALOG_HOST (adap_dialog_host_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwDialogHost, adw_dialog_host, ADW, DIALOG_HOST, GtkWidget)
+G_DECLARE_FINAL_TYPE (AdapDialogHost, adap_dialog_host, ADAP, DIALOG_HOST, GtkWidget)
 
-GtkWidget *adw_dialog_host_new (void) G_GNUC_WARN_UNUSED_RESULT;
+GtkWidget *adap_dialog_host_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-GtkWidget *adw_dialog_host_get_child (AdwDialogHost *self);
-void       adw_dialog_host_set_child (AdwDialogHost *self,
+GtkWidget *adap_dialog_host_get_child (AdapDialogHost *self);
+void       adap_dialog_host_set_child (AdapDialogHost *self,
                                       GtkWidget     *child);
 
-GListModel *adw_dialog_host_get_dialogs (AdwDialogHost *self);
+GListModel *adap_dialog_host_get_dialogs (AdapDialogHost *self);
 
-AdwDialog *adw_dialog_host_get_visible_dialog (AdwDialogHost *self);
+AdapDialog *adap_dialog_host_get_visible_dialog (AdapDialogHost *self);
 
-void adw_dialog_host_present_dialog (AdwDialogHost *self,
-                                     AdwDialog     *dialog);
+void adap_dialog_host_present_dialog (AdapDialogHost *self,
+                                     AdapDialog     *dialog);
 
-GtkWidget *adw_dialog_host_get_proxy (AdwDialogHost *self);
-void       adw_dialog_host_set_proxy (AdwDialogHost *self,
+GtkWidget *adap_dialog_host_get_proxy (AdapDialogHost *self);
+void       adap_dialog_host_set_proxy (AdapDialogHost *self,
                                       GtkWidget     *proxy);
 
-AdwDialogHost *adw_dialog_host_get_from_proxy (GtkWidget *widget);
+AdapDialogHost *adap_dialog_host_get_from_proxy (GtkWidget *widget);
 
 G_END_DECLS

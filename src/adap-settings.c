@@ -8,33 +8,33 @@
 
 #include "config.h"
 
-#include "adw-settings-private.h"
+#include "adap-settings-private.h"
 
-#include "adw-settings-impl-private.h"
+#include "adap-settings-impl-private.h"
 
 #include <gtk/gtk.h>
 
-struct _AdwSettings
+struct _AdapSettings
 {
   GObject parent_instance;
 
-  AdwSettingsImpl *platform_impl;
-  AdwSettingsImpl *gsettings_impl;
-  AdwSettingsImpl *legacy_impl;
+  AdapSettingsImpl *platform_impl;
+  AdapSettingsImpl *gsettings_impl;
+  AdapSettingsImpl *legacy_impl;
 
   gchar *theme_name;
 
-  AdwSystemColorScheme color_scheme;
+  AdapSystemColorScheme color_scheme;
   gboolean high_contrast;
   gboolean system_supports_color_schemes;
 
   gboolean override;
   gboolean system_supports_color_schemes_override;
-  AdwSystemColorScheme color_scheme_override;
+  AdapSystemColorScheme color_scheme_override;
   gboolean high_contrast_override;
 };
 
-G_DEFINE_FINAL_TYPE (AdwSettings, adw_settings, G_TYPE_OBJECT);
+G_DEFINE_FINAL_TYPE (AdapSettings, adap_settings, G_TYPE_OBJECT);
 
 enum {
   PROP_0,
@@ -47,10 +47,10 @@ enum {
 
 static GParamSpec *props[LAST_PROP];
 
-static AdwSettings *default_instance;
+static AdapSettings *default_instance;
 
 static void
-set_theme_name (AdwSettings          *self,
+set_theme_name (AdapSettings          *self,
                 const gchar          *theme_name)
 {
   if (g_strcmp0 (self->theme_name, theme_name) == 0)
@@ -63,8 +63,8 @@ set_theme_name (AdwSettings          *self,
 }
 
 static void
-set_color_scheme (AdwSettings          *self,
-                  AdwSystemColorScheme  color_scheme)
+set_color_scheme (AdapSettings          *self,
+                  AdapSystemColorScheme  color_scheme)
 {
   if (color_scheme == self->color_scheme)
     return;
@@ -76,7 +76,7 @@ set_color_scheme (AdwSettings          *self,
 }
 
 static void
-set_high_contrast (AdwSettings *self,
+set_high_contrast (AdapSettings *self,
                    gboolean     high_contrast)
 {
   if (high_contrast == self->high_contrast)
@@ -89,12 +89,12 @@ set_high_contrast (AdwSettings *self,
 }
 
 static void
-init_debug (AdwSettings *self,
+init_debug (AdapSettings *self,
             gboolean    *found_theme_name,
             gboolean    *found_color_scheme,
             gboolean    *found_high_contrast)
 {
-  const char *env = g_getenv ("ADW_DEBUG_HIGH_CONTRAST");
+  const char *env = g_getenv ("ADAP_DEBUG_HIGH_CONTRAST");
   if (env && *env) {
     if (!g_strcmp0 (env, "1")) {
       *found_high_contrast = TRUE;
@@ -103,27 +103,27 @@ init_debug (AdwSettings *self,
       *found_high_contrast = TRUE;
       self->high_contrast = FALSE;
     } else {
-      g_warning ("Invalid value for ADW_DEBUG_HIGH_CONTRAST: %s (Expected 0 or 1)", env);
+      g_warning ("Invalid value for ADAP_DEBUG_HIGH_CONTRAST: %s (Expected 0 or 1)", env);
     }
   }
 
-  env = g_getenv ("ADW_DEBUG_COLOR_SCHEME");
+  env = g_getenv ("ADAP_DEBUG_COLOR_SCHEME");
   if (env) {
     if (!g_strcmp0 (env, "default")) {
       *found_color_scheme = TRUE;
-      self->color_scheme = ADW_SYSTEM_COLOR_SCHEME_DEFAULT;
+      self->color_scheme = ADAP_SYSTEM_COLOR_SCHEME_DEFAULT;
     } else if (!g_strcmp0 (env, "prefer-dark")) {
       *found_color_scheme = TRUE;
-      self->color_scheme = ADW_SYSTEM_COLOR_SCHEME_PREFER_DARK;
+      self->color_scheme = ADAP_SYSTEM_COLOR_SCHEME_PREFER_DARK;
     } else if (!g_strcmp0 (env, "prefer-light")) {
       *found_color_scheme = TRUE;
-      self->color_scheme = ADW_SYSTEM_COLOR_SCHEME_PREFER_LIGHT;
+      self->color_scheme = ADAP_SYSTEM_COLOR_SCHEME_PREFER_LIGHT;
     } else {
       g_warning ("Invalid color scheme %s (Expected one of: default, prefer-dark, prefer-light)", env);
     }
   }
 
-  env = g_getenv ("ADW_DEBUG_THEME_NAME");
+  env = g_getenv ("ADAP_DEBUG_THEME_NAME");
   if (env) {
     *found_theme_name = TRUE;
     self->theme_name = g_strdup (env);
@@ -131,33 +131,33 @@ init_debug (AdwSettings *self,
 }
 
 static void
-register_impl (AdwSettings      *self,
-               AdwSettingsImpl  *impl,
+register_impl (AdapSettings      *self,
+               AdapSettingsImpl  *impl,
                gboolean         *found_theme_name,
                gboolean         *found_color_scheme,
                gboolean         *found_high_contrast)
 {
-  if (adw_settings_impl_get_has_theme_name (impl)) {
+  if (adap_settings_impl_get_has_theme_name (impl)) {
     *found_theme_name = TRUE;
 
-    set_theme_name (self, adw_settings_impl_get_theme_name (impl));
+    set_theme_name (self, adap_settings_impl_get_theme_name (impl));
 
     g_signal_connect_swapped (impl, "theme-name-changed",
                               G_CALLBACK (set_theme_name), self);
   }
-  if (adw_settings_impl_get_has_color_scheme (impl)) {
+  if (adap_settings_impl_get_has_color_scheme (impl)) {
     *found_color_scheme = TRUE;
 
-    set_color_scheme (self, adw_settings_impl_get_color_scheme (impl));
+    set_color_scheme (self, adap_settings_impl_get_color_scheme (impl));
 
     g_signal_connect_swapped (impl, "color-scheme-changed",
                               G_CALLBACK (set_color_scheme), self);
   }
 
-  if (adw_settings_impl_get_has_high_contrast (impl)) {
+  if (adap_settings_impl_get_has_high_contrast (impl)) {
     *found_high_contrast = TRUE;
 
-    set_high_contrast (self, adw_settings_impl_get_high_contrast (impl));
+    set_high_contrast (self, adap_settings_impl_get_high_contrast (impl));
 
     g_signal_connect_swapped (impl, "high-contrast-changed",
                               G_CALLBACK (set_high_contrast), self);
@@ -165,36 +165,36 @@ register_impl (AdwSettings      *self,
 }
 
 static void
-adw_settings_constructed (GObject *object)
+adap_settings_constructed (GObject *object)
 {
-  AdwSettings *self = ADW_SETTINGS (object);
+  AdapSettings *self = ADAP_SETTINGS (object);
   gboolean found_theme_name = FALSE;
   gboolean found_color_scheme = FALSE;
   gboolean found_high_contrast = FALSE;
 
-  G_OBJECT_CLASS (adw_settings_parent_class)->constructed (object);
+  G_OBJECT_CLASS (adap_settings_parent_class)->constructed (object);
 
   init_debug (self, &found_theme_name, &found_color_scheme, &found_high_contrast);
 
   if (!found_color_scheme || !found_high_contrast) {
 #ifdef __APPLE__
-    self->platform_impl = adw_settings_impl_macos_new (!found_color_scheme, !found_high_contrast);
+    self->platform_impl = adap_settings_impl_macos_new (!found_color_scheme, !found_high_contrast);
 #elif defined(G_OS_WIN32)
-    self->platform_impl = adw_settings_impl_win32_new (!found_color_scheme, !found_high_contrast);
+    self->platform_impl = adap_settings_impl_win32_new (!found_color_scheme, !found_high_contrast);
 #else
-    self->platform_impl = adw_settings_impl_portal_new (!found_theme_name, !found_color_scheme, !found_high_contrast);
+    self->platform_impl = adap_settings_impl_portal_new (!found_theme_name, !found_color_scheme, !found_high_contrast);
 #endif
 
     register_impl (self, self->platform_impl, &found_theme_name, &found_color_scheme, &found_high_contrast);
   }
 
   if (!found_theme_name || !found_color_scheme || !found_high_contrast) {
-    self->gsettings_impl = adw_settings_impl_gsettings_new (!found_theme_name, !found_color_scheme, !found_high_contrast);
+    self->gsettings_impl = adap_settings_impl_gsettings_new (!found_theme_name, !found_color_scheme, !found_high_contrast);
     register_impl (self, self->gsettings_impl, &found_theme_name, &found_color_scheme, &found_high_contrast);
   }
 
   if (!found_color_scheme || !found_high_contrast) {
-    self->legacy_impl = adw_settings_impl_legacy_new (!found_color_scheme, !found_high_contrast);
+    self->legacy_impl = adap_settings_impl_legacy_new (!found_color_scheme, !found_high_contrast);
     register_impl (self, self->legacy_impl, &found_theme_name, &found_color_scheme, &found_high_contrast);
   }
 
@@ -202,40 +202,40 @@ adw_settings_constructed (GObject *object)
 }
 
 static void
-adw_settings_dispose (GObject *object)
+adap_settings_dispose (GObject *object)
 {
-  AdwSettings *self = ADW_SETTINGS (object);
+  AdapSettings *self = ADAP_SETTINGS (object);
 
   g_clear_object (&self->platform_impl);
   g_clear_object (&self->gsettings_impl);
   g_clear_object (&self->legacy_impl);
 
-  G_OBJECT_CLASS (adw_settings_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_settings_parent_class)->dispose (object);
 }
 
 static void
-adw_settings_get_property (GObject    *object,
+adap_settings_get_property (GObject    *object,
                            guint       prop_id,
                            GValue     *value,
                            GParamSpec *pspec)
 {
-  AdwSettings *self = ADW_SETTINGS (object);
+  AdapSettings *self = ADAP_SETTINGS (object);
 
   switch (prop_id) {
   case PROP_THEME_NAME:
-    g_value_set_string (value, adw_settings_get_theme_name (self));
+    g_value_set_string (value, adap_settings_get_theme_name (self));
     break;
 
   case PROP_SYSTEM_SUPPORTS_COLOR_SCHEMES:
-    g_value_set_boolean (value, adw_settings_get_system_supports_color_schemes (self));
+    g_value_set_boolean (value, adap_settings_get_system_supports_color_schemes (self));
     break;
 
   case PROP_COLOR_SCHEME:
-    g_value_set_enum (value, adw_settings_get_color_scheme (self));
+    g_value_set_enum (value, adap_settings_get_color_scheme (self));
     break;
 
   case PROP_HIGH_CONTRAST:
-    g_value_set_boolean (value, adw_settings_get_high_contrast (self));
+    g_value_set_boolean (value, adap_settings_get_high_contrast (self));
     break;
 
   default:
@@ -244,13 +244,13 @@ adw_settings_get_property (GObject    *object,
 }
 
 static void
-adw_settings_class_init (AdwSettingsClass *klass)
+adap_settings_class_init (AdapSettingsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = adw_settings_constructed;
-  object_class->dispose = adw_settings_dispose;
-  object_class->get_property = adw_settings_get_property;
+  object_class->constructed = adap_settings_constructed;
+  object_class->dispose = adap_settings_dispose;
+  object_class->get_property = adap_settings_get_property;
 
   props[PROP_THEME_NAME] =
     g_param_spec_string ("theme-name", NULL, NULL,
@@ -264,8 +264,8 @@ adw_settings_class_init (AdwSettingsClass *klass)
 
   props[PROP_COLOR_SCHEME] =
     g_param_spec_enum ("color-scheme", NULL, NULL,
-                       ADW_TYPE_SYSTEM_COLOR_SCHEME,
-                       ADW_SYSTEM_COLOR_SCHEME_DEFAULT,
+                       ADAP_TYPE_SYSTEM_COLOR_SCHEME,
+                       ADAP_SYSTEM_COLOR_SCHEME_DEFAULT,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   props[PROP_HIGH_CONTRAST] =
@@ -277,23 +277,23 @@ adw_settings_class_init (AdwSettingsClass *klass)
 }
 
 static void
-adw_settings_init (AdwSettings *self)
+adap_settings_init (AdapSettings *self)
 {
 }
 
-AdwSettings *
-adw_settings_get_default (void)
+AdapSettings *
+adap_settings_get_default (void)
 {
   if (!default_instance)
-    default_instance = g_object_new (ADW_TYPE_SETTINGS, NULL);
+    default_instance = g_object_new (ADAP_TYPE_SETTINGS, NULL);
 
   return default_instance;
 }
 
 gboolean
-adw_settings_get_system_supports_color_schemes (AdwSettings *self)
+adap_settings_get_system_supports_color_schemes (AdapSettings *self)
 {
-  g_return_val_if_fail (ADW_IS_SETTINGS (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SETTINGS (self), FALSE);
 
   if (self->override)
     return self->system_supports_color_schemes_override;
@@ -302,17 +302,17 @@ adw_settings_get_system_supports_color_schemes (AdwSettings *self)
 }
 
 const gchar *
-adw_settings_get_theme_name (AdwSettings *self)
+adap_settings_get_theme_name (AdapSettings *self)
 {
-  g_return_val_if_fail (ADW_IS_SETTINGS (self), NULL);
+  g_return_val_if_fail (ADAP_IS_SETTINGS (self), NULL);
 
   return self->theme_name;
 }
 
-AdwSystemColorScheme
-adw_settings_get_color_scheme (AdwSettings *self)
+AdapSystemColorScheme
+adap_settings_get_color_scheme (AdapSettings *self)
 {
-  g_return_val_if_fail (ADW_IS_SETTINGS (self), ADW_SYSTEM_COLOR_SCHEME_DEFAULT);
+  g_return_val_if_fail (ADAP_IS_SETTINGS (self), ADAP_SYSTEM_COLOR_SCHEME_DEFAULT);
 
   if (self->override)
     return self->color_scheme_override;
@@ -321,9 +321,9 @@ adw_settings_get_color_scheme (AdwSettings *self)
 }
 
 gboolean
-adw_settings_get_high_contrast (AdwSettings *self)
+adap_settings_get_high_contrast (AdapSettings *self)
 {
-  g_return_val_if_fail (ADW_IS_SETTINGS (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SETTINGS (self), FALSE);
 
   if (self->override)
     return self->high_contrast_override;
@@ -332,9 +332,9 @@ adw_settings_get_high_contrast (AdwSettings *self)
 }
 
 void
-adw_settings_start_override (AdwSettings *self)
+adap_settings_start_override (AdapSettings *self)
 {
-  g_return_if_fail (ADW_IS_SETTINGS (self));
+  g_return_if_fail (ADAP_IS_SETTINGS (self));
 
   if (self->override)
     return;
@@ -347,11 +347,11 @@ adw_settings_start_override (AdwSettings *self)
 }
 
 void
-adw_settings_end_override (AdwSettings *self)
+adap_settings_end_override (AdapSettings *self)
 {
   gboolean notify_system_supports_color_scheme, notify_color_scheme, notify_hc;
 
-  g_return_if_fail (ADW_IS_SETTINGS (self));
+  g_return_if_fail (ADAP_IS_SETTINGS (self));
 
   if (!self->override)
     return;
@@ -362,7 +362,7 @@ adw_settings_end_override (AdwSettings *self)
 
   self->override = FALSE;
   self->system_supports_color_schemes_override = FALSE;
-  self->color_scheme_override = ADW_SYSTEM_COLOR_SCHEME_DEFAULT;
+  self->color_scheme_override = ADAP_SYSTEM_COLOR_SCHEME_DEFAULT;
   self->high_contrast_override = FALSE;
 
   if (notify_system_supports_color_scheme)
@@ -374,10 +374,10 @@ adw_settings_end_override (AdwSettings *self)
 }
 
 void
-adw_settings_override_system_supports_color_schemes (AdwSettings *self,
+adap_settings_override_system_supports_color_schemes (AdapSettings *self,
                                                      gboolean     system_supports_color_schemes)
 {
-  g_return_if_fail (ADW_IS_SETTINGS (self));
+  g_return_if_fail (ADAP_IS_SETTINGS (self));
   g_return_if_fail (self->override);
 
   system_supports_color_schemes = !!system_supports_color_schemes;
@@ -386,7 +386,7 @@ adw_settings_override_system_supports_color_schemes (AdwSettings *self,
     return;
 
   if (!system_supports_color_schemes)
-    adw_settings_override_color_scheme (self, ADW_SYSTEM_COLOR_SCHEME_DEFAULT);
+    adap_settings_override_color_scheme (self, ADAP_SYSTEM_COLOR_SCHEME_DEFAULT);
 
   self->system_supports_color_schemes_override = system_supports_color_schemes;
 
@@ -394,10 +394,10 @@ adw_settings_override_system_supports_color_schemes (AdwSettings *self,
 }
 
 void
-adw_settings_override_color_scheme (AdwSettings          *self,
-                                    AdwSystemColorScheme  color_scheme)
+adap_settings_override_color_scheme (AdapSettings          *self,
+                                    AdapSystemColorScheme  color_scheme)
 {
-  g_return_if_fail (ADW_IS_SETTINGS (self));
+  g_return_if_fail (ADAP_IS_SETTINGS (self));
   g_return_if_fail (self->override);
 
   if (color_scheme == self->color_scheme_override ||
@@ -410,10 +410,10 @@ adw_settings_override_color_scheme (AdwSettings          *self,
 }
 
 void
-adw_settings_override_high_contrast (AdwSettings *self,
+adap_settings_override_high_contrast (AdapSettings *self,
                                      gboolean     high_contrast)
 {
-  g_return_if_fail (ADW_IS_SETTINGS (self));
+  g_return_if_fail (ADAP_IS_SETTINGS (self));
   g_return_if_fail (self->override);
 
   high_contrast = !!high_contrast;

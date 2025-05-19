@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwWindow" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapWindow" id="widget">
     <property name="title">Banner</property>
     <property name="default-width">600</property>
     <property name="default-height">150</property>
     <property name="content">
-      <object class="AdwToolbarView">
+      <object class="AdapToolbarView">
         <child type="top">
           <object class="GtkHeaderBar"/>
         </child>
         <property name="content">
-          <object class="AdwBanner">
+          <object class="AdapBanner">
             <property name="valign">start</property>
             <property name="revealed">True</property>
             <property name="title">Unlock to change settings</property>

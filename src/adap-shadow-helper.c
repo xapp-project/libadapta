@@ -6,11 +6,11 @@
 
 #include "config.h"
 
-#include "adw-shadow-helper-private.h"
+#include "adap-shadow-helper-private.h"
 
-#include "adw-gizmo-private.h"
+#include "adap-gizmo-private.h"
 
-struct _AdwShadowHelper
+struct _AdapShadowHelper
 {
   GObject parent_instance;
 
@@ -22,7 +22,7 @@ struct _AdwShadowHelper
   GtkWidget *outline;
 };
 
-G_DEFINE_FINAL_TYPE (AdwShadowHelper, adw_shadow_helper, G_TYPE_OBJECT);
+G_DEFINE_FINAL_TYPE (AdapShadowHelper, adap_shadow_helper, G_TYPE_OBJECT);
 
 enum {
   PROP_0,
@@ -33,17 +33,17 @@ enum {
 static GParamSpec *props[LAST_PROP];
 
 static void
-adw_shadow_helper_constructed (GObject *object)
+adap_shadow_helper_constructed (GObject *object)
 {
-  AdwShadowHelper *self = ADW_SHADOW_HELPER (object);
+  AdapShadowHelper *self = ADAP_SHADOW_HELPER (object);
 
-  self->dimming = adw_gizmo_new_with_role ("dimming", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+  self->dimming = adap_gizmo_new_with_role ("dimming", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                            NULL, NULL, NULL, NULL, NULL, NULL);
-  self->shadow = adw_gizmo_new_with_role ("shadow", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+  self->shadow = adap_gizmo_new_with_role ("shadow", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                           NULL, NULL, NULL, NULL, NULL, NULL);
-  self->border = adw_gizmo_new_with_role ("border", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+  self->border = adap_gizmo_new_with_role ("border", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                           NULL, NULL, NULL, NULL, NULL, NULL);
-  self->outline = adw_gizmo_new_with_role ("outline", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+  self->outline = adap_gizmo_new_with_role ("outline", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                            NULL, NULL, NULL, NULL, NULL, NULL);
 
   gtk_widget_set_visible (self->dimming, FALSE);
@@ -61,13 +61,13 @@ adw_shadow_helper_constructed (GObject *object)
   gtk_widget_set_parent (self->border, self->widget);
   gtk_widget_set_parent (self->outline, self->widget);
 
-  G_OBJECT_CLASS (adw_shadow_helper_parent_class)->constructed (object);
+  G_OBJECT_CLASS (adap_shadow_helper_parent_class)->constructed (object);
 }
 
 static void
-adw_shadow_helper_dispose (GObject *object)
+adap_shadow_helper_dispose (GObject *object)
 {
-  AdwShadowHelper *self = ADW_SHADOW_HELPER (object);
+  AdapShadowHelper *self = ADAP_SHADOW_HELPER (object);
 
   g_clear_pointer (&self->dimming, gtk_widget_unparent);
   g_clear_pointer (&self->shadow, gtk_widget_unparent);
@@ -75,16 +75,16 @@ adw_shadow_helper_dispose (GObject *object)
   g_clear_pointer (&self->outline, gtk_widget_unparent);
   self->widget = NULL;
 
-  G_OBJECT_CLASS (adw_shadow_helper_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_shadow_helper_parent_class)->dispose (object);
 }
 
 static void
-adw_shadow_helper_get_property (GObject    *object,
+adap_shadow_helper_get_property (GObject    *object,
                                 guint       prop_id,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-  AdwShadowHelper *self = ADW_SHADOW_HELPER (object);
+  AdapShadowHelper *self = ADAP_SHADOW_HELPER (object);
 
   switch (prop_id) {
   case PROP_WIDGET:
@@ -97,12 +97,12 @@ adw_shadow_helper_get_property (GObject    *object,
 }
 
 static void
-adw_shadow_helper_set_property (GObject      *object,
+adap_shadow_helper_set_property (GObject      *object,
                                 guint         prop_id,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-  AdwShadowHelper *self = ADW_SHADOW_HELPER (object);
+  AdapShadowHelper *self = ADAP_SHADOW_HELPER (object);
 
   switch (prop_id) {
   case PROP_WIDGET:
@@ -115,17 +115,17 @@ adw_shadow_helper_set_property (GObject      *object,
 }
 
 static void
-adw_shadow_helper_class_init (AdwShadowHelperClass *klass)
+adap_shadow_helper_class_init (AdapShadowHelperClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = adw_shadow_helper_constructed;
-  object_class->dispose = adw_shadow_helper_dispose;
-  object_class->get_property = adw_shadow_helper_get_property;
-  object_class->set_property = adw_shadow_helper_set_property;
+  object_class->constructed = adap_shadow_helper_constructed;
+  object_class->dispose = adap_shadow_helper_dispose;
+  object_class->get_property = adap_shadow_helper_get_property;
+  object_class->set_property = adap_shadow_helper_set_property;
 
   /**
-   * AdwShadowHelper:widget:
+   * AdapShadowHelper:widget:
    *
    * The widget the shadow will be drawn for. Must not be `NULL`
    */
@@ -138,27 +138,27 @@ adw_shadow_helper_class_init (AdwShadowHelperClass *klass)
 }
 
 static void
-adw_shadow_helper_init (AdwShadowHelper *self)
+adap_shadow_helper_init (AdapShadowHelper *self)
 {
 }
 
 /**
- * adw_shadow_helper_new:
+ * adap_shadow_helper_new:
  *
- * Creates a new `AdwShadowHelper`.
+ * Creates a new `AdapShadowHelper`.
  *
- * Returns: the newly created `AdwShadowHelper`
+ * Returns: the newly created `AdapShadowHelper`
  */
-AdwShadowHelper *
-adw_shadow_helper_new (GtkWidget *widget)
+AdapShadowHelper *
+adap_shadow_helper_new (GtkWidget *widget)
 {
-  return g_object_new (ADW_TYPE_SHADOW_HELPER,
+  return g_object_new (ADAP_TYPE_SHADOW_HELPER,
                        "widget", widget,
                        NULL);
 }
 
 static void
-set_style_classes (AdwShadowHelper *self,
+set_style_classes (AdapShadowHelper *self,
                    GtkPanDirection  direction)
 {
   const char *classes[2];
@@ -188,7 +188,7 @@ set_style_classes (AdwShadowHelper *self,
 }
 
 void
-adw_shadow_helper_size_allocate (AdwShadowHelper *self,
+adap_shadow_helper_size_allocate (AdapShadowHelper *self,
                                  int              width,
                                  int              height,
                                  int              baseline,
@@ -279,7 +279,7 @@ adw_shadow_helper_size_allocate (AdwShadowHelper *self,
 }
 
 void
-adw_shadow_helper_snapshot (AdwShadowHelper *self,
+adap_shadow_helper_snapshot (AdapShadowHelper *self,
                             GtkSnapshot     *snapshot)
 {
   if (!gtk_widget_get_child_visible (self->dimming))

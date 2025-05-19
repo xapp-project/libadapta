@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwExpanderRow" parent="AdwPreferencesRow">
+  <template class="AdapExpanderRow" parent="AdapPreferencesRow">
     <property name="activatable">False</property>
     <signal name="activate" handler="activate_cb" after="yes"/>
     <style>
@@ -21,17 +21,17 @@
             <signal name="row-activated" handler="activate_cb" after="yes" swapped="yes"/>
             <signal name="keynav-failed" handler="keynav_failed_cb" swapped="yes"/>
             <child>
-              <object class="AdwActionRow" id="action_row">
+              <object class="AdapActionRow" id="action_row">
                 <!-- The header row must be activatable to toggle expansion by
                      clicking it or via keyboard activation. -->
                 <property name="activatable">True</property>
                 <!-- The header row must be focusable for keyboard navigation to
                      work as expected. -->
                 <property name="can-focus">True</property>
-                <property name="title" bind-source="AdwExpanderRow" bind-property="title" bind-flags="sync-create"/>
-                <property name="use-underline" bind-source="AdwExpanderRow" bind-property="use-underline" bind-flags="sync-create"/>
-                <property name="selectable" bind-source="AdwExpanderRow" bind-property="title-selectable" bind-flags="sync-create"/>
-                <property name="use-markup" bind-source="AdwExpanderRow" bind-property="use-markup" bind-flags="sync-create"/>
+                <property name="title" bind-source="AdapExpanderRow" bind-property="title" bind-flags="sync-create"/>
+                <property name="use-underline" bind-source="AdapExpanderRow" bind-property="use-underline" bind-flags="sync-create"/>
+                <property name="selectable" bind-source="AdapExpanderRow" bind-property="title-selectable" bind-flags="sync-create"/>
+                <property name="use-markup" bind-source="AdapExpanderRow" bind-property="use-markup" bind-flags="sync-create"/>
                 <accessibility>
                   <state name="expanded">False</state>
                 </accessibility>
@@ -48,19 +48,19 @@
                 </child>
                 <child>
                   <object class="GtkSwitch" id="enable_switch">
-                    <property name="active" bind-source="AdwExpanderRow" bind-property="enable-expansion" bind-flags="bidirectional|sync-create"/>
+                    <property name="active" bind-source="AdapExpanderRow" bind-property="enable-expansion" bind-flags="bidirectional|sync-create"/>
                     <property name="valign">center</property>
-                    <property name="visible" bind-source="AdwExpanderRow" bind-property="show-enable-switch" bind-flags="bidirectional|sync-create"/>
+                    <property name="visible" bind-source="AdapExpanderRow" bind-property="show-enable-switch" bind-flags="bidirectional|sync-create"/>
                     <accessibility>
-                      <relation name="labelled-by">AdwExpanderRow</relation>
-                      <relation name="described-by">AdwExpanderRow</relation>
+                      <relation name="labelled-by">AdapExpanderRow</relation>
+                      <relation name="described-by">AdapExpanderRow</relation>
                     </accessibility>
                   </object>
                 </child>
                 <child>
                   <object class="GtkImage" id="image">
-                    <property name="icon-name">adw-expander-arrow-symbolic</property>
-                    <property name="sensitive" bind-source="AdwExpanderRow" bind-property="enable-expansion" bind-flags="sync-create"/>
+                    <property name="icon-name">adap-expander-arrow-symbolic</property>
+                    <property name="sensitive" bind-source="AdapExpanderRow" bind-property="enable-expansion" bind-flags="sync-create"/>
                     <property name="accessible-role">presentation</property>
                     <style>
                       <class name="expander-row-arrow"/>
@@ -73,7 +73,7 @@
         </child>
         <child>
           <object class="GtkRevealer">
-            <property name="reveal-child" bind-source="AdwExpanderRow" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="reveal-child" bind-source="AdapExpanderRow" bind-property="expanded" bind-flags="sync-create"/>
             <property name="transition-type">slide-up</property>
             <property name="child">
               <object class="GtkListBox" id="list">

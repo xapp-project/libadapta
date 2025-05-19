@@ -8,46 +8,46 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <gtk/gtk.h>
-#include "adw-tab-view.h"
+#include "adap-tab-view.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_TAB (adw_tab_get_type())
+#define ADAP_TYPE_TAB (adap_tab_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwTab, adw_tab, ADW, TAB, GtkWidget)
+G_DECLARE_FINAL_TYPE (AdapTab, adap_tab, ADAP, TAB, GtkWidget)
 
-AdwTab *adw_tab_new (AdwTabView *view,
+AdapTab *adap_tab_new (AdapTabView *view,
                      gboolean    pinned) G_GNUC_WARN_UNUSED_RESULT;
 
-AdwTabPage *adw_tab_get_page (AdwTab     *self);
-void        adw_tab_set_page (AdwTab     *self,
-                              AdwTabPage *page);
+AdapTabPage *adap_tab_get_page (AdapTab     *self);
+void        adap_tab_set_page (AdapTab     *self,
+                              AdapTabPage *page);
 
-gboolean adw_tab_get_dragging (AdwTab   *self);
-void     adw_tab_set_dragging (AdwTab   *self,
+gboolean adap_tab_get_dragging (AdapTab   *self);
+void     adap_tab_set_dragging (AdapTab   *self,
                                gboolean  dragging);
 
-gboolean adw_tab_get_inverted (AdwTab   *self);
-void     adw_tab_set_inverted (AdwTab   *self,
+gboolean adap_tab_get_inverted (AdapTab   *self);
+void     adap_tab_set_inverted (AdapTab   *self,
                                gboolean  inverted);
 
-void adw_tab_set_fully_visible (AdwTab   *self,
+void adap_tab_set_fully_visible (AdapTab   *self,
                                 gboolean  fully_visible);
 
-void adw_tab_setup_extra_drop_target (AdwTab        *self,
+void adap_tab_setup_extra_drop_target (AdapTab        *self,
                                       GdkDragAction  actions,
                                       GType         *types,
                                       gsize          n_types);
 
-void adw_tab_set_extra_drag_preload (AdwTab   *self,
+void adap_tab_set_extra_drag_preload (AdapTab   *self,
                                      gboolean  preload);
 
-gboolean adw_tab_can_click_at (AdwTab *self,
+gboolean adap_tab_can_click_at (AdapTab *self,
                                float   x,
                                float   y);
 

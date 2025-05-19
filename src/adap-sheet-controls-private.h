@@ -8,28 +8,28 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_SHEET_CONTROLS (adw_sheet_controls_get_type ())
+#define ADAP_TYPE_SHEET_CONTROLS (adap_sheet_controls_get_type ())
 
-G_DECLARE_FINAL_TYPE (AdwSheetControls, adw_sheet_controls, ADW, SHEET_CONTROLS, GtkWidget)
+G_DECLARE_FINAL_TYPE (AdapSheetControls, adap_sheet_controls, ADAP, SHEET_CONTROLS, GtkWidget)
 
-GtkWidget *adw_sheet_controls_new                    (GtkPackType side);
+GtkWidget *adap_sheet_controls_new                    (GtkPackType side);
 
-GtkPackType adw_sheet_controls_get_side (AdwSheetControls *self);
-void        adw_sheet_controls_set_side (AdwSheetControls *self,
+GtkPackType adap_sheet_controls_get_side (AdapSheetControls *self);
+void        adap_sheet_controls_set_side (AdapSheetControls *self,
                                          GtkPackType       side);
 
-const char *adw_sheet_controls_get_decoration_layout (AdwSheetControls *self);
-void        adw_sheet_controls_set_decoration_layout (AdwSheetControls *self,
+const char *adap_sheet_controls_get_decoration_layout (AdapSheetControls *self);
+void        adap_sheet_controls_set_decoration_layout (AdapSheetControls *self,
                                                       const char       *layout);
 
-gboolean     adw_sheet_controls_get_empty (AdwSheetControls *self);
+gboolean     adap_sheet_controls_get_empty (AdapSheetControls *self);
 
 G_END_DECLS

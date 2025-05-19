@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include "adw-preferences-page.h"
+#include "adap-preferences-page.h"
 
 G_BEGIN_DECLS
 
-GListModel *adw_preferences_page_get_rows (AdwPreferencesPage *self) G_GNUC_WARN_UNUSED_RESULT;
+GListModel *adap_preferences_page_get_rows (AdapPreferencesPage *self) G_GNUC_WARN_UNUSED_RESULT;
 
 G_END_DECLS

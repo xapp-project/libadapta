@@ -6,15 +6,15 @@
  * Author: Alice Mikhaylenko <alice.mikhaylenko@puri.sm>
  */
 
-#include <adwaita.h>
+#include <adapta.h>
 
 static void
 test_easing_ease (gconstpointer data)
 {
-  AdwEasing easing = GPOINTER_TO_INT (data);
+  AdapEasing easing = GPOINTER_TO_INT (data);
 
-  g_assert_cmpfloat_with_epsilon (adw_easing_ease (easing, 0), 0, 0.005);
-  g_assert_cmpfloat_with_epsilon (adw_easing_ease (easing, 1), 1, 0.005);
+  g_assert_cmpfloat_with_epsilon (adap_easing_ease (easing, 0), 0, 0.005);
+  g_assert_cmpfloat_with_epsilon (adap_easing_ease (easing, 1), 1, 0.005);
 }
 
 int
@@ -25,13 +25,13 @@ main (int   argc,
   guint i;
 
   gtk_test_init (&argc, &argv, NULL);
-  adw_init ();
+  adap_init ();
 
-  enum_class = g_type_class_ref (ADW_TYPE_EASING);
+  enum_class = g_type_class_ref (ADAP_TYPE_EASING);
 
   for (i = 0; i < enum_class->n_values; i++) {
     GEnumValue *value = &enum_class->values[i];
-    char *path = g_strdup_printf ("/Adwaita/Easing/%s", value->value_nick);
+    char *path = g_strdup_printf ("/Adapta/Easing/%s", value->value_nick);
 
     g_test_add_data_func (path, GINT_TO_POINTER (value->value), test_easing_ease);
 

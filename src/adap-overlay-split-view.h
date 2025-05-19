@@ -7,96 +7,96 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-length-unit.h"
+#include "adap-length-unit.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_OVERLAY_SPLIT_VIEW (adw_overlay_split_view_get_type ())
+#define ADAP_TYPE_OVERLAY_SPLIT_VIEW (adap_overlay_split_view_get_type ())
 
-ADW_AVAILABLE_IN_1_4
-G_DECLARE_FINAL_TYPE (AdwOverlaySplitView, adw_overlay_split_view, ADW, OVERLAY_SPLIT_VIEW, GtkWidget)
+ADAP_AVAILABLE_IN_1_4
+G_DECLARE_FINAL_TYPE (AdapOverlaySplitView, adap_overlay_split_view, ADAP, OVERLAY_SPLIT_VIEW, GtkWidget)
 
-ADW_AVAILABLE_IN_1_4
-GtkWidget *adw_overlay_split_view_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_1_4
+GtkWidget *adap_overlay_split_view_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-GtkWidget *adw_overlay_split_view_get_sidebar (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void       adw_overlay_split_view_set_sidebar (AdwOverlaySplitView *self,
+ADAP_AVAILABLE_IN_1_4
+GtkWidget *adap_overlay_split_view_get_sidebar (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void       adap_overlay_split_view_set_sidebar (AdapOverlaySplitView *self,
                                                GtkWidget           *sidebar);
 
-ADW_AVAILABLE_IN_1_4
-GtkWidget *adw_overlay_split_view_get_content (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void       adw_overlay_split_view_set_content (AdwOverlaySplitView *self,
+ADAP_AVAILABLE_IN_1_4
+GtkWidget *adap_overlay_split_view_get_content (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void       adap_overlay_split_view_set_content (AdapOverlaySplitView *self,
                                                GtkWidget           *content);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_overlay_split_view_get_collapsed (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_overlay_split_view_set_collapsed (AdwOverlaySplitView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_overlay_split_view_get_collapsed (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_overlay_split_view_set_collapsed (AdapOverlaySplitView *self,
                                                gboolean             collapsed);
 
-ADW_AVAILABLE_IN_1_4
-GtkPackType adw_overlay_split_view_get_sidebar_position (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void        adw_overlay_split_view_set_sidebar_position (AdwOverlaySplitView *self,
+ADAP_AVAILABLE_IN_1_4
+GtkPackType adap_overlay_split_view_get_sidebar_position (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void        adap_overlay_split_view_set_sidebar_position (AdapOverlaySplitView *self,
                                                          GtkPackType          position);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_overlay_split_view_get_show_sidebar (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_overlay_split_view_set_show_sidebar (AdwOverlaySplitView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_overlay_split_view_get_show_sidebar (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_overlay_split_view_set_show_sidebar (AdapOverlaySplitView *self,
                                                   gboolean             show_sidebar);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_overlay_split_view_get_pin_sidebar (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_overlay_split_view_set_pin_sidebar (AdwOverlaySplitView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_overlay_split_view_get_pin_sidebar (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_overlay_split_view_set_pin_sidebar (AdapOverlaySplitView *self,
                                                  gboolean             pin_sidebar);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_overlay_split_view_get_enable_show_gesture (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_overlay_split_view_set_enable_show_gesture (AdwOverlaySplitView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_overlay_split_view_get_enable_show_gesture (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_overlay_split_view_set_enable_show_gesture (AdapOverlaySplitView *self,
                                                          gboolean             enable_show_gesture);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_overlay_split_view_get_enable_hide_gesture (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_overlay_split_view_set_enable_hide_gesture (AdwOverlaySplitView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_overlay_split_view_get_enable_hide_gesture (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_overlay_split_view_set_enable_hide_gesture (AdapOverlaySplitView *self,
                                                          gboolean             enable_hide_gesture);
 
-ADW_AVAILABLE_IN_1_4
-double adw_overlay_split_view_get_min_sidebar_width (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void   adw_overlay_split_view_set_min_sidebar_width (AdwOverlaySplitView *self,
+ADAP_AVAILABLE_IN_1_4
+double adap_overlay_split_view_get_min_sidebar_width (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void   adap_overlay_split_view_set_min_sidebar_width (AdapOverlaySplitView *self,
                                                      double               width);
 
-ADW_AVAILABLE_IN_1_4
-double adw_overlay_split_view_get_max_sidebar_width (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void   adw_overlay_split_view_set_max_sidebar_width (AdwOverlaySplitView *self,
+ADAP_AVAILABLE_IN_1_4
+double adap_overlay_split_view_get_max_sidebar_width (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void   adap_overlay_split_view_set_max_sidebar_width (AdapOverlaySplitView *self,
                                                      double               width);
 
-ADW_AVAILABLE_IN_1_4
-double adw_overlay_split_view_get_sidebar_width_fraction (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void   adw_overlay_split_view_set_sidebar_width_fraction (AdwOverlaySplitView *self,
+ADAP_AVAILABLE_IN_1_4
+double adap_overlay_split_view_get_sidebar_width_fraction (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void   adap_overlay_split_view_set_sidebar_width_fraction (AdapOverlaySplitView *self,
                                                           double               fraction);
 
-ADW_AVAILABLE_IN_1_4
-AdwLengthUnit adw_overlay_split_view_get_sidebar_width_unit (AdwOverlaySplitView *self);
-ADW_AVAILABLE_IN_1_4
-void          adw_overlay_split_view_set_sidebar_width_unit (AdwOverlaySplitView *self,
-                                                             AdwLengthUnit        unit);
+ADAP_AVAILABLE_IN_1_4
+AdapLengthUnit adap_overlay_split_view_get_sidebar_width_unit (AdapOverlaySplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void          adap_overlay_split_view_set_sidebar_width_unit (AdapOverlaySplitView *self,
+                                                             AdapLengthUnit        unit);
 
 G_END_DECLS

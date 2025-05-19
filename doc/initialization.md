@@ -3,18 +3,18 @@ Slug: initialization
 
 # Initialization
 
-Before using Libadwaita, it must be initialized. There are two ways of doing
+Before using Libadapta, it must be initialized. There are two ways of doing
 this.
 
-## Using `AdwApplication` (Recommended)
+## Using `AdapApplication` (Recommended)
 
-[class@Application] automatically initializes Libadwaita if used instead of
+[class@Application] automatically initializes Libadapta if used instead of
 [class@Gtk.Application].
 
 Example:
 
 ```c
-#include <adwaita.h>
+#include <adapta.h>
 
 static void
 activate_cb (GtkApplication *app)
@@ -32,9 +32,9 @@ int
 main (int   argc,
       char *argv[])
 {
-  g_autoptr (AdwApplication) app = NULL;
+  g_autoptr (AdapApplication) app = NULL;
 
-  app = adw_application_new ("org.example.Hello", G_APPLICATION_FLAGS_NONE);
+  app = adap_application_new ("org.example.Hello", G_APPLICATION_FLAGS_NONE);
 
   g_signal_connect (app, "activate", G_CALLBACK (activate_cb), NULL);
 
@@ -49,7 +49,7 @@ After building and running, the application will look like this:
   <img src="hello-world.png" alt="hello-world">
 </picture>
 
-## Using `adw_init()`
+## Using `adap_init()`
 
 If using [class@Application] is not possible, use [func@init] instead. It can be
 called instead of [func@Gtk.init].
@@ -57,7 +57,7 @@ called instead of [func@Gtk.init].
 Example:
 
 ```c
-#include <adwaita.h>
+#include <adapta.h>
 
 int
 main (int   argc,
@@ -65,7 +65,7 @@ main (int   argc,
 {
   GtkWidget *window, *label;
 
-  adw_init ();
+  adap_init ();
 
   window = gtk_window_new ();
   label = gtk_label_new ("Hello World");

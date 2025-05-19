@@ -6,42 +6,42 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-length-unit.h"
+#include "adap-length-unit.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_CLAMP_LAYOUT (adw_clamp_layout_get_type())
+#define ADAP_TYPE_CLAMP_LAYOUT (adap_clamp_layout_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwClampLayout, adw_clamp_layout, ADW, CLAMP_LAYOUT, GtkLayoutManager)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapClampLayout, adap_clamp_layout, ADAP, CLAMP_LAYOUT, GtkLayoutManager)
 
-ADW_AVAILABLE_IN_ALL
-GtkLayoutManager *adw_clamp_layout_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkLayoutManager *adap_clamp_layout_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-int  adw_clamp_layout_get_maximum_size (AdwClampLayout *self);
-ADW_AVAILABLE_IN_ALL
-void adw_clamp_layout_set_maximum_size (AdwClampLayout *self,
+ADAP_AVAILABLE_IN_ALL
+int  adap_clamp_layout_get_maximum_size (AdapClampLayout *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_clamp_layout_set_maximum_size (AdapClampLayout *self,
                                         int             maximum_size);
 
-ADW_AVAILABLE_IN_ALL
-int  adw_clamp_layout_get_tightening_threshold (AdwClampLayout *self);
-ADW_AVAILABLE_IN_ALL
-void adw_clamp_layout_set_tightening_threshold (AdwClampLayout *self,
+ADAP_AVAILABLE_IN_ALL
+int  adap_clamp_layout_get_tightening_threshold (AdapClampLayout *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_clamp_layout_set_tightening_threshold (AdapClampLayout *self,
                                                 int             tightening_threshold);
 
-ADW_AVAILABLE_IN_1_4
-AdwLengthUnit adw_clamp_layout_get_unit (AdwClampLayout *self);
-ADW_AVAILABLE_IN_1_4
-void          adw_clamp_layout_set_unit (AdwClampLayout *self,
-                                         AdwLengthUnit   unit);
+ADAP_AVAILABLE_IN_1_4
+AdapLengthUnit adap_clamp_layout_get_unit (AdapClampLayout *self);
+ADAP_AVAILABLE_IN_1_4
+void          adap_clamp_layout_set_unit (AdapClampLayout *self,
+                                         AdapLengthUnit   unit);
 
 G_END_DECLS

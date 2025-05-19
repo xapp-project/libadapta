@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwTabButton" parent="GtkWidget">
+  <template class="AdapTabButton" parent="GtkWidget">
     <child>
       <object class="GtkButton" id="button">
         <property name="tooltip-text" translatable="yes">View Open Tabs</property>
         <signal name="clicked" handler="clicked_cb" swapped="yes"/>
         <property name="child">
-          <object class="AdwIndicatorBin" id="indicator">
+          <object class="AdapIndicatorBin" id="indicator">
             <property name="halign">center</property>
             <property name="valign">center</property>
             <property name="child">

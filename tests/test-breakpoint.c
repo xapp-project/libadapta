@@ -6,30 +6,30 @@
  * Author: Alice Mikhaylenko <alice.mikhaylenko@puri.sm>
  */
 
-#include <adwaita.h>
+#include <adapta.h>
 
 static inline void
-check_to_string (AdwBreakpointCondition *condition,
+check_to_string (AdapBreakpointCondition *condition,
                  const char             *expected)
 {
-  char *str = adw_breakpoint_condition_to_string (condition);
+  char *str = adap_breakpoint_condition_to_string (condition);
 
   g_assert_cmpstr (str, ==, expected);
 
   g_free (str);
-  adw_breakpoint_condition_free (condition);
+  adap_breakpoint_condition_free (condition);
 }
 
 static inline void
 check_parse (const char *input,
              const char *expected)
 {
-  AdwBreakpointCondition *condition;
+  AdapBreakpointCondition *condition;
 
   if (!expected)
-    g_test_expect_message (ADW_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL, "*Unable to parse condition*");
+    g_test_expect_message (ADAP_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL, "*Unable to parse condition*");
 
-  condition = adw_breakpoint_condition_parse (input);
+  condition = adap_breakpoint_condition_parse (input);
 
   if (expected) {
     g_assert_nonnull (condition);
@@ -37,7 +37,7 @@ check_parse (const char *input,
     check_to_string (condition, expected);
   } else {
     if (condition != NULL) {
-      char *str = adw_breakpoint_condition_to_string (condition);
+      char *str = adap_breakpoint_condition_to_string (condition);
 
       g_test_message ("'%s' is invalid, but was parsed as '%s'", input, str);
       g_free (str);
@@ -50,69 +50,69 @@ check_parse (const char *input,
 }
 
 static void
-test_adw_breakpoint_condition_to_string (void)
+test_adap_breakpoint_condition_to_string (void)
 {
-  AdwBreakpointCondition *condition_1, *condition_2, *condition_3;
+  AdapBreakpointCondition *condition_1, *condition_2, *condition_3;
 
-  check_to_string (adw_breakpoint_condition_new_length (ADW_BREAKPOINT_CONDITION_MAX_WIDTH,
+  check_to_string (adap_breakpoint_condition_new_length (ADAP_BREAKPOINT_CONDITION_MAX_WIDTH,
                                                         400,
-                                                        ADW_LENGTH_UNIT_PX),
+                                                        ADAP_LENGTH_UNIT_PX),
                    "max-width: 400px");
 
-  check_to_string (adw_breakpoint_condition_new_length (ADW_BREAKPOINT_CONDITION_MIN_HEIGHT,
+  check_to_string (adap_breakpoint_condition_new_length (ADAP_BREAKPOINT_CONDITION_MIN_HEIGHT,
                                                         200,
-                                                        ADW_LENGTH_UNIT_PT),
+                                                        ADAP_LENGTH_UNIT_PT),
                    "min-height: 200pt");
 
-  check_to_string (adw_breakpoint_condition_new_ratio (ADW_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO,
+  check_to_string (adap_breakpoint_condition_new_ratio (ADAP_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO,
                                                        4, 3),
                    "min-aspect-ratio: 4/3");
 
-  check_to_string (adw_breakpoint_condition_new_ratio (ADW_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO,
+  check_to_string (adap_breakpoint_condition_new_ratio (ADAP_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO,
                                                        2, 1),
                    "min-aspect-ratio: 2");
-  check_to_string (adw_breakpoint_condition_new_ratio (ADW_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO,
+  check_to_string (adap_breakpoint_condition_new_ratio (ADAP_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO,
                                                        0, 2),
                    "min-aspect-ratio: 0");
 
-  condition_1 = adw_breakpoint_condition_new_length (ADW_BREAKPOINT_CONDITION_MAX_WIDTH,
+  condition_1 = adap_breakpoint_condition_new_length (ADAP_BREAKPOINT_CONDITION_MAX_WIDTH,
                                                      400,
-                                                     ADW_LENGTH_UNIT_PX);
-  condition_2 = adw_breakpoint_condition_new_ratio (ADW_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO,
+                                                     ADAP_LENGTH_UNIT_PX);
+  condition_2 = adap_breakpoint_condition_new_ratio (ADAP_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO,
                                                     4, 3);
-  condition_3 = adw_breakpoint_condition_new_ratio (ADW_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO,
+  condition_3 = adap_breakpoint_condition_new_ratio (ADAP_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO,
                                                     2, 1);
 
-  check_to_string (adw_breakpoint_condition_new_and (adw_breakpoint_condition_copy (condition_1),
-                                                     adw_breakpoint_condition_copy (condition_2)),
+  check_to_string (adap_breakpoint_condition_new_and (adap_breakpoint_condition_copy (condition_1),
+                                                     adap_breakpoint_condition_copy (condition_2)),
                    "max-width: 400px and min-aspect-ratio: 4/3");
 
-  check_to_string (adw_breakpoint_condition_new_or (adw_breakpoint_condition_copy (condition_1),
-                                                    adw_breakpoint_condition_copy (condition_2)),
+  check_to_string (adap_breakpoint_condition_new_or (adap_breakpoint_condition_copy (condition_1),
+                                                    adap_breakpoint_condition_copy (condition_2)),
                    "max-width: 400px or min-aspect-ratio: 4/3");
 
-  check_to_string (adw_breakpoint_condition_new_and (adw_breakpoint_condition_copy (condition_1),
-                                                     adw_breakpoint_condition_new_and (adw_breakpoint_condition_copy (condition_2),
-                                                                                       adw_breakpoint_condition_copy (condition_3))),
+  check_to_string (adap_breakpoint_condition_new_and (adap_breakpoint_condition_copy (condition_1),
+                                                     adap_breakpoint_condition_new_and (adap_breakpoint_condition_copy (condition_2),
+                                                                                       adap_breakpoint_condition_copy (condition_3))),
                    "max-width: 400px and min-aspect-ratio: 4/3 and max-aspect-ratio: 2");
 
-  check_to_string (adw_breakpoint_condition_new_and (adw_breakpoint_condition_copy (condition_1),
-                                                     adw_breakpoint_condition_new_or (adw_breakpoint_condition_copy (condition_2),
-                                                                                       adw_breakpoint_condition_copy (condition_3))),
+  check_to_string (adap_breakpoint_condition_new_and (adap_breakpoint_condition_copy (condition_1),
+                                                     adap_breakpoint_condition_new_or (adap_breakpoint_condition_copy (condition_2),
+                                                                                       adap_breakpoint_condition_copy (condition_3))),
                    "max-width: 400px and (min-aspect-ratio: 4/3 or max-aspect-ratio: 2)");
 
-  check_to_string (adw_breakpoint_condition_new_or (adw_breakpoint_condition_new_and (adw_breakpoint_condition_copy (condition_1),
-                                                                                      adw_breakpoint_condition_copy (condition_2)),
-                                                    adw_breakpoint_condition_copy (condition_3)),
+  check_to_string (adap_breakpoint_condition_new_or (adap_breakpoint_condition_new_and (adap_breakpoint_condition_copy (condition_1),
+                                                                                      adap_breakpoint_condition_copy (condition_2)),
+                                                    adap_breakpoint_condition_copy (condition_3)),
                    "(max-width: 400px and min-aspect-ratio: 4/3) or max-aspect-ratio: 2");
 
-  adw_breakpoint_condition_free (condition_1);
-  adw_breakpoint_condition_free (condition_2);
-  adw_breakpoint_condition_free (condition_3);
+  adap_breakpoint_condition_free (condition_1);
+  adap_breakpoint_condition_free (condition_2);
+  adap_breakpoint_condition_free (condition_3);
 }
 
 static void
-test_adw_breakpoint_condition_parse (void)
+test_adap_breakpoint_condition_parse (void)
 {
   check_parse ("", NULL);
   check_parse ("()", NULL);
@@ -203,10 +203,10 @@ main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
-  adw_init ();
+  adap_init ();
 
-  g_test_add_func ("/Adwaita/BreakpointCondition/to_string", test_adw_breakpoint_condition_to_string);
-  g_test_add_func ("/Adwaita/BreakpointCondition/parse", test_adw_breakpoint_condition_parse);
+  g_test_add_func ("/Adapta/BreakpointCondition/to_string", test_adap_breakpoint_condition_to_string);
+  g_test_add_func ("/Adapta/BreakpointCondition/parse", test_adap_breakpoint_condition_parse);
 
   return g_test_run ();
 }

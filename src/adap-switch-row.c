@@ -6,10 +6,10 @@
 
 #include "config.h"
 
-#include "adw-switch-row.h"
+#include "adap-switch-row.h"
 
 /**
- * AdwSwitchRow:
+ * AdapSwitchRow:
  *
  * A [class@Gtk.ListBoxRow] used to represent two states.
  *
@@ -18,7 +18,7 @@
  *   <img src="switch-row.png" alt="switch-row">
  * </picture>
  *
- * The `AdwSwitchRow` widget contains a [class@Gtk.Switch] that allows the user
+ * The `AdapSwitchRow` widget contains a [class@Gtk.Switch] that allows the user
  * to select between two states: "on" or "off". When activated, the row will
  * invert its active state.
  *
@@ -27,9 +27,9 @@
  *
  * See [class@Gtk.Switch] for details.
  *
- * Example of an `AdwSwitchRow` UI definition:
+ * Example of an `AdapSwitchRow` UI definition:
  * ```xml
- * <object class="AdwSwitchRow">
+ * <object class="AdapSwitchRow">
  *   <property name="title" translatable="yes">Switch Row</property>
  *   <signal name="notify::active" handler="switch_row_notify_active_cb"/>
  * </object>
@@ -40,19 +40,19 @@
  *
  * ## Accessibility
  *
- * `AdwSwitchRow` uses the `GTK_ACCESSIBLE_ROLE_SWITCH` role.
+ * `AdapSwitchRow` uses the `GTK_ACCESSIBLE_ROLE_SWITCH` role.
  *
  * Since: 1.4
  */
 
-struct _AdwSwitchRow
+struct _AdapSwitchRow
 {
-  AdwActionRow parent_instance;
+  AdapActionRow parent_instance;
 
   GtkWidget *slider;
 };
 
-G_DEFINE_FINAL_TYPE (AdwSwitchRow, adw_switch_row, ADW_TYPE_ACTION_ROW)
+G_DEFINE_FINAL_TYPE (AdapSwitchRow, adap_switch_row, ADAP_TYPE_ACTION_ROW)
 
 enum
 {
@@ -64,9 +64,9 @@ enum
 static GParamSpec *props[PROP_LAST_PROP];
 
 static void
-slider_notify_active_cb (AdwSwitchRow *self)
+slider_notify_active_cb (AdapSwitchRow *self)
 {
-  g_assert (ADW_IS_SWITCH_ROW (self));
+  g_assert (ADAP_IS_SWITCH_ROW (self));
 
   gtk_accessible_update_state (GTK_ACCESSIBLE (self),
                                GTK_ACCESSIBLE_STATE_CHECKED,
@@ -77,16 +77,16 @@ slider_notify_active_cb (AdwSwitchRow *self)
 }
 
 static void
-adw_switch_row_get_property (GObject    *object,
+adap_switch_row_get_property (GObject    *object,
                              guint       prop_id,
                              GValue     *value,
                              GParamSpec *pspec)
 {
-  AdwSwitchRow *self = ADW_SWITCH_ROW (object);
+  AdapSwitchRow *self = ADAP_SWITCH_ROW (object);
 
   switch (prop_id) {
   case PROP_ACTIVE:
-    g_value_set_boolean (value, adw_switch_row_get_active (self));
+    g_value_set_boolean (value, adap_switch_row_get_active (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -94,16 +94,16 @@ adw_switch_row_get_property (GObject    *object,
 }
 
 static void
-adw_switch_row_set_property (GObject      *object,
+adap_switch_row_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
-  AdwSwitchRow *self = ADW_SWITCH_ROW (object);
+  AdapSwitchRow *self = ADAP_SWITCH_ROW (object);
 
   switch (prop_id) {
   case PROP_ACTIVE:
-    adw_switch_row_set_active (self, g_value_get_boolean (value));
+    adap_switch_row_set_active (self, g_value_get_boolean (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -111,27 +111,27 @@ adw_switch_row_set_property (GObject      *object,
 }
 
 static void
-adw_switch_row_dispose (GObject *object)
+adap_switch_row_dispose (GObject *object)
 {
-  AdwSwitchRow *self = ADW_SWITCH_ROW (object);
+  AdapSwitchRow *self = ADAP_SWITCH_ROW (object);
 
   g_clear_pointer (&self->slider, gtk_widget_unparent);
 
-  G_OBJECT_CLASS (adw_switch_row_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_switch_row_parent_class)->dispose (object);
 }
 
 static void
-adw_switch_row_class_init (AdwSwitchRowClass *klass)
+adap_switch_row_class_init (AdapSwitchRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_switch_row_get_property;
-  object_class->set_property = adw_switch_row_set_property;
-  object_class->dispose = adw_switch_row_dispose;
+  object_class->get_property = adap_switch_row_get_property;
+  object_class->set_property = adap_switch_row_set_property;
+  object_class->dispose = adap_switch_row_dispose;
 
   /**
-   * AdwSwitchRow:active: (attributes org.gtk.Property.get=adw_switch_row_get_active org.gtk.Property.set=adw_switch_row_set_active)
+   * AdapSwitchRow:active: (attributes org.gtk.Property.get=adap_switch_row_get_active org.gtk.Property.set=adap_switch_row_set_active)
    *
    * Whether the switch row is in the "on" or "off" position.
    *
@@ -148,7 +148,7 @@ adw_switch_row_class_init (AdwSwitchRowClass *klass)
 }
 
 static void
-adw_switch_row_init (AdwSwitchRow *self)
+adap_switch_row_init (AdapSwitchRow *self)
 {
   self->slider = gtk_switch_new ();
   gtk_widget_set_valign (self->slider, GTK_ALIGN_CENTER);
@@ -158,8 +158,8 @@ adw_switch_row_init (AdwSwitchRow *self)
                                -1);
   gtk_widget_set_can_focus (self->slider, FALSE);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (self), TRUE);
-  adw_action_row_add_suffix (ADW_ACTION_ROW (self), self->slider);
-  adw_action_row_set_activatable_widget (ADW_ACTION_ROW (self), self->slider);
+  adap_action_row_add_suffix (ADAP_ACTION_ROW (self), self->slider);
+  adap_action_row_set_activatable_widget (ADAP_ACTION_ROW (self), self->slider);
 
   g_object_bind_property (self, "action-name",
                           self->slider, "action-name",
@@ -172,22 +172,22 @@ adw_switch_row_init (AdwSwitchRow *self)
 }
 
 /**
- * adw_switch_row_new:
+ * adap_switch_row_new:
  *
- * Creates a new `AdwSwitchRow`.
+ * Creates a new `AdapSwitchRow`.
  *
- * Returns: the newly created `AdwSwitchRow`
+ * Returns: the newly created `AdapSwitchRow`
  *
  * Since: 1.4
  */
 GtkWidget *
-adw_switch_row_new (void)
+adap_switch_row_new (void)
 {
-  return g_object_new (ADW_TYPE_SWITCH_ROW, NULL);
+  return g_object_new (ADAP_TYPE_SWITCH_ROW, NULL);
 }
 
 /**
- * adw_switch_row_get_active: (attributes org.gtk.Method.get_property=active)
+ * adap_switch_row_get_active: (attributes org.gtk.Method.get_property=active)
  * @self: a switch row
  *
  * Gets whether @self is in its "on" or "off" position.
@@ -197,15 +197,15 @@ adw_switch_row_new (void)
  * Since: 1.4
  */
 gboolean
-adw_switch_row_get_active (AdwSwitchRow *self)
+adap_switch_row_get_active (AdapSwitchRow *self)
 {
-  g_return_val_if_fail (ADW_IS_SWITCH_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SWITCH_ROW (self), FALSE);
 
   return gtk_switch_get_active (GTK_SWITCH (self->slider));
 }
 
 /**
- * adw_switch_row_set_active: (attributes org.gtk.Method.set_property=active)
+ * adap_switch_row_set_active: (attributes org.gtk.Method.set_property=active)
  * @self: a switch row
  * @is_active: whether @self should be active
  *
@@ -214,10 +214,10 @@ adw_switch_row_get_active (AdwSwitchRow *self)
  * Since: 1.4
  */
 void
-adw_switch_row_set_active (AdwSwitchRow *self,
+adap_switch_row_set_active (AdapSwitchRow *self,
                            gboolean      is_active)
 {
-  g_return_if_fail (ADW_IS_SWITCH_ROW (self));
+  g_return_if_fail (ADAP_IS_SWITCH_ROW (self));
 
   is_active = !!is_active;
 

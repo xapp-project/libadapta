@@ -6,27 +6,27 @@
 
 #include "config.h"
 
-#include "adw-enum-list-model.h"
+#include "adap-enum-list-model.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
 /**
- * AdwEnumListModel:
+ * AdapEnumListModel:
  *
  * A [iface@Gio.ListModel] representing values of a given enum.
  *
- * `AdwEnumListModel` contains objects of type [class@EnumListItem].
+ * `AdapEnumListModel` contains objects of type [class@EnumListItem].
  */
 
-struct _AdwEnumListModel
+struct _AdapEnumListModel
 {
   GObject parent_instance;
 
   GType enum_type;
   GEnumClass *enum_class;
 
-  AdwEnumListItem **objects;
+  AdapEnumListItem **objects;
 };
 
 enum {
@@ -37,18 +37,18 @@ enum {
 
 static GParamSpec *props[LAST_PROP];
 
-static void adw_enum_list_model_list_model_init (GListModelInterface *iface);
+static void adap_enum_list_model_list_model_init (GListModelInterface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwEnumListModel, adw_enum_list_model, G_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, adw_enum_list_model_list_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapEnumListModel, adap_enum_list_model, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, adap_enum_list_model_list_model_init))
 
 /**
- * AdwEnumListItem:
+ * AdapEnumListItem:
  *
- * `AdwEnumListItem` is the type of items in a [class@EnumListModel].
+ * `AdapEnumListItem` is the type of items in a [class@EnumListModel].
  */
 
-struct _AdwEnumListItem
+struct _AdapEnumListItem
 {
   GObject parent_instance;
 
@@ -65,25 +65,25 @@ enum {
 
 static GParamSpec *value_props[LAST_VALUE_PROP];
 
-G_DEFINE_FINAL_TYPE (AdwEnumListItem, adw_enum_list_item, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (AdapEnumListItem, adap_enum_list_item, G_TYPE_OBJECT)
 
 static void
-adw_enum_list_item_get_property (GObject    *object,
+adap_enum_list_item_get_property (GObject    *object,
                                  guint       prop_id,
                                  GValue     *value,
                                  GParamSpec *pspec)
 {
-  AdwEnumListItem *self = ADW_ENUM_LIST_ITEM (object);
+  AdapEnumListItem *self = ADAP_ENUM_LIST_ITEM (object);
 
   switch (prop_id) {
   case VALUE_PROP_VALUE:
-    g_value_set_int (value, adw_enum_list_item_get_value (self));
+    g_value_set_int (value, adap_enum_list_item_get_value (self));
     break;
   case VALUE_PROP_NAME:
-    g_value_set_string (value, adw_enum_list_item_get_name (self));
+    g_value_set_string (value, adap_enum_list_item_get_name (self));
     break;
   case VALUE_PROP_NICK:
-    g_value_set_string (value, adw_enum_list_item_get_nick (self));
+    g_value_set_string (value, adap_enum_list_item_get_nick (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -91,14 +91,14 @@ adw_enum_list_item_get_property (GObject    *object,
 }
 
 static void
-adw_enum_list_item_class_init (AdwEnumListItemClass *klass)
+adap_enum_list_item_class_init (AdapEnumListItemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->get_property = adw_enum_list_item_get_property;
+  object_class->get_property = adap_enum_list_item_get_property;
 
   /**
-   * AdwEnumListItem:value: (attributes org.gtk.Property.get=adw_enum_list_item_get_value)
+   * AdapEnumListItem:value: (attributes org.gtk.Property.get=adap_enum_list_item_get_value)
    *
    * The enum value.
    */
@@ -108,7 +108,7 @@ adw_enum_list_item_class_init (AdwEnumListItemClass *klass)
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwEnumListItem:name: (attributes org.gtk.Property.get=adw_enum_list_item_get_name)
+   * AdapEnumListItem:name: (attributes org.gtk.Property.get=adap_enum_list_item_get_name)
    *
    * The enum value name.
    */
@@ -118,7 +118,7 @@ adw_enum_list_item_class_init (AdwEnumListItemClass *klass)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwEnumListItem:nick: (attributes org.gtk.Property.get=adw_enum_list_item_get_nick)
+   * AdapEnumListItem:nick: (attributes org.gtk.Property.get=adap_enum_list_item_get_nick)
    *
    * The enum value nick.
    */
@@ -131,14 +131,14 @@ adw_enum_list_item_class_init (AdwEnumListItemClass *klass)
 }
 
 static void
-adw_enum_list_item_init (AdwEnumListItem *self)
+adap_enum_list_item_init (AdapEnumListItem *self)
 {
 }
 
-static AdwEnumListItem *
-adw_enum_list_item_new (GEnumValue *enum_value)
+static AdapEnumListItem *
+adap_enum_list_item_new (GEnumValue *enum_value)
 {
-  AdwEnumListItem *self = g_object_new (ADW_TYPE_ENUM_LIST_ITEM, NULL);
+  AdapEnumListItem *self = g_object_new (ADAP_TYPE_ENUM_LIST_ITEM, NULL);
 
   self->enum_value = *enum_value;
 
@@ -146,70 +146,70 @@ adw_enum_list_item_new (GEnumValue *enum_value)
 }
 
 /**
- * adw_enum_list_item_get_value: (attributes org.gtk.Method.get_property=value)
+ * adap_enum_list_item_get_value: (attributes org.gtk.Method.get_property=value)
  *
  * Gets the enum value.
  *
  * Returns: the enum value
  */
 int
-adw_enum_list_item_get_value (AdwEnumListItem *self)
+adap_enum_list_item_get_value (AdapEnumListItem *self)
 {
-  g_return_val_if_fail (ADW_IS_ENUM_LIST_ITEM (self), 0);
+  g_return_val_if_fail (ADAP_IS_ENUM_LIST_ITEM (self), 0);
 
   return self->enum_value.value;
 }
 
 /**
- * adw_enum_list_item_get_name: (attributes org.gtk.Method.get_property=name)
+ * adap_enum_list_item_get_name: (attributes org.gtk.Method.get_property=name)
  *
  * Gets the enum value name.
  *
  * Returns: the enum value name
  */
 const char *
-adw_enum_list_item_get_name (AdwEnumListItem *self)
+adap_enum_list_item_get_name (AdapEnumListItem *self)
 {
-  g_return_val_if_fail (ADW_IS_ENUM_LIST_ITEM (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ENUM_LIST_ITEM (self), NULL);
 
   return self->enum_value.value_name;
 }
 
 /**
- * adw_enum_list_item_get_nick: (attributes org.gtk.Method.get_property=nick)
+ * adap_enum_list_item_get_nick: (attributes org.gtk.Method.get_property=nick)
  *
  * Gets the enum value nick.
  *
  * Returns: the enum value nick
  */
 const char *
-adw_enum_list_item_get_nick (AdwEnumListItem *self)
+adap_enum_list_item_get_nick (AdapEnumListItem *self)
 {
-  g_return_val_if_fail (ADW_IS_ENUM_LIST_ITEM (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ENUM_LIST_ITEM (self), NULL);
 
   return self->enum_value.value_nick;
 }
 
 static void
-adw_enum_list_model_constructed (GObject *object)
+adap_enum_list_model_constructed (GObject *object)
 {
-  AdwEnumListModel *self = ADW_ENUM_LIST_MODEL (object);
+  AdapEnumListModel *self = ADAP_ENUM_LIST_MODEL (object);
   guint i;
 
   self->enum_class = g_type_class_ref (self->enum_type);
 
-  self->objects = g_new0 (AdwEnumListItem *, self->enum_class->n_values);
+  self->objects = g_new0 (AdapEnumListItem *, self->enum_class->n_values);
 
   for (i = 0; i < self->enum_class->n_values; i++)
-    self->objects[i] = adw_enum_list_item_new (&self->enum_class->values[i]);
+    self->objects[i] = adap_enum_list_item_new (&self->enum_class->values[i]);
 
-  G_OBJECT_CLASS (adw_enum_list_model_parent_class)->constructed (object);
+  G_OBJECT_CLASS (adap_enum_list_model_parent_class)->constructed (object);
 }
 
 static void
-adw_enum_list_model_finalize (GObject *object)
+adap_enum_list_model_finalize (GObject *object)
 {
-  AdwEnumListModel *self = ADW_ENUM_LIST_MODEL (object);
+  AdapEnumListModel *self = ADAP_ENUM_LIST_MODEL (object);
   guint i;
 
   for (i = 0; i < self->enum_class->n_values; i++)
@@ -219,20 +219,20 @@ adw_enum_list_model_finalize (GObject *object)
 
   g_clear_pointer (&self->objects, g_free);
 
-  G_OBJECT_CLASS (adw_enum_list_model_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_enum_list_model_parent_class)->finalize (object);
 }
 
 static void
-adw_enum_list_model_get_property (GObject    *object,
+adap_enum_list_model_get_property (GObject    *object,
                                   guint       prop_id,
                                   GValue     *value,
                                   GParamSpec *pspec)
 {
-  AdwEnumListModel *self = ADW_ENUM_LIST_MODEL (object);
+  AdapEnumListModel *self = ADAP_ENUM_LIST_MODEL (object);
 
   switch (prop_id) {
   case PROP_ENUM_TYPE:
-    g_value_set_gtype (value, adw_enum_list_model_get_enum_type (self));
+    g_value_set_gtype (value, adap_enum_list_model_get_enum_type (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -240,12 +240,12 @@ adw_enum_list_model_get_property (GObject    *object,
 }
 
 static void
-adw_enum_list_model_set_property (GObject      *object,
+adap_enum_list_model_set_property (GObject      *object,
                                   guint         prop_id,
                                   const GValue *value,
                                   GParamSpec   *pspec)
 {
-  AdwEnumListModel *self = ADW_ENUM_LIST_MODEL (object);
+  AdapEnumListModel *self = ADAP_ENUM_LIST_MODEL (object);
 
   switch (prop_id) {
   case PROP_ENUM_TYPE:
@@ -257,17 +257,17 @@ adw_enum_list_model_set_property (GObject      *object,
 }
 
 static void
-adw_enum_list_model_class_init (AdwEnumListModelClass *klass)
+adap_enum_list_model_class_init (AdapEnumListModelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = adw_enum_list_model_constructed;
-  object_class->finalize = adw_enum_list_model_finalize;
-  object_class->get_property = adw_enum_list_model_get_property;
-  object_class->set_property = adw_enum_list_model_set_property;
+  object_class->constructed = adap_enum_list_model_constructed;
+  object_class->finalize = adap_enum_list_model_finalize;
+  object_class->get_property = adap_enum_list_model_get_property;
+  object_class->set_property = adap_enum_list_model_set_property;
 
   /**
-   * AdwEnumListModel:enum-type: (attributes org.gtk.Property.get=adw_enum_list_model_get_enum_type)
+   * AdapEnumListModel:enum-type: (attributes org.gtk.Property.get=adap_enum_list_model_get_enum_type)
    *
    * The type of the enum represented by the model.
    */
@@ -280,29 +280,29 @@ adw_enum_list_model_class_init (AdwEnumListModelClass *klass)
 }
 
 static void
-adw_enum_list_model_init (AdwEnumListModel *self)
+adap_enum_list_model_init (AdapEnumListModel *self)
 {
 }
 
 static GType
-adw_enum_list_model_get_item_type (GListModel *list)
+adap_enum_list_model_get_item_type (GListModel *list)
 {
-  return ADW_TYPE_ENUM_LIST_ITEM;
+  return ADAP_TYPE_ENUM_LIST_ITEM;
 }
 
 static guint
-adw_enum_list_model_get_n_items (GListModel *list)
+adap_enum_list_model_get_n_items (GListModel *list)
 {
-  AdwEnumListModel *self = ADW_ENUM_LIST_MODEL (list);
+  AdapEnumListModel *self = ADAP_ENUM_LIST_MODEL (list);
 
   return self->enum_class->n_values;
 }
 
 static gpointer
-adw_enum_list_model_get_item (GListModel *list,
+adap_enum_list_model_get_item (GListModel *list,
                               guint       position)
 {
-  AdwEnumListModel *self = ADW_ENUM_LIST_MODEL (list);
+  AdapEnumListModel *self = ADAP_ENUM_LIST_MODEL (list);
 
   if (position >= self->enum_class->n_values)
     return NULL;
@@ -311,46 +311,46 @@ adw_enum_list_model_get_item (GListModel *list,
 }
 
 static void
-adw_enum_list_model_list_model_init (GListModelInterface *iface)
+adap_enum_list_model_list_model_init (GListModelInterface *iface)
 {
-  iface->get_item_type = adw_enum_list_model_get_item_type;
-  iface->get_n_items = adw_enum_list_model_get_n_items;
-  iface->get_item = adw_enum_list_model_get_item;
+  iface->get_item_type = adap_enum_list_model_get_item_type;
+  iface->get_n_items = adap_enum_list_model_get_n_items;
+  iface->get_item = adap_enum_list_model_get_item;
 }
 
 /**
- * adw_enum_list_model_new:
+ * adap_enum_list_model_new:
  * @enum_type: the type of the enum to construct the model from
  *
- * Creates a new `AdwEnumListModel` for @enum_type.
+ * Creates a new `AdapEnumListModel` for @enum_type.
  *
- * Returns: the newly created `AdwEnumListModel`
+ * Returns: the newly created `AdapEnumListModel`
  */
-AdwEnumListModel *
-adw_enum_list_model_new (GType enum_type)
+AdapEnumListModel *
+adap_enum_list_model_new (GType enum_type)
 {
-  return g_object_new (ADW_TYPE_ENUM_LIST_MODEL,
+  return g_object_new (ADAP_TYPE_ENUM_LIST_MODEL,
                        "enum-type", enum_type,
                        NULL);
 }
 
 /**
- * adw_enum_list_model_get_enum_type: (attributes org.gtk.Method.get_property=enum-type)
+ * adap_enum_list_model_get_enum_type: (attributes org.gtk.Method.get_property=enum-type)
  *
  * Gets the type of the enum represented by @self.
  *
  * Returns: the enum type
  */
 GType
-adw_enum_list_model_get_enum_type (AdwEnumListModel *self)
+adap_enum_list_model_get_enum_type (AdapEnumListModel *self)
 {
-  g_return_val_if_fail (ADW_IS_ENUM_LIST_MODEL (self), G_TYPE_INVALID);
+  g_return_val_if_fail (ADAP_IS_ENUM_LIST_MODEL (self), G_TYPE_INVALID);
 
   return self->enum_type;
 }
 
 /**
- * adw_enum_list_model_find_position:
+ * adap_enum_list_model_find_position:
  * @value: an enum value
  *
  * Finds the position of a given enum value in @self.
@@ -360,12 +360,12 @@ adw_enum_list_model_get_enum_type (AdwEnumListModel *self)
  * Returns: the position of the value
  */
 guint
-adw_enum_list_model_find_position (AdwEnumListModel *self,
+adap_enum_list_model_find_position (AdapEnumListModel *self,
                                    int               value)
 {
   guint i;
 
-  g_return_val_if_fail (ADW_IS_ENUM_LIST_MODEL (self), 0);
+  g_return_val_if_fail (ADAP_IS_ENUM_LIST_MODEL (self), 0);
 
   for (i = 0; i < self->enum_class->n_values; i++)
     if (self->enum_class->values[i].value == value)

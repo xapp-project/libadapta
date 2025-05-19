@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <template class="AdwDemoPageAnimations" parent="AdwBin">
+  <requires lib="libadapta" version="1.0"/>
+  <template class="AdapDemoPageAnimations" parent="AdapBin">
     <property name="child">
       <object class="GtkScrolledWindow">
         <property name="hscrollbar-policy">never</property>
@@ -17,14 +17,14 @@
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="AdwClamp">
+                  <object class="AdapClamp">
                     <property name="maximum-size">400</property>
                     <property name="tightening-threshold">300</property>
                     <property name="child">
-                      <object class="AdwBin" id="timed_animation_sample">
+                      <object class="AdapBin" id="timed_animation_sample">
                         <property name="margin-bottom">36</property>
                         <property name="child">
-                          <object class="AdwBin" id="timed_animation_widget">
+                          <object class="AdapBin" id="timed_animation_widget">
                             <property name="halign">center</property>
                             <property name="valign">center</property>
                             <property name="name">animation-sample</property>
@@ -73,11 +73,11 @@
                     <property name="valign">center</property>
                     <binding name="sensitive">
                       <closure type="gboolean" function="timed_animation_can_reset">
-                        <lookup name="state" type="AdwAnimation">
-                          <lookup name="timed-animation">AdwDemoPageAnimations</lookup>
+                        <lookup name="state" type="AdapAnimation">
+                          <lookup name="timed-animation">AdapDemoPageAnimations</lookup>
                         </lookup>
-                        <lookup name="state" type="AdwAnimation">
-                          <lookup name="spring-animation">AdwDemoPageAnimations</lookup>
+                        <lookup name="state" type="AdapAnimation">
+                          <lookup name="spring-animation">AdapDemoPageAnimations</lookup>
                         </lookup>
                       </closure>
                     </binding>
@@ -92,11 +92,11 @@
                   <object class="GtkButton">
                     <binding name="icon-name">
                       <closure type="gchararray" function="get_play_pause_icon_name">
-                        <lookup name="state" type="AdwAnimation">
-                          <lookup name="timed-animation">AdwDemoPageAnimations</lookup>
+                        <lookup name="state" type="AdapAnimation">
+                          <lookup name="timed-animation">AdapDemoPageAnimations</lookup>
                         </lookup>
-                        <lookup name="state" type="AdwAnimation">
-                          <lookup name="spring-animation">AdwDemoPageAnimations</lookup>
+                        <lookup name="state" type="AdapAnimation">
+                          <lookup name="spring-animation">AdapDemoPageAnimations</lookup>
                         </lookup>
                       </closure>
                     </binding>
@@ -115,11 +115,11 @@
                     <property name="valign">center</property>
                     <binding name="sensitive">
                       <closure type="gboolean" function="timed_animation_can_skip">
-                        <lookup name="state" type="AdwAnimation">
-                          <lookup name="timed-animation">AdwDemoPageAnimations</lookup>
+                        <lookup name="state" type="AdapAnimation">
+                          <lookup name="timed-animation">AdapDemoPageAnimations</lookup>
                         </lookup>
-                        <lookup name="state" type="AdwAnimation">
-                          <lookup name="spring-animation">AdwDemoPageAnimations</lookup>
+                        <lookup name="state" type="AdapAnimation">
+                          <lookup name="spring-animation">AdapDemoPageAnimations</lookup>
                         </lookup>
                       </closure>
                     </binding>
@@ -133,7 +133,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwPreferencesGroup">
+              <object class="AdapPreferencesGroup">
                 <child>
                   <object class="GtkStackSwitcher">
                     <property name="stack">animation_preferences_stack</property>
@@ -144,7 +144,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwClamp">
+              <object class="AdapClamp">
                 <property name="maximum-size">400</property>
                 <property name="tightening-threshold">300</property>
                 <property name="child">
@@ -155,13 +155,13 @@
                         <property name="title" translatable="yes">Timed</property>
                         <property name="name">Timed</property>
                         <property name="child">
-                          <object class="AdwPreferencesGroup">
+                          <object class="AdapPreferencesGroup">
                             <child>
-                              <object class="AdwComboRow" id="timed_animation_easing">
+                              <object class="AdapComboRow" id="timed_animation_easing">
                                 <property name="title" translatable="yes">Easing</property>
                                 <property name="model">
-                                  <object class="AdwEnumListModel">
-                                    <property name="enum-type">AdwEasing</property>
+                                  <object class="AdapEnumListModel">
+                                    <property name="enum-type">AdapEasing</property>
                                   </object>
                                 </property>
                                 <property name="expression">
@@ -170,7 +170,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="AdwSpinRow" id="timed_animation_duration">
+                              <object class="AdapSpinRow" id="timed_animation_duration">
                                 <property name="title" translatable="yes">Duration</property>
                                 <property name="numeric">True</property>
                                 <property name="adjustment">
@@ -185,7 +185,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="AdwSpinRow" id="timed_animation_repeat_count">
+                              <object class="AdapSpinRow" id="timed_animation_repeat_count">
                                 <property name="title" translatable="yes">Repeat Count</property>
                                 <property name="numeric">True</property>
                                 <property name="adjustment">
@@ -200,12 +200,12 @@
                               </object>
                             </child>
                             <child>
-                              <object class="AdwSwitchRow" id="timed_animation_reverse">
+                              <object class="AdapSwitchRow" id="timed_animation_reverse">
                                 <property name="title" translatable="yes">Reverse</property>
                               </object>
                             </child>
                             <child>
-                              <object class="AdwSwitchRow" id="timed_animation_alternate">
+                              <object class="AdapSwitchRow" id="timed_animation_alternate">
                                 <property name="title" translatable="yes">Alternate</property>
                               </object>
                             </child>
@@ -218,9 +218,9 @@
                         <property name="title" translatable="yes">Spring</property>
                         <property name="name">Spring</property>
                         <property name="child">
-                          <object class="AdwPreferencesGroup">
+                          <object class="AdapPreferencesGroup">
                             <child>
-                              <object class="AdwSpinRow" id="spring_animation_velocity">
+                              <object class="AdapSpinRow" id="spring_animation_velocity">
                                 <property name="title" translatable="yes">Initial Velocity</property>
                                 <property name="numeric">True</property>
                                 <property name="adjustment">
@@ -235,7 +235,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="AdwSpinRow" id="spring_animation_damping">
+                              <object class="AdapSpinRow" id="spring_animation_damping">
                                 <property name="title" translatable="yes">Damping</property>
                                 <property name="numeric">True</property>
                                 <property name="adjustment">
@@ -250,7 +250,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="AdwSpinRow" id="spring_animation_mass">
+                              <object class="AdapSpinRow" id="spring_animation_mass">
                                 <property name="title" translatable="yes">Mass</property>
                                 <property name="numeric">True</property>
                                 <property name="adjustment">
@@ -266,7 +266,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="AdwSpinRow" id="spring_animation_stiffness">
+                              <object class="AdapSpinRow" id="spring_animation_stiffness">
                                 <property name="title" translatable="yes">Stiffness</property>
                                 <property name="numeric">True</property>
                                 <property name="adjustment">
@@ -282,7 +282,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="AdwSpinRow" id="spring_animation_epsilon">
+                              <object class="AdapSpinRow" id="spring_animation_epsilon">
                                 <property name="title" translatable="yes">Epsilon</property>
                                 <property name="numeric">True</property>
                                 <property name="digits">5</property>
@@ -298,7 +298,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="AdwSwitchRow" id="spring_animation_clamp_switch">
+                              <object class="AdapSwitchRow" id="spring_animation_clamp_switch">
                                 <property name="title" translatable="yes">Clamp</property>
                               </object>
                             </child>

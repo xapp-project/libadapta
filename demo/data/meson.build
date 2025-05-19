@@ -1,6 +1,6 @@
 desktop_file = i18n.merge_file(
-  input: 'org.gnome.Adwaita1.Demo.desktop.in',
-  output: 'org.gnome.Adwaita1.Demo.desktop',
+  input: 'org.gnome.Adapta1.Demo.desktop.in',
+  output: 'org.gnome.Adapta1.Demo.desktop',
   type: 'desktop',
   po_dir: '../../po',
   install: true,
@@ -36,11 +36,11 @@ appdata_config.set('BUILD_DATE', today)
 
 appstream_file = i18n.merge_file(
   input: configure_file(
-    input: 'org.gnome.Adwaita1.Demo.metainfo.xml.in.in',
-    output: 'org.gnome.Adwaita1.Demo.metainfo.xml.in',
+    input: 'org.gnome.Adapta1.Demo.metainfo.xml.in.in',
+    output: 'org.gnome.Adapta1.Demo.metainfo.xml.in',
     configuration: appdata_config
   ),
-  output: 'org.gnome.Adwaita1.Demo.metainfo.xml',
+  output: 'org.gnome.Adapta1.Demo.metainfo.xml',
   po_dir: '../../po',
   install: true,
   install_dir: datadir / 'metainfo'
@@ -54,11 +54,11 @@ if appstreamcli.found()
 endif
 
 install_data(
-  'org.gnome.Adwaita1.Demo.svg',
+  'org.gnome.Adapta1.Demo.svg',
   install_dir: datadir / 'icons' / 'hicolor' / 'scalable' / 'apps'
 )
 
 install_data(
-  'org.gnome.Adwaita1.Demo-symbolic.svg',
+  'org.gnome.Adapta1.Demo-symbolic.svg',
   install_dir: datadir / 'icons' / 'hicolor' / 'symbolic' / 'apps'
 )

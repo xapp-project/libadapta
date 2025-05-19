@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
+  <requires lib="libadapta" version="1.0"/>
   <object class="GtkWindow">
     <property name="decorated">False</property>
     <property name="default-width">600</property>
@@ -9,7 +9,7 @@
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
-          <object class="AdwTabBar" id="widget">
+          <object class="AdapTabBar" id="widget">
             <property name="view">view</property>
             <style>
               <class name="inline"/>
@@ -17,28 +17,28 @@
           </object>
         </child>
         <child>
-          <object class="AdwTabView" id="view">
+          <object class="AdapTabView" id="view">
             <child>
-              <object class="AdwTabPage">
+              <object class="AdapTabPage">
                 <property name="title">Page 1</property>
                 <property name="child">
-                  <object class="AdwBin"/>
+                  <object class="AdapBin"/>
                 </property>
               </object>
             </child>
             <child>
-              <object class="AdwTabPage">
+              <object class="AdapTabPage">
                 <property name="title">Page 2</property>
                 <property name="child">
-                  <object class="AdwBin"/>
+                  <object class="AdapBin"/>
                 </property>
               </object>
             </child>
             <child>
-              <object class="AdwTabPage">
+              <object class="AdapTabPage">
                 <property name="title">Page 3</property>
                 <property name="child">
-                  <object class="AdwBin"/>
+                  <object class="AdapBin"/>
                 </property>
               </object>
             </child>

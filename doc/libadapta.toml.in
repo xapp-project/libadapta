@@ -3,10 +3,10 @@ version = "@VERSION@"
 description = "Building blocks for modern GNOME applications"
 authors = "Purism SPC"
 license = "LGPL-2.1-or-later"
-browse_url = "https://gitlab.gnome.org/GNOME/libadwaita/"
-repository_url = "https://gitlab.gnome.org/GNOME/libadwaita.git"
-website_url = "https://gnome.pages.gitlab.gnome.org/libadwaita"
-logo_url = "libadwaita.svg"
+browse_url = "https://gitlab.gnome.org/GNOME/libadapta/"
+repository_url = "https://gitlab.gnome.org/GNOME/libadapta.git"
+website_url = "https://gnome.pages.gitlab.gnome.org/libadapta"
+logo_url = "libadapta.svg"
 dependencies = [
   "GObject-2.0",
   "Gtk-4.0",
@@ -31,7 +31,7 @@ show_class_hierarchy = true
 
 [source-location]
 # The base URL for the web UI
-base_url = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/main/"
+base_url = "https://gitlab.gnome.org/GNOME/libadapta/-/blob/main/"
 # The format for links, using "filename" and "line" for the format
 file_format = "{filename}#L{line}"
 
@@ -48,7 +48,7 @@ content_files = [
   "named-colors.md",
   "style-classes.md",
 
-  "migrating-libhandy-1-4-to-libadwaita.md",
+  "migrating-libhandy-1-4-to-libadapta.md",
   "migrating-to-breakpoints.md",
   "migrating-to-adaptive-dialogs.md",
 
@@ -316,7 +316,7 @@ content_images = [
   "images/window-dark.png",
   "images/window-title.png",
   "images/window-title-dark.png",
-  "libadwaita.svg",
+  "libadapta.svg",
 ]
 
 [[object]]

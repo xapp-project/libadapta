@@ -6,12 +6,12 @@
 
 #include "config.h"
 
-#include "adw-status-page.h"
+#include "adap-status-page.h"
 
-#include "adw-widget-utils-private.h"
+#include "adap-widget-utils-private.h"
 
 /**
- * AdwStatusPage:
+ * AdapStatusPage:
  *
  * A page used for empty/error states and similar use-cases.
  *
@@ -20,14 +20,14 @@
  *   <img src="status-page.png" alt="status-page">
  * </picture>
  *
- * The `AdwStatusPage` widget can have an icon, a title, a description and a
+ * The `AdapStatusPage` widget can have an icon, a title, a description and a
  * custom widget which is displayed below them.
  *
  * ## CSS nodes
  *
- * `AdwStatusPage` has a main CSS node with name `statuspage`.
+ * `AdapStatusPage` has a main CSS node with name `statuspage`.
  *
- * `AdwStatusPage` can use the
+ * `AdapStatusPage` can use the
  * [`.compact`](style-classes.html#compact-status-page) style class for when it
  * needs to fit into a small space such a sidebar or a popover.
  */
@@ -44,7 +44,7 @@ enum {
 
 static GParamSpec *props[LAST_PROP];
 
-struct _AdwStatusPage
+struct _AdapStatusPage
 {
   GtkWidget parent_instance;
 
@@ -59,15 +59,15 @@ struct _AdwStatusPage
   GtkWidget *user_widget;
 };
 
-static void adw_status_page_buildable_init (GtkBuildableIface *iface);
+static void adap_status_page_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwStatusPage, adw_status_page, GTK_TYPE_WIDGET,
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_status_page_buildable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapStatusPage, adap_status_page, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_status_page_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
 static gboolean
-has_image (AdwStatusPage *self,
+has_image (AdapStatusPage *self,
            const char    *icon_name,
            GdkPaintable  *paintable)
 {
@@ -75,39 +75,39 @@ has_image (AdwStatusPage *self,
 }
 
 static gboolean
-string_is_not_empty (AdwStatusPage *self,
+string_is_not_empty (AdapStatusPage *self,
                      const char    *string)
 {
   return string && string[0];
 }
 
 static void
-adw_status_page_get_property (GObject    *object,
+adap_status_page_get_property (GObject    *object,
                               guint       prop_id,
                               GValue     *value,
                               GParamSpec *pspec)
 {
-  AdwStatusPage *self = ADW_STATUS_PAGE (object);
+  AdapStatusPage *self = ADAP_STATUS_PAGE (object);
 
   switch (prop_id) {
   case PROP_ICON_NAME:
-    g_value_set_string (value, adw_status_page_get_icon_name (self));
+    g_value_set_string (value, adap_status_page_get_icon_name (self));
     break;
 
   case PROP_PAINTABLE:
-    g_value_set_object (value, adw_status_page_get_paintable (self));
+    g_value_set_object (value, adap_status_page_get_paintable (self));
     break;
 
   case PROP_TITLE:
-    g_value_set_string (value, adw_status_page_get_title (self));
+    g_value_set_string (value, adap_status_page_get_title (self));
     break;
 
   case PROP_DESCRIPTION:
-    g_value_set_string (value, adw_status_page_get_description (self));
+    g_value_set_string (value, adap_status_page_get_description (self));
     break;
 
   case PROP_CHILD:
-    g_value_set_object (value, adw_status_page_get_child (self));
+    g_value_set_object (value, adap_status_page_get_child (self));
     break;
 
   default:
@@ -116,32 +116,32 @@ adw_status_page_get_property (GObject    *object,
 }
 
 static void
-adw_status_page_set_property (GObject      *object,
+adap_status_page_set_property (GObject      *object,
                               guint         prop_id,
                               const GValue *value,
                               GParamSpec   *pspec)
 {
-  AdwStatusPage *self = ADW_STATUS_PAGE (object);
+  AdapStatusPage *self = ADAP_STATUS_PAGE (object);
 
   switch (prop_id) {
   case PROP_ICON_NAME:
-    adw_status_page_set_icon_name (self, g_value_get_string (value));
+    adap_status_page_set_icon_name (self, g_value_get_string (value));
     break;
 
   case PROP_PAINTABLE:
-    adw_status_page_set_paintable (self, g_value_get_object (value));
+    adap_status_page_set_paintable (self, g_value_get_object (value));
     break;
 
   case PROP_TITLE:
-    adw_status_page_set_title (self, g_value_get_string (value));
+    adap_status_page_set_title (self, g_value_get_string (value));
     break;
 
   case PROP_DESCRIPTION:
-    adw_status_page_set_description (self, g_value_get_string (value));
+    adap_status_page_set_description (self, g_value_get_string (value));
     break;
 
   case PROP_CHILD:
-    adw_status_page_set_child (self, g_value_get_object (value));
+    adap_status_page_set_child (self, g_value_get_object (value));
     break;
 
   default:
@@ -150,45 +150,45 @@ adw_status_page_set_property (GObject      *object,
 }
 
 static void
-adw_status_page_dispose (GObject *object)
+adap_status_page_dispose (GObject *object)
 {
-  AdwStatusPage *self = ADW_STATUS_PAGE (object);
+  AdapStatusPage *self = ADAP_STATUS_PAGE (object);
 
-  adw_status_page_set_child (self, NULL);
+  adap_status_page_set_child (self, NULL);
 
   self->user_widget = NULL;
 
-  gtk_widget_dispose_template (GTK_WIDGET (self), ADW_TYPE_STATUS_PAGE);
+  gtk_widget_dispose_template (GTK_WIDGET (self), ADAP_TYPE_STATUS_PAGE);
 
-  G_OBJECT_CLASS (adw_status_page_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_status_page_parent_class)->dispose (object);
 }
 
 static void
-adw_status_page_finalize (GObject *object)
+adap_status_page_finalize (GObject *object)
 {
-  AdwStatusPage *self = ADW_STATUS_PAGE (object);
+  AdapStatusPage *self = ADAP_STATUS_PAGE (object);
 
   g_clear_pointer (&self->icon_name, g_free);
   g_clear_object (&self->paintable);
 
-  G_OBJECT_CLASS (adw_status_page_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_status_page_parent_class)->finalize (object);
 }
 
 static void
-adw_status_page_class_init (AdwStatusPageClass *klass)
+adap_status_page_class_init (AdapStatusPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_status_page_get_property;
-  object_class->set_property = adw_status_page_set_property;
-  object_class->dispose = adw_status_page_dispose;
-  object_class->finalize = adw_status_page_finalize;
+  object_class->get_property = adap_status_page_get_property;
+  object_class->set_property = adap_status_page_set_property;
+  object_class->dispose = adap_status_page_dispose;
+  object_class->finalize = adap_status_page_finalize;
 
-  widget_class->compute_expand = adw_widget_compute_expand;
+  widget_class->compute_expand = adap_widget_compute_expand;
 
   /**
-   * AdwStatusPage:icon-name: (attributes org.gtk.Property.get=adw_status_page_get_icon_name org.gtk.Property.set=adw_status_page_set_icon_name)
+   * AdapStatusPage:icon-name: (attributes org.gtk.Property.get=adap_status_page_get_icon_name org.gtk.Property.set=adap_status_page_set_icon_name)
    *
    * The name of the icon to be used.
    *
@@ -200,7 +200,7 @@ adw_status_page_class_init (AdwStatusPageClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwStatusPage:paintable: (attributes org.gtk.Property.get=adw_status_page_get_paintable org.gtk.Property.set=adw_status_page_set_paintable)
+   * AdapStatusPage:paintable: (attributes org.gtk.Property.get=adap_status_page_get_paintable org.gtk.Property.set=adap_status_page_set_paintable)
    *
    * The paintable to be used.
    *
@@ -212,7 +212,7 @@ adw_status_page_class_init (AdwStatusPageClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwStatusPage:title: (attributes org.gtk.Property.get=adw_status_page_get_title org.gtk.Property.set=adw_status_page_set_title)
+   * AdapStatusPage:title: (attributes org.gtk.Property.get=adap_status_page_get_title org.gtk.Property.set=adap_status_page_set_title)
    *
    * The title to be displayed below the icon.
    * 
@@ -224,7 +224,7 @@ adw_status_page_class_init (AdwStatusPageClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwStatusPage:description: (attributes org.gtk.Property.get=adw_status_page_get_description org.gtk.Property.set=adw_status_page_set_description)
+   * AdapStatusPage:description: (attributes org.gtk.Property.get=adap_status_page_get_description org.gtk.Property.set=adap_status_page_set_description)
    *
    * The description markup to be displayed below the title.
    */
@@ -234,7 +234,7 @@ adw_status_page_class_init (AdwStatusPageClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwStatusPage:child: (attributes org.gtk.Property.get=adw_status_page_get_child org.gtk.Property.set=adw_status_page_set_child)
+   * AdapStatusPage:child: (attributes org.gtk.Property.get=adap_status_page_get_child org.gtk.Property.set=adap_status_page_set_child)
    *
    * The child widget.
    */
@@ -246,12 +246,12 @@ adw_status_page_class_init (AdwStatusPageClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-status-page.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwStatusPage, scrolled_window);
-  gtk_widget_class_bind_template_child (widget_class, AdwStatusPage, toplevel_box);
-  gtk_widget_class_bind_template_child (widget_class, AdwStatusPage, image);
-  gtk_widget_class_bind_template_child (widget_class, AdwStatusPage, title_label);
-  gtk_widget_class_bind_template_child (widget_class, AdwStatusPage, description_label);
+                                               "/org/gnome/Adapta/ui/adap-status-page.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapStatusPage, scrolled_window);
+  gtk_widget_class_bind_template_child (widget_class, AdapStatusPage, toplevel_box);
+  gtk_widget_class_bind_template_child (widget_class, AdapStatusPage, image);
+  gtk_widget_class_bind_template_child (widget_class, AdapStatusPage, title_label);
+  gtk_widget_class_bind_template_child (widget_class, AdapStatusPage, description_label);
   gtk_widget_class_bind_template_callback (widget_class, has_image);
   gtk_widget_class_bind_template_callback (widget_class, string_is_not_empty);
 
@@ -261,51 +261,51 @@ adw_status_page_class_init (AdwStatusPageClass *klass)
 }
 
 static void
-adw_status_page_init (AdwStatusPage *self)
+adap_status_page_init (AdapStatusPage *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
-adw_status_page_buildable_add_child (GtkBuildable *buildable,
+adap_status_page_buildable_add_child (GtkBuildable *buildable,
                                      GtkBuilder   *builder,
                                      GObject      *child,
                                      const char   *type)
 {
-  AdwStatusPage *self = ADW_STATUS_PAGE (buildable);
+  AdapStatusPage *self = ADAP_STATUS_PAGE (buildable);
 
   if (!self->scrolled_window && GTK_IS_WIDGET (child))
     gtk_widget_set_parent (GTK_WIDGET (child), GTK_WIDGET (buildable));
   else if (GTK_IS_WIDGET (child))
-    adw_status_page_set_child (self, GTK_WIDGET (child));
+    adap_status_page_set_child (self, GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_status_page_buildable_init (GtkBuildableIface *iface)
+adap_status_page_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_status_page_buildable_add_child;
+  iface->add_child = adap_status_page_buildable_add_child;
 }
 
 
 /**
- * adw_status_page_new:
+ * adap_status_page_new:
  *
- * Creates a new `AdwStatusPage`.
+ * Creates a new `AdapStatusPage`.
  *
- * Returns: the newly created `AdwStatusPage`
+ * Returns: the newly created `AdapStatusPage`
  */
 GtkWidget *
-adw_status_page_new (void)
+adap_status_page_new (void)
 {
-  return g_object_new (ADW_TYPE_STATUS_PAGE, NULL);
+  return g_object_new (ADAP_TYPE_STATUS_PAGE, NULL);
 }
 
 /**
- * adw_status_page_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
+ * adap_status_page_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
  * @self: a status page
  *
  * Gets the icon name for @self.
@@ -313,15 +313,15 @@ adw_status_page_new (void)
  * Returns: (nullable): the icon name
  */
 const char *
-adw_status_page_get_icon_name (AdwStatusPage *self)
+adap_status_page_get_icon_name (AdapStatusPage *self)
 {
-  g_return_val_if_fail (ADW_IS_STATUS_PAGE (self), NULL);
+  g_return_val_if_fail (ADAP_IS_STATUS_PAGE (self), NULL);
 
   return self->icon_name;
 }
 
 /**
- * adw_status_page_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
+ * adap_status_page_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
  * @self: a status page
  * @icon_name: (nullable): the icon name
  *
@@ -330,10 +330,10 @@ adw_status_page_get_icon_name (AdwStatusPage *self)
  * Changing this will set [property@StatusPage:paintable] to `NULL`.
  */
 void
-adw_status_page_set_icon_name (AdwStatusPage *self,
+adap_status_page_set_icon_name (AdapStatusPage *self,
                                const char    *icon_name)
 {
-  g_return_if_fail (ADW_IS_STATUS_PAGE (self));
+  g_return_if_fail (ADAP_IS_STATUS_PAGE (self));
 
   if (g_strcmp0 (self->icon_name, icon_name) == 0)
     return;
@@ -353,7 +353,7 @@ adw_status_page_set_icon_name (AdwStatusPage *self,
 }
 
 /**
- * adw_status_page_get_paintable: (attributes org.gtk.Method.get_property=paintable)
+ * adap_status_page_get_paintable: (attributes org.gtk.Method.get_property=paintable)
  * @self: a status page
  *
  * Gets the paintable for @self.
@@ -361,15 +361,15 @@ adw_status_page_set_icon_name (AdwStatusPage *self,
  * Returns: (nullable) (transfer none): the paintable
  */
 GdkPaintable *
-adw_status_page_get_paintable (AdwStatusPage *self)
+adap_status_page_get_paintable (AdapStatusPage *self)
 {
-  g_return_val_if_fail (ADW_IS_STATUS_PAGE (self), NULL);
+  g_return_val_if_fail (ADAP_IS_STATUS_PAGE (self), NULL);
 
   return self->paintable;
 }
 
 /**
- * adw_status_page_set_paintable: (attributes org.gtk.Method.set_property=paintable)
+ * adap_status_page_set_paintable: (attributes org.gtk.Method.set_property=paintable)
  * @self: a status page
  * @paintable: (nullable): the paintable
  *
@@ -378,10 +378,10 @@ adw_status_page_get_paintable (AdwStatusPage *self)
  * Changing this will set [property@StatusPage:icon-name] to `NULL`.
  */
 void
-adw_status_page_set_paintable (AdwStatusPage *self,
+adap_status_page_set_paintable (AdapStatusPage *self,
                                GdkPaintable  *paintable)
 {
-  g_return_if_fail (ADW_IS_STATUS_PAGE (self));
+  g_return_if_fail (ADAP_IS_STATUS_PAGE (self));
   g_return_if_fail (paintable == NULL || GDK_IS_PAINTABLE (paintable));
 
   if (self->paintable == paintable)
@@ -402,7 +402,7 @@ adw_status_page_set_paintable (AdwStatusPage *self,
 }
 
 /**
- * adw_status_page_get_title: (attributes org.gtk.Method.get_property=title)
+ * adap_status_page_get_title: (attributes org.gtk.Method.get_property=title)
  * @self: a status page
  *
  * Gets the title for @self.
@@ -410,15 +410,15 @@ adw_status_page_set_paintable (AdwStatusPage *self,
  * Returns: the title
  */
 const char *
-adw_status_page_get_title (AdwStatusPage *self)
+adap_status_page_get_title (AdapStatusPage *self)
 {
-  g_return_val_if_fail (ADW_IS_STATUS_PAGE (self), NULL);
+  g_return_val_if_fail (ADAP_IS_STATUS_PAGE (self), NULL);
 
   return gtk_label_get_label (self->title_label);
 }
 
 /**
- * adw_status_page_set_title: (attributes org.gtk.Method.set_property=title)
+ * adap_status_page_set_title: (attributes org.gtk.Method.set_property=title)
  * @self: a status page
  * @title: the title
  *
@@ -427,12 +427,12 @@ adw_status_page_get_title (AdwStatusPage *self)
  * The title is displayed below the icon. It is not parsed as Pango markup.
  */
 void
-adw_status_page_set_title (AdwStatusPage *self,
+adap_status_page_set_title (AdapStatusPage *self,
                            const char    *title)
 {
-  g_return_if_fail (ADW_IS_STATUS_PAGE (self));
+  g_return_if_fail (ADAP_IS_STATUS_PAGE (self));
 
-  if (g_strcmp0 (title, adw_status_page_get_title (self)) == 0)
+  if (g_strcmp0 (title, adap_status_page_get_title (self)) == 0)
     return;
 
   gtk_label_set_label (self->title_label, title);
@@ -441,7 +441,7 @@ adw_status_page_set_title (AdwStatusPage *self,
 }
 
 /**
- * adw_status_page_get_description: (attributes org.gtk.Method.get_property=description)
+ * adap_status_page_get_description: (attributes org.gtk.Method.get_property=description)
  * @self: a status page
  *
  * Gets the description markup for @self.
@@ -449,15 +449,15 @@ adw_status_page_set_title (AdwStatusPage *self,
  * Returns: (nullable): the description
  */
 const char *
-adw_status_page_get_description (AdwStatusPage *self)
+adap_status_page_get_description (AdapStatusPage *self)
 {
-  g_return_val_if_fail (ADW_IS_STATUS_PAGE (self), NULL);
+  g_return_val_if_fail (ADAP_IS_STATUS_PAGE (self), NULL);
 
   return gtk_label_get_label (self->description_label);
 }
 
 /**
- * adw_status_page_set_description: (attributes org.gtk.Method.set_property=description)
+ * adap_status_page_set_description: (attributes org.gtk.Method.set_property=description)
  * @self: a status page
  * @description: (nullable): the description
  *
@@ -466,12 +466,12 @@ adw_status_page_get_description (AdwStatusPage *self)
  * The description is displayed below the title. It is parsed as Pango markup.
  */
 void
-adw_status_page_set_description (AdwStatusPage *self,
+adap_status_page_set_description (AdapStatusPage *self,
                                  const char    *description)
 {
-  g_return_if_fail (ADW_IS_STATUS_PAGE (self));
+  g_return_if_fail (ADAP_IS_STATUS_PAGE (self));
 
-  if (g_strcmp0 (description, adw_status_page_get_description (self)) == 0)
+  if (g_strcmp0 (description, adap_status_page_get_description (self)) == 0)
     return;
 
   gtk_label_set_label (self->description_label, description);
@@ -480,7 +480,7 @@ adw_status_page_set_description (AdwStatusPage *self,
 }
 
 /**
- * adw_status_page_get_child: (attributes org.gtk.Method.get_property=child)
+ * adap_status_page_get_child: (attributes org.gtk.Method.get_property=child)
  * @self: a status page
  *
  * Gets the child widget of @self.
@@ -488,25 +488,25 @@ adw_status_page_set_description (AdwStatusPage *self,
  * Returns: (nullable) (transfer none): the child widget of @self
  */
 GtkWidget *
-adw_status_page_get_child (AdwStatusPage *self)
+adap_status_page_get_child (AdapStatusPage *self)
 {
-  g_return_val_if_fail (ADW_IS_STATUS_PAGE (self), NULL);
+  g_return_val_if_fail (ADAP_IS_STATUS_PAGE (self), NULL);
 
   return self->user_widget;
 }
 
 /**
- * adw_status_page_set_child: (attributes org.gtk.Method.set_property=child)
+ * adap_status_page_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a status page
  * @child: (nullable): the child widget
  *
  * Sets the child widget of @self.
  */
 void
-adw_status_page_set_child (AdwStatusPage *self,
+adap_status_page_set_child (AdapStatusPage *self,
                            GtkWidget     *child)
 {
-  g_return_if_fail (ADW_IS_STATUS_PAGE (self));
+  g_return_if_fail (ADAP_IS_STATUS_PAGE (self));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
   if (child)

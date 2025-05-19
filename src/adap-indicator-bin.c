@@ -7,21 +7,21 @@
  */
 
 #include "config.h"
-#include "adw-indicator-bin-private.h"
+#include "adap-indicator-bin-private.h"
 
-#include "adw-gizmo-private.h"
-#include "adw-widget-utils-private.h"
+#include "adap-gizmo-private.h"
+#include "adap-widget-utils-private.h"
 
 /**
- * AdwIndicatorBin:
+ * AdapIndicatorBin:
  *
  * A helper object for [class@ViewSwitcherButton].
  *
- * The `AdwIndicatorBin` widget shows an unread indicator over the child widget
+ * The `AdapIndicatorBin` widget shows an unread indicator over the child widget
  * masking it if they overlap.
  */
 
-struct _AdwIndicatorBin
+struct _AdapIndicatorBin
 {
   GtkWidget parent_instance;
 
@@ -33,10 +33,10 @@ struct _AdwIndicatorBin
   GtkWidget *label;
 };
 
-static void adw_indicator_bin_buildable_init (GtkBuildableIface *iface);
+static void adap_indicator_bin_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwIndicatorBin, adw_indicator_bin, GTK_TYPE_WIDGET,
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_indicator_bin_buildable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapIndicatorBin, adap_indicator_bin, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_indicator_bin_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -51,7 +51,7 @@ enum {
 static GParamSpec *props[LAST_PROP];
 
 static gboolean
-has_badge (AdwIndicatorBin *self)
+has_badge (AdapIndicatorBin *self)
 {
   const char *text = gtk_label_get_label (GTK_LABEL (self->label));
 
@@ -59,7 +59,7 @@ has_badge (AdwIndicatorBin *self)
 }
 
 static void
-adw_indicator_bin_measure (GtkWidget      *widget,
+adap_indicator_bin_measure (GtkWidget      *widget,
                            GtkOrientation  orientation,
                            int             for_size,
                            int            *min,
@@ -67,7 +67,7 @@ adw_indicator_bin_measure (GtkWidget      *widget,
                            int            *min_baseline,
                            int            *nat_baseline)
 {
-  AdwIndicatorBin *self = ADW_INDICATOR_BIN (widget);
+  AdapIndicatorBin *self = ADAP_INDICATOR_BIN (widget);
 
   if (!self->child) {
     if (min)
@@ -87,12 +87,12 @@ adw_indicator_bin_measure (GtkWidget      *widget,
 }
 
 static void
-adw_indicator_bin_size_allocate (GtkWidget *widget,
+adap_indicator_bin_size_allocate (GtkWidget *widget,
                                  int        width,
                                  int        height,
                                  int        baseline)
 {
-  AdwIndicatorBin *self = ADW_INDICATOR_BIN (widget);
+  AdapIndicatorBin *self = ADAP_INDICATOR_BIN (widget);
   GtkRequisition mask_size, indicator_size, size;
   float x, y;
 
@@ -121,10 +121,10 @@ adw_indicator_bin_size_allocate (GtkWidget *widget,
 }
 
 static void
-adw_indicator_bin_snapshot (GtkWidget   *widget,
+adap_indicator_bin_snapshot (GtkWidget   *widget,
                             GtkSnapshot *snapshot)
 {
-  AdwIndicatorBin *self = ADW_INDICATOR_BIN (widget);
+  AdapIndicatorBin *self = ADAP_INDICATOR_BIN (widget);
 
   if (!has_badge (self) && !self->needs_attention) {
     if (self->child)
@@ -147,24 +147,24 @@ adw_indicator_bin_snapshot (GtkWidget   *widget,
 }
 
 static void
-adw_indicator_bin_get_property (GObject    *object,
+adap_indicator_bin_get_property (GObject    *object,
                                 guint       prop_id,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-  AdwIndicatorBin *self = ADW_INDICATOR_BIN (object);
+  AdapIndicatorBin *self = ADAP_INDICATOR_BIN (object);
 
   switch (prop_id) {
   case PROP_CHILD:
-    g_value_set_object (value, adw_indicator_bin_get_child (self));
+    g_value_set_object (value, adap_indicator_bin_get_child (self));
     break;
 
   case PROP_NEEDS_ATTENTION:
-    g_value_set_boolean (value, adw_indicator_bin_get_needs_attention (self));
+    g_value_set_boolean (value, adap_indicator_bin_get_needs_attention (self));
     break;
 
   case PROP_BADGE:
-    g_value_set_string (value, adw_indicator_bin_get_badge (self));
+    g_value_set_string (value, adap_indicator_bin_get_badge (self));
     break;
 
   default:
@@ -173,24 +173,24 @@ adw_indicator_bin_get_property (GObject    *object,
 }
 
 static void
-adw_indicator_bin_set_property (GObject      *object,
+adap_indicator_bin_set_property (GObject      *object,
                                 guint         prop_id,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-  AdwIndicatorBin *self = ADW_INDICATOR_BIN (object);
+  AdapIndicatorBin *self = ADAP_INDICATOR_BIN (object);
 
   switch (prop_id) {
   case PROP_CHILD:
-    adw_indicator_bin_set_child (self, g_value_get_object (value));
+    adap_indicator_bin_set_child (self, g_value_get_object (value));
     break;
 
   case PROP_NEEDS_ATTENTION:
-    adw_indicator_bin_set_needs_attention (self, g_value_get_boolean (value));
+    adap_indicator_bin_set_needs_attention (self, g_value_get_boolean (value));
     break;
 
   case PROP_BADGE:
-    adw_indicator_bin_set_badge (self, g_value_get_string (value));
+    adap_indicator_bin_set_badge (self, g_value_get_string (value));
     break;
 
   default:
@@ -199,35 +199,35 @@ adw_indicator_bin_set_property (GObject      *object,
 }
 
 static void
-adw_indicator_bin_dispose (GObject *object)
+adap_indicator_bin_dispose (GObject *object)
 {
-  AdwIndicatorBin *self = ADW_INDICATOR_BIN (object);
+  AdapIndicatorBin *self = ADAP_INDICATOR_BIN (object);
 
   g_clear_pointer (&self->child, gtk_widget_unparent);
   g_clear_pointer (&self->mask, gtk_widget_unparent);
   g_clear_pointer (&self->indicator, gtk_widget_unparent);
   self->label = NULL;
 
-  G_OBJECT_CLASS (adw_indicator_bin_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_indicator_bin_parent_class)->dispose (object);
 }
 static void
-adw_indicator_bin_class_init (AdwIndicatorBinClass *klass)
+adap_indicator_bin_class_init (AdapIndicatorBinClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_indicator_bin_get_property;
-  object_class->set_property = adw_indicator_bin_set_property;
-  object_class->dispose = adw_indicator_bin_dispose;
+  object_class->get_property = adap_indicator_bin_get_property;
+  object_class->set_property = adap_indicator_bin_set_property;
+  object_class->dispose = adap_indicator_bin_dispose;
 
-  widget_class->measure = adw_indicator_bin_measure;
-  widget_class->size_allocate = adw_indicator_bin_size_allocate;
-  widget_class->snapshot = adw_indicator_bin_snapshot;
-  widget_class->get_request_mode = adw_widget_get_request_mode;
-  widget_class->compute_expand = adw_widget_compute_expand;
+  widget_class->measure = adap_indicator_bin_measure;
+  widget_class->size_allocate = adap_indicator_bin_size_allocate;
+  widget_class->snapshot = adap_indicator_bin_snapshot;
+  widget_class->get_request_mode = adap_widget_get_request_mode;
+  widget_class->compute_expand = adap_widget_compute_expand;
 
   /**
-   * AdwIndicatorBin:child:
+   * AdapIndicatorBin:child:
    *
    * The child widget.
    */
@@ -237,7 +237,7 @@ adw_indicator_bin_class_init (AdwIndicatorBinClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwIndicatorBin:needs-attention:
+   * AdapIndicatorBin:needs-attention:
    *
    * Whether the indicator requires attention of the user.
    */
@@ -247,7 +247,7 @@ adw_indicator_bin_class_init (AdwIndicatorBinClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwIndicatorBin:badge:
+   * AdapIndicatorBin:badge:
    *
    * Additional information for the user.
    */
@@ -262,13 +262,13 @@ adw_indicator_bin_class_init (AdwIndicatorBinClass *klass)
 }
 
 static void
-adw_indicator_bin_init (AdwIndicatorBin *self)
+adap_indicator_bin_init (AdapIndicatorBin *self)
 {
-  self->mask = adw_gizmo_new ("mask", NULL, NULL, NULL, NULL, NULL, NULL);
+  self->mask = adap_gizmo_new ("mask", NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_can_target (self->mask, FALSE);
   gtk_widget_set_parent (self->mask, GTK_WIDGET (self));
 
-  self->indicator = adw_gizmo_new ("indicator", NULL, NULL, NULL, NULL, NULL, NULL);
+  self->indicator = adap_gizmo_new ("indicator", NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_can_target (self->indicator, FALSE);
   gtk_widget_set_parent (self->indicator, GTK_WIDGET (self));
   gtk_widget_set_layout_manager (self->indicator, gtk_bin_layout_new ());
@@ -280,40 +280,40 @@ adw_indicator_bin_init (AdwIndicatorBin *self)
 }
 
 static void
-adw_indicator_bin_buildable_add_child (GtkBuildable *buildable,
+adap_indicator_bin_buildable_add_child (GtkBuildable *buildable,
                                        GtkBuilder   *builder,
                                        GObject      *child,
                                        const char   *type)
 {
   if (GTK_IS_WIDGET (child))
-    adw_indicator_bin_set_child (ADW_INDICATOR_BIN (buildable), GTK_WIDGET (child));
+    adap_indicator_bin_set_child (ADAP_INDICATOR_BIN (buildable), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_indicator_bin_buildable_init (GtkBuildableIface *iface)
+adap_indicator_bin_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_indicator_bin_buildable_add_child;
+  iface->add_child = adap_indicator_bin_buildable_add_child;
 }
 
 /**
- * adw_indicator_bin_new:
+ * adap_indicator_bin_new:
  *
- * Creates a new `AdwIndicatorBin`.
+ * Creates a new `AdapIndicatorBin`.
  *
- * Returns: the newly created `AdwIndicatorBin`
+ * Returns: the newly created `AdapIndicatorBin`
  */
 GtkWidget *
-adw_indicator_bin_new (void)
+adap_indicator_bin_new (void)
 {
-  return g_object_new (ADW_TYPE_INDICATOR_BIN, NULL);
+  return g_object_new (ADAP_TYPE_INDICATOR_BIN, NULL);
 }
 
 /**
- * adw_indicator_bin_get_child:
+ * adap_indicator_bin_get_child:
  * @self: an indicator bin
  *
  * Gets the child widget of @self.
@@ -321,25 +321,25 @@ adw_indicator_bin_new (void)
  * Returns: (nullable) (transfer none): the child widget of @self
  */
 GtkWidget *
-adw_indicator_bin_get_child (AdwIndicatorBin *self)
+adap_indicator_bin_get_child (AdapIndicatorBin *self)
 {
-  g_return_val_if_fail (ADW_IS_INDICATOR_BIN (self), NULL);
+  g_return_val_if_fail (ADAP_IS_INDICATOR_BIN (self), NULL);
 
   return self->child;
 }
 
 /**
- * adw_indicator_bin_set_child:
+ * adap_indicator_bin_set_child:
  * @self: an indicator bin
  * @child: (nullable): the child widget
  *
  * Sets the child widget of @self.
  */
 void
-adw_indicator_bin_set_child (AdwIndicatorBin *self,
+adap_indicator_bin_set_child (AdapIndicatorBin *self,
                              GtkWidget       *child)
 {
-  g_return_if_fail (ADW_IS_INDICATOR_BIN (self));
+  g_return_if_fail (ADAP_IS_INDICATOR_BIN (self));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
   if (child)
@@ -360,18 +360,18 @@ adw_indicator_bin_set_child (AdwIndicatorBin *self,
 }
 
 gboolean
-adw_indicator_bin_get_needs_attention (AdwIndicatorBin *self)
+adap_indicator_bin_get_needs_attention (AdapIndicatorBin *self)
 {
-  g_return_val_if_fail (ADW_IS_INDICATOR_BIN (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_INDICATOR_BIN (self), FALSE);
 
   return self->needs_attention;
 }
 
 void
-adw_indicator_bin_set_needs_attention (AdwIndicatorBin *self,
+adap_indicator_bin_set_needs_attention (AdapIndicatorBin *self,
                                        gboolean         needs_attention)
 {
-  g_return_if_fail (ADW_IS_INDICATOR_BIN (self));
+  g_return_if_fail (ADAP_IS_INDICATOR_BIN (self));
 
   needs_attention = !!needs_attention;
 
@@ -391,18 +391,18 @@ adw_indicator_bin_set_needs_attention (AdwIndicatorBin *self,
 }
 
 const char *
-adw_indicator_bin_get_badge (AdwIndicatorBin *self)
+adap_indicator_bin_get_badge (AdapIndicatorBin *self)
 {
-  g_return_val_if_fail (ADW_IS_INDICATOR_BIN (self), "");
+  g_return_val_if_fail (ADAP_IS_INDICATOR_BIN (self), "");
 
   return gtk_label_get_label (GTK_LABEL (self->label));
 }
 
 void
-adw_indicator_bin_set_badge (AdwIndicatorBin *self,
+adap_indicator_bin_set_badge (AdapIndicatorBin *self,
                              const char      *badge)
 {
-  g_return_if_fail (ADW_IS_INDICATOR_BIN (self));
+  g_return_if_fail (ADAP_IS_INDICATOR_BIN (self));
 
   gtk_label_set_text (GTK_LABEL (self->label), badge);
 

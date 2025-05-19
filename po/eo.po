@@ -1,12 +1,12 @@
-# Esperanto translation for libadwaita.
-# Copyright (C) 2023 libadwaita's COPYRIGHT HOLDER
-# This file is distributed under the same license as the libadwaita package.
+# Esperanto translation for libadapta.
+# Copyright (C) 2023 libadapta's COPYRIGHT HOLDER
+# This file is distributed under the same license as the libadapta package.
 # Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: libadwaita main\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadwaita/issues\n"
+"Project-Id-Version: libadapta main\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadapta/issues\n"
 "POT-Creation-Date: 2023-09-14 08:30+0000\n"
 "PO-Revision-Date: 2023-09-14 12:25+0200\n"
 "Last-Translator: Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>\n"
@@ -18,94 +18,94 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Generator: Gtranslator 42.0\n"
 
-#: src/adw-about-window.c:206
+#: src/adap-about-window.c:206
 msgid "GNU General Public License, version 2 or later"
 msgstr "GNU Ĝenerala Publika Permesilo, versio 2 aŭ pli nova"
 
-#: src/adw-about-window.c:207
+#: src/adap-about-window.c:207
 msgid "GNU General Public License, version 3 or later"
 msgstr "GNU Ĝenerala Publika Permesilo, versio 3 aŭ pli nova"
 
-#: src/adw-about-window.c:208
+#: src/adap-about-window.c:208
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "GNU Malpli Ĝenerala Publika Permesilo, versio 2.1 aŭ pli nova"
 
-#: src/adw-about-window.c:209
+#: src/adap-about-window.c:209
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "GNU Malpli Ĝenerala Publika Permesilo, versio 3 aŭ pli nova"
 
-#: src/adw-about-window.c:210
+#: src/adap-about-window.c:210
 msgid "BSD 2-Clause License"
 msgstr "BSD 2-Klaŭza Permesilo"
 
-#: src/adw-about-window.c:211
+#: src/adap-about-window.c:211
 msgid "The MIT License (MIT)"
 msgstr "La MIT-Permesilo (MIT)"
 
-#: src/adw-about-window.c:212
+#: src/adap-about-window.c:212
 msgid "Artistic License 2.0"
 msgstr "Arta Permesilo 2.0"
 
-#: src/adw-about-window.c:213
+#: src/adap-about-window.c:213
 msgid "GNU General Public License, version 2 only"
 msgstr "GNU Ĝenerala Publika Permesilo, nur versio 2"
 
-#: src/adw-about-window.c:214
+#: src/adap-about-window.c:214
 msgid "GNU General Public License, version 3 only"
 msgstr "GNU Ĝenerala Publika Permesilo, nur versio 3"
 
-#: src/adw-about-window.c:215
+#: src/adap-about-window.c:215
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "GNU Malpli Ĝenerala Publika Permesilo, nur versio 2.1"
 
-#: src/adw-about-window.c:216
+#: src/adap-about-window.c:216
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Malpli Ĝenerala Publika Permesilo, nur versio 3"
 
-#: src/adw-about-window.c:217
+#: src/adap-about-window.c:217
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero Ĝenerala Publika Permesilo, versio 3 aŭ pli nova"
 
-#: src/adw-about-window.c:218
+#: src/adap-about-window.c:218
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero Ĝenerala Publika Permesilo, nur versio 3"
 
-#: src/adw-about-window.c:219
+#: src/adap-about-window.c:219
 msgid "BSD 3-Clause License"
 msgstr "BSD 3-Klaŭza Permesilo"
 
-#: src/adw-about-window.c:220
+#: src/adap-about-window.c:220
 msgid "Apache License, Version 2.0"
 msgstr "Apache-Permesilo, versio 2.0"
 
-#: src/adw-about-window.c:221
+#: src/adap-about-window.c:221
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Publika Permesilo 2.0"
 
-#: src/adw-about-window.c:537
+#: src/adap-about-window.c:537
 msgid "Code by"
 msgstr "Kodo farita de"
 
-#: src/adw-about-window.c:538
+#: src/adap-about-window.c:538
 msgid "Design by"
 msgstr "Dizajno farita de"
 
-#: src/adw-about-window.c:539
+#: src/adap-about-window.c:539
 msgid "Artwork by"
 msgstr "Arto farita de"
 
-#: src/adw-about-window.c:540
+#: src/adap-about-window.c:540
 msgid "Documentation by"
 msgstr "Dokumentado farita de"
 
-#: src/adw-about-window.c:541
+#: src/adap-about-window.c:541
 msgid "Translated by"
 msgstr "Tradukita de"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: src/adw-about-window.c:570
+#: src/adap-about-window.c:570
 #, c-format
 msgid ""
 "This application comes with absolutely no warranty. See the <a "
@@ -114,93 +114,93 @@ msgstr ""
 "Ĉi tiu aplikaĵo estas sen ajna garantiado. Vidu la <a href=\"%s\">%s</a> por "
 "detaloj."
 
-#: src/adw-about-window.c:648
+#: src/adap-about-window.c:648
 msgid "This Application"
 msgstr "Ĉi tiu aplikaĵo"
 
-#: src/adw-about-window.c:950
+#: src/adap-about-window.c:950
 #, c-format
 msgid "Version %s"
 msgstr "Versio %s"
 
-#: src/adw-about-window.c:976
+#: src/adap-about-window.c:976
 msgid "Unable to parse release notes:"
 msgstr "Ne eblis analizi eldononotojn:"
 
-#: src/adw-about-window.c:982
+#: src/adap-about-window.c:982
 #, c-format
 msgid "Line: %d, character: %d"
 msgstr "Linio: %d, signo: %d"
 
-#: src/adw-about-window.c:1258
+#: src/adap-about-window.c:1258
 msgid "Copied to clipboard"
 msgstr "Kopiita al tondujo"
 
-#: src/adw-about-window.c:1286
+#: src/adap-about-window.c:1286
 msgid "Unable to save debugging information"
 msgstr "Ne eblis konservi sencimig-informon"
 
-#: src/adw-about-window.c:1291
+#: src/adap-about-window.c:1291
 msgid "Close"
 msgstr "Fermi"
 
-#: src/adw-about-window.c:1307
+#: src/adap-about-window.c:1307
 msgid "Save debugging information"
 msgstr "Konservi sencimig-informon"
 
-#: src/adw-about-window.ui:5
+#: src/adap-about-window.ui:5
 msgid "About"
 msgstr "Pri"
 
-#: src/adw-about-window.ui:92
+#: src/adap-about-window.ui:92
 msgid "_What’s New"
 msgstr "_Kio estas nova"
 
-#: src/adw-about-window.ui:108
+#: src/adap-about-window.ui:108
 msgid "_Details"
 msgstr "_Detaloj"
 
-#: src/adw-about-window.ui:124 src/adw-about-window.ui:344
+#: src/adap-about-window.ui:124 src/adap-about-window.ui:344
 msgid "_Website"
 msgstr "_Retejo"
 
-#: src/adw-about-window.ui:148
+#: src/adap-about-window.ui:148
 msgid "_Support Questions"
 msgstr "_Helpdemandoj"
 
-#: src/adw-about-window.ui:165
+#: src/adap-about-window.ui:165
 msgid "_Report an Issue"
 msgstr "_Raporti problemon"
 
-#: src/adw-about-window.ui:181
+#: src/adap-about-window.ui:181
 msgid "_Troubleshooting"
 msgstr "_Problemosolvado"
 
-#: src/adw-about-window.ui:201
+#: src/adap-about-window.ui:201
 msgid "_Credits"
 msgstr "_Dankoj"
 
-#: src/adw-about-window.ui:217
+#: src/adap-about-window.ui:217
 msgid "_Legal"
 msgstr "_Leĝa avizo"
 
-#: src/adw-about-window.ui:233
+#: src/adap-about-window.ui:233
 msgid "_Acknowledgements"
 msgstr "_Agnoskoj"
 
-#: src/adw-about-window.ui:263
+#: src/adap-about-window.ui:263
 msgid "What’s New"
 msgstr "Kio estas nova"
 
-#: src/adw-about-window.ui:306
+#: src/adap-about-window.ui:306
 msgid "Details"
 msgstr "Detaloj"
 
-#: src/adw-about-window.ui:372
+#: src/adap-about-window.ui:372
 msgid "Troubleshooting"
 msgstr "Problemosolvado"
 
-#: src/adw-about-window.ui:395
+#: src/adap-about-window.ui:395
 msgid ""
 "To assist in troubleshooting, you can view your debugging information. "
 "Providing this information to the application developers can help diagnose "
@@ -210,69 +210,69 @@ msgstr ""
 "La provizado de tiu informo al la aplikaĵaj programistoj povas helpi "
 "diagnozi eblajn problemojn kiujn vi trovas, kiam vi raportas problemo."
 
-#: src/adw-about-window.ui:406
+#: src/adap-about-window.ui:406
 msgid "_Debugging Information"
 msgstr "_Sencimig-informo"
 
-#: src/adw-about-window.ui:433
+#: src/adap-about-window.ui:433
 msgid "Debugging Information"
 msgstr "Sencimig-informo"
 
-#: src/adw-about-window.ui:478
+#: src/adap-about-window.ui:478
 msgid "_Copy Text"
 msgstr "_Kopiigi tekston"
 
-#: src/adw-about-window.ui:486
+#: src/adap-about-window.ui:486
 msgid "_Save as…"
 msgstr "_Konservi kiel…"
 
-#: src/adw-about-window.ui:499
+#: src/adap-about-window.ui:499
 msgid "Credits"
 msgstr "Dankoj"
 
-#: src/adw-about-window.ui:530
+#: src/adap-about-window.ui:530
 msgid "Legal"
 msgstr "Leĝa avizo"
 
-#: src/adw-about-window.ui:561
+#: src/adap-about-window.ui:561
 msgid "Acknowledgements"
 msgstr "Agnoskoj"
 
-#: src/adw-back-button.c:347 src/adw-back-button.c:445
-#: src/adw-back-button.c:555
+#: src/adap-back-button.c:347 src/adap-back-button.c:445
+#: src/adap-back-button.c:555
 msgid "Back"
 msgstr "Reen"
 
-#: src/adw-combo-row.ui:50
+#: src/adap-combo-row.ui:50
 msgid "Search…"
 msgstr "Serĉi…"
 
-#: src/adw-entry-row.ui:97
+#: src/adap-entry-row.ui:97
 msgid "Apply"
 msgstr "Apliki"
 
-#: src/adw-inspector-page.c:75
+#: src/adap-inspector-page.c:75
 msgid "No Preference"
 msgstr "Neniu prefero"
 
-#: src/adw-inspector-page.c:77
+#: src/adap-inspector-page.c:77
 msgid "Prefer Dark"
 msgstr "Preferi mallumon"
 
-#: src/adw-inspector-page.c:79
+#: src/adap-inspector-page.c:79
 msgid "Prefer Light"
 msgstr "Preferi lumon"
 
 #. Translators: The name of the library, not the stylesheet
-#: src/adw-inspector-page.c:97
-msgid "Adwaita"
+#: src/adap-inspector-page.c:97
+msgid "Adapta"
 msgstr "Advajto"
 
-#: src/adw-inspector-page.ui:10
+#: src/adap-inspector-page.ui:10
 msgid "System Appearance"
 msgstr "Apero de la sistemo"
 
-#: src/adw-inspector-page.ui:11
+#: src/adap-inspector-page.ui:11
 msgid ""
 "Override settings for this application. They will be reset upon closing the "
 "inspector."
@@ -280,94 +280,94 @@ msgstr ""
 "Anstataŭigi agordojn por ĉi tiu aplikaĵo. Ili estos reeakiritaj je fermado "
 "de la inspektisto."
 
-#: src/adw-inspector-page.ui:14
+#: src/adap-inspector-page.ui:14
 msgid "System Supports Color Schemes"
 msgstr "La sistemo subtenas koloraĵojn"
 
-#: src/adw-inspector-page.ui:20
+#: src/adap-inspector-page.ui:20
 msgid "Preferred Color Scheme"
 msgstr "Preferata koloraĵo"
 
-#: src/adw-inspector-page.ui:37
+#: src/adap-inspector-page.ui:37
 msgid "High Contrast"
 msgstr "Alta kontrasto"
 
-#: src/adw-password-entry-row.c:70
+#: src/adap-password-entry-row.c:70
 msgid "Hide Password"
 msgstr "Kaŝi pasvorton"
 
-#: src/adw-password-entry-row.c:74
+#: src/adap-password-entry-row.c:74
 msgid "Show Password"
 msgstr "Montri pasvorton"
 
-#: src/adw-password-entry-row.c:168
+#: src/adap-password-entry-row.c:168
 msgid "Caps Lock is on"
 msgstr "Kapsklavo estas ŝaltita"
 
-#: src/adw-password-entry-row.c:176
+#: src/adap-password-entry-row.c:176
 msgid "_Show Password"
 msgstr "_Montri pasvorton"
 
-#: src/adw-preferences-window.c:259
+#: src/adap-preferences-window.c:259
 msgid "Untitled page"
 msgstr "Sennomo paĝo"
 
-#: src/adw-preferences-window.ui:8
+#: src/adap-preferences-window.ui:8
 msgid "Preferences"
 msgstr "Preferoj"
 
-#: src/adw-preferences-window.ui:81
+#: src/adap-preferences-window.ui:81
 msgid "Search preferences"
 msgstr "Serĉi preferojn"
 
-#: src/adw-preferences-window.ui:96
+#: src/adap-preferences-window.ui:96
 msgid "Search"
 msgstr "Serĉi"
 
-#: src/adw-preferences-window.ui:163
+#: src/adap-preferences-window.ui:163
 msgid "No Results Found"
 msgstr "Neniu rezulto troviĝis"
 
-#: src/adw-preferences-window.ui:164 src/adw-tab-overview.ui:111
+#: src/adap-preferences-window.ui:164 src/adap-tab-overview.ui:111
 msgid "Try a different search."
 msgstr "Provu alian serĉon."
 
-#: src/adw-split-button.c:519 src/adw-split-button.c:1033
+#: src/adap-split-button.c:519 src/adap-split-button.c:1033
 msgid "More Options"
 msgstr "Pli da opcioj"
 
-#: src/adw-tab-button.ui:7
+#: src/adap-tab-button.ui:7
 msgid "View Open Tabs"
 msgstr "Vidi malfermitajn langetojn"
 
 #. Translators: Tab overview title, %u is the number of open tabs
-#: src/adw-tab-overview.c:922
+#: src/adap-tab-overview.c:922
 #, c-format
 msgid "%u Tab"
 msgid_plural "%u Tabs"
 msgstr[0] "%u Langeto"
 msgstr[1] "%u Langetoj"
 
-#: src/adw-tab-overview.ui:21
+#: src/adap-tab-overview.ui:21
 msgid "Search Tabs"
 msgstr "Serĉi langetojn"
 
-#: src/adw-tab-overview.ui:51
+#: src/adap-tab-overview.ui:51
 msgid "Search tabs"
 msgstr "Serĉi langetojn"
 
-#: src/adw-tab-overview.ui:97
+#: src/adap-tab-overview.ui:97
 msgid "No Open Tabs"
 msgstr "Neniu malfermita langeto"
 
-#: src/adw-tab-overview.ui:110
+#: src/adap-tab-overview.ui:110
 msgid "No Tabs Found"
 msgstr "Neniu langeto troviĝis"
 
-#: src/adw-tab-overview.ui:131
+#: src/adap-tab-overview.ui:131
 msgid "New _Tab"
 msgstr "Nova _langeto"
 
-#: src/adw-tab-thumbnail.ui:39 src/adw-tab.ui:95
+#: src/adap-tab-thumbnail.ui:39 src/adap-tab.ui:95
 msgid "Close Tab"
 msgstr "Fermi langeton"

@@ -5,13 +5,13 @@
  */
 
 #include "config.h"
-#include "adw-action-row-private.h"
+#include "adap-action-row-private.h"
 
-#include "adw-marshalers.h"
-#include "adw-widget-utils-private.h"
+#include "adap-marshalers.h"
+#include "adap-widget-utils-private.h"
 
 /**
- * AdwActionRow:
+ * AdapActionRow:
  *
  * A [class@Gtk.ListBoxRow] used to present actions.
  *
@@ -20,18 +20,18 @@
  *   <img src="action-row.png" alt="action-row">
  * </picture>
  *
- * The `AdwActionRow` widget can have a title, a subtitle and an icon. The row
+ * The `AdapActionRow` widget can have a title, a subtitle and an icon. The row
  * can receive additional widgets at its end, or prefix widgets at its start.
  *
  * It is convenient to present a preference and its related actions.
  *
- * `AdwActionRow` is unactivatable by default, giving it an activatable widget
+ * `AdapActionRow` is unactivatable by default, giving it an activatable widget
  * will automatically make it activatable, but unsetting it won't change the
  * row's activatability.
  *
- * ## AdwActionRow as GtkBuildable
+ * ## AdapActionRow as GtkBuildable
  *
- * The `AdwActionRow` implementation of the [iface@Gtk.Buildable] interface
+ * The `AdapActionRow` implementation of the [iface@Gtk.Buildable] interface
  * supports adding a child at its end by specifying “suffix” or omitting the
  * “type” attribute of a <child> element.
  *
@@ -40,7 +40,7 @@
  *
  * ## CSS nodes
  *
- * `AdwActionRow` has a main CSS node with name `row`.
+ * `AdapActionRow` has a main CSS node with name `row`.
  *
  * It contains the subnode `box.header` for its main horizontal box, and
  * `box.title` for the vertical box containing the title and subtitle labels.
@@ -48,7 +48,7 @@
  * It contains subnodes `label.title` and `label.subtitle` representing
  * respectively the title label and subtitle label.
  *
- * `AdwActionRow` can use the
+ * `AdapActionRow` can use the
  * [`.property`](style-classes.html#property-rows) style class to emphasize
  * the row subtitle instead of the row title, which is useful for
  * displaying read-only properties.
@@ -71,14 +71,14 @@ typedef struct
   gboolean subtitle_selectable;
   GtkWidget *activatable_widget;
   GBinding *activatable_binding;
-} AdwActionRowPrivate;
+} AdapActionRowPrivate;
 
-static void adw_action_row_buildable_init (GtkBuildableIface *iface);
+static void adap_action_row_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (AdwActionRow, adw_action_row, ADW_TYPE_PREFERENCES_ROW,
-                         G_ADD_PRIVATE (AdwActionRow)
+G_DEFINE_TYPE_WITH_CODE (AdapActionRow, adap_action_row, ADAP_TYPE_PREFERENCES_ROW,
+                         G_ADD_PRIVATE (AdapActionRow)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                         adw_action_row_buildable_init))
+                         adap_action_row_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -103,20 +103,20 @@ enum {
 static guint signals[SIGNAL_LAST_SIGNAL];
 
 static gboolean
-string_is_not_empty (AdwActionRow *self,
+string_is_not_empty (AdapActionRow *self,
                      const char   *string)
 {
   return string && string[0];
 }
 
 static void
-pressed_cb (AdwActionRow *self,
+pressed_cb (AdapActionRow *self,
             int           n_press,
             double        x,
             double        y,
             GtkGesture   *gesture)
 {
-  AdwActionRowPrivate *priv = adw_action_row_get_instance_private (self);
+  AdapActionRowPrivate *priv = adap_action_row_get_instance_private (self);
   GtkWidget *picked;
   GtkEditable *delegate;
 
@@ -151,18 +151,18 @@ pressed_cb (AdwActionRow *self,
 }
 
 static void
-row_activated_cb (AdwActionRow  *self,
+row_activated_cb (AdapActionRow  *self,
                   GtkListBoxRow *row)
 {
   /* No need to use GTK_LIST_BOX_ROW() for a pointer comparison. */
   if ((GtkListBoxRow *) self == row)
-    adw_action_row_activate (self);
+    adap_action_row_activate (self);
 }
 
 static void
-parent_cb (AdwActionRow *self)
+parent_cb (AdapActionRow *self)
 {
-  AdwActionRowPrivate *priv = adw_action_row_get_instance_private (self);
+  AdapActionRowPrivate *priv = adap_action_row_get_instance_private (self);
   GtkWidget *parent = gtk_widget_get_parent (GTK_WIDGET (self));
 
   if (priv->previous_parent != NULL) {
@@ -178,31 +178,31 @@ parent_cb (AdwActionRow *self)
 }
 
 static void
-adw_action_row_get_property (GObject    *object,
+adap_action_row_get_property (GObject    *object,
                              guint       prop_id,
                              GValue     *value,
                              GParamSpec *pspec)
 {
-  AdwActionRow *self = ADW_ACTION_ROW (object);
+  AdapActionRow *self = ADAP_ACTION_ROW (object);
 
   switch (prop_id) {
   case PROP_SUBTITLE:
-    g_value_set_string (value, adw_action_row_get_subtitle (self));
+    g_value_set_string (value, adap_action_row_get_subtitle (self));
     break;
   case PROP_ICON_NAME:
-    g_value_set_string (value, adw_action_row_get_icon_name (self));
+    g_value_set_string (value, adap_action_row_get_icon_name (self));
     break;
   case PROP_ACTIVATABLE_WIDGET:
-    g_value_set_object (value, (GObject *) adw_action_row_get_activatable_widget (self));
+    g_value_set_object (value, (GObject *) adap_action_row_get_activatable_widget (self));
     break;
   case PROP_SUBTITLE_LINES:
-    g_value_set_int (value, adw_action_row_get_subtitle_lines (self));
+    g_value_set_int (value, adap_action_row_get_subtitle_lines (self));
     break;
   case PROP_TITLE_LINES:
-    g_value_set_int (value, adw_action_row_get_title_lines (self));
+    g_value_set_int (value, adap_action_row_get_title_lines (self));
     break;
   case PROP_SUBTITLE_SELECTABLE:
-    g_value_set_boolean (value, adw_action_row_get_subtitle_selectable (self));
+    g_value_set_boolean (value, adap_action_row_get_subtitle_selectable (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -210,31 +210,31 @@ adw_action_row_get_property (GObject    *object,
 }
 
 static void
-adw_action_row_set_property (GObject      *object,
+adap_action_row_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
-  AdwActionRow *self = ADW_ACTION_ROW (object);
+  AdapActionRow *self = ADAP_ACTION_ROW (object);
 
   switch (prop_id) {
   case PROP_SUBTITLE:
-    adw_action_row_set_subtitle (self, g_value_get_string (value));
+    adap_action_row_set_subtitle (self, g_value_get_string (value));
     break;
   case PROP_ICON_NAME:
-    adw_action_row_set_icon_name (self, g_value_get_string (value));
+    adap_action_row_set_icon_name (self, g_value_get_string (value));
     break;
   case PROP_ACTIVATABLE_WIDGET:
-    adw_action_row_set_activatable_widget (self, (GtkWidget*) g_value_get_object (value));
+    adap_action_row_set_activatable_widget (self, (GtkWidget*) g_value_get_object (value));
     break;
   case PROP_SUBTITLE_LINES:
-    adw_action_row_set_subtitle_lines (self, g_value_get_int (value));
+    adap_action_row_set_subtitle_lines (self, g_value_get_int (value));
     break;
   case PROP_TITLE_LINES:
-    adw_action_row_set_title_lines (self, g_value_get_int (value));
+    adap_action_row_set_title_lines (self, g_value_get_int (value));
     break;
   case PROP_SUBTITLE_SELECTABLE:
-    adw_action_row_set_subtitle_selectable (self, g_value_get_boolean (value));
+    adap_action_row_set_subtitle_selectable (self, g_value_get_boolean (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -242,25 +242,25 @@ adw_action_row_set_property (GObject      *object,
 }
 
 static void
-adw_action_row_dispose (GObject *object)
+adap_action_row_dispose (GObject *object)
 {
-  AdwActionRow *self = ADW_ACTION_ROW (object);
-  AdwActionRowPrivate *priv = adw_action_row_get_instance_private (self);
+  AdapActionRow *self = ADAP_ACTION_ROW (object);
+  AdapActionRowPrivate *priv = adap_action_row_get_instance_private (self);
 
   if (priv->previous_parent != NULL) {
     g_signal_handlers_disconnect_by_func (priv->previous_parent, G_CALLBACK (row_activated_cb), self);
     priv->previous_parent = NULL;
   }
 
-  adw_action_row_set_activatable_widget (self, NULL);
+  adap_action_row_set_activatable_widget (self, NULL);
 
-  G_OBJECT_CLASS (adw_action_row_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_action_row_parent_class)->dispose (object);
 }
 
 static void
-adw_action_row_activate_real (AdwActionRow *self)
+adap_action_row_activate_real (AdapActionRow *self)
 {
-  AdwActionRowPrivate *priv = adw_action_row_get_instance_private (self);
+  AdapActionRowPrivate *priv = adap_action_row_get_instance_private (self);
 
   if (priv->activatable_widget)
     gtk_widget_mnemonic_activate (priv->activatable_widget, FALSE);
@@ -269,19 +269,19 @@ adw_action_row_activate_real (AdwActionRow *self)
 }
 
 static void
-adw_action_row_class_init (AdwActionRowClass *klass)
+adap_action_row_class_init (AdapActionRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_action_row_get_property;
-  object_class->set_property = adw_action_row_set_property;
-  object_class->dispose = adw_action_row_dispose;
+  object_class->get_property = adap_action_row_get_property;
+  object_class->set_property = adap_action_row_set_property;
+  object_class->dispose = adap_action_row_dispose;
 
-  klass->activate = adw_action_row_activate_real;
+  klass->activate = adap_action_row_activate_real;
 
   /**
-   * AdwActionRow:subtitle: (attributes org.gtk.Property.get=adw_action_row_get_subtitle org.gtk.Property.set=adw_action_row_set_subtitle)
+   * AdapActionRow:subtitle: (attributes org.gtk.Property.get=adap_action_row_get_subtitle org.gtk.Property.set=adap_action_row_set_subtitle)
    *
    * The subtitle for this row.
    *
@@ -294,7 +294,7 @@ adw_action_row_class_init (AdwActionRowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwActionRow:icon-name: (attributes org.gtk.Property.get=adw_action_row_get_icon_name org.gtk.Property.set=adw_action_row_set_icon_name)
+   * AdapActionRow:icon-name: (attributes org.gtk.Property.get=adap_action_row_get_icon_name org.gtk.Property.set=adap_action_row_set_icon_name)
    *
    * The icon name for this row.
    *
@@ -306,7 +306,7 @@ adw_action_row_class_init (AdwActionRowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwActionRow:activatable-widget: (attributes org.gtk.Property.get=adw_action_row_get_activatable_widget org.gtk.Property.set=adw_action_row_set_activatable_widget)
+   * AdapActionRow:activatable-widget: (attributes org.gtk.Property.get=adap_action_row_get_activatable_widget org.gtk.Property.set=adap_action_row_set_activatable_widget)
    *
    * The widget to activate when the row is activated.
    *
@@ -324,7 +324,7 @@ adw_action_row_class_init (AdwActionRowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwActionRow:title-lines: (attributes org.gtk.Property.get=adw_action_row_get_title_lines org.gtk.Property.set=adw_action_row_set_title_lines)
+   * AdapActionRow:title-lines: (attributes org.gtk.Property.get=adap_action_row_get_title_lines org.gtk.Property.set=adap_action_row_set_title_lines)
    *
    * The number of lines at the end of which the title label will be ellipsized.
    *
@@ -337,7 +337,7 @@ adw_action_row_class_init (AdwActionRowClass *klass)
                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwActionRow:subtitle-lines: (attributes org.gtk.Property.get=adw_action_row_get_subtitle_lines org.gtk.Property.set=adw_action_row_set_subtitle_lines)
+   * AdapActionRow:subtitle-lines: (attributes org.gtk.Property.get=adap_action_row_get_subtitle_lines org.gtk.Property.set=adap_action_row_set_subtitle_lines)
    *
    * The number of lines at the end of which the subtitle label will be
    * ellipsized.
@@ -351,7 +351,7 @@ adw_action_row_class_init (AdwActionRowClass *klass)
                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwActionRow:subtitle-selectable: (attributes org.gtk.Property.get=adw_action_row_get_subtitle_selectable org.gtk.Property.set=adw_action_row_set_subtitle_selectable)
+   * AdapActionRow:subtitle-selectable: (attributes org.gtk.Property.get=adap_action_row_get_subtitle_selectable org.gtk.Property.set=adap_action_row_set_subtitle_selectable)
    *
    * Whether the user can copy the subtitle from the label.
    *
@@ -367,7 +367,7 @@ adw_action_row_class_init (AdwActionRowClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
-   * AdwActionRow::activated:
+   * AdapActionRow::activated:
    *
    * This signal is emitted after the row has been activated.
    */
@@ -377,28 +377,28 @@ adw_action_row_class_init (AdwActionRowClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_ACTIVATED],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-action-row.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, AdwActionRow, header);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwActionRow, image);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwActionRow, prefixes);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwActionRow, subtitle);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwActionRow, suffixes);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwActionRow, title);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwActionRow, title_box);
+                                               "/org/gnome/Adapta/ui/adap-action-row.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, AdapActionRow, header);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapActionRow, image);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapActionRow, prefixes);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapActionRow, subtitle);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapActionRow, suffixes);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapActionRow, title);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapActionRow, title_box);
   gtk_widget_class_bind_template_callback (widget_class, string_is_not_empty);
   gtk_widget_class_bind_template_callback (widget_class, pressed_cb);
 }
 
 static void
-adw_action_row_init (AdwActionRow *self)
+adap_action_row_init (AdapActionRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -406,110 +406,110 @@ adw_action_row_init (AdwActionRow *self)
 }
 
 static void
-adw_action_row_buildable_add_child (GtkBuildable *buildable,
+adap_action_row_buildable_add_child (GtkBuildable *buildable,
                                     GtkBuilder   *builder,
                                     GObject      *child,
                                     const char   *type)
 {
-  AdwActionRow *self = ADW_ACTION_ROW (buildable);
-  AdwActionRowPrivate *priv = adw_action_row_get_instance_private (self);
+  AdapActionRow *self = ADAP_ACTION_ROW (buildable);
+  AdapActionRowPrivate *priv = adap_action_row_get_instance_private (self);
 
   if (!priv->header)
     parent_buildable_iface->add_child (buildable, builder, child, type);
   else if (g_strcmp0 (type, "prefix") == 0)
-    adw_action_row_add_prefix (self, GTK_WIDGET (child));
+    adap_action_row_add_prefix (self, GTK_WIDGET (child));
   else if (g_strcmp0 (type, "suffix") == 0)
-    adw_action_row_add_suffix (self, GTK_WIDGET (child));
+    adap_action_row_add_suffix (self, GTK_WIDGET (child));
   else if (!type && GTK_IS_WIDGET (child))
-    adw_action_row_add_suffix (self, GTK_WIDGET (child));
+    adap_action_row_add_suffix (self, GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_action_row_buildable_init (GtkBuildableIface *iface)
+adap_action_row_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->add_child = adw_action_row_buildable_add_child;
+  iface->add_child = adap_action_row_buildable_add_child;
 }
 
 /**
- * adw_action_row_new:
+ * adap_action_row_new:
  *
- * Creates a new `AdwActionRow`.
+ * Creates a new `AdapActionRow`.
  *
- * Returns: the newly created `AdwActionRow`
+ * Returns: the newly created `AdapActionRow`
  */
 GtkWidget *
-adw_action_row_new (void)
+adap_action_row_new (void)
 {
-  return g_object_new (ADW_TYPE_ACTION_ROW, NULL);
+  return g_object_new (ADAP_TYPE_ACTION_ROW, NULL);
 }
 
 /**
- * adw_action_row_add_prefix:
+ * adap_action_row_add_prefix:
  * @self: an action row
  * @widget: a widget
  *
  * Adds a prefix widget to @self.
  */
 void
-adw_action_row_add_prefix (AdwActionRow *self,
+adap_action_row_add_prefix (AdapActionRow *self,
                            GtkWidget    *widget)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ACTION_ROW (self));
+  g_return_if_fail (ADAP_IS_ACTION_ROW (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_parent (widget) == NULL);
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   gtk_box_prepend (priv->prefixes, widget);
   gtk_widget_set_visible (GTK_WIDGET (priv->prefixes), TRUE);
 }
 
 /**
- * adw_action_row_add_suffix:
+ * adap_action_row_add_suffix:
  * @self: an action row
  * @widget: a widget
  *
  * Adds a suffix widget to @self.
  */
 void
-adw_action_row_add_suffix (AdwActionRow *self,
+adap_action_row_add_suffix (AdapActionRow *self,
                            GtkWidget    *widget)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ACTION_ROW (self));
+  g_return_if_fail (ADAP_IS_ACTION_ROW (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_parent (widget) == NULL);
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   gtk_box_append (priv->suffixes, widget);
   gtk_widget_set_visible (GTK_WIDGET (priv->suffixes), TRUE);
 }
 
 /**
- * adw_action_row_remove:
+ * adap_action_row_remove:
  * @self: an action row
  * @widget: the child to be removed
  *
  * Removes a child from @self.
  */
 void
-adw_action_row_remove (AdwActionRow *self,
+adap_action_row_remove (AdapActionRow *self,
                        GtkWidget    *child)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
   GtkWidget *parent;
 
-  g_return_if_fail (ADW_IS_ACTION_ROW (self));
+  g_return_if_fail (ADAP_IS_ACTION_ROW (self));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   parent = gtk_widget_get_parent (child);
 
@@ -518,12 +518,12 @@ adw_action_row_remove (AdwActionRow *self,
     gtk_widget_set_visible (parent, gtk_widget_get_first_child (parent) != NULL);
   }
   else {
-    ADW_CRITICAL_CANNOT_REMOVE_CHILD (self, child);
+    ADAP_CRITICAL_CANNOT_REMOVE_CHILD (self, child);
   }
 }
 
 /**
- * adw_action_row_get_subtitle: (attributes org.gtk.Method.get_property=subtitle)
+ * adap_action_row_get_subtitle: (attributes org.gtk.Method.get_property=subtitle)
  * @self: an action row
  *
  * Gets the subtitle for @self.
@@ -531,19 +531,19 @@ adw_action_row_remove (AdwActionRow *self,
  * Returns: (nullable): the subtitle for @self
  */
 const char *
-adw_action_row_get_subtitle (AdwActionRow *self)
+adap_action_row_get_subtitle (AdapActionRow *self)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ACTION_ROW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ACTION_ROW (self), NULL);
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   return gtk_label_get_text (priv->subtitle);
 }
 
 /**
- * adw_action_row_set_subtitle: (attributes org.gtk.Method.set_property=subtitle)
+ * adap_action_row_set_subtitle: (attributes org.gtk.Method.set_property=subtitle)
  * @self: an action row
  * @subtitle: the subtitle
  *
@@ -553,14 +553,14 @@ adw_action_row_get_subtitle (AdwActionRow *self)
  * [property@PreferencesRow:use-markup] is set to `FALSE`.
  */
 void
-adw_action_row_set_subtitle (AdwActionRow *self,
+adap_action_row_set_subtitle (AdapActionRow *self,
                              const char   *subtitle)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ACTION_ROW (self));
+  g_return_if_fail (ADAP_IS_ACTION_ROW (self));
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   if (g_strcmp0 (gtk_label_get_text (priv->subtitle), subtitle) == 0)
     return;
@@ -571,7 +571,7 @@ adw_action_row_set_subtitle (AdwActionRow *self,
 }
 
 /**
- * adw_action_row_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
+ * adap_action_row_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
  * @self: an action row
  *
  * Gets the icon name for @self.
@@ -581,19 +581,19 @@ adw_action_row_set_subtitle (AdwActionRow *self,
  * Deprecated: 1.3: Use [method@ActionRow.add_prefix] to add an icon.
  */
 const char *
-adw_action_row_get_icon_name (AdwActionRow *self)
+adap_action_row_get_icon_name (AdapActionRow *self)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ACTION_ROW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ACTION_ROW (self), NULL);
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   return gtk_image_get_icon_name (priv->image);
 }
 
 /**
- * adw_action_row_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
+ * adap_action_row_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
  * @self: an action row
  * @icon_name: (nullable): the icon name
  *
@@ -602,15 +602,15 @@ adw_action_row_get_icon_name (AdwActionRow *self)
  * Deprecated: 1.3: Use [method@ActionRow.add_prefix] to add an icon.
  */
 void
-adw_action_row_set_icon_name (AdwActionRow *self,
+adap_action_row_set_icon_name (AdapActionRow *self,
                               const char   *icon_name)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
   const char *old_icon_name;
 
-  g_return_if_fail (ADW_IS_ACTION_ROW (self));
+  g_return_if_fail (ADAP_IS_ACTION_ROW (self));
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   old_icon_name = gtk_image_get_icon_name (priv->image);
   if (g_strcmp0 (old_icon_name, icon_name) == 0)
@@ -622,7 +622,7 @@ adw_action_row_set_icon_name (AdwActionRow *self,
 }
 
 /**
- * adw_action_row_get_activatable_widget: (attributes org.gtk.Method.get_property=activatable-widget)
+ * adap_action_row_get_activatable_widget: (attributes org.gtk.Method.get_property=activatable-widget)
  * @self: an action row
  *
  * Gets the widget activated when @self is activated.
@@ -630,13 +630,13 @@ adw_action_row_set_icon_name (AdwActionRow *self,
  * Returns: (nullable) (transfer none): the activatable widget for @self
  */
 GtkWidget *
-adw_action_row_get_activatable_widget (AdwActionRow *self)
+adap_action_row_get_activatable_widget (AdapActionRow *self)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ACTION_ROW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ACTION_ROW (self), NULL);
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   return priv->activatable_widget;
 }
@@ -645,8 +645,8 @@ static void
 activatable_widget_weak_notify (gpointer  data,
                                 GObject  *where_the_object_was)
 {
-  AdwActionRow *self = ADW_ACTION_ROW (data);
-  AdwActionRowPrivate *priv = adw_action_row_get_instance_private (self);
+  AdapActionRow *self = ADAP_ACTION_ROW (data);
+  AdapActionRowPrivate *priv = adap_action_row_get_instance_private (self);
 
   priv->activatable_widget = NULL;
   priv->activatable_binding = NULL;
@@ -655,7 +655,7 @@ activatable_widget_weak_notify (gpointer  data,
 }
 
 /**
- * adw_action_row_set_activatable_widget: (attributes org.gtk.Method.set_property=activatable-widget)
+ * adap_action_row_set_activatable_widget: (attributes org.gtk.Method.set_property=activatable-widget)
  * @self: an action row
  * @widget: (nullable): the target widget
  *
@@ -669,15 +669,15 @@ activatable_widget_weak_notify (gpointer  data,
  * [signal@Gtk.Widget::mnemonic-activate] signal on it.
  */
 void
-adw_action_row_set_activatable_widget (AdwActionRow *self,
+adap_action_row_set_activatable_widget (AdapActionRow *self,
                                        GtkWidget    *widget)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ACTION_ROW (self));
+  g_return_if_fail (ADAP_IS_ACTION_ROW (self));
   g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   if (priv->activatable_widget == widget)
     return;
@@ -717,7 +717,7 @@ adw_action_row_set_activatable_widget (AdwActionRow *self,
 }
 
 /**
- * adw_action_row_get_title_lines: (attributes org.gtk.Method.get_property=title-lines)
+ * adap_action_row_get_title_lines: (attributes org.gtk.Method.get_property=title-lines)
  * @self: an action row
  *
  * Gets the number of lines at the end of which the title label will be
@@ -727,19 +727,19 @@ adw_action_row_set_activatable_widget (AdwActionRow *self,
  *   ellipsized
  */
 int
-adw_action_row_get_title_lines (AdwActionRow *self)
+adap_action_row_get_title_lines (AdapActionRow *self)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ACTION_ROW (self), 0);
+  g_return_val_if_fail (ADAP_IS_ACTION_ROW (self), 0);
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   return priv->title_lines;
 }
 
 /**
- * adw_action_row_set_title_lines: (attributes org.gtk.Method.set_property=title-lines)
+ * adap_action_row_set_title_lines: (attributes org.gtk.Method.set_property=title-lines)
  * @self: an action row
  * @title_lines: the number of lines at the end of which the title label will be ellipsized
  *
@@ -749,15 +749,15 @@ adw_action_row_get_title_lines (AdwActionRow *self)
  * If the value is 0, the number of lines won't be limited.
  */
 void
-adw_action_row_set_title_lines (AdwActionRow *self,
+adap_action_row_set_title_lines (AdapActionRow *self,
                                 int           title_lines)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ACTION_ROW (self));
+  g_return_if_fail (ADAP_IS_ACTION_ROW (self));
   g_return_if_fail (title_lines >= 0);
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   if (priv->title_lines == title_lines)
     return;
@@ -771,7 +771,7 @@ adw_action_row_set_title_lines (AdwActionRow *self,
 }
 
 /**
- * adw_action_row_get_subtitle_lines: (attributes org.gtk.Method.get_property=subtitle-lines)
+ * adap_action_row_get_subtitle_lines: (attributes org.gtk.Method.get_property=subtitle-lines)
  * @self: an action row
  *
  * Gets the number of lines at the end of which the subtitle label will be
@@ -781,19 +781,19 @@ adw_action_row_set_title_lines (AdwActionRow *self,
  *   ellipsized
  */
 int
-adw_action_row_get_subtitle_lines (AdwActionRow *self)
+adap_action_row_get_subtitle_lines (AdapActionRow *self)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ACTION_ROW (self), 0);
+  g_return_val_if_fail (ADAP_IS_ACTION_ROW (self), 0);
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   return priv->subtitle_lines;
 }
 
 /**
- * adw_action_row_set_subtitle_lines: (attributes org.gtk.Method.set_property=subtitle-lines)
+ * adap_action_row_set_subtitle_lines: (attributes org.gtk.Method.set_property=subtitle-lines)
  * @self: an action row
  * @subtitle_lines: the number of lines at the end of which the subtitle label will be ellipsized
  *
@@ -803,15 +803,15 @@ adw_action_row_get_subtitle_lines (AdwActionRow *self)
  * If the value is 0, the number of lines won't be limited.
  */
 void
-adw_action_row_set_subtitle_lines (AdwActionRow *self,
+adap_action_row_set_subtitle_lines (AdapActionRow *self,
                                    int           subtitle_lines)
 {
-  AdwActionRowPrivate *priv;
+  AdapActionRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ACTION_ROW (self));
+  g_return_if_fail (ADAP_IS_ACTION_ROW (self));
   g_return_if_fail (subtitle_lines >= 0);
 
-  priv = adw_action_row_get_instance_private (self);
+  priv = adap_action_row_get_instance_private (self);
 
   if (priv->subtitle_lines == subtitle_lines)
     return;
@@ -825,8 +825,8 @@ adw_action_row_set_subtitle_lines (AdwActionRow *self,
 }
 
 /**
- * adw_action_row_get_subtitle_selectable: (attributes org.gtk.Method.get_property=subtitle-selectable)
- * @self: a `AdwActionRow`
+ * adap_action_row_get_subtitle_selectable: (attributes org.gtk.Method.get_property=subtitle-selectable)
+ * @self: a `AdapActionRow`
  *
  * Gets whether the user can copy the subtitle from the label
  *
@@ -835,18 +835,18 @@ adw_action_row_set_subtitle_lines (AdwActionRow *self,
  * Since: 1.3
  */
 gboolean
-adw_action_row_get_subtitle_selectable (AdwActionRow *self)
+adap_action_row_get_subtitle_selectable (AdapActionRow *self)
 {
-  AdwActionRowPrivate *priv = adw_action_row_get_instance_private (self);
+  AdapActionRowPrivate *priv = adap_action_row_get_instance_private (self);
 
-  g_return_val_if_fail (ADW_IS_ACTION_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_ACTION_ROW (self), FALSE);
 
   return priv->subtitle_selectable;
 }
 
 /**
- * adw_action_row_set_subtitle_selectable: (attributes org.gtk.Method.set_property=subtitle-selectable)
- * @self: a `AdwActionRow`
+ * adap_action_row_set_subtitle_selectable: (attributes org.gtk.Method.set_property=subtitle-selectable)
+ * @self: a `AdapActionRow`
  * @subtitle_selectable: `TRUE` if the user can copy the subtitle from the label
  *
  * Sets whether the user can copy the subtitle from the label
@@ -856,12 +856,12 @@ adw_action_row_get_subtitle_selectable (AdwActionRow *self)
  * Since: 1.3
  */
 void
-adw_action_row_set_subtitle_selectable (AdwActionRow *self,
+adap_action_row_set_subtitle_selectable (AdapActionRow *self,
                                         gboolean      subtitle_selectable)
 {
-  AdwActionRowPrivate *priv = adw_action_row_get_instance_private (self);
+  AdapActionRowPrivate *priv = adap_action_row_get_instance_private (self);
 
-  g_return_if_fail (ADW_IS_ACTION_ROW (self));
+  g_return_if_fail (ADAP_IS_ACTION_ROW (self));
 
   subtitle_selectable = !!subtitle_selectable;
 
@@ -874,26 +874,26 @@ adw_action_row_set_subtitle_selectable (AdwActionRow *self,
 }
 
 /**
- * adw_action_row_activate:
+ * adap_action_row_activate:
  * @self: an action row
  *
  * Activates @self.
  */
 void
-adw_action_row_activate (AdwActionRow *self)
+adap_action_row_activate (AdapActionRow *self)
 {
-  g_return_if_fail (ADW_IS_ACTION_ROW (self));
+  g_return_if_fail (ADAP_IS_ACTION_ROW (self));
 
-  ADW_ACTION_ROW_GET_CLASS (self)->activate (self);
+  ADAP_ACTION_ROW_GET_CLASS (self)->activate (self);
 }
 
 void
-adw_action_row_set_expand_suffixes (AdwActionRow *self,
+adap_action_row_set_expand_suffixes (AdapActionRow *self,
                                     gboolean      expand)
 {
-  AdwActionRowPrivate *priv = adw_action_row_get_instance_private (self);
+  AdapActionRowPrivate *priv = adap_action_row_get_instance_private (self);
 
-  g_return_if_fail (ADW_IS_ACTION_ROW (self));
+  g_return_if_fail (ADAP_IS_ACTION_ROW (self));
 
   expand = !!expand;
 

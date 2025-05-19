@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/Adwaita1/Test">
-    <file compressed="true">org.gnome.Adwaita1.Test.metainfo.xml</file>
+  <gresource prefix="/org/gnome/Adapta1/Test">
+    <file compressed="true">org.gnome.Adapta1.Test.metainfo.xml</file>
   </gresource>
 </gresources>

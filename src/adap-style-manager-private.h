@@ -8,14 +8,14 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-style-manager.h"
+#include "adap-style-manager.h"
 
 G_BEGIN_DECLS
 
-void adw_style_manager_ensure (void);
+void adap_style_manager_ensure (void);
 
 G_END_DECLS

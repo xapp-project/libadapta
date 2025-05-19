@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwWindow" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapWindow" id="widget">
     <property name="width-request">360</property>
     <property name="height-request">200</property>
     <property name="default-width">800</property>
     <property name="default-height">500</property>
     <property name="title">View Switcher</property>
     <child>
-      <object class="AdwBreakpoint">
+      <object class="AdapBreakpoint">
         <condition>max-width: 550sp</condition>
         <setter object="switcher_bar" property="reveal">True</setter>
         <setter object="header_bar" property="title-widget"/>
       </object>
     </child>
     <property name="content">
-      <object class="AdwToolbarView">
+      <object class="AdapToolbarView">
         <child type="top">
-          <object class="AdwHeaderBar" id="header_bar">
+          <object class="AdapHeaderBar" id="header_bar">
             <property name="title-widget">
-              <object class="AdwViewSwitcher">
+              <object class="AdapViewSwitcher">
                 <property name="stack">stack</property>
                 <property name="policy">wide</property>
               </object>
@@ -28,9 +28,9 @@
           </object>
         </child>
         <property name="content">
-          <object class="AdwViewStack" id="stack">
+          <object class="AdapViewStack" id="stack">
             <child>
-              <object class="AdwViewStackPage">
+              <object class="AdapViewStackPage">
                 <property name="title">View 1</property>
                 <property name="icon-name">folder-music-symbolic</property>
                 <property name="child">
@@ -44,7 +44,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwViewStackPage">
+              <object class="AdapViewStackPage">
                 <property name="title">View 2</property>
                 <property name="icon-name">folder-pictures-symbolic</property>
                 <property name="child">
@@ -58,7 +58,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwViewStackPage">
+              <object class="AdapViewStackPage">
                 <property name="title">View 3</property>
                 <property name="icon-name">folder-videos-symbolic</property>
                 <property name="child">
@@ -72,7 +72,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwViewStackPage">
+              <object class="AdapViewStackPage">
                 <property name="title">View 4</property>
                 <property name="icon-name">user-bookmarks-symbolic</property>
                 <property name="child">
@@ -88,7 +88,7 @@
           </object>
         </property>
         <child type="bottom">
-          <object class="AdwViewSwitcherBar" id="switcher_bar">
+          <object class="AdapViewSwitcherBar" id="switcher_bar">
             <property name="stack">stack</property>
           </object>
         </child>

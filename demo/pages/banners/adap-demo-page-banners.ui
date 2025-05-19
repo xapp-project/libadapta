@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0" />
-  <requires lib="libadwaita" version="1.0" />
-  <template class="AdwDemoPageBanners" parent="AdwBin">
+  <requires lib="libadapta" version="1.0" />
+  <template class="AdapDemoPageBanners" parent="AdapBin">
     <property name="child">
       <object class="GtkCenterBox">
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <child type="start">
-          <object class="AdwBanner" id="banner">
+          <object class="AdapBanner" id="banner">
             <property name="revealed" bind-source="show_banner_switch" bind-property="active" bind-flags="sync-create|bidirectional" />
             <property name="title" bind-source="title_row" bind-property="text" bind-flags="sync-create" />
             <property name="button-label" bind-source="button_label_row" bind-property="text" bind-flags="sync-create" />
@@ -16,24 +16,24 @@
           </object>
         </child>
         <child type="center">
-          <object class="AdwStatusPage">
+          <object class="AdapStatusPage">
             <property name="icon-name">widget-banner-symbolic</property>
             <property name="title" translatable="yes">Banner</property>
             <property name="description" translatable="yes">A bar with contextual information.</property>
             <property name="child">
-              <object class="AdwClamp">
+              <object class="AdapClamp">
                 <property name="maximum-size">400</property>
                 <property name="tightening-threshold">300</property>
                 <child>
-                  <object class="AdwPreferencesGroup">
+                  <object class="AdapPreferencesGroup">
                     <child>
-                      <object class="AdwSwitchRow" id="show_banner_switch">
+                      <object class="AdapSwitchRow" id="show_banner_switch">
                         <property name="title" translatable="yes">Show Banner</property>
                         <property name="active">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="AdwEntryRow" id="title_row">
+                      <object class="AdapEntryRow" id="title_row">
                         <property name="title" translatable="yes">Title</property>
                         <property name="use_underline">True</property>
                         <property name="text">Metered connection – updates paused</property>
@@ -41,7 +41,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="AdwEntryRow" id="button_label_row">
+                      <object class="AdapEntryRow" id="button_label_row">
                         <property name="title" translatable="yes">Button</property>
                         <property name="use_underline">True</property>
                         <property name="text">_Network Settings</property>

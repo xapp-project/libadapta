@@ -8,15 +8,15 @@
 
 #include "config.h"
 
-#include "adw-dialog-private.h"
+#include "adap-dialog-private.h"
 
-#include "adw-bottom-sheet-private.h"
-#include "adw-breakpoint-bin-private.h"
-#include "adw-dialog-host-private.h"
-#include "adw-floating-sheet-private.h"
-#include "adw-gizmo-private.h"
-#include "adw-marshalers.h"
-#include "adw-widget-utils-private.h"
+#include "adap-bottom-sheet-private.h"
+#include "adap-breakpoint-bin-private.h"
+#include "adap-dialog-host-private.h"
+#include "adap-floating-sheet-private.h"
+#include "adap-gizmo-private.h"
+#include "adap-marshalers.h"
+#include "adap-widget-utils-private.h"
 
 #define DEFAULT_NATURAL_SIZE 200
 
@@ -24,11 +24,11 @@
 #define LANDSCAPE_CONDITION "max-height: 360px"
 
 /**
- * AdwDialogPresentationMode:
- * @ADW_DIALOG_AUTO: Switch between `ADW_DIALOG_FLOATING` and
- *   `ADW_DIALOG_BOTTOM_SHEET` depending on available size.
- * @ADW_DIALOG_FLOATING: Present dialog as a centered floating window.
- * @ADW_DIALOG_BOTTOM_SHEET: Present dialog as a bottom sheet.
+ * AdapDialogPresentationMode:
+ * @ADAP_DIALOG_AUTO: Switch between `ADAP_DIALOG_FLOATING` and
+ *   `ADAP_DIALOG_BOTTOM_SHEET` depending on available size.
+ * @ADAP_DIALOG_FLOATING: Present dialog as a centered floating window.
+ * @ADAP_DIALOG_BOTTOM_SHEET: Present dialog as a bottom sheet.
  *
  * Describes the available presentation modes for [class@Dialog].
  *
@@ -40,7 +40,7 @@
  */
 
 /**
- * AdwDialog:
+ * AdapDialog:
  *
  * An adaptive dialog container.
  *
@@ -53,23 +53,23 @@
  *   <img src="dialog-bottom.png" alt="dialog-bottom">
  * </picture>
  *
- * `AdwDialog` is similar to a window, but is shown within another window. It
+ * `AdapDialog` is similar to a window, but is shown within another window. It
  * can be used with [class@Window] and [class@ApplicationWindow], use
  * [method@Dialog.present] to show it.
  *
- * `AdwDialog` is not resizable. Use the [property@Dialog:content-width] and
+ * `AdapDialog` is not resizable. Use the [property@Dialog:content-width] and
  * [property@Dialog:content-height] properties to set its size, or set
  * [property@Dialog:follows-content-size] to `TRUE` to make the dialog track the
- * content's size as it changes. `AdwDialog` can never be larger than its parent
+ * content's size as it changes. `AdapDialog` can never be larger than its parent
  * window.
  *
- * `AdwDialog` can be presented as a centered floating window or a bottom sheet.
+ * `AdapDialog` can be presented as a centered floating window or a bottom sheet.
  * By default it's automatic depending on the available size.
  * [property@Dialog:presentation-mode] can be used to change that.
  *
- * `AdwDialog` can be closed via [method@Dialog.close].
+ * `AdapDialog` can be closed via [method@Dialog.close].
  *
- * When presented as a bottom sheet, `AdwDialog` can also be closed via swiping
+ * When presented as a bottom sheet, `AdapDialog` can also be closed via swiping
  * it down.
  *
  * The [property@Dialog:can-close] can be used to prevent closing. In that case,
@@ -80,7 +80,7 @@
  *
  * ## Header Bar Integration
  *
- * When placed inside an `AdwDialog`, [class@HeaderBar] will display the dialog
+ * When placed inside an `AdapDialog`, [class@HeaderBar] will display the dialog
  * title instead of window title. It will also adjust the decoration layout to
  * ensure it always has a close button and nothing else. Set
  * [property@HeaderBar:show-start-title-buttons] and
@@ -89,10 +89,10 @@
  *
  * ## Breakpoints
  *
- * `AdwDialog` can be used with [class@Breakpoint] the same way as
+ * `AdapDialog` can be used with [class@Breakpoint] the same way as
  * [class@BreakpointBin]. Refer to that widget's documentation for details.
  *
- * Like `AdwBreakpointBin`, if breakpoints are used, `AdwDialog` doesn't have a
+ * Like `AdapBreakpointBin`, if breakpoints are used, `AdapDialog` doesn't have a
  * minimum size, and [property@Gtk.Widget:width-request] and
  * [property@Gtk.Widget:height-request] properties must be set manually.
  *
@@ -106,8 +106,8 @@ typedef struct
 
   GtkWidget *child_breakpoint_bin;
 
-  AdwBottomSheet *bottom_sheet;
-  AdwFloatingSheet *floating_sheet;
+  AdapBottomSheet *bottom_sheet;
+  AdapFloatingSheet *floating_sheet;
   gboolean first_map;
 
   guint tick_cb_id;
@@ -125,9 +125,9 @@ typedef struct
   gboolean content_width_set;
   gboolean content_height_set;
 
-  AdwDialogPresentationMode presentation_mode;
-  AdwBreakpoint *portrait_breakpoint;
-  AdwBreakpoint *landscape_breakpoint;
+  AdapDialogPresentationMode presentation_mode;
+  AdapBreakpoint *portrait_breakpoint;
+  AdapBreakpoint *landscape_breakpoint;
 
   GtkWidget *focus_widget;
   GtkWidget *default_widget;
@@ -140,13 +140,13 @@ typedef struct
 
   GtkWidget *window;
   gboolean force_closing;
-} AdwDialogPrivate;
+} AdapDialogPrivate;
 
-static void adw_dialog_buildable_init (GtkBuildableIface *iface);
+static void adap_dialog_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (AdwDialog, adw_dialog, GTK_TYPE_WIDGET,
-                         G_ADD_PRIVATE (AdwDialog)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_dialog_buildable_init))
+G_DEFINE_TYPE_WITH_CODE (AdapDialog, adap_dialog, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (AdapDialog)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_dialog_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -176,15 +176,15 @@ enum {
 static guint signals[SIGNAL_LAST_SIGNAL];
 
 static void
-child_breakpoint_bin_notify_current_breakpoint_cb (AdwDialog *self)
+child_breakpoint_bin_notify_current_breakpoint_cb (AdapDialog *self)
 {
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CURRENT_BREAKPOINT]);
 }
 
 static gboolean
-map_tick_cb (AdwDialog *self)
+map_tick_cb (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   priv->ticks++;
 
@@ -192,9 +192,9 @@ map_tick_cb (AdwDialog *self)
    * and we can't animate it right away */
   if (priv->ticks == 2) {
     if (priv->bottom_sheet)
-      adw_bottom_sheet_set_open (priv->bottom_sheet, TRUE);
+      adap_bottom_sheet_set_open (priv->bottom_sheet, TRUE);
     else if (priv->floating_sheet)
-      adw_floating_sheet_set_open (priv->floating_sheet, TRUE);
+      adap_floating_sheet_set_open (priv->floating_sheet, TRUE);
 
     gtk_widget_grab_focus (GTK_WIDGET (self));
 
@@ -208,9 +208,9 @@ map_tick_cb (AdwDialog *self)
 }
 
 static void
-sheet_closing_cb (AdwDialog *self)
+sheet_closing_cb (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   if (priv->closing_callback)
     priv->closing_callback (self, priv->user_data);
@@ -219,31 +219,31 @@ sheet_closing_cb (AdwDialog *self)
 }
 
 static void
-sheet_closed_cb (AdwDialog *self)
+sheet_closed_cb (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   if (priv->remove_callback)
     priv->remove_callback (self, priv->user_data);
 }
 
 static void
-sheet_close_attempt_cb (AdwDialog *self)
+sheet_close_attempt_cb (AdapDialog *self)
 {
   g_print ("a\n");
   g_signal_emit (self, signals[SIGNAL_CLOSE_ATTEMPT], 0);
 }
 
 static void
-unset_default_widget (AdwDialog *self)
+unset_default_widget (AdapDialog *self)
 {
-  adw_dialog_set_default_widget (self, NULL);
+  adap_dialog_set_default_widget (self, NULL);
 }
 
 static void
-default_widget_notify_visible_cb (AdwDialog *self)
+default_widget_notify_visible_cb (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   g_assert (priv->default_widget);
 
@@ -252,9 +252,9 @@ default_widget_notify_visible_cb (AdwDialog *self)
 }
 
 static void
-default_widget_notify_parent_cb (AdwDialog *self)
+default_widget_notify_parent_cb (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   g_assert (priv->default_widget);
 
@@ -263,15 +263,15 @@ default_widget_notify_parent_cb (AdwDialog *self)
 }
 
 static void
-unset_focus_widget (AdwDialog *self)
+unset_focus_widget (AdapDialog *self)
 {
-  adw_dialog_set_focus (self, NULL);
+  adap_dialog_set_focus (self, NULL);
 }
 
 static void
-focus_widget_notify_visible_cb (AdwDialog *self)
+focus_widget_notify_visible_cb (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   g_assert (priv->focus_widget);
 
@@ -280,9 +280,9 @@ focus_widget_notify_visible_cb (AdwDialog *self)
 }
 
 static void
-focus_widget_notify_parent_cb (AdwDialog *self)
+focus_widget_notify_parent_cb (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   g_assert (priv->focus_widget);
 
@@ -291,10 +291,10 @@ focus_widget_notify_parent_cb (AdwDialog *self)
 }
 
 static void
-set_focus (AdwDialog *self,
+set_focus (AdapDialog *self,
            GtkWidget *focus)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   if (focus == priv->focus_widget)
     return;
@@ -326,29 +326,29 @@ set_focus (AdwDialog *self,
 }
 
 static void
-window_notify_focus_cb (AdwDialog  *self,
+window_notify_focus_cb (AdapDialog  *self,
                         GParamSpec *pspec,
                         GtkRoot    *root)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
   GtkWidget *focus = gtk_root_get_focus (root);
 
   if (focus && !gtk_widget_is_ancestor (focus, GTK_WIDGET (self)))
     focus = NULL;
 
-  if (priv->floating_sheet && focus == adw_floating_sheet_get_sheet_bin (priv->floating_sheet))
+  if (priv->floating_sheet && focus == adap_floating_sheet_get_sheet_bin (priv->floating_sheet))
     focus = NULL;
 
-  if (priv->bottom_sheet && focus == adw_bottom_sheet_get_sheet_bin (priv->bottom_sheet))
+  if (priv->bottom_sheet && focus == adap_bottom_sheet_get_sheet_bin (priv->bottom_sheet))
     focus = NULL;
 
   set_focus (self, focus);
 }
 
 static void
-update_natural_size (AdwDialog *self)
+update_natural_size (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
   int width, height;
 
   /* Follow default/content size for floating dialogs */
@@ -359,7 +359,7 @@ update_natural_size (AdwDialog *self)
     height = priv->content_height;
   }
 
-  adw_breakpoint_bin_set_natural_size (ADW_BREAKPOINT_BIN (priv->child_breakpoint_bin),
+  adap_breakpoint_bin_set_natural_size (ADAP_BREAKPOINT_BIN (priv->child_breakpoint_bin),
                                        width, height);
 
   if (priv->window)
@@ -367,13 +367,13 @@ update_natural_size (AdwDialog *self)
 }
 
 static void
-set_content_size (AdwDialog *self,
+set_content_size (AdapDialog *self,
                   gboolean   set_width,
                   int        width,
                   gboolean   set_height,
                   int        height)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
   gboolean changed = FALSE;
   GtkRequisition min, nat;
 
@@ -431,10 +431,10 @@ set_content_size (AdwDialog *self,
 }
 
 static void
-update_presentation (AdwDialog *self)
+update_presentation (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
-  AdwBreakpoint *breakpoint;
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
+  AdapBreakpoint *breakpoint;
   gboolean use_bottom_sheet;
   GtkRoot *root;
   GtkWidget *focus = NULL;
@@ -443,8 +443,8 @@ update_presentation (AdwDialog *self)
     return;
 
   breakpoint =
-    adw_breakpoint_bin_get_current_breakpoint (ADW_BREAKPOINT_BIN (priv->bin));
-  use_bottom_sheet = priv->presentation_mode == ADW_DIALOG_BOTTOM_SHEET ||
+    adap_breakpoint_bin_get_current_breakpoint (ADAP_BREAKPOINT_BIN (priv->bin));
+  use_bottom_sheet = priv->presentation_mode == ADAP_DIALOG_BOTTOM_SHEET ||
                      breakpoint != NULL;
 
   g_object_ref (priv->child_breakpoint_bin);
@@ -467,27 +467,27 @@ update_presentation (AdwDialog *self)
   }
 
   if (priv->bottom_sheet) {
-    adw_bottom_sheet_set_sheet (priv->bottom_sheet, NULL);
+    adap_bottom_sheet_set_sheet (priv->bottom_sheet, NULL);
     priv->bottom_sheet = NULL;
   } else if (priv->floating_sheet) {
-    adw_floating_sheet_set_child (priv->floating_sheet, NULL);
+    adap_floating_sheet_set_child (priv->floating_sheet, NULL);
     priv->floating_sheet = NULL;
   }
 
-  adw_breakpoint_bin_set_child (ADW_BREAKPOINT_BIN (priv->bin), NULL);
+  adap_breakpoint_bin_set_child (ADAP_BREAKPOINT_BIN (priv->bin), NULL);
 
   if (use_bottom_sheet) {
-    priv->bottom_sheet = ADW_BOTTOM_SHEET (adw_bottom_sheet_new ());
+    priv->bottom_sheet = ADAP_BOTTOM_SHEET (adap_bottom_sheet_new ());
 
-    adw_bottom_sheet_set_min_natural_width (priv->bottom_sheet, 360);
+    adap_bottom_sheet_set_min_natural_width (priv->bottom_sheet, 360);
 
     if (!priv->first_map)
-      adw_bottom_sheet_set_open (priv->bottom_sheet, TRUE);
+      adap_bottom_sheet_set_open (priv->bottom_sheet, TRUE);
 
-    adw_bottom_sheet_set_show_drag_handle (priv->bottom_sheet, FALSE);
-    adw_bottom_sheet_set_sheet (priv->bottom_sheet, priv->child_breakpoint_bin);
-    adw_bottom_sheet_set_can_close (priv->bottom_sheet, priv->can_close);
-    adw_breakpoint_bin_set_child (ADW_BREAKPOINT_BIN (priv->bin),
+    adap_bottom_sheet_set_show_drag_handle (priv->bottom_sheet, FALSE);
+    adap_bottom_sheet_set_sheet (priv->bottom_sheet, priv->child_breakpoint_bin);
+    adap_bottom_sheet_set_can_close (priv->bottom_sheet, priv->can_close);
+    adap_breakpoint_bin_set_child (ADAP_BREAKPOINT_BIN (priv->bin),
                                   GTK_WIDGET (priv->bottom_sheet));
 
     g_signal_connect_swapped (priv->bottom_sheet, "closing",
@@ -508,14 +508,14 @@ update_presentation (AdwDialog *self)
       gtk_widget_remove_css_class (GTK_WIDGET (self), "portrait");
     }
   } else {
-    priv->floating_sheet = ADW_FLOATING_SHEET (adw_floating_sheet_new ());
+    priv->floating_sheet = ADAP_FLOATING_SHEET (adap_floating_sheet_new ());
 
     if (!priv->first_map)
-      adw_floating_sheet_set_open (priv->floating_sheet, TRUE);
+      adap_floating_sheet_set_open (priv->floating_sheet, TRUE);
 
-    adw_floating_sheet_set_child (priv->floating_sheet, priv->child_breakpoint_bin);
-    adw_floating_sheet_set_can_close (priv->floating_sheet, priv->can_close);
-    adw_breakpoint_bin_set_child (ADW_BREAKPOINT_BIN (priv->bin),
+    adap_floating_sheet_set_child (priv->floating_sheet, priv->child_breakpoint_bin);
+    adap_floating_sheet_set_can_close (priv->floating_sheet, priv->can_close);
+    adap_breakpoint_bin_set_child (ADAP_BREAKPOINT_BIN (priv->bin),
                                   GTK_WIDGET (priv->floating_sheet));
 
     g_signal_connect_swapped (priv->floating_sheet, "closing",
@@ -540,34 +540,34 @@ update_presentation (AdwDialog *self)
 }
 
 static void
-update_presentation_mode (AdwDialog *self)
+update_presentation_mode (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   if (priv->window)
     return;
 
   switch (priv->presentation_mode) {
-  case ADW_DIALOG_AUTO:
+  case ADAP_DIALOG_AUTO:
     g_assert (!priv->portrait_breakpoint);
     g_assert (!priv->landscape_breakpoint);
 
-    priv->landscape_breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse (LANDSCAPE_CONDITION));
-    adw_breakpoint_bin_add_breakpoint (ADW_BREAKPOINT_BIN (priv->bin),
+    priv->landscape_breakpoint = adap_breakpoint_new (adap_breakpoint_condition_parse (LANDSCAPE_CONDITION));
+    adap_breakpoint_bin_add_breakpoint (ADAP_BREAKPOINT_BIN (priv->bin),
                                        priv->landscape_breakpoint);
 
-    priv->portrait_breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse (PORTRAIT_CONDITION));
-    adw_breakpoint_bin_add_breakpoint (ADW_BREAKPOINT_BIN (priv->bin),
+    priv->portrait_breakpoint = adap_breakpoint_new (adap_breakpoint_condition_parse (PORTRAIT_CONDITION));
+    adap_breakpoint_bin_add_breakpoint (ADAP_BREAKPOINT_BIN (priv->bin),
                                        priv->portrait_breakpoint);
     break;
-  case ADW_DIALOG_FLOATING:
-  case ADW_DIALOG_BOTTOM_SHEET:
+  case ADAP_DIALOG_FLOATING:
+  case ADAP_DIALOG_BOTTOM_SHEET:
     if (priv->portrait_breakpoint) {
-      adw_breakpoint_bin_remove_breakpoint (ADW_BREAKPOINT_BIN (priv->bin),
+      adap_breakpoint_bin_remove_breakpoint (ADAP_BREAKPOINT_BIN (priv->bin),
                                             priv->portrait_breakpoint);
       priv->portrait_breakpoint = NULL;
 
-      adw_breakpoint_bin_remove_breakpoint (ADW_BREAKPOINT_BIN (priv->bin),
+      adap_breakpoint_bin_remove_breakpoint (ADAP_BREAKPOINT_BIN (priv->bin),
                                             priv->landscape_breakpoint);
       priv->landscape_breakpoint = NULL;
     }
@@ -581,9 +581,9 @@ update_presentation_mode (AdwDialog *self)
 }
 
 static void
-default_activate_cb (AdwDialog *self)
+default_activate_cb (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   if (priv->default_widget && gtk_widget_is_sensitive (priv->default_widget) &&
       (!priv->focus_widget || !gtk_widget_get_receives_default (priv->focus_widget)))
@@ -593,11 +593,11 @@ default_activate_cb (AdwDialog *self)
 }
 
 static gboolean
-window_close_request_cb (AdwDialog *self)
+window_close_request_cb (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
-  if (priv->force_closing || adw_dialog_close (self))
+  if (priv->force_closing || adap_dialog_close (self))
     return GDK_EVENT_PROPAGATE;
 
   return GDK_EVENT_STOP;
@@ -606,16 +606,16 @@ window_close_request_cb (AdwDialog *self)
 static gboolean
 maybe_close_cb (GtkWidget *widget,
                 GVariant  *args,
-                AdwDialog *self)
+                AdapDialog *self)
 {
-  return adw_dialog_close (self);
+  return adap_dialog_close (self);
 }
 
 static void
-present_as_window (AdwDialog *self,
+present_as_window (AdapDialog *self,
                    GtkWidget *parent)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
   GtkWidget *titlebar;
   GtkEventController *shortcut_controller;
   GtkShortcut *shortcut;
@@ -649,7 +649,7 @@ present_as_window (AdwDialog *self,
     }
   }
 
-  titlebar = adw_gizmo_new_with_role ("nothing", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+  titlebar = adap_gizmo_new_with_role ("nothing", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                       NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_visible (titlebar, FALSE);
   gtk_window_set_titlebar (GTK_WINDOW (priv->window), titlebar);
@@ -667,9 +667,9 @@ present_as_window (AdwDialog *self,
 }
 
 static gboolean
-activate_focus_cb (AdwDialog *self)
+activate_focus_cb (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
   GtkRoot *root;
 
   if (priv->window)
@@ -686,9 +686,9 @@ activate_focus_cb (AdwDialog *self)
 }
 
 static gboolean
-activate_default_cb (AdwDialog *self)
+activate_default_cb (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
   GtkRoot *root;
 
   if (priv->window)
@@ -740,10 +740,10 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
 }
 
 static gboolean
-open_inspector_cb (AdwDialog *self,
+open_inspector_cb (AdapDialog *self,
                    GVariant  *args)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
   GtkRoot *root;
   gboolean preselect_widget, ret;
 
@@ -763,9 +763,9 @@ open_inspector_cb (AdwDialog *self,
 }
 
 static gboolean
-ensure_focus (AdwDialog *self)
+ensure_focus (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
   GtkWidget *focus;
 
@@ -785,20 +785,20 @@ ensure_focus (AdwDialog *self)
     return gtk_widget_grab_focus (GTK_WIDGET (priv->bottom_sheet));
 
   if (priv->window)
-    return adw_widget_grab_focus_self (GTK_WIDGET (self));
+    return adap_widget_grab_focus_self (GTK_WIDGET (self));
 
   return TRUE;
 }
 
 static void
-adw_dialog_root (GtkWidget *widget)
+adap_dialog_root (GtkWidget *widget)
 {
-  AdwDialog *self = ADW_DIALOG (widget);
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialog *self = ADAP_DIALOG (widget);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
   GtkRoot *root;
   GtkWidget *parent;
 
-  GTK_WIDGET_CLASS (adw_dialog_parent_class)->root (widget);
+  GTK_WIDGET_CLASS (adap_dialog_parent_class)->root (widget);
 
   set_content_size (self, FALSE, -1, FALSE, -1);
 
@@ -809,8 +809,8 @@ adw_dialog_root (GtkWidget *widget)
 
   parent = gtk_widget_get_parent (widget);
 
-  if (parent != priv->window && !ADW_IS_DIALOG_HOST (parent)) {
-    g_error ("Trying to add %s %p to %s %p. Use adw_dialog_present() to show dialogs.",
+  if (parent != priv->window && !ADAP_IS_DIALOG_HOST (parent)) {
+    g_error ("Trying to add %s %p to %s %p. Use adap_dialog_present() to show dialogs.",
               G_OBJECT_TYPE_NAME (self), self,
               G_OBJECT_TYPE_NAME (parent), parent);
   }
@@ -820,23 +820,23 @@ adw_dialog_root (GtkWidget *widget)
 }
 
 static void
-adw_dialog_unroot (GtkWidget *widget)
+adap_dialog_unroot (GtkWidget *widget)
 {
   GtkRoot *root = gtk_widget_get_root (widget);
 
   if (GTK_IS_WINDOW (root))
     g_signal_handlers_disconnect_by_func (root, window_notify_focus_cb, widget);
 
-  GTK_WIDGET_CLASS (adw_dialog_parent_class)->unroot (widget);
+  GTK_WIDGET_CLASS (adap_dialog_parent_class)->unroot (widget);
 }
 
 static void
-adw_dialog_map (GtkWidget *widget)
+adap_dialog_map (GtkWidget *widget)
 {
-  AdwDialog *self = ADW_DIALOG (widget);
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialog *self = ADAP_DIALOG (widget);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
-  GTK_WIDGET_CLASS (adw_dialog_parent_class)->map (widget);
+  GTK_WIDGET_CLASS (adap_dialog_parent_class)->map (widget);
 
   if (priv->window)
     return;
@@ -847,20 +847,20 @@ adw_dialog_map (GtkWidget *widget)
 }
 
 static gboolean
-adw_dialog_focus (GtkWidget        *widget,
+adap_dialog_focus (GtkWidget        *widget,
                   GtkDirectionType  direction)
 {
-  if (adw_widget_focus_child (widget, direction))
+  if (adap_widget_focus_child (widget, direction))
     return TRUE;
 
-  return ensure_focus (ADW_DIALOG (widget));
+  return ensure_focus (ADAP_DIALOG (widget));
 }
 
 static gboolean
-adw_dialog_grab_focus (GtkWidget *widget)
+adap_dialog_grab_focus (GtkWidget *widget)
 {
-  AdwDialog *self = ADW_DIALOG (widget);
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialog *self = ADAP_DIALOG (widget);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   if (priv->focus_widget)
     return gtk_widget_grab_focus (priv->focus_widget);
@@ -868,14 +868,14 @@ adw_dialog_grab_focus (GtkWidget *widget)
   GTK_WIDGET_GET_CLASS (widget)->move_focus (GTK_WIDGET (widget),
                                              GTK_DIR_TAB_FORWARD);
 
-  return ensure_focus (ADW_DIALOG (widget));
+  return ensure_focus (ADAP_DIALOG (widget));
 }
 
 static void
-adw_dialog_dispose (GObject *object)
+adap_dialog_dispose (GObject *object)
 {
-  AdwDialog *self = ADW_DIALOG (object);
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialog *self = ADAP_DIALOG (object);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   if (priv->focus_widget) {
     g_signal_handlers_disconnect_by_func (priv->focus_widget,
@@ -920,58 +920,58 @@ adw_dialog_dispose (GObject *object)
     priv->child = NULL;
   }
 
-  G_OBJECT_CLASS (adw_dialog_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_dialog_parent_class)->dispose (object);
 }
 
 static void
-adw_dialog_finalize (GObject *object)
+adap_dialog_finalize (GObject *object)
 {
-  AdwDialog *self = ADW_DIALOG (object);
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialog *self = ADAP_DIALOG (object);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   g_free (priv->title);
 
-  G_OBJECT_CLASS (adw_dialog_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_dialog_parent_class)->finalize (object);
 }
 
 static void
-adw_dialog_get_property (GObject    *object,
+adap_dialog_get_property (GObject    *object,
                          guint       prop_id,
                          GValue     *value,
                          GParamSpec *pspec)
 {
-  AdwDialog *self = ADW_DIALOG (object);
+  AdapDialog *self = ADAP_DIALOG (object);
 
   switch (prop_id) {
   case PROP_CHILD:
-    g_value_set_object (value, adw_dialog_get_child (self));
+    g_value_set_object (value, adap_dialog_get_child (self));
     break;
   case PROP_TITLE:
-    g_value_set_string (value, adw_dialog_get_title (self));
+    g_value_set_string (value, adap_dialog_get_title (self));
     break;
   case PROP_CAN_CLOSE:
-    g_value_set_boolean (value, adw_dialog_get_can_close (self));
+    g_value_set_boolean (value, adap_dialog_get_can_close (self));
     break;
   case PROP_CONTENT_WIDTH:
-    g_value_set_int (value, adw_dialog_get_content_width (self));
+    g_value_set_int (value, adap_dialog_get_content_width (self));
     break;
   case PROP_CONTENT_HEIGHT:
-    g_value_set_int (value, adw_dialog_get_content_height (self));
+    g_value_set_int (value, adap_dialog_get_content_height (self));
     break;
   case PROP_FOLLOWS_CONTENT_SIZE:
-    g_value_set_boolean (value, adw_dialog_get_follows_content_size (self));
+    g_value_set_boolean (value, adap_dialog_get_follows_content_size (self));
     break;
   case PROP_PRESENTATION_MODE:
-    g_value_set_enum (value, adw_dialog_get_presentation_mode (self));
+    g_value_set_enum (value, adap_dialog_get_presentation_mode (self));
     break;
   case PROP_FOCUS_WIDGET:
-    g_value_set_object (value, adw_dialog_get_focus (self));
+    g_value_set_object (value, adap_dialog_get_focus (self));
     break;
   case PROP_DEFAULT_WIDGET:
-    g_value_set_object (value, adw_dialog_get_default_widget (self));
+    g_value_set_object (value, adap_dialog_get_default_widget (self));
     break;
   case PROP_CURRENT_BREAKPOINT:
-    g_value_set_object (value, adw_dialog_get_current_breakpoint (self));
+    g_value_set_object (value, adap_dialog_get_current_breakpoint (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -979,40 +979,40 @@ adw_dialog_get_property (GObject    *object,
 }
 
 static void
-adw_dialog_set_property (GObject      *object,
+adap_dialog_set_property (GObject      *object,
                          guint         prop_id,
                          const GValue *value,
                          GParamSpec   *pspec)
 {
-  AdwDialog *self = ADW_DIALOG (object);
+  AdapDialog *self = ADAP_DIALOG (object);
 
   switch (prop_id) {
   case PROP_CHILD:
-    adw_dialog_set_child (self, g_value_get_object (value));
+    adap_dialog_set_child (self, g_value_get_object (value));
     break;
   case PROP_TITLE:
-    adw_dialog_set_title (self, g_value_get_string (value));
+    adap_dialog_set_title (self, g_value_get_string (value));
     break;
   case PROP_CAN_CLOSE:
-    adw_dialog_set_can_close (self, g_value_get_boolean (value));
+    adap_dialog_set_can_close (self, g_value_get_boolean (value));
     break;
   case PROP_CONTENT_WIDTH:
-    adw_dialog_set_content_width (self, g_value_get_int (value));
+    adap_dialog_set_content_width (self, g_value_get_int (value));
     break;
   case PROP_CONTENT_HEIGHT:
-    adw_dialog_set_content_height (self, g_value_get_int (value));
+    adap_dialog_set_content_height (self, g_value_get_int (value));
     break;
   case PROP_PRESENTATION_MODE:
-    adw_dialog_set_presentation_mode (self, g_value_get_enum (value));
+    adap_dialog_set_presentation_mode (self, g_value_get_enum (value));
     break;
   case PROP_FOCUS_WIDGET:
-    adw_dialog_set_focus (self, g_value_get_object (value));
+    adap_dialog_set_focus (self, g_value_get_object (value));
     break;
   case PROP_DEFAULT_WIDGET:
-    adw_dialog_set_default_widget (self, g_value_get_object (value));
+    adap_dialog_set_default_widget (self, g_value_get_object (value));
     break;
   case PROP_FOLLOWS_CONTENT_SIZE:
-    adw_dialog_set_follows_content_size (self, g_value_get_boolean (value));
+    adap_dialog_set_follows_content_size (self, g_value_get_boolean (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1020,28 +1020,28 @@ adw_dialog_set_property (GObject      *object,
 }
 
 static void
-adw_dialog_class_init (AdwDialogClass *klass)
+adap_dialog_class_init (AdapDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_dialog_dispose;
-  object_class->finalize = adw_dialog_finalize;
-  object_class->get_property = adw_dialog_get_property;
-  object_class->set_property = adw_dialog_set_property;
+  object_class->dispose = adap_dialog_dispose;
+  object_class->finalize = adap_dialog_finalize;
+  object_class->get_property = adap_dialog_get_property;
+  object_class->set_property = adap_dialog_set_property;
 
-  widget_class->root = adw_dialog_root;
-  widget_class->unroot = adw_dialog_unroot;
-  widget_class->map = adw_dialog_map;
-  widget_class->focus = adw_dialog_focus;
-  widget_class->grab_focus = adw_dialog_grab_focus;
-  widget_class->contains = adw_widget_contains_passthrough;
-  widget_class->compute_expand = adw_widget_compute_expand;
+  widget_class->root = adap_dialog_root;
+  widget_class->unroot = adap_dialog_unroot;
+  widget_class->map = adap_dialog_map;
+  widget_class->focus = adap_dialog_focus;
+  widget_class->grab_focus = adap_dialog_grab_focus;
+  widget_class->contains = adap_widget_contains_passthrough;
+  widget_class->compute_expand = adap_widget_compute_expand;
 
   /**
-   * AdwDialog:child: (attributes org.gtk.Property.get=adw_dialog_get_child org.gtk.Property.set=adw_dialog_set_child)
+   * AdapDialog:child: (attributes org.gtk.Property.get=adap_dialog_get_child org.gtk.Property.set=adap_dialog_set_child)
    *
-   * The child widget of the `AdwDialog`.
+   * The child widget of the `AdapDialog`.
    *
    * Since: 1.5
    */
@@ -1051,7 +1051,7 @@ adw_dialog_class_init (AdwDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwDialog:title: (attributes org.gtk.Property.get=adw_dialog_get_title org.gtk.Property.set=adw_dialog_set_title)
+   * AdapDialog:title: (attributes org.gtk.Property.get=adap_dialog_get_title org.gtk.Property.set=adap_dialog_set_title)
    *
    * The title of the dialog.
    *
@@ -1063,7 +1063,7 @@ adw_dialog_class_init (AdwDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwDialog:can-close: (attributes org.gtk.Property.get=adw_dialog_get_can_close org.gtk.Property.set=adw_dialog_set_can_close)
+   * AdapDialog:can-close: (attributes org.gtk.Property.get=adap_dialog_get_can_close org.gtk.Property.set=adap_dialog_set_can_close)
    *
    * Whether the dialog can be closed.
    *
@@ -1080,7 +1080,7 @@ adw_dialog_class_init (AdwDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwDialog:content-width: (attributes org.gtk.Property.get=adw_dialog_get_content_width org.gtk.Property.set=adw_dialog_set_content_width)
+   * AdapDialog:content-width: (attributes org.gtk.Property.get=adap_dialog_get_content_width org.gtk.Property.set=adap_dialog_set_content_width)
    *
    * The width of the dialog's contents.
    *
@@ -1096,7 +1096,7 @@ adw_dialog_class_init (AdwDialogClass *klass)
                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwDialog:content-height: (attributes org.gtk.Property.get=adw_dialog_get_content_height org.gtk.Property.set=adw_dialog_set_content_height)
+   * AdapDialog:content-height: (attributes org.gtk.Property.get=adap_dialog_get_content_height org.gtk.Property.set=adap_dialog_set_content_height)
    *
    * The height of the dialog's contents.
    *
@@ -1112,7 +1112,7 @@ adw_dialog_class_init (AdwDialogClass *klass)
                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwDialog:follows-content-size: (attributes org.gtk.Property.get=adw_dialog_get_follows_content_size org.gtk.Property.set=adw_dialog_set_follows_content_size)
+   * AdapDialog:follows-content-size: (attributes org.gtk.Property.get=adap_dialog_get_follows_content_size org.gtk.Property.set=adap_dialog_set_follows_content_size)
    *
    * Whether to size content automatically.
    *
@@ -1130,15 +1130,15 @@ adw_dialog_class_init (AdwDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwDialog:presentation-mode: (attributes org.gtk.Property.get=adw_dialog_get_presentation_mode org.gtk.Property.set=adw_dialog_set_presentation_mode)
+   * AdapDialog:presentation-mode: (attributes org.gtk.Property.get=adap_dialog_get_presentation_mode org.gtk.Property.set=adap_dialog_set_presentation_mode)
    *
    * The dialog's presentation mode.
    *
-   * When set to `ADW_DIALOG_AUTO`, the dialog appears as a bottom sheet when
+   * When set to `ADAP_DIALOG_AUTO`, the dialog appears as a bottom sheet when
    * the following condition is met: `max-width: 450px or max-height: 360px`,
    * and as a floating window otherwise.
    *
-   * Set it to `ADW_DIALOG_FLOATING` or `ADW_DIALOG_BOTTOM_SHEET` to always
+   * Set it to `ADAP_DIALOG_FLOATING` or `ADAP_DIALOG_BOTTOM_SHEET` to always
    * present it a floating window or a bottom sheet respectively, regardless of
    * available size.
    *
@@ -1148,12 +1148,12 @@ adw_dialog_class_init (AdwDialogClass *klass)
    */
   props[PROP_PRESENTATION_MODE] =
     g_param_spec_enum ("presentation-mode", NULL, NULL,
-                       ADW_TYPE_DIALOG_PRESENTATION_MODE,
-                       ADW_DIALOG_AUTO,
+                       ADAP_TYPE_DIALOG_PRESENTATION_MODE,
+                       ADAP_DIALOG_AUTO,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwDialog:focus-widget: (attributes org.gtk.Property.get=adw_dialog_get_focus org.gtk.Property.set=adw_dialog_set_focus)
+   * AdapDialog:focus-widget: (attributes org.gtk.Property.get=adap_dialog_get_focus org.gtk.Property.set=adap_dialog_set_focus)
    *
    * The focus widget.
    *
@@ -1165,7 +1165,7 @@ adw_dialog_class_init (AdwDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwDialog:default-widget: (attributes org.gtk.Property.get=adw_dialog_get_default_widget org.gtk.Property.set=adw_dialog_set_default_widget)
+   * AdapDialog:default-widget: (attributes org.gtk.Property.get=adap_dialog_get_default_widget org.gtk.Property.set=adap_dialog_set_default_widget)
    *
    * The default widget.
    *
@@ -1179,7 +1179,7 @@ adw_dialog_class_init (AdwDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwDialog:current-breakpoint: (attributes org.gtk.Property.get=adw_dialog_get_current_breakpoint)
+   * AdapDialog:current-breakpoint: (attributes org.gtk.Property.get=adap_dialog_get_current_breakpoint)
    *
    * The current breakpoint.
    *
@@ -1187,13 +1187,13 @@ adw_dialog_class_init (AdwDialogClass *klass)
    */
   props[PROP_CURRENT_BREAKPOINT] =
     g_param_spec_object ("current-breakpoint", NULL, NULL,
-                         ADW_TYPE_BREAKPOINT,
+                         ADAP_TYPE_BREAKPOINT,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
-   * AdwDialog::close-attempt:
+   * AdapDialog::close-attempt:
    * @self: a dialog
    *
    * Emitted when the close button or shortcut is used, or
@@ -1206,17 +1206,17 @@ adw_dialog_class_init (AdwDialogClass *klass)
     g_signal_new ("close-attempt",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (AdwDialogClass, close_attempt),
+                  G_STRUCT_OFFSET (AdapDialogClass, close_attempt),
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_CLOSE_ATTEMPT],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   /**
-   * AdwDialog::closed:
+   * AdapDialog::closed:
    * @self: a dialog
    *
    * Emitted when the dialog is successfully closed.
@@ -1227,14 +1227,14 @@ adw_dialog_class_init (AdwDialogClass *klass)
     g_signal_new ("closed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (AdwDialogClass, closed),
+                  G_STRUCT_OFFSET (AdapDialogClass, closed),
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_CLOSED],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   gtk_widget_class_install_action (widget_class, "default.activate", NULL,
                                    (GtkWidgetActionActivateFunc) default_activate_cb);
@@ -1267,7 +1267,7 @@ adw_dialog_class_init (AdwDialogClass *klass)
                                 (GtkShortcutFunc) open_inspector_cb, "b", TRUE);
 
   gtk_widget_class_add_binding (widget_class, GDK_KEY_Escape, 0,
-                                (GtkShortcutFunc) adw_dialog_close, NULL);
+                                (GtkShortcutFunc) adap_dialog_close, NULL);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "dialog");
@@ -1275,9 +1275,9 @@ adw_dialog_class_init (AdwDialogClass *klass)
 }
 
 static void
-adw_dialog_init (AdwDialog *self)
+adap_dialog_init (AdapDialog *self)
 {
-  AdwDialogPrivate *priv = adw_dialog_get_instance_private (self);
+  AdapDialogPrivate *priv = adap_dialog_get_instance_private (self);
 
   priv->first_map = TRUE;
   priv->title = g_strdup ("");
@@ -1285,10 +1285,10 @@ adw_dialog_init (AdwDialog *self)
   priv->content_width = -1;
   priv->content_height = -1;
   priv->follows_content_size = FALSE;
-  priv->presentation_mode = ADW_DIALOG_AUTO;
+  priv->presentation_mode = ADAP_DIALOG_AUTO;
 
-  priv->child_breakpoint_bin = adw_breakpoint_bin_new ();
-  adw_breakpoint_bin_set_warning_widget (ADW_BREAKPOINT_BIN (priv->child_breakpoint_bin),
+  priv->child_breakpoint_bin = adap_breakpoint_bin_new ();
+  adap_breakpoint_bin_set_warning_widget (ADAP_BREAKPOINT_BIN (priv->child_breakpoint_bin),
                                          GTK_WIDGET (self));
   g_object_bind_property (self, "width-request",
                           priv->child_breakpoint_bin, "width-request",
@@ -1303,45 +1303,45 @@ adw_dialog_init (AdwDialog *self)
 }
 
 static void
-adw_dialog_buildable_add_child (GtkBuildable *buildable,
+adap_dialog_buildable_add_child (GtkBuildable *buildable,
                                 GtkBuilder   *builder,
                                 GObject      *child,
                                 const char   *type)
 {
   if (GTK_IS_WIDGET (child))
-    adw_dialog_set_child (ADW_DIALOG (buildable), GTK_WIDGET (child));
-  else if (ADW_IS_BREAKPOINT (child))
-    adw_dialog_add_breakpoint (ADW_DIALOG (buildable),
-                               g_object_ref (ADW_BREAKPOINT (child)));
+    adap_dialog_set_child (ADAP_DIALOG (buildable), GTK_WIDGET (child));
+  else if (ADAP_IS_BREAKPOINT (child))
+    adap_dialog_add_breakpoint (ADAP_DIALOG (buildable),
+                               g_object_ref (ADAP_BREAKPOINT (child)));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_dialog_buildable_init (GtkBuildableIface *iface)
+adap_dialog_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_dialog_buildable_add_child;
+  iface->add_child = adap_dialog_buildable_add_child;
 }
 
 /**
- * adw_dialog_new:
+ * adap_dialog_new:
  *
- * Creates a new `AdwDialog`.
+ * Creates a new `AdapDialog`.
  *
- * Returns: the new created `AdwDialog`
+ * Returns: the new created `AdapDialog`
  *
  * Since: 1.5
  */
-AdwDialog *
-adw_dialog_new (void)
+AdapDialog *
+adap_dialog_new (void)
 {
-  return g_object_new (ADW_TYPE_DIALOG, NULL);
+  return g_object_new (ADAP_TYPE_DIALOG, NULL);
 }
 
 /**
- * adw_dialog_get_child: (attributes org.gtk.Method.get_property=child)
+ * adap_dialog_get_child: (attributes org.gtk.Method.get_property=child)
  * @self: a dialog
  *
  * Gets the child widget of @self.
@@ -1351,19 +1351,19 @@ adw_dialog_new (void)
  * Since: 1.5
  */
 GtkWidget *
-adw_dialog_get_child (AdwDialog *self)
+adap_dialog_get_child (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), NULL);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   return priv->child;
 }
 
 /**
- * adw_dialog_set_child: (attributes org.gtk.Method.set_property=child)
+ * adap_dialog_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a dialog
  * @child: (nullable): the child widget
  *
@@ -1372,31 +1372,31 @@ adw_dialog_get_child (AdwDialog *self)
  * Since: 1.5
  */
 void
-adw_dialog_set_child (AdwDialog *self,
+adap_dialog_set_child (AdapDialog *self,
                       GtkWidget *child)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
   if (child)
     g_return_if_fail (gtk_widget_get_parent (child) == NULL);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   if (priv->child == child)
     return;
 
   priv->child = child;
 
-  adw_breakpoint_bin_set_child (ADW_BREAKPOINT_BIN (priv->child_breakpoint_bin), child);
+  adap_breakpoint_bin_set_child (ADAP_BREAKPOINT_BIN (priv->child_breakpoint_bin), child);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CHILD]);
 }
 
 /**
- * adw_dialog_get_title: (attributes org.gtk.Method.get_property=title)
+ * adap_dialog_get_title: (attributes org.gtk.Method.get_property=title)
  * @self: a dialog
  *
  * Gets the title of @self.
@@ -1406,19 +1406,19 @@ adw_dialog_set_child (AdwDialog *self,
  * Since: 1.5
  */
 const char *
-adw_dialog_get_title (AdwDialog *self)
+adap_dialog_get_title (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), NULL);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   return priv->title;
 }
 
 /**
- * adw_dialog_set_title: (attributes org.gtk.Method.set_property=title)
+ * adap_dialog_set_title: (attributes org.gtk.Method.set_property=title)
  * @self: a dialog
  * @title: (transfer none): the new title
  *
@@ -1427,14 +1427,14 @@ adw_dialog_get_title (AdwDialog *self)
  * Since: 1.5
  */
 void
-adw_dialog_set_title (AdwDialog  *self,
+adap_dialog_set_title (AdapDialog  *self,
                       const char *title)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   if (!g_set_str (&priv->title, title))
     return;
@@ -1447,7 +1447,7 @@ adw_dialog_set_title (AdwDialog  *self,
 }
 
 /**
- * adw_dialog_get_can_close: (attributes org.gtk.Method.get_property=can-close)
+ * adap_dialog_get_can_close: (attributes org.gtk.Method.get_property=can-close)
  * @self: a dialog
  *
  * Gets whether @self can be closed.
@@ -1457,19 +1457,19 @@ adw_dialog_set_title (AdwDialog  *self,
  * Since: 1.5
  */
 gboolean
-adw_dialog_get_can_close (AdwDialog *self)
+adap_dialog_get_can_close (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), FALSE);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   return priv->can_close;
 }
 
 /**
- * adw_dialog_set_can_close: (attributes org.gtk.Method.set_property=can-close)
+ * adap_dialog_set_can_close: (attributes org.gtk.Method.set_property=can-close)
  * @self: a dialog
  * @can_close: whether to allow closing
  *
@@ -1483,14 +1483,14 @@ adw_dialog_get_can_close (AdwDialog *self)
  * Since: 1.5
  */
 void
-adw_dialog_set_can_close (AdwDialog *self,
+adap_dialog_set_can_close (AdapDialog *self,
                           gboolean   can_close)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   can_close = !!can_close;
 
@@ -1500,16 +1500,16 @@ adw_dialog_set_can_close (AdwDialog *self,
   priv->can_close = can_close;
 
   if (priv->bottom_sheet)
-    adw_bottom_sheet_set_can_close (priv->bottom_sheet, can_close);
+    adap_bottom_sheet_set_can_close (priv->bottom_sheet, can_close);
 
   if (priv->floating_sheet)
-    adw_floating_sheet_set_can_close (priv->floating_sheet, can_close);
+    adap_floating_sheet_set_can_close (priv->floating_sheet, can_close);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CAN_CLOSE]);
 }
 
 /**
- * adw_dialog_get_content_width: (attributes org.gtk.Method.get_property=content-width)
+ * adap_dialog_get_content_width: (attributes org.gtk.Method.get_property=content-width)
  * @self: a dialog
  *
  * Gets the width of the dialog's contents.
@@ -1519,19 +1519,19 @@ adw_dialog_set_can_close (AdwDialog *self,
  * Since: 1.5
  */
 int
-adw_dialog_get_content_width (AdwDialog *self)
+adap_dialog_get_content_width (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), 0);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), 0);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   return priv->content_width;
 }
 
 /**
- * adw_dialog_set_content_width: (attributes org.gtk.Method.set_property=content-width)
+ * adap_dialog_set_content_width: (attributes org.gtk.Method.set_property=content-width)
  * @self: a dialog
  * @content_width: the content width
  *
@@ -1544,22 +1544,22 @@ adw_dialog_get_content_width (AdwDialog *self)
  * Since: 1.5
  */
 void
-adw_dialog_set_content_width (AdwDialog *self,
+adap_dialog_set_content_width (AdapDialog *self,
                               int        content_width)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
   g_return_if_fail (content_width >= -1);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   priv->content_width_set = TRUE;
   set_content_size (self, TRUE, content_width, FALSE, -1);
 }
 
 /**
- * adw_dialog_get_content_height: (attributes org.gtk.Method.get_property=content-height)
+ * adap_dialog_get_content_height: (attributes org.gtk.Method.get_property=content-height)
  * @self: a dialog
  *
  * Gets the height of the dialog's contents.
@@ -1569,19 +1569,19 @@ adw_dialog_set_content_width (AdwDialog *self,
  * Since: 1.5
  */
 int
-adw_dialog_get_content_height (AdwDialog *self)
+adap_dialog_get_content_height (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), 0);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), 0);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   return priv->content_height;
 }
 
 /**
- * adw_dialog_set_content_height: (attributes org.gtk.Method.set_property=content-height)
+ * adap_dialog_set_content_height: (attributes org.gtk.Method.set_property=content-height)
  * @self: a dialog
  * @content_height: the content height
  *
@@ -1594,22 +1594,22 @@ adw_dialog_get_content_height (AdwDialog *self)
  * Since: 1.5
  */
 void
-adw_dialog_set_content_height (AdwDialog *self,
+adap_dialog_set_content_height (AdapDialog *self,
                                int        content_height)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
   g_return_if_fail (content_height >= -1);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   priv->content_height_set = TRUE;
   set_content_size (self, FALSE, -1, TRUE, content_height);
 }
 
 /**
- * adw_dialog_get_follows_content_size: (attributes org.gtk.Method.get_property=follows-content-size)
+ * adap_dialog_get_follows_content_size: (attributes org.gtk.Method.get_property=follows-content-size)
  * @self: a dialog
  *
  * Gets whether to size content of @self automatically.
@@ -1619,19 +1619,19 @@ adw_dialog_set_content_height (AdwDialog *self,
  * Since: 1.5
  */
 gboolean
-adw_dialog_get_follows_content_size (AdwDialog *self)
+adap_dialog_get_follows_content_size (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), FALSE);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   return priv->follows_content_size;
 }
 
 /**
- * adw_dialog_set_follows_content_size: (attributes org.gtk.Method.set_property=follows-content-size)
+ * adap_dialog_set_follows_content_size: (attributes org.gtk.Method.set_property=follows-content-size)
  * @self: a dialog
  * @follows_content_size: whether to size content automatically
  *
@@ -1646,14 +1646,14 @@ adw_dialog_get_follows_content_size (AdwDialog *self)
  * Since: 1.5
  */
 void
-adw_dialog_set_follows_content_size (AdwDialog *self,
+adap_dialog_set_follows_content_size (AdapDialog *self,
                                      gboolean   follows_content_size)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   follows_content_size = !!follows_content_size;
 
@@ -1668,7 +1668,7 @@ adw_dialog_set_follows_content_size (AdwDialog *self,
 }
 
 /**
- * adw_dialog_get_presentation_mode: (attributes org.gtk.Method.get_property=presentation-mode)
+ * adap_dialog_get_presentation_mode: (attributes org.gtk.Method.get_property=presentation-mode)
  * @self: a dialog
  *
  * Gets presentation mode for @self.
@@ -1677,30 +1677,30 @@ adw_dialog_set_follows_content_size (AdwDialog *self,
  *
  * Since: 1.5
  */
-AdwDialogPresentationMode
-adw_dialog_get_presentation_mode (AdwDialog *self)
+AdapDialogPresentationMode
+adap_dialog_get_presentation_mode (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), ADW_DIALOG_AUTO);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), ADAP_DIALOG_AUTO);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   return priv->presentation_mode;
 }
 
 /**
- * adw_dialog_set_presentation_mode: (attributes org.gtk.Method.set_property=presentation-mode)
+ * adap_dialog_set_presentation_mode: (attributes org.gtk.Method.set_property=presentation-mode)
  * @self: a dialog
  * @presentation_mode: the new presentation mode
  *
  * Sets presentation mode for @self.
  *
- * When set to `ADW_DIALOG_AUTO`, the dialog appears as a bottom sheet when the
+ * When set to `ADAP_DIALOG_AUTO`, the dialog appears as a bottom sheet when the
  * following condition is met: `max-width: 450px or max-height: 360px`, and as a
  * floating window otherwise.
  *
- * Set it to `ADW_DIALOG_FLOATING` or `ADW_DIALOG_BOTTOM_SHEET` to always
+ * Set it to `ADAP_DIALOG_FLOATING` or `ADAP_DIALOG_BOTTOM_SHEET` to always
  * present it a floating window or a bottom sheet respectively, regardless of
  * available size.
  *
@@ -1709,16 +1709,16 @@ adw_dialog_get_presentation_mode (AdwDialog *self)
  * Since: 1.5
  */
 void
-adw_dialog_set_presentation_mode (AdwDialog                 *self,
-                                  AdwDialogPresentationMode  presentation_mode)
+adap_dialog_set_presentation_mode (AdapDialog                 *self,
+                                  AdapDialogPresentationMode  presentation_mode)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
-  g_return_if_fail (presentation_mode >= ADW_DIALOG_AUTO);
-  g_return_if_fail (presentation_mode <= ADW_DIALOG_BOTTOM_SHEET);
+  g_return_if_fail (ADAP_IS_DIALOG (self));
+  g_return_if_fail (presentation_mode >= ADAP_DIALOG_AUTO);
+  g_return_if_fail (presentation_mode <= ADAP_DIALOG_BOTTOM_SHEET);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   if (priv->presentation_mode == presentation_mode)
     return;
@@ -1731,7 +1731,7 @@ adw_dialog_set_presentation_mode (AdwDialog                 *self,
 }
 
 /**
- * adw_dialog_get_focus: (attributes org.gtk.Method.get_property=focus-widget)
+ * adap_dialog_get_focus: (attributes org.gtk.Method.get_property=focus-widget)
  * @self: a dialog
  *
  * Gets the focus widget for @self.
@@ -1741,19 +1741,19 @@ adw_dialog_set_presentation_mode (AdwDialog                 *self,
  * Since: 1.5
  */
 GtkWidget *
-adw_dialog_get_focus (AdwDialog *self)
+adap_dialog_get_focus (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), NULL);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   return priv->focus_widget;
 }
 
 /**
- * adw_dialog_set_focus: (attributes org.gtk.Method.set_property=focus-widget)
+ * adap_dialog_set_focus: (attributes org.gtk.Method.set_property=focus-widget)
  * @self: a dialog
  * @focus: (nullable) (transfer none): the focus widget
  *
@@ -1769,16 +1769,16 @@ adw_dialog_get_focus (AdwDialog *self)
  * Since: 1.5
  */
 void
-adw_dialog_set_focus (AdwDialog *self,
+adap_dialog_set_focus (AdapDialog *self,
                       GtkWidget *focus)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
   GtkRoot *root;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
   g_return_if_fail (focus == NULL || GTK_IS_WIDGET (focus));
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   if (!gtk_widget_get_mapped (GTK_WIDGET (self)) || priv->tick_cb_id != 0) {
     set_focus (self, focus);
@@ -1803,7 +1803,7 @@ adw_dialog_set_focus (AdwDialog *self,
 }
 
 /**
- * adw_dialog_get_default_widget: (attributes org.gtk.Method.get_property=default-widget)
+ * adap_dialog_get_default_widget: (attributes org.gtk.Method.get_property=default-widget)
  * @self: a dialog
  *
  * Gets the default widget for @self.
@@ -1813,19 +1813,19 @@ adw_dialog_set_focus (AdwDialog *self,
  * Since: 1.5
  */
 GtkWidget *
-adw_dialog_get_default_widget (AdwDialog *self)
+adap_dialog_get_default_widget (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), NULL);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   return priv->default_widget;
 }
 
 /**
- * adw_dialog_set_default_widget: (attributes org.gtk.Method.set_property=default-widget)
+ * adap_dialog_set_default_widget: (attributes org.gtk.Method.set_property=default-widget)
  * @self: a dialog
  * @default_widget: (nullable) (transfer none): the default widget
  *
@@ -1836,15 +1836,15 @@ adw_dialog_get_default_widget (AdwDialog *self)
  * Since: 1.5
  */
 void
-adw_dialog_set_default_widget (AdwDialog *self,
+adap_dialog_set_default_widget (AdapDialog *self,
                                GtkWidget *default_widget)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
   g_return_if_fail (default_widget == NULL || GTK_IS_WIDGET (default_widget));
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   if (priv->default_widget == default_widget)
     return;
@@ -1885,7 +1885,7 @@ adw_dialog_set_default_widget (AdwDialog *self,
 }
 
 /**
- * adw_dialog_close:
+ * adap_dialog_close:
  * @self: a dialog
  *
  * Attempts to close @self.
@@ -1900,13 +1900,13 @@ adw_dialog_set_default_widget (AdwDialog *self,
  * Since: 1.5
  */
 gboolean
-adw_dialog_close (AdwDialog *self)
+adap_dialog_close (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), FALSE);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   if (!priv->can_close) {
   g_print ("b\n");
@@ -1925,14 +1925,14 @@ adw_dialog_close (AdwDialog *self)
 
     gtk_window_close (GTK_WINDOW (window));
   } else {
-    adw_dialog_force_close (self);
+    adap_dialog_force_close (self);
   }
 
   return TRUE;
 }
 
 /**
- * adw_dialog_force_close:
+ * adap_dialog_force_close:
  * @self: a dialog
  *
  * Closes @self.
@@ -1943,22 +1943,22 @@ adw_dialog_close (AdwDialog *self)
  * Since: 1.5
  */
 void
-adw_dialog_force_close (AdwDialog *self)
+adap_dialog_force_close (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   g_object_ref (self);
 
   priv->force_closing = TRUE;
 
   if (priv->bottom_sheet)
-    adw_bottom_sheet_set_open (priv->bottom_sheet, FALSE);
+    adap_bottom_sheet_set_open (priv->bottom_sheet, FALSE);
   else if (priv->floating_sheet)
-    adw_floating_sheet_set_open (priv->floating_sheet, FALSE);
+    adap_floating_sheet_set_open (priv->floating_sheet, FALSE);
   else if (priv->window)
     gtk_window_close (GTK_WINDOW (priv->window));
 
@@ -1966,7 +1966,7 @@ adw_dialog_force_close (AdwDialog *self)
 }
 
 /**
- * adw_dialog_add_breakpoint:
+ * adap_dialog_add_breakpoint:
  * @self: a dialog
  * @breakpoint: (transfer full): the breakpoint to add
  *
@@ -1975,23 +1975,23 @@ adw_dialog_force_close (AdwDialog *self)
  * Since: 1.5
  */
 void
-adw_dialog_add_breakpoint (AdwDialog     *self,
-                           AdwBreakpoint *breakpoint)
+adap_dialog_add_breakpoint (AdapDialog     *self,
+                           AdapBreakpoint *breakpoint)
 {
-  AdwDialogPrivate *priv;
-  AdwBreakpointBin *bin;
+  AdapDialogPrivate *priv;
+  AdapBreakpointBin *bin;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
-  g_return_if_fail (ADW_IS_BREAKPOINT (breakpoint));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_BREAKPOINT (breakpoint));
 
-  priv = adw_dialog_get_instance_private (self);
-  bin = ADW_BREAKPOINT_BIN (priv->child_breakpoint_bin);
+  priv = adap_dialog_get_instance_private (self);
+  bin = ADAP_BREAKPOINT_BIN (priv->child_breakpoint_bin);
 
-  adw_breakpoint_bin_add_breakpoint (bin, breakpoint);
+  adap_breakpoint_bin_add_breakpoint (bin, breakpoint);
 }
 
 /**
- * adw_dialog_get_current_breakpoint: (attributes org.gtk.Method.get_property=current-breakpoint)
+ * adap_dialog_get_current_breakpoint: (attributes org.gtk.Method.get_property=current-breakpoint)
  * @self: a dialog
  *
  * Gets the current breakpoint.
@@ -2000,44 +2000,44 @@ adw_dialog_add_breakpoint (AdwDialog     *self,
  *
  * Since: 1.5
  */
-AdwBreakpoint *
-adw_dialog_get_current_breakpoint (AdwDialog *self)
+AdapBreakpoint *
+adap_dialog_get_current_breakpoint (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
-  AdwBreakpointBin *bin;
+  AdapDialogPrivate *priv;
+  AdapBreakpointBin *bin;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), NULL);
 
-  priv = adw_dialog_get_instance_private (self);
-  bin = ADW_BREAKPOINT_BIN (priv->child_breakpoint_bin);
+  priv = adap_dialog_get_instance_private (self);
+  bin = ADAP_BREAKPOINT_BIN (priv->child_breakpoint_bin);
 
-  return adw_breakpoint_bin_get_current_breakpoint (bin);
+  return adap_breakpoint_bin_get_current_breakpoint (bin);
 }
 
-static AdwDialogHost *
+static AdapDialogHost *
 find_dialog_host (GtkWidget *widget)
 {
   while (widget) {
-    AdwDialogHost *proxy;
+    AdapDialogHost *proxy;
 
-    if (ADW_IS_DIALOG_HOST (widget))
+    if (ADAP_IS_DIALOG_HOST (widget))
       break;
 
-    proxy = adw_dialog_host_get_from_proxy (widget);
+    proxy = adap_dialog_host_get_from_proxy (widget);
     if (proxy)
       return proxy;
 
     widget = gtk_widget_get_parent (widget);
   }
 
-  if (ADW_IS_DIALOG_HOST (widget))
-    return ADW_DIALOG_HOST (widget);
+  if (ADAP_IS_DIALOG_HOST (widget))
+    return ADAP_DIALOG_HOST (widget);
 
   return NULL;
 }
 
 /**
- * adw_dialog_present:
+ * adap_dialog_present:
  * @self: a dialog
  * @parent: (nullable): a widget within the toplevel
  *
@@ -2051,16 +2051,16 @@ find_dialog_host (GtkWidget *widget)
  * Since: 1.5
  */
 void
-adw_dialog_present (AdwDialog *self,
+adap_dialog_present (AdapDialog *self,
                     GtkWidget *parent)
 {
-  AdwDialogPrivate *priv;
-  AdwDialogHost *host = NULL, *current_host;
+  AdapDialogPrivate *priv;
+  AdapDialogHost *host = NULL, *current_host;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
   g_return_if_fail (parent == NULL || GTK_IS_WIDGET (parent));
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   if (parent) {
     GtkRoot *root = gtk_widget_get_root (parent);
@@ -2075,7 +2075,7 @@ adw_dialog_present (AdwDialog *self,
     current_host = find_dialog_host (GTK_WIDGET (self));
 
     if (current_host) {
-      GtkWidget *current_proxy = adw_dialog_host_get_proxy (current_host);
+      GtkWidget *current_proxy = adap_dialog_host_get_proxy (current_host);
 
       if (!current_proxy)
         current_proxy = GTK_WIDGET (current_host);
@@ -2091,9 +2091,9 @@ adw_dialog_present (AdwDialog *self,
   }
 
   if (!priv->bin) {
-    priv->bin = adw_breakpoint_bin_new ();
-    adw_breakpoint_bin_set_pass_through (ADW_BREAKPOINT_BIN (priv->bin), TRUE);
-    adw_breakpoint_bin_set_warnings (ADW_BREAKPOINT_BIN (priv->bin), FALSE, TRUE);
+    priv->bin = adap_breakpoint_bin_new ();
+    adap_breakpoint_bin_set_pass_through (ADAP_BREAKPOINT_BIN (priv->bin), TRUE);
+    adap_breakpoint_bin_set_warnings (ADAP_BREAKPOINT_BIN (priv->bin), FALSE, TRUE);
 
     gtk_widget_set_parent (priv->bin, GTK_WIDGET (self));
 
@@ -2108,8 +2108,8 @@ adw_dialog_present (AdwDialog *self,
 
   if (current_host) {
     if (current_host != host) {
-      GtkWidget *proxy = adw_dialog_host_get_proxy (host);
-      GtkWidget *current_proxy = adw_dialog_host_get_proxy (current_host);
+      GtkWidget *proxy = adap_dialog_host_get_proxy (host);
+      GtkWidget *current_proxy = adap_dialog_host_get_proxy (current_host);
 
       if (!proxy)
         proxy = GTK_WIDGET (host);
@@ -2125,13 +2125,13 @@ adw_dialog_present (AdwDialog *self,
     }
   }
 
-  adw_dialog_host_present_dialog (host, self);
+  adap_dialog_host_present_dialog (host, self);
 
   if (!priv->first_map) {
     if (priv->bottom_sheet)
-      adw_bottom_sheet_set_open (priv->bottom_sheet, TRUE);
+      adap_bottom_sheet_set_open (priv->bottom_sheet, TRUE);
     else if (priv->floating_sheet)
-      adw_floating_sheet_set_open (priv->floating_sheet, TRUE);
+      adap_floating_sheet_set_open (priv->floating_sheet, TRUE);
   }
 
   if (current_host)
@@ -2139,14 +2139,14 @@ adw_dialog_present (AdwDialog *self,
 }
 
 void
-adw_dialog_set_shadowed (AdwDialog *self,
+adap_dialog_set_shadowed (AdapDialog *self,
                          gboolean   shadowed)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   shadowed = !!shadowed;
 
@@ -2172,16 +2172,16 @@ adw_dialog_set_shadowed (AdwDialog *self,
 }
 
 void
-adw_dialog_set_callbacks (AdwDialog *self,
+adap_dialog_set_callbacks (AdapDialog *self,
                           GFunc      closing_callback,
                           GFunc      remove_callback,
                           gpointer   user_data)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   priv->closing_callback = closing_callback;
   priv->remove_callback = remove_callback;
@@ -2189,38 +2189,38 @@ adw_dialog_set_callbacks (AdwDialog *self,
 }
 
 gboolean
-adw_dialog_get_closing (AdwDialog *self)
+adap_dialog_get_closing (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), FALSE);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   return priv->closing;
 }
 
 void
-adw_dialog_set_closing (AdwDialog *self,
+adap_dialog_set_closing (AdapDialog *self,
                         gboolean   closing)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_DIALOG (self));
+  g_return_if_fail (ADAP_IS_DIALOG (self));
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   priv->closing = closing;
 }
 
 GtkWidget *
-adw_dialog_get_window (AdwDialog *self)
+adap_dialog_get_window (AdapDialog *self)
 {
-  AdwDialogPrivate *priv;
+  AdapDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_DIALOG (self), NULL);
 
-  priv = adw_dialog_get_instance_private (self);
+  priv = adap_dialog_get_instance_private (self);
 
   return priv->window;
 }

@@ -6,33 +6,33 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
-#include "adw-toast.h"
+#include "adap-version.h"
+#include "adap-toast.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_TOAST_OVERLAY (adw_toast_overlay_get_type())
+#define ADAP_TYPE_TOAST_OVERLAY (adap_toast_overlay_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwToastOverlay, adw_toast_overlay, ADW, TOAST_OVERLAY, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapToastOverlay, adap_toast_overlay, ADAP, TOAST_OVERLAY, GtkWidget)
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_toast_overlay_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_toast_overlay_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_toast_overlay_get_child (AdwToastOverlay *self);
-ADW_AVAILABLE_IN_ALL
-void       adw_toast_overlay_set_child (AdwToastOverlay *self,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_toast_overlay_get_child (AdapToastOverlay *self);
+ADAP_AVAILABLE_IN_ALL
+void       adap_toast_overlay_set_child (AdapToastOverlay *self,
                                         GtkWidget       *child);
 
-ADW_AVAILABLE_IN_ALL
-void adw_toast_overlay_add_toast (AdwToastOverlay *self,
-                                  AdwToast        *toast);
+ADAP_AVAILABLE_IN_ALL
+void adap_toast_overlay_add_toast (AdapToastOverlay *self,
+                                  AdapToast        *toast);
 
 G_END_DECLS

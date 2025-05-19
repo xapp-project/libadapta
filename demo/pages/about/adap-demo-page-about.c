@@ -1,18 +1,18 @@
-#include "adw-demo-page-about.h"
+#include "adap-demo-page-about.h"
 
 #include <glib/gi18n.h>
 
-struct _AdwDemoPageAbout
+struct _AdapDemoPageAbout
 {
-  AdwBin parent_instance;
+  AdapBin parent_instance;
 };
 
-G_DEFINE_FINAL_TYPE (AdwDemoPageAbout, adw_demo_page_about, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (AdapDemoPageAbout, adap_demo_page_about, ADAP_TYPE_BIN)
 
 static void
-demo_run_cb (AdwDemoPageAbout *self)
+demo_run_cb (AdapDemoPageAbout *self)
 {
-  AdwDialog *about;
+  AdapDialog *about;
 
   const char *developers[] = {
     "Angela Avery <angela@example.org>",
@@ -43,7 +43,7 @@ demo_run_cb (AdwDemoPageAbout *self)
   ";
 
   about =
-    g_object_new (ADW_TYPE_ABOUT_DIALOG,
+    g_object_new (ADAP_TYPE_ABOUT_DIALOG,
                   "application-icon", "org.example.Typeset",
                   "application-name", _("Typeset"),
                   "developer-name", _("Angela Avery"),
@@ -61,35 +61,35 @@ demo_run_cb (AdwDemoPageAbout *self)
                   "translator-credits", _("translator-credits"),
                   NULL);
 
-  adw_about_dialog_add_link (ADW_ABOUT_DIALOG (about),
+  adap_about_dialog_add_link (ADAP_ABOUT_DIALOG (about),
                              _("_Documentation"),
-                             "https://gnome.pages.gitlab.gnome.org/libadwaita/doc/main/class.AboutDialog.html");
+                             "https://gnome.pages.gitlab.gnome.org/libadapta/doc/main/class.AboutDialog.html");
 
-  adw_about_dialog_add_legal_section (ADW_ABOUT_DIALOG (about),
+  adap_about_dialog_add_legal_section (ADAP_ABOUT_DIALOG (about),
                                       _("Fonts"),
                                       NULL,
                                       GTK_LICENSE_CUSTOM,
                                       "This application uses font data from <a href='https://example.org'>somewhere</a>.");
 
-  adw_about_dialog_add_acknowledgement_section (ADW_ABOUT_DIALOG (about),
+  adap_about_dialog_add_acknowledgement_section (ADAP_ABOUT_DIALOG (about),
                                                 _("Special thanks to"),
                                                 special_thanks);
 
-  adw_dialog_present (about, GTK_WIDGET (self));
+  adap_dialog_present (about, GTK_WIDGET (self));
 }
 
 static void
-adw_demo_page_about_class_init (AdwDemoPageAboutClass *klass)
+adap_demo_page_about_class_init (AdapDemoPageAboutClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adwaita1/Demo/ui/pages/about/adw-demo-page-about.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adapta1/Demo/ui/pages/about/adap-demo-page-about.ui");
 
   gtk_widget_class_install_action (widget_class, "demo.run", NULL, (GtkWidgetActionActivateFunc) demo_run_cb);
 }
 
 static void
-adw_demo_page_about_init (AdwDemoPageAbout *self)
+adap_demo_page_about_init (AdapDemoPageAbout *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }

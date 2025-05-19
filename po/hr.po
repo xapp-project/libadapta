@@ -1,12 +1,12 @@
-# Croatian translation for libadwaita.
-# Copyright (C) 2022 libadwaita's COPYRIGHT HOLDER
-# This file is distributed under the same license as the libadwaita package.
+# Croatian translation for libadapta.
+# Copyright (C) 2022 libadapta's COPYRIGHT HOLDER
+# This file is distributed under the same license as the libadapta package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: libadwaita libadwaita-1-0\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadwaita/issues\n"
+"Project-Id-Version: libadapta libadapta-1-0\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadapta/issues\n"
 "POT-Creation-Date: 2022-10-02 13:34+0000\n"
 "PO-Revision-Date: 2022-10-02 16:31+0200\n"
 "Last-Translator: \n"
@@ -19,94 +19,94 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: src/adw-about-window.c:203
+#: src/adap-about-window.c:203
 msgid "GNU General Public License, version 2 or later"
 msgstr "GNU Opća Javna Licenca, inačice 2 ili novija"
 
-#: src/adw-about-window.c:204
+#: src/adap-about-window.c:204
 msgid "GNU General Public License, version 3 or later"
 msgstr "GNU Opća Javna Licenca, inačice 3 ili novija"
 
-#: src/adw-about-window.c:205
+#: src/adap-about-window.c:205
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "GNU Manja Opća Javna Licenca, inačice 2.1 ili novija"
 
-#: src/adw-about-window.c:206
+#: src/adap-about-window.c:206
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "GNU Manja Opća Javna Licenca, inačice 3 ili novija"
 
-#: src/adw-about-window.c:207
+#: src/adap-about-window.c:207
 msgid "BSD 2-Clause License"
 msgstr "BSD 2-klauzula licence"
 
-#: src/adw-about-window.c:208
+#: src/adap-about-window.c:208
 msgid "The MIT License (MIT)"
 msgstr "MIT licenca (MIT)"
 
-#: src/adw-about-window.c:209
+#: src/adap-about-window.c:209
 msgid "Artistic License 2.0"
 msgstr "Umjetnička licenca 2.0"
 
-#: src/adw-about-window.c:210
+#: src/adap-about-window.c:210
 msgid "GNU General Public License, version 2 only"
 msgstr "GNU Opća Javna Licenca, samo inačica 2"
 
-#: src/adw-about-window.c:211
+#: src/adap-about-window.c:211
 msgid "GNU General Public License, version 3 only"
 msgstr "GNU Opća Javna Licenca, samo inačica 3"
 
-#: src/adw-about-window.c:212
+#: src/adap-about-window.c:212
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "GNU Manja Opća Javna Licenca, samo inačica 2.1"
 
-#: src/adw-about-window.c:213
+#: src/adap-about-window.c:213
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Manja Opća Javna Licenca, samo inačica 3"
 
-#: src/adw-about-window.c:214
+#: src/adap-about-window.c:214
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero Opća Javna Licenca, inačica 3 ili novija"
 
-#: src/adw-about-window.c:215
+#: src/adap-about-window.c:215
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero Opća Javna Licenca, samo inačica 3"
 
-#: src/adw-about-window.c:216
+#: src/adap-about-window.c:216
 msgid "BSD 3-Clause License"
 msgstr "BSD 3-klauzula licence"
 
-#: src/adw-about-window.c:217
+#: src/adap-about-window.c:217
 msgid "Apache License, Version 2.0"
 msgstr "Apache licenca, inačica 2.0"
 
-#: src/adw-about-window.c:218
+#: src/adap-about-window.c:218
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla javna licenca 2.0"
 
-#: src/adw-about-window.c:526
+#: src/adap-about-window.c:526
 msgid "Code by"
 msgstr "Kôdirali"
 
-#: src/adw-about-window.c:527
+#: src/adap-about-window.c:527
 msgid "Design by"
 msgstr "Dizajnirali"
 
-#: src/adw-about-window.c:528
+#: src/adap-about-window.c:528
 msgid "Artwork by"
 msgstr "Grafika"
 
-#: src/adw-about-window.c:529
+#: src/adap-about-window.c:529
 msgid "Documentation by"
 msgstr "Dokumentirali"
 
-#: src/adw-about-window.c:530
+#: src/adap-about-window.c:530
 msgid "Translated by"
 msgstr "Preveli"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: src/adw-about-window.c:559
+#: src/adap-about-window.c:559
 #, c-format
 msgid ""
 "This application comes with absolutely no warranty. See the <a "
@@ -115,108 +115,108 @@ msgstr ""
 "Ova aplikacija dolazi bez ikakvog jamstva. Pogledajte <a href=\"%s\">%s</a> "
 "za više pojedinosti."
 
-#: src/adw-about-window.c:637
+#: src/adap-about-window.c:637
 msgid "This Application"
 msgstr "Ova aplikacija"
 
-#: src/adw-about-window.c:939
+#: src/adap-about-window.c:939
 #, c-format
 msgid "Version %s"
 msgstr "Inačica %s"
 
-#: src/adw-about-window.c:965
+#: src/adap-about-window.c:965
 msgid "Unable to parse release notes:"
 msgstr "Nemoguća obrada bilješki izdanja:"
 
-#: src/adw-about-window.c:971
+#: src/adap-about-window.c:971
 #, c-format
 msgid "Line: %d, character: %d"
 msgstr "Redak %d, znak %d"
 
-#: src/adw-about-window.c:1264
+#: src/adap-about-window.c:1264
 msgid "Copied to clipboard"
 msgstr "Kopirano u međuspremnik"
 
-#: src/adw-about-window.c:1299
+#: src/adap-about-window.c:1299
 msgid "Unable to save debugging information"
 msgstr "Nemoguće spremanje informacija otklanjanja greške"
 
-#: src/adw-about-window.c:1304
+#: src/adap-about-window.c:1304
 msgid "Close"
 msgstr "Zatvori"
 
-#: src/adw-about-window.c:1322
+#: src/adap-about-window.c:1322
 msgid "Save debugging information"
 msgstr "Spremi informacije otklanjanja greške"
 
-#: src/adw-about-window.c:1325
+#: src/adap-about-window.c:1325
 msgid "_Save"
 msgstr "_Spremi"
 
-#: src/adw-about-window.c:1326
+#: src/adap-about-window.c:1326
 msgid "_Cancel"
 msgstr "_Odustani"
 
-#: src/adw-about-window.ui:5
+#: src/adap-about-window.ui:5
 msgid "About"
 msgstr "O programu"
 
-#: src/adw-about-window.ui:123
+#: src/adap-about-window.ui:123
 msgid "_What’s New"
 msgstr "_Novosti"
 
-#: src/adw-about-window.ui:138
+#: src/adap-about-window.ui:138
 msgid "_Details"
 msgstr "_Pojedinosti"
 
-#: src/adw-about-window.ui:153 src/adw-about-window.ui:395
+#: src/adap-about-window.ui:153 src/adap-about-window.ui:395
 msgid "_Website"
 msgstr "_Web naslovnica"
 
-#: src/adw-about-window.ui:176
+#: src/adap-about-window.ui:176
 msgid "_Support Questions"
 msgstr "_Podrška"
 
-#: src/adw-about-window.ui:192
+#: src/adap-about-window.ui:192
 msgid "_Report an Issue"
 msgstr "_Prijava problema"
 
-#: src/adw-about-window.ui:207
+#: src/adap-about-window.ui:207
 msgid "_Troubleshooting"
 msgstr "_Rješavanje problema"
 
-#: src/adw-about-window.ui:226
+#: src/adap-about-window.ui:226
 msgid "_Credits"
 msgstr "_Zasluge"
 
-#: src/adw-about-window.ui:241
+#: src/adap-about-window.ui:241
 msgid "_Legal"
 msgstr "_Pravilnik"
 
-#: src/adw-about-window.ui:256
+#: src/adap-about-window.ui:256
 msgid "_Acknowledgements"
 msgstr "_Zahvale"
 
-#: src/adw-about-window.ui:295
+#: src/adap-about-window.ui:295
 msgid "What’s New"
 msgstr "Novosti"
 
-#: src/adw-about-window.ui:300 src/adw-about-window.ui:356
-#: src/adw-about-window.ui:437 src/adw-about-window.ui:512
-#: src/adw-about-window.ui:559 src/adw-about-window.ui:606
-#: src/adw-about-window.ui:653
+#: src/adap-about-window.ui:300 src/adap-about-window.ui:356
+#: src/adap-about-window.ui:437 src/adap-about-window.ui:512
+#: src/adap-about-window.ui:559 src/adap-about-window.ui:606
+#: src/adap-about-window.ui:653
 msgid "Back"
 msgstr "Natrag"
 
-#: src/adw-about-window.ui:351
+#: src/adap-about-window.ui:351
 msgid "Details"
 msgstr "Pojedinosti"
 
-#: src/adw-about-window.ui:432
+#: src/adap-about-window.ui:432
 msgid "Troubleshooting"
 msgstr "Rješavanje problema"
 
-#: src/adw-about-window.ui:461
+#: src/adap-about-window.ui:461
 msgid ""
 "To assist in troubleshooting, you can view your debugging information. "
 "Providing this information to the application developers can help diagnose "
@@ -227,138 +227,138 @@ msgstr ""
 "aplikacije može pomoći u dijagnosticiranju problema na koje ste naišli pri "
 "prijavi problema."
 
-#: src/adw-about-window.ui:472
+#: src/adap-about-window.ui:472
 msgid "_Debugging Information"
 msgstr "_Informacije otklanjanja greške"
 
-#: src/adw-about-window.ui:507
+#: src/adap-about-window.ui:507
 msgid "Credits"
 msgstr "Zasluge"
 
-#: src/adw-about-window.ui:554
+#: src/adap-about-window.ui:554
 msgid "Legal"
 msgstr "Pravilnik"
 
-#: src/adw-about-window.ui:601
+#: src/adap-about-window.ui:601
 msgid "Acknowledgements"
 msgstr "Zahvale"
 
-#: src/adw-about-window.ui:648
+#: src/adap-about-window.ui:648
 msgid "Debugging Information"
 msgstr "Informacije otklanjanja greške"
 
-#: src/adw-about-window.ui:696
+#: src/adap-about-window.ui:696
 msgid "_Copy Text"
 msgstr "_Kopiraj tekst"
 
-#: src/adw-about-window.ui:703
+#: src/adap-about-window.ui:703
 msgid "_Save as…"
 msgstr "_Spremi kao…"
 
-#: src/adw-entry-row.ui:93
+#: src/adap-entry-row.ui:93
 msgid "Apply"
 msgstr "Primijeni"
 
-#: src/adw-inspector-page.c:76
+#: src/adap-inspector-page.c:76
 msgid "No Preference"
 msgstr "Bez osobitosti"
 
-#: src/adw-inspector-page.c:78
+#: src/adap-inspector-page.c:78
 msgid "Prefer Dark"
 msgstr "Preferiraj tamno"
 
-#: src/adw-inspector-page.c:80
+#: src/adap-inspector-page.c:80
 msgid "Prefer Light"
 msgstr "Preferiraj svjetlo"
 
 #. Translators: The name of the library, not the stylesheet
-#: src/adw-inspector-page.c:98
-msgid "Adwaita"
-msgstr "Adwaita"
+#: src/adap-inspector-page.c:98
+msgid "Adapta"
+msgstr "Adapta"
 
-#: src/adw-inspector-page.ui:10
+#: src/adap-inspector-page.ui:10
 msgid "System Appearance"
 msgstr "Izgled sustava"
 
-#: src/adw-inspector-page.ui:11
+#: src/adap-inspector-page.ui:11
 msgid ""
 "Override settings for this application. They will be reset upon closing the "
 "inspector."
 msgstr ""
 "Zaobiđi postavke za ovu aplikaciju. Poništit će se pri zatvaranju inspektora."
 
-#: src/adw-inspector-page.ui:14
+#: src/adap-inspector-page.ui:14
 msgid "System Supports Color Schemes"
 msgstr "Sustav podržava sheme boja"
 
-#: src/adw-inspector-page.ui:26
+#: src/adap-inspector-page.ui:26
 msgid "Preferred Color Scheme"
 msgstr "Željena shema boja"
 
-#: src/adw-inspector-page.ui:43
+#: src/adap-inspector-page.ui:43
 msgid "High Contrast"
 msgstr "Visok kontrast"
 
-#: src/adw-password-entry-row.c:71
+#: src/adap-password-entry-row.c:71
 msgid "Hide Text"
 msgstr "Sakrij tekst"
 
-#: src/adw-password-entry-row.c:75
+#: src/adap-password-entry-row.c:75
 msgid "Show Text"
 msgstr "Prikaži tekst"
 
-#: src/adw-password-entry-row.c:169
+#: src/adap-password-entry-row.c:169
 msgid "Caps Lock is on"
 msgstr "Velika slova su uključena"
 
-#: src/adw-password-entry-row.c:177
+#: src/adap-password-entry-row.c:177
 msgid "_Show Text"
 msgstr "_Prikaži tekst"
 
-#: src/adw-preferences-window.c:245
+#: src/adap-preferences-window.c:245
 msgid "Untitled page"
 msgstr "Bezimena stranica"
 
-#: src/adw-preferences-window.ui:8
+#: src/adap-preferences-window.ui:8
 msgid "Preferences"
 msgstr "Osobitosti"
 
-#: src/adw-preferences-window.ui:69
+#: src/adap-preferences-window.ui:69
 msgid "Search"
 msgstr "Pretraga"
 
-#: src/adw-preferences-window.ui:139
+#: src/adap-preferences-window.ui:139
 msgid "No Results Found"
 msgstr "Nema pronađenih rezultata"
 
-#: src/adw-preferences-window.ui:140 src/adw-tab-overview.ui:111
+#: src/adap-preferences-window.ui:140 src/adap-tab-overview.ui:111
 msgid "Try a different search."
 msgstr "Pokušajte drugačiju pretragu."
 
-#: src/adw-tab-button.ui:7
+#: src/adap-tab-button.ui:7
 msgid "View Open Tabs"
 msgstr "Prikaz otvorenih kartica"
 
-#: src/adw-tab-overview.ui:23
+#: src/adap-tab-overview.ui:23
 msgid "Search Tabs"
 msgstr "Pretraga kartica"
 
-#: src/adw-tab-overview.ui:53
+#: src/adap-tab-overview.ui:53
 msgid "Search tabs"
 msgstr "Pretraži kartice"
 
-#: src/adw-tab-overview.ui:97
+#: src/adap-tab-overview.ui:97
 msgid "No Open Tabs"
 msgstr "Nema otvorenih kartica"
 
-#: src/adw-tab-overview.ui:110
+#: src/adap-tab-overview.ui:110
 msgid "No Tabs Found"
 msgstr "Nema pronađenih kartica"
 
-#: src/adw-tab-overview.ui:131
+#: src/adap-tab-overview.ui:131
 msgid "New _Tab"
 msgstr "Nova _kartica"
 
-#: src/adw-tab-thumbnail.ui:36 src/adw-tab.ui:88
+#: src/adap-tab-thumbnail.ui:36 src/adap-tab.ui:88
 msgid "Close Tab"
 msgstr "Zatvori karticu"

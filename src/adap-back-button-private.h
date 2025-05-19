@@ -8,22 +8,22 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-bin.h"
+#include "adap-bin.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_BACK_BUTTON (adw_back_button_get_type())
+#define ADAP_TYPE_BACK_BUTTON (adap_back_button_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwBackButton, adw_back_button, ADW, BACK_BUTTON, AdwBin)
+G_DECLARE_FINAL_TYPE (AdapBackButton, adap_back_button, ADAP, BACK_BUTTON, AdapBin)
 
-GtkWidget *adw_back_button_new (void);
+GtkWidget *adap_back_button_new (void);
 
 G_END_DECLS

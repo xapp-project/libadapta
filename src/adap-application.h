@@ -6,28 +6,28 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-style-manager.h"
+#include "adap-style-manager.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_APPLICATION (adw_application_get_type())
+#define ADAP_TYPE_APPLICATION (adap_application_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_DERIVABLE_TYPE (AdwApplication, adw_application, ADW, APPLICATION, GtkApplication)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (AdapApplication, adap_application, ADAP, APPLICATION, GtkApplication)
 
 /**
- * AdwApplicationClass:
+ * AdapApplicationClass:
  * @parent_class: The parent class
  */
-struct _AdwApplicationClass
+struct _AdapApplicationClass
 {
   GtkApplicationClass parent_class;
 
@@ -35,11 +35,11 @@ struct _AdwApplicationClass
   gpointer padding[4];
 };
 
-ADW_AVAILABLE_IN_ALL
-AdwApplication *adw_application_new (const char        *application_id,
+ADAP_AVAILABLE_IN_ALL
+AdapApplication *adap_application_new (const char        *application_id,
                                      GApplicationFlags  flags) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-AdwStyleManager *adw_application_get_style_manager (AdwApplication *self);
+ADAP_AVAILABLE_IN_ALL
+AdapStyleManager *adap_application_get_style_manager (AdapApplication *self);
 
 G_END_DECLS

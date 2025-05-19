@@ -6,18 +6,18 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <glib-object.h>
-#include "adw-enums.h"
+#include "adap-enums.h"
 
 G_BEGIN_DECLS
 
 typedef enum {
-  ADW_FOLD_THRESHOLD_POLICY_MINIMUM,
-  ADW_FOLD_THRESHOLD_POLICY_NATURAL,
-} AdwFoldThresholdPolicy;
+  ADAP_FOLD_THRESHOLD_POLICY_MINIMUM,
+  ADAP_FOLD_THRESHOLD_POLICY_NATURAL,
+} AdapFoldThresholdPolicy;
 
 G_END_DECLS

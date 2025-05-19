@@ -6,14 +6,14 @@
 
 #include "config.h"
 
-#include "adw-toast-overlay.h"
+#include "adap-toast-overlay.h"
 
-#include "adw-animation-util.h"
-#include "adw-easing.h"
-#include "adw-timed-animation.h"
-#include "adw-toast-private.h"
-#include "adw-toast-widget-private.h"
-#include "adw-widget-utils-private.h"
+#include "adap-animation-util.h"
+#include "adap-easing.h"
+#include "adap-timed-animation.h"
+#include "adap-toast-private.h"
+#include "adap-toast-widget-private.h"
+#include "adap-widget-utils-private.h"
 
 #define SHOW_DURATION 300
 #define HIDE_DURATION 300
@@ -22,7 +22,7 @@
 #define NATURAL_WIDTH 450
 
 /**
- * AdwToastOverlay:
+ * AdapToastOverlay:
  *
  * A widget showing toasts above its content.
  *
@@ -31,7 +31,7 @@
  *   <img src="toast-overlay.png" alt="toast-overlay">
  * </picture>
  *
- * Much like [class@Gtk.Overlay], `AdwToastOverlay` is a container with a single
+ * Much like [class@Gtk.Overlay], `AdapToastOverlay` is a container with a single
  * main child, on top of which it can display a [class@Toast], overlaid.
  * Toasts can be shown with [method@ToastOverlay.add_toast].
  *
@@ -50,7 +50,7 @@
  *     ╰── button.circular.flat
  * ```
  *
- * `AdwToastOverlay`'s CSS node is called `toastoverlay`. It contains the child,
+ * `AdapToastOverlay`'s CSS node is called `toastoverlay`. It contains the child,
  * as well as zero or more `toast` subnodes.
  *
  * Each of the `toast` nodes contains a `widget` subnode, optionally a `button`
@@ -62,24 +62,24 @@
  *
  * ## Accessibility
  *
- * `AdwToastOverlay` uses the `GTK_ACCESSIBLE_ROLE_TAB_GROUP` role.
+ * `AdapToastOverlay` uses the `GTK_ACCESSIBLE_ROLE_TAB_GROUP` role.
  */
 
 typedef struct {
-  AdwToastOverlay *overlay;
+  AdapToastOverlay *overlay;
 
-  AdwToast *toast;
+  AdapToast *toast;
   GtkWidget *widget;
 
-  AdwAnimation *show_animation;
-  AdwAnimation *hide_animation;
+  AdapAnimation *show_animation;
+  AdapAnimation *hide_animation;
 
   gulong shown_id;
   gulong dismissed_id;
   gboolean postponing;
 } ToastInfo;
 
-struct _AdwToastOverlay {
+struct _AdapToastOverlay {
   GtkWidget parent_instance;
 
   GtkWidget *child;
@@ -97,11 +97,11 @@ enum {
 
 static GParamSpec *props[LAST_PROP];
 
-static void adw_toast_overlay_buildable_init (GtkBuildableIface *iface);
+static void adap_toast_overlay_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwToastOverlay, adw_toast_overlay, GTK_TYPE_WIDGET,
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapToastOverlay, adap_toast_overlay, GTK_TYPE_WIDGET,
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                               adw_toast_overlay_buildable_init))
+                               adap_toast_overlay_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -127,7 +127,7 @@ dismiss_and_free_toast_info (ToastInfo *info)
   g_signal_handler_disconnect (info->toast, info->dismissed_id);
   info->dismissed_id = 0;
 
-  adw_toast_dismiss (info->toast);
+  adap_toast_dismiss (info->toast);
 
   free_toast_info (info);
 }
@@ -136,7 +136,7 @@ static void
 hide_value_cb (double     value,
                ToastInfo *info)
 {
-  value = adw_easing_ease (ADW_EASE_OUT_CUBIC, value);
+  value = adap_easing_ease (ADAP_EASE_OUT_CUBIC, value);
   gtk_widget_set_opacity (info->widget, value);
 
   gtk_widget_queue_allocate (GTK_WIDGET (info->overlay));
@@ -145,7 +145,7 @@ hide_value_cb (double     value,
 static void
 hide_done_cb (ToastInfo *info)
 {
-  AdwToastOverlay *self = info->overlay;
+  AdapToastOverlay *self = info->overlay;
 
   self->hiding_toasts = g_list_remove (self->hiding_toasts, info);
 
@@ -169,14 +169,14 @@ show_done_cb (ToastInfo *info)
   g_clear_object (&info->show_animation);
 }
 
-static void show_toast (AdwToastOverlay *self,
+static void show_toast (AdapToastOverlay *self,
                         ToastInfo       *info);
 
 static void
-hide_current_toast (AdwToastOverlay *self)
+hide_current_toast (AdapToastOverlay *self)
 {
   ToastInfo *info = self->current_toast;
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
 
   self->hiding_toasts = g_list_append (self->hiding_toasts, info);
   self->current_toast = NULL;
@@ -184,22 +184,22 @@ hide_current_toast (AdwToastOverlay *self)
   gtk_widget_set_can_target (GTK_WIDGET (info->widget), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (info->widget), FALSE);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               hide_value_cb,
                                               info, NULL);
   info->hide_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 1, 0, HIDE_DURATION, target);
+    adap_timed_animation_new (GTK_WIDGET (self), 1, 0, HIDE_DURATION, target);
 
   g_signal_connect_swapped (info->hide_animation, "done",
                             G_CALLBACK (hide_done_cb), info);
 
-  adw_animation_play (info->hide_animation);
+  adap_animation_play (info->hide_animation);
 }
 
 static void
 dismissed_cb (ToastInfo *info)
 {
-  AdwToastOverlay *self = info->overlay;
+  AdapToastOverlay *self = info->overlay;
 
   if (info->hide_animation && !info->postponing)
     return;
@@ -222,7 +222,7 @@ dismissed_cb (ToastInfo *info)
   } else {
     g_queue_remove (self->queue, info);
 
-    adw_toast_set_overlay (ADW_TOAST (info->toast), NULL);
+    adap_toast_set_overlay (ADAP_TOAST (info->toast), NULL);
     if (!info->hide_animation)
       free_toast_info (info);
   }
@@ -236,38 +236,38 @@ show_toast_animation_cb (double     value,
 }
 
 static void
-show_toast (AdwToastOverlay *self,
+show_toast (AdapToastOverlay *self,
             ToastInfo       *info)
 {
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
 
   g_assert (!info->widget);
 
   self->current_toast = info;
 
-  info->widget = adw_toast_widget_new (info->toast);
+  info->widget = adap_toast_widget_new (info->toast);
   gtk_widget_insert_before (info->widget, GTK_WIDGET (self), NULL);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               show_toast_animation_cb,
                                               self, NULL);
   info->show_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 0, 1,
+    adap_timed_animation_new (GTK_WIDGET (self), 0, 1,
                              self->hiding_toasts ? REPLACE_DURATION : SHOW_DURATION,
                              target);
 
   info->shown_id = g_signal_connect_swapped (info->show_animation, "done",
                                              G_CALLBACK (show_done_cb), info);
 
-  adw_animation_play (info->show_animation);
+  adap_animation_play (info->show_animation);
 }
 
 static int
 bump_sort_func (ToastInfo *compare,
-                AdwToast  *toast,
+                AdapToast  *toast,
                 gpointer   user_data)
 {
-  if (adw_toast_get_priority (compare->toast) == ADW_TOAST_PRIORITY_HIGH)
+  if (adap_toast_get_priority (compare->toast) == ADAP_TOAST_PRIORITY_HIGH)
     return -1;
 
   return 1;
@@ -275,7 +275,7 @@ bump_sort_func (ToastInfo *compare,
 
 static int
 find_toast_func (ToastInfo *info,
-                 AdwToast  *toast)
+                 AdapToast  *toast)
 {
   if (info && info->toast == toast)
     return 0;
@@ -284,8 +284,8 @@ find_toast_func (ToastInfo *info,
 }
 
 static void
-bump_toast (AdwToastOverlay *self,
-            AdwToast        *toast)
+bump_toast (AdapToastOverlay *self,
+            AdapToast        *toast)
 {
   GList *link;
   ToastInfo *info;
@@ -299,7 +299,7 @@ bump_toast (AdwToastOverlay *self,
   info = link->data;
   g_queue_remove (self->queue, info);
 
-  if (adw_toast_get_priority (toast) == ADW_TOAST_PRIORITY_HIGH)
+  if (adap_toast_get_priority (toast) == ADAP_TOAST_PRIORITY_HIGH)
     g_queue_push_head (self->queue, info);
   else
     g_queue_insert_sorted (self->queue, info,
@@ -308,11 +308,11 @@ bump_toast (AdwToastOverlay *self,
 }
 
 static gboolean
-dismiss_cb (AdwToastOverlay *self,
+dismiss_cb (AdapToastOverlay *self,
             GVariant        *args)
 {
   if (self->current_toast) {
-    adw_toast_dismiss (self->current_toast->toast);
+    adap_toast_dismiss (self->current_toast->toast);
 
     return GDK_EVENT_STOP;
   }
@@ -321,7 +321,7 @@ dismiss_cb (AdwToastOverlay *self,
 }
 
 static void
-adw_toast_overlay_measure (GtkWidget      *widget,
+adap_toast_overlay_measure (GtkWidget      *widget,
                            GtkOrientation  orientation,
                            int             for_size,
                            int            *minimum,
@@ -357,7 +357,7 @@ adw_toast_overlay_measure (GtkWidget      *widget,
 }
 
 static void
-allocate_toast (AdwToastOverlay *self,
+allocate_toast (AdapToastOverlay *self,
                 ToastInfo       *info,
                 int              width,
                 int              height)
@@ -368,7 +368,7 @@ allocate_toast (AdwToastOverlay *self,
 
   gtk_widget_get_preferred_size (info->widget, NULL, &size);
 
-  if (adw_toast_widget_get_button_visible (ADW_TOAST_WIDGET (info->widget)))
+  if (adap_toast_widget_get_button_visible (ADAP_TOAST_WIDGET (info->widget)))
     size.width = MIN (MAX (size.width, NATURAL_WIDTH), width);
   else
     size.width = MIN (size.width, width);
@@ -380,20 +380,20 @@ allocate_toast (AdwToastOverlay *self,
   transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y));
 
   if (info->show_animation) {
-    float value = adw_animation_get_value (info->show_animation);
-    float offset = adw_lerp (size.height, 0.0f, value);
+    float value = adap_animation_get_value (info->show_animation);
+    float offset = adap_lerp (size.height, 0.0f, value);
 
     transform = gsk_transform_translate (transform,
                                          &GRAPHENE_POINT_INIT (0, offset));
   }
 
   if (info->hide_animation) {
-    float value = adw_animation_get_value (info->hide_animation);
+    float value = adap_animation_get_value (info->hide_animation);
 
     x = size.width / 2.0f;
     y = size.height / 2.0f;
 
-    value = adw_lerp (1 - SCALE_AMOUNT, 1, value);
+    value = adap_lerp (1 - SCALE_AMOUNT, 1, value);
     transform = gsk_transform_translate (transform,
                                          &GRAPHENE_POINT_INIT (x, y));
     transform = gsk_transform_scale (transform, value, value);
@@ -405,12 +405,12 @@ allocate_toast (AdwToastOverlay *self,
 }
 
 static void
-adw_toast_overlay_size_allocate (GtkWidget *widget,
+adap_toast_overlay_size_allocate (GtkWidget *widget,
                                  int        width,
                                  int        height,
                                  int        baseline)
 {
-  AdwToastOverlay *self = ADW_TOAST_OVERLAY (widget);
+  AdapToastOverlay *self = ADAP_TOAST_OVERLAY (widget);
   GList *l;
 
   if (self->child && gtk_widget_should_layout (self->child))
@@ -424,40 +424,40 @@ adw_toast_overlay_size_allocate (GtkWidget *widget,
 }
 
 static void
-adw_toast_overlay_dispose (GObject *object)
+adap_toast_overlay_dispose (GObject *object)
 {
-  AdwToastOverlay *self = ADW_TOAST_OVERLAY (object);
+  AdapToastOverlay *self = ADAP_TOAST_OVERLAY (object);
 
-  adw_toast_overlay_set_child (self, NULL);
+  adap_toast_overlay_set_child (self, NULL);
 
   g_clear_list (&self->hiding_toasts, (GDestroyNotify) free_toast_info);
   g_clear_pointer (&self->current_toast, dismiss_and_free_toast_info);
   g_queue_foreach (self->queue, (GFunc) dismiss_and_free_toast_info, NULL);
 
-  G_OBJECT_CLASS (adw_toast_overlay_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_toast_overlay_parent_class)->dispose (object);
 }
 
 static void
-adw_toast_overlay_finalize (GObject *object)
+adap_toast_overlay_finalize (GObject *object)
 {
-  AdwToastOverlay *self = ADW_TOAST_OVERLAY (object);
+  AdapToastOverlay *self = ADAP_TOAST_OVERLAY (object);
 
   g_queue_free (self->queue);
 
-  G_OBJECT_CLASS (adw_toast_overlay_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_toast_overlay_parent_class)->finalize (object);
 }
 
 static void
-adw_toast_overlay_get_property (GObject    *object,
+adap_toast_overlay_get_property (GObject    *object,
                                 guint       prop_id,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-  AdwToastOverlay *self = ADW_TOAST_OVERLAY (object);
+  AdapToastOverlay *self = ADAP_TOAST_OVERLAY (object);
 
   switch (prop_id) {
   case PROP_CHILD:
-    g_value_set_object (value, adw_toast_overlay_get_child (self));
+    g_value_set_object (value, adap_toast_overlay_get_child (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -465,16 +465,16 @@ adw_toast_overlay_get_property (GObject    *object,
 }
 
 static void
-adw_toast_overlay_set_property (GObject      *object,
+adap_toast_overlay_set_property (GObject      *object,
                                 guint         prop_id,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-  AdwToastOverlay *self = ADW_TOAST_OVERLAY (object);
+  AdapToastOverlay *self = ADAP_TOAST_OVERLAY (object);
 
   switch (prop_id) {
   case PROP_CHILD:
-    adw_toast_overlay_set_child (self, g_value_get_object (value));
+    adap_toast_overlay_set_child (self, g_value_get_object (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -482,23 +482,23 @@ adw_toast_overlay_set_property (GObject      *object,
 }
 
 static void
-adw_toast_overlay_class_init (AdwToastOverlayClass *klass)
+adap_toast_overlay_class_init (AdapToastOverlayClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_toast_overlay_dispose;
-  object_class->finalize = adw_toast_overlay_finalize;
-  object_class->get_property = adw_toast_overlay_get_property;
-  object_class->set_property = adw_toast_overlay_set_property;
+  object_class->dispose = adap_toast_overlay_dispose;
+  object_class->finalize = adap_toast_overlay_finalize;
+  object_class->get_property = adap_toast_overlay_get_property;
+  object_class->set_property = adap_toast_overlay_set_property;
 
-  widget_class->compute_expand = adw_widget_compute_expand;
-  widget_class->get_request_mode = adw_widget_get_request_mode;
-  widget_class->measure = adw_toast_overlay_measure;
-  widget_class->size_allocate = adw_toast_overlay_size_allocate;
+  widget_class->compute_expand = adap_widget_compute_expand;
+  widget_class->get_request_mode = adap_widget_get_request_mode;
+  widget_class->measure = adap_toast_overlay_measure;
+  widget_class->size_allocate = adap_toast_overlay_size_allocate;
 
   /**
-   * AdwToastOverlay:child: (attributes org.gtk.Property.get=adw_toast_overlay_get_child org.gtk.Property.set=adw_toast_overlay_set_child)
+   * AdapToastOverlay:child: (attributes org.gtk.Property.get=adap_toast_overlay_get_child org.gtk.Property.set=adap_toast_overlay_set_child)
    *
    * The child widget.
    */
@@ -516,7 +516,7 @@ adw_toast_overlay_class_init (AdwToastOverlayClass *klass)
 }
 
 static void
-adw_toast_overlay_init (AdwToastOverlay *self)
+adap_toast_overlay_init (AdapToastOverlay *self)
 {
   self->queue = g_queue_new ();
 
@@ -524,44 +524,44 @@ adw_toast_overlay_init (AdwToastOverlay *self)
 }
 
 static void
-adw_toast_overlay_buildable_add_child (GtkBuildable *buildable,
+adap_toast_overlay_buildable_add_child (GtkBuildable *buildable,
                                        GtkBuilder   *builder,
                                        GObject      *child,
                                        const char   *type)
 {
-  AdwToastOverlay *self = ADW_TOAST_OVERLAY (buildable);
+  AdapToastOverlay *self = ADAP_TOAST_OVERLAY (buildable);
 
   if (!type && GTK_IS_WIDGET (child))
-    adw_toast_overlay_set_child (self, GTK_WIDGET (child));
-  else if (!type && ADW_IS_TOAST (child))
-    adw_toast_overlay_add_toast (self, g_object_ref (ADW_TOAST (child)));
+    adap_toast_overlay_set_child (self, GTK_WIDGET (child));
+  else if (!type && ADAP_IS_TOAST (child))
+    adap_toast_overlay_add_toast (self, g_object_ref (ADAP_TOAST (child)));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_toast_overlay_buildable_init (GtkBuildableIface *iface)
+adap_toast_overlay_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_toast_overlay_buildable_add_child;
+  iface->add_child = adap_toast_overlay_buildable_add_child;
 }
 
 /**
- * adw_toast_overlay_new:
+ * adap_toast_overlay_new:
  *
- * Creates a new `AdwToastOverlay`.
+ * Creates a new `AdapToastOverlay`.
  *
- * Returns: the new created `AdwToastOverlay`
+ * Returns: the new created `AdapToastOverlay`
  */
 GtkWidget *
-adw_toast_overlay_new (void)
+adap_toast_overlay_new (void)
 {
-  return g_object_new (ADW_TYPE_TOAST_OVERLAY, NULL);
+  return g_object_new (ADAP_TYPE_TOAST_OVERLAY, NULL);
 }
 
 /**
- * adw_toast_overlay_get_child: (attributes org.gtk.Method.get_property=child)
+ * adap_toast_overlay_get_child: (attributes org.gtk.Method.get_property=child)
  * @self: a toast overlay
  *
  * Gets the child widget of @self.
@@ -569,25 +569,25 @@ adw_toast_overlay_new (void)
  * Returns: (nullable) (transfer none): the child widget of @self
  */
 GtkWidget *
-adw_toast_overlay_get_child (AdwToastOverlay *self)
+adap_toast_overlay_get_child (AdapToastOverlay *self)
 {
-  g_return_val_if_fail (ADW_IS_TOAST_OVERLAY (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TOAST_OVERLAY (self), NULL);
 
   return self->child;
 }
 
 /**
- * adw_toast_overlay_set_child: (attributes org.gtk.Method.set_property=child)
+ * adap_toast_overlay_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a toast overlay
  * @child: (nullable): the child widget
  *
  * Sets the child widget of @self.
  */
 void
-adw_toast_overlay_set_child (AdwToastOverlay *self,
+adap_toast_overlay_set_child (AdapToastOverlay *self,
                              GtkWidget       *child)
 {
-  g_return_if_fail (ADW_IS_TOAST_OVERLAY (self));
+  g_return_if_fail (ADAP_IS_TOAST_OVERLAY (self));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
   if (child)
@@ -608,7 +608,7 @@ adw_toast_overlay_set_child (AdwToastOverlay *self,
 }
 
 /**
- * adw_toast_overlay_add_toast:
+ * adap_toast_overlay_add_toast:
  * @self: a toast overlay
  * @toast: (transfer full): a toast
  *
@@ -624,22 +624,22 @@ adw_toast_overlay_set_child (AdwToastOverlay *self,
  * forward to be shown as soon as possible.
  */
 void
-adw_toast_overlay_add_toast (AdwToastOverlay *self,
-                             AdwToast        *toast)
+adap_toast_overlay_add_toast (AdapToastOverlay *self,
+                             AdapToast        *toast)
 {
   ToastInfo *info;
-  AdwToastOverlay *overlay;
+  AdapToastOverlay *overlay;
 
-  g_return_if_fail (ADW_IS_TOAST_OVERLAY (self));
-  g_return_if_fail (ADW_IS_TOAST (toast));
+  g_return_if_fail (ADAP_IS_TOAST_OVERLAY (self));
+  g_return_if_fail (ADAP_IS_TOAST (toast));
 
-  overlay = adw_toast_get_overlay (toast);
+  overlay = adap_toast_get_overlay (toast);
 
   /* If the toast has been added already and is being shown, reset its
    * timeout. Otherwise, bump it forward in the queue. */
   if (overlay == self) {
     if (self->current_toast && self->current_toast->toast == toast)
-      adw_toast_widget_reset_timeout (ADW_TOAST_WIDGET (self->current_toast->widget));
+      adap_toast_widget_reset_timeout (ADAP_TOAST_WIDGET (self->current_toast->widget));
     else
       bump_toast (self, toast);
 
@@ -650,13 +650,13 @@ adw_toast_overlay_add_toast (AdwToastOverlay *self,
 
   if (overlay) {
     g_critical ("Adding toast '%s', but it has already been added to a "
-                "different AdwToastOverlay", adw_toast_get_title (toast));
+                "different AdapToastOverlay", adap_toast_get_title (toast));
 
     g_object_unref (toast);
     return;
   }
 
-  adw_toast_set_overlay (toast, self);
+  adap_toast_set_overlay (toast, self);
 
   info = g_new0 (ToastInfo, 1);
   info->overlay = self;
@@ -671,12 +671,12 @@ adw_toast_overlay_add_toast (AdwToastOverlay *self,
     return;
   }
 
-  switch (adw_toast_get_priority (toast)) {
-  case ADW_TOAST_PRIORITY_NORMAL:
+  switch (adap_toast_get_priority (toast)) {
+  case ADAP_TOAST_PRIORITY_NORMAL:
     g_queue_push_tail (self->queue, info);
     break;
 
-  case ADW_TOAST_PRIORITY_HIGH:
+  case ADAP_TOAST_PRIORITY_HIGH:
     self->current_toast->postponing = TRUE;
     g_queue_push_head (self->queue, self->current_toast);
 

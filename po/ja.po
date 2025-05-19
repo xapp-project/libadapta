@@ -1,12 +1,12 @@
-# Japanese translation for libadwaita.
-# Copyright (C) 2022 libadwaita's COPYRIGHT HOLDER
-# This file is distributed under the same license as the libadwaita package.
+# Japanese translation for libadapta.
+# Copyright (C) 2022 libadapta's COPYRIGHT HOLDER
+# This file is distributed under the same license as the libadapta package.
 # sicklylife <translation@sicklylife.jp>, 2022.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: libadwaita libadwaita-1-0\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadwaita/issues\n"
+"Project-Id-Version: libadapta libadapta-1-0\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadapta/issues\n"
 "POT-Creation-Date: 2022-02-17 21:54+0000\n"
 "PO-Revision-Date: 2022-02-21 20:30+0000\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
@@ -17,28 +17,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/adw-inspector-page.c:76
+#: src/adap-inspector-page.c:76
 msgid "No Preference"
 msgstr "設定なし"
 
-#: src/adw-inspector-page.c:78
+#: src/adap-inspector-page.c:78
 msgid "Prefer Dark"
 msgstr "暗くする"
 
-#: src/adw-inspector-page.c:80
+#: src/adap-inspector-page.c:80
 msgid "Prefer Light"
 msgstr "明るくする"
 
 #. Translators: The name of the library, not the stylesheet
-#: src/adw-inspector-page.c:98
-msgid "Adwaita"
-msgstr "Adwaita"
+#: src/adap-inspector-page.c:98
+msgid "Adapta"
+msgstr "Adapta"
 
-#: src/adw-inspector-page.ui:10
+#: src/adap-inspector-page.ui:10
 msgid "System Appearance"
 msgstr "システムの外観"
 
-#: src/adw-inspector-page.ui:11
+#: src/adap-inspector-page.ui:11
 msgid ""
 "Override settings for this application. They will be reset upon closing the "
 "inspector."
@@ -46,34 +46,34 @@ msgstr ""
 "このアプリケーションの設定をオーバーライドします。インスペクターを閉じると"
 "リセットされます。"
 
-#: src/adw-inspector-page.ui:14
+#: src/adap-inspector-page.ui:14
 msgid "System Supports Color Schemes"
 msgstr "システムがサポートするカラースキーム"
 
-#: src/adw-inspector-page.ui:26
+#: src/adap-inspector-page.ui:26
 msgid "Preferred Color Scheme"
 msgstr "カラースキームの指定"
 
-#: src/adw-inspector-page.ui:43
+#: src/adap-inspector-page.ui:43
 msgid "High Contrast"
 msgstr "ハイコントラスト"
 
-#: src/adw-preferences-window.c:217
+#: src/adap-preferences-window.c:217
 msgid "Untitled page"
 msgstr "タイトルなしのページ"
 
-#: src/adw-preferences-window.ui:8
+#: src/adap-preferences-window.ui:8
 msgid "Preferences"
 msgstr "設定"
 
-#: src/adw-preferences-window.ui:69
+#: src/adap-preferences-window.ui:69
 msgid "Search"
 msgstr "検索"
 
-#: src/adw-preferences-window.ui:139
+#: src/adap-preferences-window.ui:139
 msgid "No Results Found"
 msgstr "結果がありません"
 
-#: src/adw-preferences-window.ui:140
+#: src/adap-preferences-window.ui:140
 msgid "Try a different search."
 msgstr "他のキーワードを試してください。"

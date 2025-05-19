@@ -8,13 +8,13 @@
 
 #include "config.h"
 
-#include "adw-length-unit.h"
+#include "adap-length-unit.h"
 
 /**
- * AdwLengthUnit:
- * @ADW_LENGTH_UNIT_PX: pixels
- * @ADW_LENGTH_UNIT_PT: points, changes with text scale factor
- * @ADW_LENGTH_UNIT_SP: scale independent pixels, changes with text scale factor
+ * AdapLengthUnit:
+ * @ADAP_LENGTH_UNIT_PX: pixels
+ * @ADAP_LENGTH_UNIT_PT: points, changes with text scale factor
+ * @ADAP_LENGTH_UNIT_SP: scale independent pixels, changes with text scale factor
  *
  * Describes length units.
  *
@@ -43,7 +43,7 @@ get_dpi (GtkSettings *settings)
 }
 
 /**
- * adw_length_unit_to_px:
+ * adap_length_unit_to_px:
  * @unit: a length unit
  * @value: a value in @unit
  * @settings: (nullable): settings to use, or `NULL` for default settings
@@ -55,12 +55,12 @@ get_dpi (GtkSettings *settings)
  * Since: 1.4
  */
 double
-adw_length_unit_to_px (AdwLengthUnit  unit,
+adap_length_unit_to_px (AdapLengthUnit  unit,
                        double         value,
                        GtkSettings   *settings)
 {
-  g_return_val_if_fail (unit >= ADW_LENGTH_UNIT_PX, 0.0);
-  g_return_val_if_fail (unit <= ADW_LENGTH_UNIT_SP, 0.0);
+  g_return_val_if_fail (unit >= ADAP_LENGTH_UNIT_PX, 0.0);
+  g_return_val_if_fail (unit <= ADAP_LENGTH_UNIT_SP, 0.0);
   g_return_val_if_fail (settings == NULL || GTK_IS_SETTINGS (settings), 0.0);
 
   if (!settings)
@@ -70,11 +70,11 @@ adw_length_unit_to_px (AdwLengthUnit  unit,
     return 0;
 
   switch (unit) {
-  case ADW_LENGTH_UNIT_PX:
+  case ADAP_LENGTH_UNIT_PX:
     return value;
-  case ADW_LENGTH_UNIT_PT:
+  case ADAP_LENGTH_UNIT_PT:
     return value * get_dpi (settings) / 72.0;
-  case ADW_LENGTH_UNIT_SP:
+  case ADAP_LENGTH_UNIT_SP:
     return value * get_dpi (settings) / 96.0;
   default:
     g_assert_not_reached ();
@@ -82,7 +82,7 @@ adw_length_unit_to_px (AdwLengthUnit  unit,
 }
 
 /**
- * adw_length_unit_from_px:
+ * adap_length_unit_from_px:
  * @unit: a length unit
  * @value: a value in pixels
  * @settings: (nullable): settings to use, or `NULL` for default settings
@@ -94,12 +94,12 @@ adw_length_unit_to_px (AdwLengthUnit  unit,
  * Since: 1.4
  */
 double
-adw_length_unit_from_px (AdwLengthUnit  unit,
+adap_length_unit_from_px (AdapLengthUnit  unit,
                          double         value,
                          GtkSettings   *settings)
 {
-  g_return_val_if_fail (unit >= ADW_LENGTH_UNIT_PX, 0.0);
-  g_return_val_if_fail (unit <= ADW_LENGTH_UNIT_SP, 0.0);
+  g_return_val_if_fail (unit >= ADAP_LENGTH_UNIT_PX, 0.0);
+  g_return_val_if_fail (unit <= ADAP_LENGTH_UNIT_SP, 0.0);
   g_return_val_if_fail (settings == NULL || GTK_IS_SETTINGS (settings), 0.0);
 
   if (!settings)
@@ -109,11 +109,11 @@ adw_length_unit_from_px (AdwLengthUnit  unit,
     return 0;
 
   switch (unit) {
-  case ADW_LENGTH_UNIT_PX:
+  case ADAP_LENGTH_UNIT_PX:
     return value;
-  case ADW_LENGTH_UNIT_PT:
+  case ADAP_LENGTH_UNIT_PT:
     return value / get_dpi (settings) * 72.0;
-  case ADW_LENGTH_UNIT_SP:
+  case ADAP_LENGTH_UNIT_SP:
     return value / get_dpi (settings) * 96.0;
   default:
     g_assert_not_reached ();

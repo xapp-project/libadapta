@@ -9,7 +9,7 @@
 #define _WIN32_WINNT 0x0602
 #define INITGUID
 
-#include "adw-settings-impl-private.h"
+#include "adap-settings-impl-private.h"
 
 #include <gtk/gtk.h>
 #include <gdk/win32/gdkwin32.h>
@@ -27,9 +27,9 @@
 #define WM_THEMECHANGED 0x031A
 #endif
 
-struct _AdwSettingsImplWin32
+struct _AdapSettingsImplWin32
 {
-  AdwSettingsImpl parent_instance;
+  AdapSettingsImpl parent_instance;
 
 #ifdef HAS_WINRT
   gboolean initialized;
@@ -52,7 +52,7 @@ struct _AdwSettingsImplWin32
   gboolean added_filter;
 };
 
-G_DEFINE_FINAL_TYPE (AdwSettingsImplWin32, adw_settings_impl_win32, ADW_TYPE_SETTINGS_IMPL)
+G_DEFINE_FINAL_TYPE (AdapSettingsImplWin32, adap_settings_impl_win32, ADAP_TYPE_SETTINGS_IMPL)
 
 /* Dark mode is only supported if WinRT is available on Windows 10 or above. */
 #ifdef HAS_WINRT
@@ -61,7 +61,7 @@ DEFINE_GUID (IID_IUISettings3, 0x03021be4, 0x5254, 0x4781, 0x81, 0x94, 0x51, 0x6
 DEFINE_GUID (IID_UISettingsEventHandler, 0x2dbdba9d, 0x20da, 0x519d, 0x90, 0x78, 0x09, 0xf8, 0x35, 0xbc, 0x5b, 0xc7);
 
 static inline IInspectable *
-com_activate (AdwSettingsImplWin32 *self,
+com_activate (AdapSettingsImplWin32 *self,
               const WCHAR          *name)
 {
   HRESULT res;
@@ -93,7 +93,7 @@ typedef struct
 
 static inline TypedEventHandler *
 TypedEventHandler_New (gpointer              vtbl,
-                       AdwSettingsImplWin32 *settings)
+                       AdapSettingsImplWin32 *settings)
 {
   TypedEventHandler *handler = g_new0 (TypedEventHandler, 1);
 
@@ -146,17 +146,17 @@ UISettingsEvent_QueryInterface (__FITypedEventHandler_2_Windows__CUI__CViewManag
  * Algorithm is suggested by IsColorLight() in this example:
  * https://learn.microsoft.com/en-us/windows/apps/desktop/modernize/apply-windows-themes
  */
-static inline AdwSystemColorScheme
+static inline AdapSystemColorScheme
 scheme_for_fg_color (DWORD c)
 {
   if (5 * GetGValue (c) + 2 * GetRValue (c) + GetBValue (c) > 8 * 128)
-    return ADW_SYSTEM_COLOR_SCHEME_PREFER_DARK;
+    return ADAP_SYSTEM_COLOR_SCHEME_PREFER_DARK;
   else
-    return ADW_SYSTEM_COLOR_SCHEME_DEFAULT;
+    return ADAP_SYSTEM_COLOR_SCHEME_DEFAULT;
 }
 
 static inline HRESULT
-color_values_changed (AdwSettingsImplWin32 *self)
+color_values_changed (AdapSettingsImplWin32 *self)
 {
   struct __x_ABI_CWindows_CUI_CColor color;
   HRESULT res;
@@ -168,7 +168,7 @@ color_values_changed (AdwSettingsImplWin32 *self)
   if (FAILED (res))
     return res;
 
-  adw_settings_impl_set_color_scheme (ADW_SETTINGS_IMPL (self),
+  adap_settings_impl_set_color_scheme (ADAP_SETTINGS_IMPL (self),
                                       scheme_for_fg_color (RGB (color.R, color.G, color.B)));
 
   return S_OK;
@@ -187,7 +187,7 @@ ColorValuesChanged_Invoke (__FITypedEventHandler_2_Windows__CUI__CViewManagement
                            IInspectable                                                                    *args)
 {
   TypedEventHandler *handler = (gpointer) self;
-  AdwSettingsImplWin32 *settings;
+  AdapSettingsImplWin32 *settings;
 
   settings = g_weak_ref_get (&handler->settings);
   if (settings != NULL) {
@@ -205,7 +205,7 @@ struct __FITypedEventHandler_2_Windows__CUI__CViewManagement__CUISettings_IInspe
 };
 
 static HRESULT
-init_winrt_ui_settings (AdwSettingsImplWin32 *self)
+init_winrt_ui_settings (AdapSettingsImplWin32 *self)
 {
   HRESULT res;
   TypedEventHandler *handler;
@@ -237,7 +237,7 @@ init_winrt_ui_settings (AdwSettingsImplWin32 *self)
 }
 
 static void
-init_winrt_module (AdwSettingsImplWin32 *self)
+init_winrt_module (AdapSettingsImplWin32 *self)
 {
   HRESULT res;
 
@@ -261,7 +261,7 @@ init_winrt_module (AdwSettingsImplWin32 *self)
 }
 
 static void
-cleanup_winrt_settings (AdwSettingsImplWin32 *self)
+cleanup_winrt_settings (AdapSettingsImplWin32 *self)
 {
   if (self->ui) {
     if (self->color_changed_token.value)
@@ -283,7 +283,7 @@ cleanup_winrt_settings (AdwSettingsImplWin32 *self)
 }
 
 static HRESULT
-init_winrt_settings (AdwSettingsImplWin32 *self)
+init_winrt_settings (AdapSettingsImplWin32 *self)
 {
   HRESULT res;
 
@@ -304,7 +304,7 @@ init_winrt_settings (AdwSettingsImplWin32 *self)
 
 /* High contrast is supported on all Windows versions. */
 static void
-system_colors_changed (AdwSettingsImplWin32 *self)
+system_colors_changed (AdapSettingsImplWin32 *self)
 {
   HIGHCONTRASTA hc;
 
@@ -315,7 +315,7 @@ system_colors_changed (AdwSettingsImplWin32 *self)
   if (SystemParametersInfoA (SPI_GETHIGHCONTRAST, sizeof hc, &hc, 0)) {
     gboolean high_contrast = (hc.dwFlags & HCF_HIGHCONTRASTON) != 0;
 
-    adw_settings_impl_set_high_contrast (ADW_SETTINGS_IMPL (self), high_contrast);
+    adap_settings_impl_set_high_contrast (ADAP_SETTINGS_IMPL (self), high_contrast);
   }
 
 #ifdef HAS_WINRT
@@ -329,7 +329,7 @@ system_colors_filter (GdkWin32Display *display,
                       int             *return_value,
                       gpointer         data)
 {
-  AdwSettingsImplWin32 *self = data;
+  AdapSettingsImplWin32 *self = data;
 
   if (message->message == WM_SYSCOLORCHANGE ||
       message->message == WM_THEMECHANGED)
@@ -339,9 +339,9 @@ system_colors_filter (GdkWin32Display *display,
 }
 
 static void
-adw_settings_impl_win32_dispose (GObject *object)
+adap_settings_impl_win32_dispose (GObject *object)
 {
-  AdwSettingsImplWin32 *self = ADW_SETTINGS_IMPL_WIN32 (object);
+  AdapSettingsImplWin32 *self = ADAP_SETTINGS_IMPL_WIN32 (object);
 
 #ifdef HAS_WINRT
   cleanup_winrt_settings (self);
@@ -357,32 +357,32 @@ adw_settings_impl_win32_dispose (GObject *object)
     self->added_filter = FALSE;
   }
 
-  G_OBJECT_CLASS (adw_settings_impl_win32_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_settings_impl_win32_parent_class)->dispose (object);
 }
 
 static void
-adw_settings_impl_win32_class_init (AdwSettingsImplWin32Class *klass)
+adap_settings_impl_win32_class_init (AdapSettingsImplWin32Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = adw_settings_impl_win32_dispose;
+  object_class->dispose = adap_settings_impl_win32_dispose;
 }
 
 static void
-adw_settings_impl_win32_init (AdwSettingsImplWin32 *self)
+adap_settings_impl_win32_init (AdapSettingsImplWin32 *self)
 {
 }
 
-AdwSettingsImpl *
-adw_settings_impl_win32_new (gboolean enable_color_scheme,
+AdapSettingsImpl *
+adap_settings_impl_win32_new (gboolean enable_color_scheme,
                              gboolean enable_high_contrast)
 {
-  AdwSettingsImplWin32 *self = g_object_new (ADW_TYPE_SETTINGS_IMPL_WIN32, NULL);
+  AdapSettingsImplWin32 *self = g_object_new (ADAP_TYPE_SETTINGS_IMPL_WIN32, NULL);
   GdkDisplay *display = gdk_display_get_default ();
   gboolean found_color_scheme = FALSE;
 
   if (!GDK_IS_WIN32_DISPLAY (display))
-    return ADW_SETTINGS_IMPL (self);
+    return ADAP_SETTINGS_IMPL (self);
 
   if (enable_high_contrast) {
     gdk_win32_display_add_filter (GDK_WIN32_DISPLAY (display),
@@ -399,9 +399,9 @@ adw_settings_impl_win32_new (gboolean enable_color_scheme,
   if (enable_high_contrast)
     system_colors_changed (self);
 
-  adw_settings_impl_set_features (ADW_SETTINGS_IMPL (self),
+  adap_settings_impl_set_features (ADAP_SETTINGS_IMPL (self),
                                   found_color_scheme,
                                   enable_high_contrast);
 
-  return ADW_SETTINGS_IMPL (self);
+  return ADAP_SETTINGS_IMPL (self);
 }

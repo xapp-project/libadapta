@@ -7,12 +7,12 @@
  */
 
 #include "config.h"
-#include "adw-toolbar-view.h"
+#include "adap-toolbar-view.h"
 
-#include "adw-widget-utils-private.h"
+#include "adap-widget-utils-private.h"
 
 /**
- * AdwToolbarView:
+ * AdapToolbarView:
  *
  * A widget containing a page, as well as top and/or bottom bars.
  *
@@ -21,17 +21,17 @@
  *   <img src="toolbar-view.png" alt="toolbar-view">
  * </picture>
  *
- * `AdwToolbarView` has a single content widget and one or multiple top and
+ * `AdapToolbarView` has a single content widget and one or multiple top and
  * bottom bars, shown at the top and bottom sides respectively.
  *
- * Example of an `AdwToolbarView` UI definition:
+ * Example of an `AdapToolbarView` UI definition:
  * ```xml
- * <object class="AdwToolbarView">
+ * <object class="AdapToolbarView">
  *   <child type="top">
- *     <object class="AdwHeaderBar"/>
+ *     <object class="AdapHeaderBar"/>
  *   </child>
  *   <property name="content">
- *     <object class="AdwPreferencesPage">
+ *     <object class="AdapPreferencesPage">
  *       <!-- ... -->
  *     </object>
  *   </property>
@@ -79,7 +79,7 @@
  *   <img src="toolbar-view-raised.png" alt="toolbar-view-raised">
  * </picture>
  *
- * `AdwToolbarView` ensures the top and bottom bars have consistent backdrop
+ * `AdapToolbarView` ensures the top and bottom bars have consistent backdrop
  * styles and vertical spacing. For comparison:
  *
  * <picture style="min-width: 40%; display: inline-block;">
@@ -103,29 +103,29 @@
  * [property@ToolbarView:reveal-top-bars] and
  * [property@ToolbarView:reveal-bottom-bars] properties.
  *
- * ## `AdwToolbarView` as `GtkBuildable`
+ * ## `AdapToolbarView` as `GtkBuildable`
  *
- * The `AdwToolbarView` implementation of the [iface@Gtk.Buildable] interface
+ * The `AdapToolbarView` implementation of the [iface@Gtk.Buildable] interface
  * supports adding a top bar by specifying “top” as the “type” attribute of a
  * `<child>` element, or adding a bottom bar by specifying “bottom”.
  *
  * ## Accessibility
  *
- * `AdwToolbarView` uses the `GTK_ACCESSIBLE_ROLE_GROUP` role.
+ * `AdapToolbarView` uses the `GTK_ACCESSIBLE_ROLE_GROUP` role.
  *
  * Since: 1.4
  */
 
 /**
- * AdwToolbarStyle:
- * @ADW_TOOLBAR_FLAT: No background, shadow only for scrolled content
- * @ADW_TOOLBAR_RAISED: Opaque background with a persistent shadow
- * @ADW_TOOLBAR_RAISED_BORDER: Opaque background with a persistent border
+ * AdapToolbarStyle:
+ * @ADAP_TOOLBAR_FLAT: No background, shadow only for scrolled content
+ * @ADAP_TOOLBAR_RAISED: Opaque background with a persistent shadow
+ * @ADAP_TOOLBAR_RAISED_BORDER: Opaque background with a persistent border
  *
  * Describes the possible top or bottom bar styles in an [class@ToolbarView]
  * widget.
  *
- * `ADW_TOOLBAR_FLAT` is suitable for simple content, such as
+ * `ADAP_TOOLBAR_FLAT` is suitable for simple content, such as
  * [class@StatusPage] or [class@PreferencesPage], where the background at the
  * top and bottom parts of the page is uniform. Additionally, windows with
  * sidebars should always use this style.
@@ -139,12 +139,12 @@
  *   <img src="toolbar-view-flat-2.png" alt="toolbar-view-flat-2">
  * </picture>
  *
- * `ADW_TOOLBAR_RAISED` style is suitable for content such as
+ * `ADAP_TOOLBAR_RAISED` style is suitable for content such as
  * [utility panes](https://developer.gnome.org/hig/patterns/containers/utility-panes.html),
  * where some elements are directly adjacent to the top/bottom bars, or
  * [class@TabView], where each page can have a different background.
  *
- * `ADW_TOOLBAR_RAISED_BORDER` style is similar to `ADW_TOOLBAR_RAISED`, but
+ * `ADAP_TOOLBAR_RAISED_BORDER` style is similar to `ADAP_TOOLBAR_RAISED`, but
  * with the shadow replaced with a more subtle border. It's intended to be used
  * in applications like image viewers, where a shadow over the content might be
  * undesired.
@@ -166,7 +166,7 @@
  * Since: 1.4
  */
 
-struct _AdwToolbarView
+struct _AdapToolbarView
 {
   GtkWidget parent_instance;
 
@@ -178,8 +178,8 @@ struct _AdwToolbarView
   GtkWidget *bottom_bar;
   GtkWidget *bottom_box;
 
-  AdwToolbarStyle top_bar_style;
-  AdwToolbarStyle bottom_bar_style;
+  AdapToolbarStyle top_bar_style;
+  AdapToolbarStyle bottom_bar_style;
 
   gboolean extend_content_to_top_edge;
   gboolean extend_content_to_bottom_edge;
@@ -188,10 +188,10 @@ struct _AdwToolbarView
   int bottom_bar_height;
 };
 
-static void adw_toolbar_view_buildable_init (GtkBuildableIface *iface);
+static void adap_toolbar_view_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwToolbarView, adw_toolbar_view, GTK_TYPE_WIDGET,
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_toolbar_view_buildable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapToolbarView, adap_toolbar_view, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_toolbar_view_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -212,9 +212,9 @@ enum {
 static GParamSpec *props[LAST_PROP];
 
 static void
-update_undershoots (AdwToolbarView *self)
+update_undershoots (AdapToolbarView *self)
 {
-  if (self->top_bar_style == ADW_TOOLBAR_FLAT &&
+  if (self->top_bar_style == ADAP_TOOLBAR_FLAT &&
       !self->extend_content_to_top_edge &&
       gtk_widget_get_height (self->top_bar) > 0) {
     gtk_widget_add_css_class (GTK_WIDGET (self), "undershoot-top");
@@ -222,7 +222,7 @@ update_undershoots (AdwToolbarView *self)
     gtk_widget_remove_css_class (GTK_WIDGET (self), "undershoot-top");
   }
 
-  if (self->bottom_bar_style == ADW_TOOLBAR_FLAT &&
+  if (self->bottom_bar_style == ADAP_TOOLBAR_FLAT &&
       !self->extend_content_to_bottom_edge &&
       gtk_widget_get_height (self->bottom_bar) > 0) {
     gtk_widget_add_css_class (GTK_WIDGET (self), "undershoot-bottom");
@@ -254,9 +254,9 @@ update_collapse_style (GtkWidget *box)
 }
 
 static GtkSizeRequestMode
-adw_toolbar_view_get_request_mode (GtkWidget *widget)
+adap_toolbar_view_get_request_mode (GtkWidget *widget)
 {
-  AdwToolbarView *self = ADW_TOOLBAR_VIEW (widget);
+  AdapToolbarView *self = ADAP_TOOLBAR_VIEW (widget);
 
   if (self->content)
     return gtk_widget_get_request_mode (self->content);
@@ -265,7 +265,7 @@ adw_toolbar_view_get_request_mode (GtkWidget *widget)
 }
 
 static void
-adw_toolbar_view_measure (GtkWidget      *widget,
+adap_toolbar_view_measure (GtkWidget      *widget,
                           GtkOrientation  orientation,
                           int             for_size,
                           int            *minimum,
@@ -273,7 +273,7 @@ adw_toolbar_view_measure (GtkWidget      *widget,
                           int            *minimum_baseline,
                           int            *natural_baseline)
 {
-  AdwToolbarView *self = ADW_TOOLBAR_VIEW (widget);
+  AdapToolbarView *self = ADAP_TOOLBAR_VIEW (widget);
   int top_min, bottom_min, content_min = 0;
   int top_nat, bottom_nat, content_nat = 0;
 
@@ -323,12 +323,12 @@ adw_toolbar_view_measure (GtkWidget      *widget,
 }
 
 static void
-adw_toolbar_view_size_allocate (GtkWidget *widget,
+adap_toolbar_view_size_allocate (GtkWidget *widget,
                                 int        width,
                                 int        height,
                                 int        baseline)
 {
-  AdwToolbarView *self = ADW_TOOLBAR_VIEW (widget);
+  AdapToolbarView *self = ADAP_TOOLBAR_VIEW (widget);
   int top_min, top_nat, bottom_min, bottom_nat, content_min = 0;
   int top_height, bottom_height;
   int content_height, content_offset;
@@ -386,9 +386,9 @@ adw_toolbar_view_size_allocate (GtkWidget *widget,
 }
 
 static void
-adw_toolbar_view_dispose (GObject *object)
+adap_toolbar_view_dispose (GObject *object)
 {
-  AdwToolbarView *self = ADW_TOOLBAR_VIEW (object);
+  AdapToolbarView *self = ADAP_TOOLBAR_VIEW (object);
 
   g_clear_pointer (&self->content, gtk_widget_unparent);
   g_clear_pointer (&self->top_bar, gtk_widget_unparent);
@@ -397,44 +397,44 @@ adw_toolbar_view_dispose (GObject *object)
   self->top_box = NULL;
   self->bottom_box = NULL;
 
-  G_OBJECT_CLASS (adw_toolbar_view_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_toolbar_view_parent_class)->dispose (object);
 }
 
 static void
-adw_toolbar_view_get_property (GObject    *object,
+adap_toolbar_view_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  AdwToolbarView *self = ADW_TOOLBAR_VIEW (object);
+  AdapToolbarView *self = ADAP_TOOLBAR_VIEW (object);
 
   switch (prop_id) {
   case PROP_CONTENT:
-    g_value_set_object (value, adw_toolbar_view_get_content (self));
+    g_value_set_object (value, adap_toolbar_view_get_content (self));
     break;
   case PROP_TOP_BAR_STYLE:
-    g_value_set_enum (value, adw_toolbar_view_get_top_bar_style (self));
+    g_value_set_enum (value, adap_toolbar_view_get_top_bar_style (self));
     break;
   case PROP_BOTTOM_BAR_STYLE:
-    g_value_set_enum (value, adw_toolbar_view_get_bottom_bar_style (self));
+    g_value_set_enum (value, adap_toolbar_view_get_bottom_bar_style (self));
     break;
   case PROP_REVEAL_TOP_BARS:
-    g_value_set_boolean (value, adw_toolbar_view_get_reveal_top_bars (self));
+    g_value_set_boolean (value, adap_toolbar_view_get_reveal_top_bars (self));
     break;
   case PROP_REVEAL_BOTTOM_BARS:
-    g_value_set_boolean (value, adw_toolbar_view_get_reveal_bottom_bars (self));
+    g_value_set_boolean (value, adap_toolbar_view_get_reveal_bottom_bars (self));
     break;
   case PROP_EXTEND_CONTENT_TO_TOP_EDGE:
-    g_value_set_boolean (value, adw_toolbar_view_get_extend_content_to_top_edge (self));
+    g_value_set_boolean (value, adap_toolbar_view_get_extend_content_to_top_edge (self));
     break;
   case PROP_EXTEND_CONTENT_TO_BOTTOM_EDGE:
-    g_value_set_boolean (value, adw_toolbar_view_get_extend_content_to_bottom_edge (self));
+    g_value_set_boolean (value, adap_toolbar_view_get_extend_content_to_bottom_edge (self));
     break;
   case PROP_TOP_BAR_HEIGHT:
-    g_value_set_int (value, adw_toolbar_view_get_top_bar_height (self));
+    g_value_set_int (value, adap_toolbar_view_get_top_bar_height (self));
     break;
   case PROP_BOTTOM_BAR_HEIGHT:
-    g_value_set_int (value, adw_toolbar_view_get_bottom_bar_height (self));
+    g_value_set_int (value, adap_toolbar_view_get_bottom_bar_height (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -442,34 +442,34 @@ adw_toolbar_view_get_property (GObject    *object,
 }
 
 static void
-adw_toolbar_view_set_property (GObject      *object,
+adap_toolbar_view_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
-  AdwToolbarView *self = ADW_TOOLBAR_VIEW (object);
+  AdapToolbarView *self = ADAP_TOOLBAR_VIEW (object);
 
   switch (prop_id) {
   case PROP_CONTENT:
-    adw_toolbar_view_set_content (self, g_value_get_object (value));
+    adap_toolbar_view_set_content (self, g_value_get_object (value));
     break;
   case PROP_TOP_BAR_STYLE:
-    adw_toolbar_view_set_top_bar_style (self, g_value_get_enum (value));
+    adap_toolbar_view_set_top_bar_style (self, g_value_get_enum (value));
     break;
   case PROP_BOTTOM_BAR_STYLE:
-    adw_toolbar_view_set_bottom_bar_style (self, g_value_get_enum (value));
+    adap_toolbar_view_set_bottom_bar_style (self, g_value_get_enum (value));
     break;
   case PROP_REVEAL_TOP_BARS:
-    adw_toolbar_view_set_reveal_top_bars (self, g_value_get_boolean (value));
+    adap_toolbar_view_set_reveal_top_bars (self, g_value_get_boolean (value));
     break;
   case PROP_REVEAL_BOTTOM_BARS:
-    adw_toolbar_view_set_reveal_bottom_bars (self, g_value_get_boolean (value));
+    adap_toolbar_view_set_reveal_bottom_bars (self, g_value_get_boolean (value));
     break;
   case PROP_EXTEND_CONTENT_TO_TOP_EDGE:
-    adw_toolbar_view_set_extend_content_to_top_edge (self, g_value_get_boolean (value));
+    adap_toolbar_view_set_extend_content_to_top_edge (self, g_value_get_boolean (value));
     break;
   case PROP_EXTEND_CONTENT_TO_BOTTOM_EDGE:
-    adw_toolbar_view_set_extend_content_to_bottom_edge (self, g_value_get_boolean (value));
+    adap_toolbar_view_set_extend_content_to_bottom_edge (self, g_value_get_boolean (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -477,23 +477,23 @@ adw_toolbar_view_set_property (GObject      *object,
 }
 
 static void
-adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
+adap_toolbar_view_class_init (AdapToolbarViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_toolbar_view_dispose;
-  object_class->get_property = adw_toolbar_view_get_property;
-  object_class->set_property = adw_toolbar_view_set_property;
+  object_class->dispose = adap_toolbar_view_dispose;
+  object_class->get_property = adap_toolbar_view_get_property;
+  object_class->set_property = adap_toolbar_view_set_property;
 
-  widget_class->get_request_mode = adw_toolbar_view_get_request_mode;
-  widget_class->measure = adw_toolbar_view_measure;
-  widget_class->size_allocate = adw_toolbar_view_size_allocate;
-  widget_class->focus = adw_widget_focus_child;
-  widget_class->compute_expand = adw_widget_compute_expand;
+  widget_class->get_request_mode = adap_toolbar_view_get_request_mode;
+  widget_class->measure = adap_toolbar_view_measure;
+  widget_class->size_allocate = adap_toolbar_view_size_allocate;
+  widget_class->focus = adap_widget_focus_child;
+  widget_class->compute_expand = adap_widget_compute_expand;
 
   /**
-   * AdwToolbarView:content: (attributes org.gtk.Property.get=adw_toolbar_view_get_content org.gtk.Property.set=adw_toolbar_view_set_content)
+   * AdapToolbarView:content: (attributes org.gtk.Property.get=adap_toolbar_view_get_content org.gtk.Property.set=adap_toolbar_view_set_content)
    *
    * The content widget.
    *
@@ -505,11 +505,11 @@ adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToolbarView:top-bar-style: (attributes org.gtk.Property.get=adw_toolbar_view_get_top_bar_style org.gtk.Property.set=adw_toolbar_view_set_top_bar_style)
+   * AdapToolbarView:top-bar-style: (attributes org.gtk.Property.get=adap_toolbar_view_get_top_bar_style org.gtk.Property.set=adap_toolbar_view_set_top_bar_style)
    *
    * Appearance of the top bars.
    *
-   * If set to `ADW_TOOLBAR_FLAT`, top bars are flat and scrolling content has a
+   * If set to `ADAP_TOOLBAR_FLAT`, top bars are flat and scrolling content has a
    * subtle undershoot shadow when touching them, same as the
    * [`.undershoot-top`](style-classes.html#undershoot-indicators)
    * style class. This works well for simple content, e.g. [class@StatusPage] or
@@ -520,13 +520,13 @@ adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
    * visible. It is also never present if
    * [property@ToolbarView:extend-content-to-top-edge] is set to `TRUE`.
    *
-   * If set to `ADW_TOOLBAR_RAISED`, top bars have an opaque background and a
+   * If set to `ADAP_TOOLBAR_RAISED`, top bars have an opaque background and a
    * persistent shadow, this is suitable for content such as
    * [utility panes](https://developer.gnome.org/hig/patterns/containers/utility-panes.html),
    * where some elements are directly adjacent to the top bars, or
    * [class@TabView], where each page can have a different background.
    *
-   * `ADW_TOOLBAR_RAISED_BORDER` is similar to `ADW_TOOLBAR_RAISED`, but the
+   * `ADAP_TOOLBAR_RAISED_BORDER` is similar to `ADAP_TOOLBAR_RAISED`, but the
    * shadow is replaced with a more subtle border. This can be useful for
    * applications like image viewers.
    *
@@ -536,16 +536,16 @@ adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
    */
   props[PROP_TOP_BAR_STYLE] =
     g_param_spec_enum ("top-bar-style", NULL, NULL,
-                       ADW_TYPE_TOOLBAR_STYLE,
-                       ADW_TOOLBAR_FLAT,
+                       ADAP_TYPE_TOOLBAR_STYLE,
+                       ADAP_TOOLBAR_FLAT,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToolbarView:bottom-bar-style: (attributes org.gtk.Property.get=adw_toolbar_view_get_bottom_bar_style org.gtk.Property.set=adw_toolbar_view_set_bottom_bar_style)
+   * AdapToolbarView:bottom-bar-style: (attributes org.gtk.Property.get=adap_toolbar_view_get_bottom_bar_style org.gtk.Property.set=adap_toolbar_view_set_bottom_bar_style)
    *
    * Appearance of the bottom bars.
    *
-   * If set to `ADW_TOOLBAR_FLAT`, bottom bars are flat and scrolling content
+   * If set to `ADAP_TOOLBAR_FLAT`, bottom bars are flat and scrolling content
    * has a subtle undershoot shadow when touching them, same as the
    * [`.undershoot-bottom`](style-classes.html#undershoot-indicators)
    * style class. This works well for simple content, e.g. [class@StatusPage] or
@@ -556,13 +556,13 @@ adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
    * visible. It is also never present if
    * [property@ToolbarView:extend-content-to-bottom-edge] is set to `TRUE`.
    *
-   * If set to `ADW_TOOLBAR_RAISED`, bottom bars have an opaque background and a
+   * If set to `ADAP_TOOLBAR_RAISED`, bottom bars have an opaque background and a
    * persistent shadow, this is suitable for content such as
    * [utility panes](https://developer.gnome.org/hig/patterns/containers/utility-panes.html),
    * where some elements are directly adjacent to the bottom bars, or
    * [class@TabView], where each page can have a different background.
    *
-   * `ADW_TOOLBAR_RAISED_BORDER` is similar to `ADW_TOOLBAR_RAISED`, but the
+   * `ADAP_TOOLBAR_RAISED_BORDER` is similar to `ADAP_TOOLBAR_RAISED`, but the
    * shadow is replaced with a more subtle border. This can be useful for
    * applications like image viewers.
    *
@@ -572,12 +572,12 @@ adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
    */
   props[PROP_BOTTOM_BAR_STYLE] =
     g_param_spec_enum ("bottom-bar-style", NULL, NULL,
-                       ADW_TYPE_TOOLBAR_STYLE,
-                       ADW_TOOLBAR_FLAT,
+                       ADAP_TYPE_TOOLBAR_STYLE,
+                       ADAP_TOOLBAR_FLAT,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToolbarView:reveal-top-bars: (attributes org.gtk.Property.get=adw_toolbar_view_get_reveal_top_bars org.gtk.Property.set=adw_toolbar_view_get_reveal_top_bars)
+   * AdapToolbarView:reveal-top-bars: (attributes org.gtk.Property.get=adap_toolbar_view_get_reveal_top_bars org.gtk.Property.set=adap_toolbar_view_get_reveal_top_bars)
    *
    * Whether top bars are revealed.
    *
@@ -597,7 +597,7 @@ adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToolbarView:reveal-bottom-bars: (attributes org.gtk.Property.get=adw_toolbar_view_get_reveal_bottom_bars org.gtk.Property.set=adw_toolbar_view_get_reveal_bottom_bars)
+   * AdapToolbarView:reveal-bottom-bars: (attributes org.gtk.Property.get=adap_toolbar_view_get_reveal_bottom_bars org.gtk.Property.set=adap_toolbar_view_get_reveal_bottom_bars)
    *
    * Whether bottom bars are visible.
    *
@@ -617,7 +617,7 @@ adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToolbarView:extend-content-to-top-edge: (attributes org.gtk.Property.get=adw_toolbar_view_get_extend_content_to_top_edge org.gtk.Property.set=adw_toolbar_view_set_extend_content_to_top_edge)
+   * AdapToolbarView:extend-content-to-top-edge: (attributes org.gtk.Property.get=adap_toolbar_view_get_extend_content_to_top_edge org.gtk.Property.set=adap_toolbar_view_set_extend_content_to_top_edge)
    *
    * Whether the content widget can extend behind top bars.
    *
@@ -634,7 +634,7 @@ adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToolbarView:extend-content-to-bottom-edge: (attributes org.gtk.Property.get=adw_toolbar_view_get_extend_content_to_bottom_edge org.gtk.Property.set=adw_toolbar_view_set_extend_content_to_bottom_edge)
+   * AdapToolbarView:extend-content-to-bottom-edge: (attributes org.gtk.Property.get=adap_toolbar_view_get_extend_content_to_bottom_edge org.gtk.Property.set=adap_toolbar_view_set_extend_content_to_bottom_edge)
    *
    * Whether the content widget can extend behind bottom bars.
    *
@@ -652,7 +652,7 @@ adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwToolbarView:top-bar-height: (attributes org.gtk.Property.get=adw_toolbar_view_get_top_bar_height)
+   * AdapToolbarView:top-bar-height: (attributes org.gtk.Property.get=adap_toolbar_view_get_top_bar_height)
    *
    * The current top bar height.
    *
@@ -669,7 +669,7 @@ adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwToolbarView:bottom-bar-height: (attributes org.gtk.Property.get=adw_toolbar_view_get_bottom_bar_height)
+   * AdapToolbarView:bottom-bar-height: (attributes org.gtk.Property.get=adap_toolbar_view_get_bottom_bar_height)
    *
    * The current bottom bar height.
    *
@@ -692,12 +692,12 @@ adw_toolbar_view_class_init (AdwToolbarViewClass *klass)
 }
 
 static void
-adw_toolbar_view_init (AdwToolbarView *self)
+adap_toolbar_view_init (AdapToolbarView *self)
 {
   GtkWidget *top_handle, *bottom_handle;
 
-  self->top_bar_style = ADW_TOOLBAR_FLAT;
-  self->bottom_bar_style = ADW_TOOLBAR_FLAT;
+  self->top_bar_style = ADAP_TOOLBAR_FLAT;
+  self->bottom_bar_style = ADAP_TOOLBAR_FLAT;
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 
@@ -731,48 +731,48 @@ adw_toolbar_view_init (AdwToolbarView *self)
 }
 
 static void
-adw_toolbar_view_buildable_add_child (GtkBuildable *buildable,
+adap_toolbar_view_buildable_add_child (GtkBuildable *buildable,
                                       GtkBuilder   *builder,
                                       GObject      *child,
                                       const char   *type)
 {
-  AdwToolbarView *self = ADW_TOOLBAR_VIEW (buildable);
+  AdapToolbarView *self = ADAP_TOOLBAR_VIEW (buildable);
 
   if (g_strcmp0 (type, "top") == 0)
-    adw_toolbar_view_add_top_bar (self, GTK_WIDGET (child));
+    adap_toolbar_view_add_top_bar (self, GTK_WIDGET (child));
   else if (g_strcmp0 (type, "bottom") == 0)
-    adw_toolbar_view_add_bottom_bar (self, GTK_WIDGET (child));
+    adap_toolbar_view_add_bottom_bar (self, GTK_WIDGET (child));
   else if (!type && GTK_IS_WIDGET (child))
-    adw_toolbar_view_set_content (self, GTK_WIDGET (child));
+    adap_toolbar_view_set_content (self, GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_toolbar_view_buildable_init (GtkBuildableIface *iface)
+adap_toolbar_view_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_toolbar_view_buildable_add_child;
+  iface->add_child = adap_toolbar_view_buildable_add_child;
 }
 
 /**
- * adw_toolbar_view_new:
+ * adap_toolbar_view_new:
  *
- * Creates a new `AdwToolbarView`.
+ * Creates a new `AdapToolbarView`.
  *
- * Returns: the newly created `AdwToolbarView`
+ * Returns: the newly created `AdapToolbarView`
  *
  * Since: 1.4
  */
 GtkWidget *
-adw_toolbar_view_new (void)
+adap_toolbar_view_new (void)
 {
-  return g_object_new (ADW_TYPE_TOOLBAR_VIEW, NULL);
+  return g_object_new (ADAP_TYPE_TOOLBAR_VIEW, NULL);
 }
 
 /**
- * adw_toolbar_view_get_content: (attributes org.gtk.Method.get_property=content)
+ * adap_toolbar_view_get_content: (attributes org.gtk.Method.get_property=content)
  * @self: a toolbar view
  *
  * Gets the content widget for @self.
@@ -782,15 +782,15 @@ adw_toolbar_view_new (void)
  * Since: 1.4
  */
 GtkWidget *
-adw_toolbar_view_get_content (AdwToolbarView *self)
+adap_toolbar_view_get_content (AdapToolbarView *self)
 {
-  g_return_val_if_fail (ADW_IS_TOOLBAR_VIEW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_TOOLBAR_VIEW (self), NULL);
 
   return self->content;
 }
 
 /**
- * adw_toolbar_view_set_content: (attributes org.gtk.Method.set_property=content)
+ * adap_toolbar_view_set_content: (attributes org.gtk.Method.set_property=content)
  * @self: a toolbar view
  * @content: (nullable): the content widget
  *
@@ -799,10 +799,10 @@ adw_toolbar_view_get_content (AdwToolbarView *self)
  * Since: 1.4
  */
 void
-adw_toolbar_view_set_content (AdwToolbarView *self,
+adap_toolbar_view_set_content (AdapToolbarView *self,
                               GtkWidget      *content)
 {
-  g_return_if_fail (ADW_IS_TOOLBAR_VIEW (self));
+  g_return_if_fail (ADAP_IS_TOOLBAR_VIEW (self));
   g_return_if_fail (content == NULL || GTK_IS_WIDGET (content));
 
   if (content)
@@ -823,7 +823,7 @@ adw_toolbar_view_set_content (AdwToolbarView *self,
 }
 
 /**
- * adw_toolbar_view_add_top_bar:
+ * adap_toolbar_view_add_top_bar:
  * @self: a toolbar view
  * @widget: a widget
  *
@@ -832,10 +832,10 @@ adw_toolbar_view_set_content (AdwToolbarView *self,
  * Since: 1.4
  */
 void
-adw_toolbar_view_add_top_bar (AdwToolbarView *self,
+adap_toolbar_view_add_top_bar (AdapToolbarView *self,
                               GtkWidget      *widget)
 {
-  g_return_if_fail (ADW_IS_TOOLBAR_VIEW (self));
+  g_return_if_fail (ADAP_IS_TOOLBAR_VIEW (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_parent (widget) == NULL);
 
@@ -848,7 +848,7 @@ adw_toolbar_view_add_top_bar (AdwToolbarView *self,
 }
 
 /**
- * adw_toolbar_view_add_bottom_bar:
+ * adap_toolbar_view_add_bottom_bar:
  * @self: a toolbar view
  * @widget: a widget
  *
@@ -857,10 +857,10 @@ adw_toolbar_view_add_top_bar (AdwToolbarView *self,
  * Since: 1.4
  */
 void
-adw_toolbar_view_add_bottom_bar (AdwToolbarView *self,
+adap_toolbar_view_add_bottom_bar (AdapToolbarView *self,
                                  GtkWidget      *widget)
 {
-  g_return_if_fail (ADW_IS_TOOLBAR_VIEW (self));
+  g_return_if_fail (ADAP_IS_TOOLBAR_VIEW (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_parent (widget) == NULL);
 
@@ -873,7 +873,7 @@ adw_toolbar_view_add_bottom_bar (AdwToolbarView *self,
 }
 
 /**
- * adw_toolbar_view_remove:
+ * adap_toolbar_view_remove:
  * @self: a toolbar view
  * @widget: the child to be removed
  *
@@ -882,12 +882,12 @@ adw_toolbar_view_add_bottom_bar (AdwToolbarView *self,
  * Since: 1.4
  */
 void
-adw_toolbar_view_remove (AdwToolbarView *self,
+adap_toolbar_view_remove (AdapToolbarView *self,
                          GtkWidget      *widget)
 {
   GtkWidget *parent;
 
-  g_return_if_fail (ADW_IS_TOOLBAR_VIEW (self));
+  g_return_if_fail (ADAP_IS_TOOLBAR_VIEW (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   parent = gtk_widget_get_parent (widget);
@@ -905,15 +905,15 @@ adw_toolbar_view_remove (AdwToolbarView *self,
   }
 
   if (widget == self->content) {
-    adw_toolbar_view_set_content (self, NULL);
+    adap_toolbar_view_set_content (self, NULL);
     return;
   }
 
-  ADW_CRITICAL_CANNOT_REMOVE_CHILD (self, widget);
+  ADAP_CRITICAL_CANNOT_REMOVE_CHILD (self, widget);
 }
 
 /**
- * adw_toolbar_view_get_top_bar_style: (attributes org.gtk.Method.get_property=top-bar-style)
+ * adap_toolbar_view_get_top_bar_style: (attributes org.gtk.Method.get_property=top-bar-style)
  * @self: a toolbar view
  *
  * Gets appearance of the top bars for @self.
@@ -922,22 +922,22 @@ adw_toolbar_view_remove (AdwToolbarView *self,
  *
  * Since: 1.4
  */
-AdwToolbarStyle
-adw_toolbar_view_get_top_bar_style (AdwToolbarView *self)
+AdapToolbarStyle
+adap_toolbar_view_get_top_bar_style (AdapToolbarView *self)
 {
-  g_return_val_if_fail (ADW_IS_TOOLBAR_VIEW (self), ADW_TOOLBAR_FLAT);
+  g_return_val_if_fail (ADAP_IS_TOOLBAR_VIEW (self), ADAP_TOOLBAR_FLAT);
 
   return self->top_bar_style;
 }
 
 /**
- * adw_toolbar_view_set_top_bar_style: (attributes org.gtk.Method.set_property=top-bar-style)
+ * adap_toolbar_view_set_top_bar_style: (attributes org.gtk.Method.set_property=top-bar-style)
  * @self: a toolbar view
  * @style: top bar style
  *
  * Sets appearance of the top bars for @self.
  *
- * If set to `ADW_TOOLBAR_FLAT`, top bars are flat and scrolling content has a
+ * If set to `ADAP_TOOLBAR_FLAT`, top bars are flat and scrolling content has a
  * subtle undershoot shadow when touching them, same as the
  * [`.undershoot-top`](style-classes.html#undershoot-indicators)
  * style class. This works well for simple content, e.g. [class@StatusPage] or
@@ -948,13 +948,13 @@ adw_toolbar_view_get_top_bar_style (AdwToolbarView *self)
  * visible. It is also never present if
  * [property@ToolbarView:extend-content-to-top-edge] is set to `TRUE`.
  *
- * If set to `ADW_TOOLBAR_RAISED`, top bars have an opaque background and a
+ * If set to `ADAP_TOOLBAR_RAISED`, top bars have an opaque background and a
  * persistent shadow, this is suitable for content such as
  * [utility panes](https://developer.gnome.org/hig/patterns/containers/utility-panes.html),
  * where some elements are directly adjacent to the top bars, or
  * [class@TabView], where each page can have a different background.
  *
- * `ADW_TOOLBAR_RAISED_BORDER` is similar to `ADW_TOOLBAR_RAISED`, but the
+ * `ADAP_TOOLBAR_RAISED_BORDER` is similar to `ADAP_TOOLBAR_RAISED`, but the
  * shadow is replaced with a more subtle border. This can be useful for
  * applications like image viewers.
  *
@@ -963,11 +963,11 @@ adw_toolbar_view_get_top_bar_style (AdwToolbarView *self)
  * Since: 1.4
  */
 void
-adw_toolbar_view_set_top_bar_style (AdwToolbarView  *self,
-                                    AdwToolbarStyle  style)
+adap_toolbar_view_set_top_bar_style (AdapToolbarView  *self,
+                                    AdapToolbarStyle  style)
 {
-  g_return_if_fail (ADW_IS_TOOLBAR_VIEW (self));
-  g_return_if_fail (style <= ADW_TOOLBAR_RAISED_BORDER);
+  g_return_if_fail (ADAP_IS_TOOLBAR_VIEW (self));
+  g_return_if_fail (style <= ADAP_TOOLBAR_RAISED_BORDER);
 
   if (self->top_bar_style == style)
     return;
@@ -975,15 +975,15 @@ adw_toolbar_view_set_top_bar_style (AdwToolbarView  *self,
   self->top_bar_style = style;
 
   switch (style) {
-    case ADW_TOOLBAR_FLAT:
+    case ADAP_TOOLBAR_FLAT:
       gtk_widget_remove_css_class (self->top_bar, "raised");
       gtk_widget_remove_css_class (self->top_bar, "border");
       break;
-    case ADW_TOOLBAR_RAISED:
+    case ADAP_TOOLBAR_RAISED:
       gtk_widget_add_css_class (self->top_bar, "raised");
       gtk_widget_remove_css_class (self->top_bar, "border");
       break;
-    case ADW_TOOLBAR_RAISED_BORDER:
+    case ADAP_TOOLBAR_RAISED_BORDER:
       gtk_widget_add_css_class (self->top_bar, "raised");
       gtk_widget_add_css_class (self->top_bar, "border");
       break;
@@ -999,7 +999,7 @@ adw_toolbar_view_set_top_bar_style (AdwToolbarView  *self,
 }
 
 /**
- * adw_toolbar_view_get_bottom_bar_style: (attributes org.gtk.Method.get_property=bottom-bar-style)
+ * adap_toolbar_view_get_bottom_bar_style: (attributes org.gtk.Method.get_property=bottom-bar-style)
  * @self: a toolbar view
  *
  * Gets appearance of the botom bars for @self.
@@ -1008,22 +1008,22 @@ adw_toolbar_view_set_top_bar_style (AdwToolbarView  *self,
  *
  * Since: 1.4
  */
-AdwToolbarStyle
-adw_toolbar_view_get_bottom_bar_style (AdwToolbarView *self)
+AdapToolbarStyle
+adap_toolbar_view_get_bottom_bar_style (AdapToolbarView *self)
 {
-  g_return_val_if_fail (ADW_IS_TOOLBAR_VIEW (self), ADW_TOOLBAR_FLAT);
+  g_return_val_if_fail (ADAP_IS_TOOLBAR_VIEW (self), ADAP_TOOLBAR_FLAT);
 
   return self->bottom_bar_style;
 }
 
 /**
- * adw_toolbar_view_set_bottom_bar_style: (attributes org.gtk.Method.set_property=bottom-bar-style)
+ * adap_toolbar_view_set_bottom_bar_style: (attributes org.gtk.Method.set_property=bottom-bar-style)
  * @self: a toolbar view
  * @style: bottom bar style
  *
  * Sets appearance of the bottom bars for @self.
  *
- * If set to `ADW_TOOLBAR_FLAT`, bottom bars are flat and scrolling content has
+ * If set to `ADAP_TOOLBAR_FLAT`, bottom bars are flat and scrolling content has
  * a subtle undershoot shadow when touching them, same as the
  * [`.undershoot-bottom`](style-classes.html#undershoot-indicators)
  * style class. This works well for simple content, e.g. [class@StatusPage] or
@@ -1034,13 +1034,13 @@ adw_toolbar_view_get_bottom_bar_style (AdwToolbarView *self)
  * visible. It is also never present if
  * [property@ToolbarView:extend-content-to-bottom-edge] is set to `TRUE`.
  *
- * If set to `ADW_TOOLBAR_RAISED`, bottom bars have an opaque background and a
+ * If set to `ADAP_TOOLBAR_RAISED`, bottom bars have an opaque background and a
  * persistent shadow, this is suitable for content such as
  * [utility panes](https://developer.gnome.org/hig/patterns/containers/utility-panes.html),
  * where some elements are directly adjacent to the bottom bars, or
  * [class@TabView], where each page can have a different background.
  *
- * `ADW_TOOLBAR_RAISED_BORDER` is similar to `ADW_TOOLBAR_RAISED`, but the
+ * `ADAP_TOOLBAR_RAISED_BORDER` is similar to `ADAP_TOOLBAR_RAISED`, but the
  * shadow is replaced with a more subtle border. This can be useful for
  * applications like image viewers.
  *
@@ -1049,11 +1049,11 @@ adw_toolbar_view_get_bottom_bar_style (AdwToolbarView *self)
  * Since: 1.4
  */
 void
-adw_toolbar_view_set_bottom_bar_style (AdwToolbarView  *self,
-                                       AdwToolbarStyle  style)
+adap_toolbar_view_set_bottom_bar_style (AdapToolbarView  *self,
+                                       AdapToolbarStyle  style)
 {
-  g_return_if_fail (ADW_IS_TOOLBAR_VIEW (self));
-  g_return_if_fail (style <= ADW_TOOLBAR_RAISED_BORDER);
+  g_return_if_fail (ADAP_IS_TOOLBAR_VIEW (self));
+  g_return_if_fail (style <= ADAP_TOOLBAR_RAISED_BORDER);
 
   if (self->bottom_bar_style == style)
     return;
@@ -1061,15 +1061,15 @@ adw_toolbar_view_set_bottom_bar_style (AdwToolbarView  *self,
   self->bottom_bar_style = style;
 
   switch (style) {
-    case ADW_TOOLBAR_FLAT:
+    case ADAP_TOOLBAR_FLAT:
       gtk_widget_remove_css_class (self->bottom_bar, "raised");
       gtk_widget_remove_css_class (self->bottom_bar, "border");
       break;
-    case ADW_TOOLBAR_RAISED:
+    case ADAP_TOOLBAR_RAISED:
       gtk_widget_add_css_class (self->bottom_bar, "raised");
       gtk_widget_remove_css_class (self->bottom_bar, "border");
       break;
-    case ADW_TOOLBAR_RAISED_BORDER:
+    case ADAP_TOOLBAR_RAISED_BORDER:
       gtk_widget_add_css_class (self->bottom_bar, "raised");
       gtk_widget_add_css_class (self->bottom_bar, "border");
       break;
@@ -1085,7 +1085,7 @@ adw_toolbar_view_set_bottom_bar_style (AdwToolbarView  *self,
 }
 
 /**
- * adw_toolbar_view_get_reveal_top_bars: (attributes org.gtk.Method.get_property=reveal-top-bars)
+ * adap_toolbar_view_get_reveal_top_bars: (attributes org.gtk.Method.get_property=reveal-top-bars)
  * @self: a toolbar view
  *
  * Gets whether top bars are revealed for @self.
@@ -1095,15 +1095,15 @@ adw_toolbar_view_set_bottom_bar_style (AdwToolbarView  *self,
  * Since: 1.4
  */
 gboolean
-adw_toolbar_view_get_reveal_top_bars (AdwToolbarView *self)
+adap_toolbar_view_get_reveal_top_bars (AdapToolbarView *self)
 {
-  g_return_val_if_fail (ADW_IS_TOOLBAR_VIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TOOLBAR_VIEW (self), FALSE);
 
   return gtk_revealer_get_reveal_child (GTK_REVEALER (self->top_bar));
 }
 
 /**
- * adw_toolbar_view_set_reveal_top_bars: (attributes org.gtk.Method.set_property=reveal-top-bars)
+ * adap_toolbar_view_set_reveal_top_bars: (attributes org.gtk.Method.set_property=reveal-top-bars)
  * @self: a toolbar view
  * @reveal: whether to reveal top bars
  *
@@ -1120,14 +1120,14 @@ adw_toolbar_view_get_reveal_top_bars (AdwToolbarView *self)
  * Since: 1.4
  */
 void
-adw_toolbar_view_set_reveal_top_bars (AdwToolbarView *self,
+adap_toolbar_view_set_reveal_top_bars (AdapToolbarView *self,
                                       gboolean        reveal)
 {
-  g_return_if_fail (ADW_IS_TOOLBAR_VIEW (self));
+  g_return_if_fail (ADAP_IS_TOOLBAR_VIEW (self));
 
   reveal = !!reveal;
 
-  if (reveal == adw_toolbar_view_get_reveal_top_bars (self))
+  if (reveal == adap_toolbar_view_get_reveal_top_bars (self))
     return;
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->top_bar), reveal);
@@ -1136,7 +1136,7 @@ adw_toolbar_view_set_reveal_top_bars (AdwToolbarView *self,
 }
 
 /**
- * adw_toolbar_view_get_reveal_bottom_bars: (attributes org.gtk.Method.get_property=reveal-bottom-bars)
+ * adap_toolbar_view_get_reveal_bottom_bars: (attributes org.gtk.Method.get_property=reveal-bottom-bars)
  * @self: a toolbar view
  *
  * Gets whether bottom bars are revealed for @self.
@@ -1146,15 +1146,15 @@ adw_toolbar_view_set_reveal_top_bars (AdwToolbarView *self,
  * Since: 1.4
  */
 gboolean
-adw_toolbar_view_get_reveal_bottom_bars (AdwToolbarView *self)
+adap_toolbar_view_get_reveal_bottom_bars (AdapToolbarView *self)
 {
-  g_return_val_if_fail (ADW_IS_TOOLBAR_VIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TOOLBAR_VIEW (self), FALSE);
 
   return gtk_revealer_get_reveal_child (GTK_REVEALER (self->bottom_bar));
 }
 
 /**
- * adw_toolbar_view_set_reveal_bottom_bars: (attributes org.gtk.Method.set_property=reveal-bottom-bars)
+ * adap_toolbar_view_set_reveal_bottom_bars: (attributes org.gtk.Method.set_property=reveal-bottom-bars)
  * @self: a toolbar view
  * @reveal: whether to reveal bottom bars
  *
@@ -1171,14 +1171,14 @@ adw_toolbar_view_get_reveal_bottom_bars (AdwToolbarView *self)
  * Since: 1.4
  */
 void
-adw_toolbar_view_set_reveal_bottom_bars (AdwToolbarView *self,
+adap_toolbar_view_set_reveal_bottom_bars (AdapToolbarView *self,
                                          gboolean        reveal)
 {
-  g_return_if_fail (ADW_IS_TOOLBAR_VIEW (self));
+  g_return_if_fail (ADAP_IS_TOOLBAR_VIEW (self));
 
   reveal = !!reveal;
 
-  if (reveal == adw_toolbar_view_get_reveal_bottom_bars (self))
+  if (reveal == adap_toolbar_view_get_reveal_bottom_bars (self))
     return;
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->bottom_bar), reveal);
@@ -1187,7 +1187,7 @@ adw_toolbar_view_set_reveal_bottom_bars (AdwToolbarView *self,
 }
 
 /**
- * adw_toolbar_view_get_extend_content_to_top_edge: (attributes org.gtk.Method.get_property=extend-content-to-top-edge)
+ * adap_toolbar_view_get_extend_content_to_top_edge: (attributes org.gtk.Method.get_property=extend-content-to-top-edge)
  * @self: a toolbar view
  *
  * Gets whether the content widget can extend behind top bars.
@@ -1197,15 +1197,15 @@ adw_toolbar_view_set_reveal_bottom_bars (AdwToolbarView *self,
  * Since: 1.4
  */
 gboolean
-adw_toolbar_view_get_extend_content_to_top_edge (AdwToolbarView *self)
+adap_toolbar_view_get_extend_content_to_top_edge (AdapToolbarView *self)
 {
-  g_return_val_if_fail (ADW_IS_TOOLBAR_VIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TOOLBAR_VIEW (self), FALSE);
 
   return self->extend_content_to_top_edge;
 }
 
 /**
- * adw_toolbar_view_set_extend_content_to_top_edge: (attributes org.gtk.Method.set_property=extend-content-to-top-edge)
+ * adap_toolbar_view_set_extend_content_to_top_edge: (attributes org.gtk.Method.set_property=extend-content-to-top-edge)
  * @self: a toolbar view
  * @extend: whether content extends behind top bars
  *
@@ -1219,10 +1219,10 @@ adw_toolbar_view_get_extend_content_to_top_edge (AdwToolbarView *self)
  * Since: 1.4
  */
 void
-adw_toolbar_view_set_extend_content_to_top_edge (AdwToolbarView *self,
+adap_toolbar_view_set_extend_content_to_top_edge (AdapToolbarView *self,
                                                  gboolean        extend)
 {
-  g_return_if_fail (ADW_IS_TOOLBAR_VIEW (self));
+  g_return_if_fail (ADAP_IS_TOOLBAR_VIEW (self));
 
   extend = !!extend;
 
@@ -1239,7 +1239,7 @@ adw_toolbar_view_set_extend_content_to_top_edge (AdwToolbarView *self,
 }
 
 /**
- * adw_toolbar_view_get_extend_content_to_bottom_edge: (attributes org.gtk.Method.get_property=extend-content-to-bottom-edge)
+ * adap_toolbar_view_get_extend_content_to_bottom_edge: (attributes org.gtk.Method.get_property=extend-content-to-bottom-edge)
  * @self: a toolbar view
  *
  * Gets whether the content widget can extend behind bottom bars.
@@ -1249,15 +1249,15 @@ adw_toolbar_view_set_extend_content_to_top_edge (AdwToolbarView *self,
  * Since: 1.4
  */
 gboolean
-adw_toolbar_view_get_extend_content_to_bottom_edge (AdwToolbarView *self)
+adap_toolbar_view_get_extend_content_to_bottom_edge (AdapToolbarView *self)
 {
-  g_return_val_if_fail (ADW_IS_TOOLBAR_VIEW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TOOLBAR_VIEW (self), FALSE);
 
   return self->extend_content_to_bottom_edge;
 }
 
 /**
- * adw_toolbar_view_set_extend_content_to_bottom_edge: (attributes org.gtk.Method.set_property=extend-content-to-bottom-edge)
+ * adap_toolbar_view_set_extend_content_to_bottom_edge: (attributes org.gtk.Method.set_property=extend-content-to-bottom-edge)
  * @self: a toolbar view
  * @extend: whether content extends behind bottom bars
  *
@@ -1271,10 +1271,10 @@ adw_toolbar_view_get_extend_content_to_bottom_edge (AdwToolbarView *self)
  * Since: 1.4
  */
 void
-adw_toolbar_view_set_extend_content_to_bottom_edge (AdwToolbarView *self,
+adap_toolbar_view_set_extend_content_to_bottom_edge (AdapToolbarView *self,
                                                     gboolean        extend)
 {
-  g_return_if_fail (ADW_IS_TOOLBAR_VIEW (self));
+  g_return_if_fail (ADAP_IS_TOOLBAR_VIEW (self));
 
   extend = !!extend;
 
@@ -1291,7 +1291,7 @@ adw_toolbar_view_set_extend_content_to_bottom_edge (AdwToolbarView *self,
 }
 
 /**
- * adw_toolbar_view_get_top_bar_height: (attributes org.gtk.Method.get_property=top-bar-height)
+ * adap_toolbar_view_get_top_bar_height: (attributes org.gtk.Method.get_property=top-bar-height)
  * @self: a toolbar view
  *
  * Gets the current top bar height for @self.
@@ -1306,15 +1306,15 @@ adw_toolbar_view_set_extend_content_to_bottom_edge (AdwToolbarView *self,
  * Since: 1.4
  */
 int
-adw_toolbar_view_get_top_bar_height (AdwToolbarView *self)
+adap_toolbar_view_get_top_bar_height (AdapToolbarView *self)
 {
-  g_return_val_if_fail (ADW_IS_TOOLBAR_VIEW (self), 0);
+  g_return_val_if_fail (ADAP_IS_TOOLBAR_VIEW (self), 0);
 
   return self->top_bar_height;
 }
 
 /**
- * adw_toolbar_view_get_bottom_bar_height: (attributes org.gtk.Method.get_property=bottom-bar-height)
+ * adap_toolbar_view_get_bottom_bar_height: (attributes org.gtk.Method.get_property=bottom-bar-height)
  * @self: a toolbar view
  *
  * Gets the current bottom bar height for @self.
@@ -1329,9 +1329,9 @@ adw_toolbar_view_get_top_bar_height (AdwToolbarView *self)
  * Since: 1.4
  */
 int
-adw_toolbar_view_get_bottom_bar_height (AdwToolbarView *self)
+adap_toolbar_view_get_bottom_bar_height (AdapToolbarView *self)
 {
-  g_return_val_if_fail (ADW_IS_TOOLBAR_VIEW (self), 0);
+  g_return_val_if_fail (ADAP_IS_TOOLBAR_VIEW (self), 0);
 
   return self->bottom_bar_height;
 }

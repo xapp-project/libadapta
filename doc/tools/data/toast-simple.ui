@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwToastOverlay" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapToastOverlay" id="widget">
     <property name="width-request">180</property>
     <child>
-      <object class="AdwToast">
+      <object class="AdapToast">
         <property name="title">Simple Toast</property>
       </object>
     </child>

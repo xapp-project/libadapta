@@ -1,13 +1,13 @@
 #pragma once
 
-#include <adwaita.h>
+#include <adapta.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_DEMO_PAGE_TOASTS (adw_demo_page_toasts_get_type())
+#define ADAP_TYPE_DEMO_PAGE_TOASTS (adap_demo_page_toasts_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwDemoPageToasts, adw_demo_page_toasts, ADW, DEMO_PAGE_TOASTS, AdwBin)
+G_DECLARE_FINAL_TYPE (AdapDemoPageToasts, adap_demo_page_toasts, ADAP, DEMO_PAGE_TOASTS, AdapBin)
 
-void adw_demo_page_toasts_undo (AdwDemoPageToasts *self);
+void adap_demo_page_toasts_undo (AdapDemoPageToasts *self);
 
 G_END_DECLS

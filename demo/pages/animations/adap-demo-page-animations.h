@@ -1,11 +1,11 @@
 #pragma once
 
-#include <adwaita.h>
+#include <adapta.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_DEMO_PAGE_ANIMATIONS (adw_demo_page_animations_get_type())
+#define ADAP_TYPE_DEMO_PAGE_ANIMATIONS (adap_demo_page_animations_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwDemoPageAnimations, adw_demo_page_animations, ADW, DEMO_PAGE_ANIMATIONS, AdwBin)
+G_DECLARE_FINAL_TYPE (AdapDemoPageAnimations, adap_demo_page_animations, ADAP, DEMO_PAGE_ANIMATIONS, AdapBin)
 
 G_END_DECLS

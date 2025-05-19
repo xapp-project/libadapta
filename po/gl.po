@@ -1,13 +1,13 @@
-# Galician translation for libadwaita.
-# Copyright (C) 2021 libadwaita's COPYRIGHT HOLDER
-# This file is distributed under the same license as the libadwaita package.
+# Galician translation for libadapta.
+# Copyright (C) 2021 libadapta's COPYRIGHT HOLDER
+# This file is distributed under the same license as the libadapta package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Fran Dieguez <frandieguez@gnome.org>, 2021-2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: libadwaita main\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadwaita/issues\n"
+"Project-Id-Version: libadapta main\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadapta/issues\n"
 "POT-Creation-Date: 2024-03-08 16:57+0000\n"
 "PO-Revision-Date: 2024-03-10 11:39+0100\n"
 "Last-Translator: Fran Dieguez <fran.dieguez@gnome.org>\n"
@@ -18,104 +18,104 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-DL-Team: gl\n"
-"X-DL-Module: libadwaita\n"
+"X-DL-Module: libadapta\n"
 "X-DL-Branch: main\n"
 "X-DL-Domain: po\n"
 "X-DL-State: None\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: src/adw-about-dialog.c:207 src/adw-about-window.c:206
+#: src/adap-about-dialog.c:207 src/adap-about-window.c:206
 msgid "GNU General Public License, version 2 or later"
 msgstr "Licenza Pública Xeral de GNU, versión 2 ou posterior"
 
-#: src/adw-about-dialog.c:208 src/adw-about-window.c:207
+#: src/adap-about-dialog.c:208 src/adap-about-window.c:207
 msgid "GNU General Public License, version 3 or later"
 msgstr "Licenza Pública Xeral de GNU, versión 3 ou posterior"
 
-#: src/adw-about-dialog.c:209 src/adw-about-window.c:208
+#: src/adap-about-dialog.c:209 src/adap-about-window.c:208
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "Licenza Pública Xeral Menor de GNU, versión 2.1 ou posterior"
 
-#: src/adw-about-dialog.c:210 src/adw-about-window.c:209
+#: src/adap-about-dialog.c:210 src/adap-about-window.c:209
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "Licenza Pública Xeral Menor de GNU, versión 3 ou posterior"
 
-#: src/adw-about-dialog.c:211 src/adw-about-window.c:210
+#: src/adap-about-dialog.c:211 src/adap-about-window.c:210
 msgid "BSD 2-Clause License"
 msgstr "Licenza BSD cláusula 2"
 
-#: src/adw-about-dialog.c:212 src/adw-about-window.c:211
+#: src/adap-about-dialog.c:212 src/adap-about-window.c:211
 msgid "The MIT License (MIT)"
 msgstr "Licenza MIT"
 
-#: src/adw-about-dialog.c:213 src/adw-about-window.c:212
+#: src/adap-about-dialog.c:213 src/adap-about-window.c:212
 msgid "Artistic License 2.0"
 msgstr "Licenza artística 2.0"
 
-#: src/adw-about-dialog.c:214 src/adw-about-window.c:213
+#: src/adap-about-dialog.c:214 src/adap-about-window.c:213
 msgid "GNU General Public License, version 2 only"
 msgstr "Licenza Pública Xeral de GNU, versión 2 só"
 
-#: src/adw-about-dialog.c:215 src/adw-about-window.c:214
+#: src/adap-about-dialog.c:215 src/adap-about-window.c:214
 msgid "GNU General Public License, version 3 only"
 msgstr "Licenza Pública Xeral de GNU, versión 3 só"
 
-#: src/adw-about-dialog.c:216 src/adw-about-window.c:215
+#: src/adap-about-dialog.c:216 src/adap-about-window.c:215
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "Licenza Pública Xeral Menor de GNU, versión 2.1 só"
 
-#: src/adw-about-dialog.c:217 src/adw-about-window.c:216
+#: src/adap-about-dialog.c:217 src/adap-about-window.c:216
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "Licenza Pública Xeral Menor de GNU, versión 3 só"
 
-#: src/adw-about-dialog.c:218 src/adw-about-window.c:217
+#: src/adap-about-dialog.c:218 src/adap-about-window.c:217
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "Licenza Pública Xeral de GNU Affero, versión 3 ou posterior"
 
-#: src/adw-about-dialog.c:219 src/adw-about-window.c:218
+#: src/adap-about-dialog.c:219 src/adap-about-window.c:218
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "Licenza Pública Xeral Affero de GNU, só versión 3"
 
-#: src/adw-about-dialog.c:220 src/adw-about-window.c:219
+#: src/adap-about-dialog.c:220 src/adap-about-window.c:219
 msgid "BSD 3-Clause License"
 msgstr "Licenza BSD cláusula 3"
 
-#: src/adw-about-dialog.c:221 src/adw-about-window.c:220
+#: src/adap-about-dialog.c:221 src/adap-about-window.c:220
 msgid "Apache License, Version 2.0"
 msgstr "Licencia Apache, versión 2.0"
 
-#: src/adw-about-dialog.c:222 src/adw-about-window.c:221
+#: src/adap-about-dialog.c:222 src/adap-about-window.c:221
 msgid "Mozilla Public License 2.0"
 msgstr "Licenza Pública de Mozilla 2.0"
 
-#: src/adw-about-dialog.c:223 src/adw-about-window.c:222
+#: src/adap-about-dialog.c:223 src/adap-about-window.c:222
 msgid "BSD Zero-Clause License"
 msgstr "Licenza BSD cláusula Zero"
 
-#: src/adw-about-dialog.c:560 src/adw-about-window.c:558
+#: src/adap-about-dialog.c:560 src/adap-about-window.c:558
 msgid "Code by"
 msgstr "Programado por"
 
-#: src/adw-about-dialog.c:561 src/adw-about-window.c:559
+#: src/adap-about-dialog.c:561 src/adap-about-window.c:559
 msgid "Design by"
 msgstr "Deseñado por"
 
-#: src/adw-about-dialog.c:562 src/adw-about-window.c:560
+#: src/adap-about-dialog.c:562 src/adap-about-window.c:560
 msgid "Artwork by"
 msgstr "Deseñado por"
 
-#: src/adw-about-dialog.c:563 src/adw-about-window.c:561
+#: src/adap-about-dialog.c:563 src/adap-about-window.c:561
 msgid "Documentation by"
 msgstr "Documentado por"
 
-#: src/adw-about-dialog.c:564 src/adw-about-window.c:562
+#: src/adap-about-dialog.c:564 src/adap-about-window.c:562
 msgid "Translated by"
 msgstr "Traducido por"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: src/adw-about-dialog.c:593 src/adw-about-window.c:591
+#: src/adap-about-dialog.c:593 src/adap-about-window.c:591
 #, c-format
 msgid ""
 "This application comes with absolutely no warranty. See the <a "
@@ -124,94 +124,94 @@ msgstr ""
 "Este programa non fornece ningunha garantía, para máis información visite <a "
 "href=\"%s\">%s</a>."
 
-#: src/adw-about-dialog.c:671 src/adw-about-window.c:669
+#: src/adap-about-dialog.c:671 src/adap-about-window.c:669
 msgid "This Application"
 msgstr "Esta aplicación"
 
-#: src/adw-about-dialog.c:973 src/adw-about-window.c:971
+#: src/adap-about-dialog.c:973 src/adap-about-window.c:971
 #, c-format
 msgid "Version %s"
 msgstr "Versión %s"
 
-#: src/adw-about-dialog.c:999 src/adw-about-window.c:997
+#: src/adap-about-dialog.c:999 src/adap-about-window.c:997
 msgid "Unable to parse release notes:"
 msgstr "Non foi posíbel analizar as notas de publicación:"
 
-#: src/adw-about-dialog.c:1005 src/adw-about-window.c:1003
+#: src/adap-about-dialog.c:1005 src/adap-about-window.c:1003
 #, c-format
 msgid "Line: %d, character: %d"
 msgstr "Liña: %d, caracter: %d"
 
-#: src/adw-about-dialog.c:1291 src/adw-about-window.c:1289
+#: src/adap-about-dialog.c:1291 src/adap-about-window.c:1289
 msgid "Copied to clipboard"
 msgstr "Copiado ao portapapeis"
 
-#: src/adw-about-dialog.c:1318 src/adw-about-window.c:1317
+#: src/adap-about-dialog.c:1318 src/adap-about-window.c:1317
 msgid "Unable to save debugging information"
 msgstr "Non é posíbel gardar o ficheiro de depuración"
 
-#: src/adw-about-dialog.c:1323 src/adw-about-window.c:1322
+#: src/adap-about-dialog.c:1323 src/adap-about-window.c:1322
 msgid "Close"
 msgstr "Pechar"
 
-#: src/adw-about-dialog.c:1340 src/adw-about-window.c:1338
+#: src/adap-about-dialog.c:1340 src/adap-about-window.c:1338
 msgid "Save debugging information"
 msgstr "Gardar información de depuración"
 
-#: src/adw-about-dialog.ui:5 src/adw-about-window.ui:5
+#: src/adap-about-dialog.ui:5 src/adap-about-window.ui:5
 msgid "About"
 msgstr "Sobre"
 
-#: src/adw-about-dialog.ui:89 src/adw-about-window.ui:92
+#: src/adap-about-dialog.ui:89 src/adap-about-window.ui:92
 msgid "_What’s New"
 msgstr "Que hai de _novo"
 
-#: src/adw-about-dialog.ui:105 src/adw-about-window.ui:108
+#: src/adap-about-dialog.ui:105 src/adap-about-window.ui:108
 msgid "_Details"
 msgstr "_Detalles"
 
-#: src/adw-about-dialog.ui:121 src/adw-about-dialog.ui:341
-#: src/adw-about-window.ui:124 src/adw-about-window.ui:344
+#: src/adap-about-dialog.ui:121 src/adap-about-dialog.ui:341
+#: src/adap-about-window.ui:124 src/adap-about-window.ui:344
 msgid "_Website"
 msgstr "_Sitio web"
 
-#: src/adw-about-dialog.ui:145 src/adw-about-window.ui:148
+#: src/adap-about-dialog.ui:145 src/adap-about-window.ui:148
 msgid "_Support Questions"
 msgstr "Preguntas de _asistencia"
 
-#: src/adw-about-dialog.ui:162 src/adw-about-window.ui:165
+#: src/adap-about-dialog.ui:162 src/adap-about-window.ui:165
 msgid "_Report an Issue"
 msgstr "_Informar dun erro"
 
-#: src/adw-about-dialog.ui:178 src/adw-about-window.ui:181
+#: src/adap-about-dialog.ui:178 src/adap-about-window.ui:181
 msgid "_Troubleshooting"
 msgstr "Resolución de _problemas"
 
-#: src/adw-about-dialog.ui:198 src/adw-about-window.ui:201
+#: src/adap-about-dialog.ui:198 src/adap-about-window.ui:201
 msgid "_Credits"
 msgstr "_Créditos"
 
-#: src/adw-about-dialog.ui:214 src/adw-about-window.ui:217
+#: src/adap-about-dialog.ui:214 src/adap-about-window.ui:217
 msgid "_Legal"
 msgstr "Aviso _Legal"
 
-#: src/adw-about-dialog.ui:230 src/adw-about-window.ui:233
+#: src/adap-about-dialog.ui:230 src/adap-about-window.ui:233
 msgid "_Acknowledgements"
 msgstr "_Recoñecementos"
 
-#: src/adw-about-dialog.ui:260 src/adw-about-window.ui:263
+#: src/adap-about-dialog.ui:260 src/adap-about-window.ui:263
 msgid "What’s New"
 msgstr "Que hai de novo"
 
-#: src/adw-about-dialog.ui:303 src/adw-about-window.ui:306
+#: src/adap-about-dialog.ui:303 src/adap-about-window.ui:306
 msgid "Details"
 msgstr "Detalles"
 
-#: src/adw-about-dialog.ui:369 src/adw-about-window.ui:372
+#: src/adap-about-dialog.ui:369 src/adap-about-window.ui:372
 msgid "Troubleshooting"
 msgstr "Resolución de problemas"
 
-#: src/adw-about-dialog.ui:392 src/adw-about-window.ui:395
+#: src/adap-about-dialog.ui:392 src/adap-about-window.ui:395
 msgid ""
 "To assist in troubleshooting, you can view your debugging information. "
 "Providing this information to the application developers can help diagnose "
@@ -222,71 +222,71 @@ msgstr ""
 "pode axudarlles a diagnosticar calquera problema que atope cando reporta un "
 "erro."
 
-#: src/adw-about-dialog.ui:403 src/adw-about-window.ui:406
+#: src/adap-about-dialog.ui:403 src/adap-about-window.ui:406
 msgid "_Debugging Information"
 msgstr "Información de _depuración"
 
-#: src/adw-about-dialog.ui:430 src/adw-about-window.ui:433
+#: src/adap-about-dialog.ui:430 src/adap-about-window.ui:433
 msgid "Debugging Information"
 msgstr "Información de depuración"
 
-#: src/adw-about-dialog.ui:475 src/adw-about-window.ui:478
+#: src/adap-about-dialog.ui:475 src/adap-about-window.ui:478
 msgid "_Copy Text"
 msgstr "_Copiar texto"
 
-#: src/adw-about-dialog.ui:483 src/adw-about-window.ui:486
+#: src/adap-about-dialog.ui:483 src/adap-about-window.ui:486
 msgid "_Save As…"
 msgstr "_Gardar como…"
 
-#: src/adw-about-dialog.ui:496 src/adw-about-window.ui:499
+#: src/adap-about-dialog.ui:496 src/adap-about-window.ui:499
 msgid "Credits"
 msgstr "Créditos"
 
-#: src/adw-about-dialog.ui:527 src/adw-about-window.ui:530
+#: src/adap-about-dialog.ui:527 src/adap-about-window.ui:530
 msgid "Legal"
 msgstr "Aviso legal"
 
-#: src/adw-about-dialog.ui:559 src/adw-about-window.ui:562
+#: src/adap-about-dialog.ui:559 src/adap-about-window.ui:562
 msgid "Acknowledgements"
 msgstr "Recoñecementos"
 
-#: src/adw-back-button.c:347 src/adw-back-button.c:445
-#: src/adw-back-button.c:555
+#: src/adap-back-button.c:347 src/adap-back-button.c:445
+#: src/adap-back-button.c:555
 msgid "Back"
 msgstr "Atrás"
 
-#. Translators: This is a placeholder text of the search entry from AdwComboRow. It should be phrased as a verb.
-#: src/adw-combo-row.ui:50 src/adw-preferences-dialog.ui:85
-#: src/adw-preferences-window.ui:96
+#. Translators: This is a placeholder text of the search entry from AdapComboRow. It should be phrased as a verb.
+#: src/adap-combo-row.ui:50 src/adap-preferences-dialog.ui:85
+#: src/adap-preferences-window.ui:96
 msgid "Search"
 msgstr "Buscar"
 
-#: src/adw-entry-row.ui:97
+#: src/adap-entry-row.ui:97
 msgid "Apply"
 msgstr "Aplicar"
 
-#: src/adw-inspector-page.c:75
+#: src/adap-inspector-page.c:75
 msgid "No Preference"
 msgstr "Sen preferencia"
 
-#: src/adw-inspector-page.c:77
+#: src/adap-inspector-page.c:77
 msgid "Prefer Dark"
 msgstr "Preferir escura"
 
-#: src/adw-inspector-page.c:79
+#: src/adap-inspector-page.c:79
 msgid "Prefer Light"
 msgstr "Preferir clara"
 
 #. Translators: The name of the library, not the stylesheet
-#: src/adw-inspector-page.c:97
-msgid "Adwaita"
-msgstr "Adwaita"
+#: src/adap-inspector-page.c:97
+msgid "Adapta"
+msgstr "Adapta"
 
-#: src/adw-inspector-page.ui:10
+#: src/adap-inspector-page.ui:10
 msgid "System Appearance"
 msgstr "Aparencia do sistema"
 
-#: src/adw-inspector-page.ui:11
+#: src/adap-inspector-page.ui:11
 msgid ""
 "Override settings for this application. They will be reset upon closing the "
 "inspector."
@@ -294,92 +294,92 @@ msgstr ""
 "Sobrescribir as preferencias para esta aplicación. Reiniciaranse despois de "
 "pechar o inspector."
 
-#: src/adw-inspector-page.ui:14
+#: src/adap-inspector-page.ui:14
 msgid "System Supports Color Schemes"
 msgstr "O sistema admite Esquemas de cor"
 
-#: src/adw-inspector-page.ui:20
+#: src/adap-inspector-page.ui:20
 msgid "Preferred Color Scheme"
 msgstr "Esquema de cor prefirido"
 
-#: src/adw-inspector-page.ui:37
+#: src/adap-inspector-page.ui:37
 msgid "High Contrast"
 msgstr "Contraste alto"
 
-#: src/adw-password-entry-row.c:70
+#: src/adap-password-entry-row.c:70
 msgid "Hide Password"
 msgstr "Ocultar contrasinal"
 
-#: src/adw-password-entry-row.c:74
+#: src/adap-password-entry-row.c:74
 msgid "Show Password"
 msgstr "Mostra constrasinal"
 
-#: src/adw-password-entry-row.c:168
+#: src/adap-password-entry-row.c:168
 msgid "Caps Lock is on"
 msgstr "Bloq Maiús está activo"
 
-#: src/adw-password-entry-row.c:176
+#: src/adap-password-entry-row.c:176
 msgid "_Show Password"
 msgstr "_Mostrar contrasinal"
 
-#: src/adw-preferences-dialog.c:256 src/adw-preferences-window.c:259
+#: src/adap-preferences-dialog.c:256 src/adap-preferences-window.c:259
 msgid "Untitled page"
 msgstr "Páxina sen título"
 
-#: src/adw-preferences-dialog.ui:5 src/adw-preferences-window.ui:8
+#: src/adap-preferences-dialog.ui:5 src/adap-preferences-window.ui:8
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: src/adw-preferences-dialog.ui:70 src/adw-preferences-window.ui:81
+#: src/adap-preferences-dialog.ui:70 src/adap-preferences-window.ui:81
 msgid "Search preferences"
 msgstr "Buscar preferencias"
 
-#: src/adw-preferences-dialog.ui:152 src/adw-preferences-window.ui:163
+#: src/adap-preferences-dialog.ui:152 src/adap-preferences-window.ui:163
 msgid "No Results Found"
 msgstr "Non se atoparon resultados"
 
-#: src/adw-preferences-dialog.ui:153 src/adw-preferences-window.ui:164
-#: src/adw-tab-overview.ui:111
+#: src/adap-preferences-dialog.ui:153 src/adap-preferences-window.ui:164
+#: src/adap-tab-overview.ui:111
 msgid "Try a different search."
 msgstr "Probe con outra busca."
 
-#: src/adw-split-button.c:519 src/adw-split-button.c:1033
+#: src/adap-split-button.c:519 src/adap-split-button.c:1033
 msgid "More Options"
 msgstr "Máis opcións"
 
-#: src/adw-tab-button.ui:7
+#: src/adap-tab-button.ui:7
 msgid "View Open Tabs"
 msgstr "Ver as lapelas abertas"
 
 #. Translators: Tab overview title, %u is the number of open tabs
-#: src/adw-tab-overview.c:928
+#: src/adap-tab-overview.c:928
 #, c-format
 msgid "%u Tab"
 msgid_plural "%u Tabs"
 msgstr[0] "%u lapela"
 msgstr[1] "%u lapelas"
 
-#: src/adw-tab-overview.ui:21
+#: src/adap-tab-overview.ui:21
 msgid "Search Tabs"
 msgstr "Buscar lapelas"
 
-#: src/adw-tab-overview.ui:51
+#: src/adap-tab-overview.ui:51
 msgid "Search tabs"
 msgstr "Buscar lapelas"
 
-#: src/adw-tab-overview.ui:97
+#: src/adap-tab-overview.ui:97
 msgid "No Open Tabs"
 msgstr "Non hai lapelas abertas"
 
-#: src/adw-tab-overview.ui:110
+#: src/adap-tab-overview.ui:110
 msgid "No Tabs Found"
 msgstr "Non se atoparon lapelas"
 
-#: src/adw-tab-overview.ui:131
+#: src/adap-tab-overview.ui:131
 msgid "New _Tab"
 msgstr "Nova _lapela"
 
-#: src/adw-tab-thumbnail.ui:39 src/adw-tab.ui:95
+#: src/adap-tab-thumbnail.ui:39 src/adap-tab.ui:95
 msgid "Close Tab"
 msgstr "Pechar lapela"
 

@@ -7,15 +7,15 @@
 
 #include "config.h"
 
-#include "adw-application-window.h"
+#include "adap-application-window.h"
 
-#include "adw-breakpoint-bin-private.h"
-#include "adw-dialog-host-private.h"
-#include "adw-dialog-private.h"
-#include "adw-gizmo-private.h"
+#include "adap-breakpoint-bin-private.h"
+#include "adap-dialog-host-private.h"
+#include "adap-dialog-private.h"
+#include "adap-gizmo-private.h"
 
 /**
- * AdwApplicationWindow:
+ * AdapApplicationWindow:
  *
  * A freeform application window.
  *
@@ -24,19 +24,19 @@
  *   <img src="application-window.png" alt="application-window">
  * </picture>
  *
- * `AdwApplicationWindow` is a [class@Gtk.ApplicationWindow] subclass providing
+ * `AdapApplicationWindow` is a [class@Gtk.ApplicationWindow] subclass providing
  * the same features as [class@Window].
  *
  * See [class@Window] for details.
  *
- * Example of an `AdwApplicationWindow` UI definition:
+ * Example of an `AdapApplicationWindow` UI definition:
  *
  * ```xml
- * <object class="AdwApplicationWindow">
+ * <object class="AdapApplicationWindow">
  *   <property name="content">
- *     <object class="AdwToolbarView">
+ *     <object class="AdapToolbarView">
  *       <child type="top">
- *         <object class="AdwHeaderBar"/>
+ *         <object class="AdapHeaderBar"/>
  *       </child>
  *       <property name="content">
  *         <!-- ... -->
@@ -55,13 +55,13 @@ typedef struct
   GtkWidget *titlebar;
   GtkWidget *bin;
   GtkWidget *dialog_host;
-} AdwApplicationWindowPrivate;
+} AdapApplicationWindowPrivate;
 
-static void adw_application_window_buildable_init (GtkBuildableIface *iface);
+static void adap_application_window_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (AdwApplicationWindow, adw_application_window, GTK_TYPE_APPLICATION_WINDOW,
-                         G_ADD_PRIVATE (AdwApplicationWindow)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_application_window_buildable_init))
+G_DEFINE_TYPE_WITH_CODE (AdapApplicationWindow, adap_application_window, GTK_TYPE_APPLICATION_WINDOW,
+                         G_ADD_PRIVATE (AdapApplicationWindow)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_application_window_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -77,59 +77,59 @@ enum {
 static GParamSpec *props[LAST_PROP];
 
 static void
-notify_current_breakpoint_cb (AdwApplicationWindow *self)
+notify_current_breakpoint_cb (AdapApplicationWindow *self)
 {
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CURRENT_BREAKPOINT]);
 }
 
 static void
-notify_visible_dialog_cb (AdwApplicationWindow *self)
+notify_visible_dialog_cb (AdapApplicationWindow *self)
 {
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_VISIBLE_DIALOG]);
 }
 
 static void
-adw_application_window_size_allocate (GtkWidget *widget,
+adap_application_window_size_allocate (GtkWidget *widget,
                                       int        width,
                                       int        height,
                                       int        baseline)
 {
-  AdwApplicationWindow *self = ADW_APPLICATION_WINDOW (widget);
-  AdwApplicationWindowPrivate *priv = adw_application_window_get_instance_private (self);
+  AdapApplicationWindow *self = ADAP_APPLICATION_WINDOW (widget);
+  AdapApplicationWindowPrivate *priv = adap_application_window_get_instance_private (self);
 
   /* We don't want to allow any other titlebar */
   if (gtk_window_get_titlebar (GTK_WINDOW (self)) != priv->titlebar)
-    g_error ("gtk_window_set_titlebar() is not supported for AdwApplicationWindow");
+    g_error ("gtk_window_set_titlebar() is not supported for AdapApplicationWindow");
 
   if (gtk_window_get_child (GTK_WINDOW (self)) != priv->dialog_host)
-    g_error ("gtk_window_set_child() is not supported for AdwApplicationWindow");
+    g_error ("gtk_window_set_child() is not supported for AdapApplicationWindow");
 
-  GTK_WIDGET_CLASS (adw_application_window_parent_class)->size_allocate (widget,
+  GTK_WIDGET_CLASS (adap_application_window_parent_class)->size_allocate (widget,
                                                                          width,
                                                                          height,
                                                                          baseline);
 }
 
 static void
-adw_application_window_get_property (GObject    *object,
+adap_application_window_get_property (GObject    *object,
                                      guint       prop_id,
                                      GValue     *value,
                                      GParamSpec *pspec)
 {
-  AdwApplicationWindow *self = ADW_APPLICATION_WINDOW (object);
+  AdapApplicationWindow *self = ADAP_APPLICATION_WINDOW (object);
 
   switch (prop_id) {
   case PROP_CONTENT:
-    g_value_set_object (value, adw_application_window_get_content (self));
+    g_value_set_object (value, adap_application_window_get_content (self));
     break;
   case PROP_CURRENT_BREAKPOINT:
-    g_value_set_object (value, adw_application_window_get_current_breakpoint (self));
+    g_value_set_object (value, adap_application_window_get_current_breakpoint (self));
     break;
   case PROP_DIALOGS:
-    g_value_take_object (value, adw_application_window_get_dialogs (self));
+    g_value_take_object (value, adap_application_window_get_dialogs (self));
     break;
   case PROP_VISIBLE_DIALOG:
-    g_value_set_object (value, adw_application_window_get_visible_dialog (self));
+    g_value_set_object (value, adap_application_window_get_visible_dialog (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -137,16 +137,16 @@ adw_application_window_get_property (GObject    *object,
 }
 
 static void
-adw_application_window_set_property (GObject      *object,
+adap_application_window_set_property (GObject      *object,
                                      guint         prop_id,
                                      const GValue *value,
                                      GParamSpec   *pspec)
 {
-  AdwApplicationWindow *self = ADW_APPLICATION_WINDOW (object);
+  AdapApplicationWindow *self = ADAP_APPLICATION_WINDOW (object);
 
   switch (prop_id) {
   case PROP_CONTENT:
-    adw_application_window_set_content (self, g_value_get_object (value));
+    adap_application_window_set_content (self, g_value_get_object (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -154,17 +154,17 @@ adw_application_window_set_property (GObject      *object,
 }
 
 static void
-adw_application_window_class_init (AdwApplicationWindowClass *klass)
+adap_application_window_class_init (AdapApplicationWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_application_window_get_property;
-  object_class->set_property = adw_application_window_set_property;
-  widget_class->size_allocate = adw_application_window_size_allocate;
+  object_class->get_property = adap_application_window_get_property;
+  object_class->set_property = adap_application_window_set_property;
+  widget_class->size_allocate = adap_application_window_size_allocate;
 
   /**
-   * AdwApplicationWindow:content: (attributes org.gtk.Property.get=adw_application_window_get_content org.gtk.Property.set=adw_application_window_set_content)
+   * AdapApplicationWindow:content: (attributes org.gtk.Property.get=adap_application_window_get_content org.gtk.Property.set=adap_application_window_set_content)
    *
    * The content widget.
    *
@@ -176,7 +176,7 @@ adw_application_window_class_init (AdwApplicationWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwApplicationWindow:current-breakpoint: (attributes org.gtk.Property.get=adw_application_window_get_current_breakpoint)
+   * AdapApplicationWindow:current-breakpoint: (attributes org.gtk.Property.get=adap_application_window_get_current_breakpoint)
    *
    * The current breakpoint.
    *
@@ -184,11 +184,11 @@ adw_application_window_class_init (AdwApplicationWindowClass *klass)
    */
   props[PROP_CURRENT_BREAKPOINT] =
     g_param_spec_object ("current-breakpoint", NULL, NULL,
-                         ADW_TYPE_BREAKPOINT,
+                         ADAP_TYPE_BREAKPOINT,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwApplicationWindow:dialogs: (attributes org.gtk.Property.get=adw_application_window_get_dialogs)
+   * AdapApplicationWindow:dialogs: (attributes org.gtk.Property.get=adap_application_window_get_dialogs)
    *
    * The open dialogs.
    *
@@ -200,7 +200,7 @@ adw_application_window_class_init (AdwApplicationWindowClass *klass)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwApplicationWindow:visible-dialog: (attributes org.gtk.Property.get=adw_application_window_get_visible_dialog)
+   * AdapApplicationWindow:visible-dialog: (attributes org.gtk.Property.get=adap_application_window_get_visible_dialog)
    *
    * The currently visible dialog
    *
@@ -208,30 +208,30 @@ adw_application_window_class_init (AdwApplicationWindowClass *klass)
    */
   props[PROP_VISIBLE_DIALOG] =
     g_param_spec_object ("visible-dialog", NULL, NULL,
-                         ADW_TYPE_DIALOG,
+                         ADAP_TYPE_DIALOG,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 }
 
 static void
-adw_application_window_init (AdwApplicationWindow *self)
+adap_application_window_init (AdapApplicationWindow *self)
 {
-  AdwApplicationWindowPrivate *priv = adw_application_window_get_instance_private (self);
+  AdapApplicationWindowPrivate *priv = adap_application_window_get_instance_private (self);
 
-  priv->titlebar = adw_gizmo_new_with_role ("nothing", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+  priv->titlebar = adap_gizmo_new_with_role ("nothing", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                             NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_visible (priv->titlebar, FALSE);
   gtk_window_set_titlebar (GTK_WINDOW (self), priv->titlebar);
 
-  priv->dialog_host = adw_dialog_host_new ();
+  priv->dialog_host = adap_dialog_host_new ();
   gtk_window_set_child (GTK_WINDOW (self), priv->dialog_host);
-  adw_dialog_host_set_proxy (ADW_DIALOG_HOST (priv->dialog_host), GTK_WIDGET (self));
+  adap_dialog_host_set_proxy (ADAP_DIALOG_HOST (priv->dialog_host), GTK_WIDGET (self));
 
-  priv->bin = adw_breakpoint_bin_new ();
-  adw_breakpoint_bin_set_warning_widget (ADW_BREAKPOINT_BIN (priv->bin),
+  priv->bin = adap_breakpoint_bin_new ();
+  adap_breakpoint_bin_set_warning_widget (ADAP_BREAKPOINT_BIN (priv->bin),
                                          GTK_WIDGET (self));
-  adw_dialog_host_set_child (ADW_DIALOG_HOST (priv->dialog_host), priv->bin);
+  adap_dialog_host_set_child (ADAP_DIALOG_HOST (priv->dialog_host), priv->bin);
 
   g_signal_connect_swapped (priv->bin, "notify::current-breakpoint",
                             G_CALLBACK (notify_current_breakpoint_cb), self);
@@ -242,7 +242,7 @@ adw_application_window_init (AdwApplicationWindow *self)
 }
 
 static void
-adw_application_window_buildable_add_child (GtkBuildable *buildable,
+adap_application_window_buildable_add_child (GtkBuildable *buildable,
                                             GtkBuilder   *builder,
                                             GObject      *child,
                                             const char   *type)
@@ -250,40 +250,40 @@ adw_application_window_buildable_add_child (GtkBuildable *buildable,
   if (!g_strcmp0 (type, "titlebar"))
     GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
   else if (GTK_IS_WIDGET (child))
-    adw_application_window_set_content (ADW_APPLICATION_WINDOW (buildable), GTK_WIDGET (child));
-  else if (ADW_IS_BREAKPOINT (child))
-    adw_application_window_add_breakpoint (ADW_APPLICATION_WINDOW (buildable),
-                                           g_object_ref (ADW_BREAKPOINT (child)));
+    adap_application_window_set_content (ADAP_APPLICATION_WINDOW (buildable), GTK_WIDGET (child));
+  else if (ADAP_IS_BREAKPOINT (child))
+    adap_application_window_add_breakpoint (ADAP_APPLICATION_WINDOW (buildable),
+                                           g_object_ref (ADAP_BREAKPOINT (child)));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_application_window_buildable_init (GtkBuildableIface *iface)
+adap_application_window_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_application_window_buildable_add_child;
+  iface->add_child = adap_application_window_buildable_add_child;
 }
 
 /**
- * adw_application_window_new:
+ * adap_application_window_new:
  * @app: an application instance
  *
- * Creates a new `AdwApplicationWindow` for @app.
+ * Creates a new `AdapApplicationWindow` for @app.
  *
- * Returns: the newly created `AdwApplicationWindow`
+ * Returns: the newly created `AdapApplicationWindow`
  */
 GtkWidget *
-adw_application_window_new (GtkApplication *app)
+adap_application_window_new (GtkApplication *app)
 {
-  return g_object_new (ADW_TYPE_APPLICATION_WINDOW,
+  return g_object_new (ADAP_TYPE_APPLICATION_WINDOW,
                        "application", app,
                        NULL);
 }
 
 /**
- * adw_application_window_set_content: (attributes org.gtk.Method.set_property=content)
+ * adap_application_window_set_content: (attributes org.gtk.Method.set_property=content)
  * @self: an application window
  * @content: (nullable): the content widget
  *
@@ -292,29 +292,29 @@ adw_application_window_new (GtkApplication *app)
  * This method should always be used instead of [method@Gtk.Window.set_child].
  */
 void
-adw_application_window_set_content (AdwApplicationWindow *self,
+adap_application_window_set_content (AdapApplicationWindow *self,
                                     GtkWidget            *content)
 {
-  AdwApplicationWindowPrivate *priv;
+  AdapApplicationWindowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_APPLICATION_WINDOW (self));
+  g_return_if_fail (ADAP_IS_APPLICATION_WINDOW (self));
   g_return_if_fail (content == NULL || GTK_IS_WIDGET (content));
 
   if (content)
     g_return_if_fail (gtk_widget_get_parent (content) == NULL);
 
-  priv = adw_application_window_get_instance_private (self);
+  priv = adap_application_window_get_instance_private (self);
 
-  if (adw_application_window_get_content (self) == content)
+  if (adap_application_window_get_content (self) == content)
     return;
 
-  adw_breakpoint_bin_set_child (ADW_BREAKPOINT_BIN (priv->bin), content);
+  adap_breakpoint_bin_set_child (ADAP_BREAKPOINT_BIN (priv->bin), content);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CONTENT]);
 }
 
 /**
- * adw_application_window_get_content: (attributes org.gtk.Method.get_property=content)
+ * adap_application_window_get_content: (attributes org.gtk.Method.get_property=content)
  * @self: an application window
  *
  * Gets the content widget of @self.
@@ -324,19 +324,19 @@ adw_application_window_set_content (AdwApplicationWindow *self,
  * Returns: (nullable) (transfer none): the content widget of @self
  */
 GtkWidget *
-adw_application_window_get_content (AdwApplicationWindow *self)
+adap_application_window_get_content (AdapApplicationWindow *self)
 {
-  AdwApplicationWindowPrivate *priv;
+  AdapApplicationWindowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_APPLICATION_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_APPLICATION_WINDOW (self), NULL);
 
-  priv = adw_application_window_get_instance_private (self);
+  priv = adap_application_window_get_instance_private (self);
 
-  return adw_breakpoint_bin_get_child (ADW_BREAKPOINT_BIN (priv->bin));
+  return adap_breakpoint_bin_get_child (ADAP_BREAKPOINT_BIN (priv->bin));
 }
 
 /**
- * adw_application_window_add_breakpoint:
+ * adap_application_window_add_breakpoint:
  * @self: an application window
  * @breakpoint: (transfer full): the breakpoint to add
  *
@@ -345,21 +345,21 @@ adw_application_window_get_content (AdwApplicationWindow *self)
  * Since: 1.4
  */
 void
-adw_application_window_add_breakpoint (AdwApplicationWindow *self,
-                                       AdwBreakpoint        *breakpoint)
+adap_application_window_add_breakpoint (AdapApplicationWindow *self,
+                                       AdapBreakpoint        *breakpoint)
 {
-  AdwApplicationWindowPrivate *priv;
+  AdapApplicationWindowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_APPLICATION_WINDOW (self));
-  g_return_if_fail (ADW_IS_BREAKPOINT (breakpoint));
+  g_return_if_fail (ADAP_IS_APPLICATION_WINDOW (self));
+  g_return_if_fail (ADAP_IS_BREAKPOINT (breakpoint));
 
-  priv = adw_application_window_get_instance_private (self);
+  priv = adap_application_window_get_instance_private (self);
 
-  adw_breakpoint_bin_add_breakpoint (ADW_BREAKPOINT_BIN (priv->bin), breakpoint);
+  adap_breakpoint_bin_add_breakpoint (ADAP_BREAKPOINT_BIN (priv->bin), breakpoint);
 }
 
 /**
- * adw_application_window_get_current_breakpoint: (attributes org.gtk.Method.get_property=current-breakpoint)
+ * adap_application_window_get_current_breakpoint: (attributes org.gtk.Method.get_property=current-breakpoint)
  * @self: an application window
  *
  * Gets the current breakpoint.
@@ -368,20 +368,20 @@ adw_application_window_add_breakpoint (AdwApplicationWindow *self,
  *
  * Since: 1.4
  */
-AdwBreakpoint *
-adw_application_window_get_current_breakpoint (AdwApplicationWindow *self)
+AdapBreakpoint *
+adap_application_window_get_current_breakpoint (AdapApplicationWindow *self)
 {
-  AdwApplicationWindowPrivate *priv;
+  AdapApplicationWindowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_APPLICATION_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_APPLICATION_WINDOW (self), NULL);
 
-  priv = adw_application_window_get_instance_private (self);
+  priv = adap_application_window_get_instance_private (self);
 
-  return adw_breakpoint_bin_get_current_breakpoint (ADW_BREAKPOINT_BIN (priv->bin));
+  return adap_breakpoint_bin_get_current_breakpoint (ADAP_BREAKPOINT_BIN (priv->bin));
 }
 
 /**
- * adw_application_window_get_dialogs: (attributes org.gtk.Method.get_property=dialogs)
+ * adap_application_window_get_dialogs: (attributes org.gtk.Method.get_property=dialogs)
  * @self: an application window
  *
  * Returns a [iface@Gio.ListModel] that contains the open dialogs of @self.
@@ -393,19 +393,19 @@ adw_application_window_get_current_breakpoint (AdwApplicationWindow *self)
  * Since: 1.5
  */
 GListModel *
-adw_application_window_get_dialogs (AdwApplicationWindow *self)
+adap_application_window_get_dialogs (AdapApplicationWindow *self)
 {
-  AdwApplicationWindowPrivate *priv;
+  AdapApplicationWindowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_APPLICATION_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_APPLICATION_WINDOW (self), NULL);
 
-  priv = adw_application_window_get_instance_private (self);
+  priv = adap_application_window_get_instance_private (self);
 
-  return adw_dialog_host_get_dialogs (ADW_DIALOG_HOST (priv->dialog_host));
+  return adap_dialog_host_get_dialogs (ADAP_DIALOG_HOST (priv->dialog_host));
 }
 
 /**
- * adw_application_window_get_visible_dialog: (attributes org.gtk.Method.get_property=visible-dialog)
+ * adap_application_window_get_visible_dialog: (attributes org.gtk.Method.get_property=visible-dialog)
  * @self: an application window
  *
  * Returns the currently visible dialog in @self, if there's one.
@@ -414,14 +414,14 @@ adw_application_window_get_dialogs (AdwApplicationWindow *self)
  *
  * Since: 1.5
  */
-AdwDialog *
-adw_application_window_get_visible_dialog (AdwApplicationWindow *self)
+AdapDialog *
+adap_application_window_get_visible_dialog (AdapApplicationWindow *self)
 {
-  AdwApplicationWindowPrivate *priv;
+  AdapApplicationWindowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_APPLICATION_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_APPLICATION_WINDOW (self), NULL);
 
-  priv = adw_application_window_get_instance_private (self);
+  priv = adap_application_window_get_instance_private (self);
 
-  return adw_dialog_host_get_visible_dialog (ADW_DIALOG_HOST (priv->dialog_host));
+  return adap_dialog_host_get_visible_dialog (ADAP_DIALOG_HOST (priv->dialog_host));
 }

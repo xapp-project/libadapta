@@ -8,26 +8,26 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-breakpoint-bin.h"
+#include "adap-breakpoint-bin.h"
 
 G_BEGIN_DECLS
 
-void adw_breakpoint_bin_set_warnings (AdwBreakpointBin *self,
+void adap_breakpoint_bin_set_warnings (AdapBreakpointBin *self,
                                       gboolean          min_size_warnings,
                                       gboolean          overflow_warnings);
-void adw_breakpoint_bin_set_warning_widget (AdwBreakpointBin *self,
+void adap_breakpoint_bin_set_warning_widget (AdapBreakpointBin *self,
                                             GtkWidget        *warning_widget);
 
-gboolean adw_breakpoint_bin_has_breakpoints (AdwBreakpointBin *self);
+gboolean adap_breakpoint_bin_has_breakpoints (AdapBreakpointBin *self);
 
-void adw_breakpoint_bin_set_pass_through (AdwBreakpointBin *self,
+void adap_breakpoint_bin_set_pass_through (AdapBreakpointBin *self,
                                           gboolean          pass_through);
 
-void adw_breakpoint_bin_set_natural_size (AdwBreakpointBin *self,
+void adap_breakpoint_bin_set_natural_size (AdapBreakpointBin *self,
                                           int               width,
                                           int               height);
 

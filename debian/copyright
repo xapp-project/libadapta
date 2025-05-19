@@ -23,13 +23,13 @@ Copyright: 2021, Guido Günther <agx@sigxcpu.org>
 License: GPL-3+
 
 Files:
- demo/data/org.gnome.Adwaita1.Demo.metainfo.xml*
- tests/org.gnome.Adwaita1.Test.metainfo.xml*
+ demo/data/org.gnome.Adapta1.Demo.metainfo.xml*
+ tests/org.gnome.Adapta1.Test.metainfo.xml*
 Copyright: The GNOME Project
 License: CC0-1.0
 
 Files:
- demo/data/org.gnome.Adwaita1.Demo.Source.svg
+ demo/data/org.gnome.Adapta1.Demo.Source.svg
 Copyright:
  GNOME Design Team
 License: CC-BY-SA-4.0

@@ -79,10 +79,10 @@ def compare(old_tree, new_tree):
     print(format_title(f'# Comparing the two ABIs'), end='\n\n', flush=True)
 
     old_headers = os.path.join(old_tree, 'usr', 'include')
-    old_lib = os.path.join(old_tree, 'usr', 'lib', 'libadwaita-1.so')
+    old_lib = os.path.join(old_tree, 'usr', 'lib', 'libadapta-1.so')
 
     new_headers = os.path.join(new_tree, 'usr', 'include')
-    new_lib = os.path.join(new_tree, 'usr', 'lib', 'libadwaita-1.so')
+    new_lib = os.path.join(new_tree, 'usr', 'lib', 'libadapta-1.so')
 
     subprocess.check_call([
         'abidiff', '--headers-dir1', old_headers, '--headers-dir2', new_headers,

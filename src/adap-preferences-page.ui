@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwPreferencesPage" parent="GtkWidget">
+  <template class="AdapPreferencesPage" parent="GtkWidget">
     <accessibility>
       <relation name="described-by">description</relation>
     </accessibility>
@@ -10,7 +10,7 @@
         <property name="hscrollbar-policy">never</property>
         <property name="propagate-natural-height">True</property>
         <property name="child">
-          <object class="AdwClamp">
+          <object class="AdapClamp">
             <property name="child">
               <object class="GtkBox" id="box">
                 <property name="orientation">vertical</property>

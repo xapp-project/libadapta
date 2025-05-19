@@ -7,14 +7,14 @@
  */
 
 #include "config.h"
-#include "adw-fading-label-private.h"
+#include "adap-fading-label-private.h"
 
 #include <glib/gi18n-lib.h>
-#include "adw-bidi-private.h"
+#include "adap-bidi-private.h"
 
 #define FADE_WIDTH 18.0f
 
-struct _AdwFadingLabel
+struct _AdapFadingLabel
 {
   GtkWidget parent_instance;
 
@@ -22,7 +22,7 @@ struct _AdwFadingLabel
   float align;
 };
 
-G_DEFINE_FINAL_TYPE (AdwFadingLabel, adw_fading_label, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (AdapFadingLabel, adap_fading_label, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
@@ -34,13 +34,13 @@ enum {
 static GParamSpec *props[LAST_PROP];
 
 static gboolean
-is_rtl (AdwFadingLabel *self)
+is_rtl (AdapFadingLabel *self)
 {
   PangoDirection pango_direction = PANGO_DIRECTION_NEUTRAL;
-  const char *label = adw_fading_label_get_label (self);
+  const char *label = adap_fading_label_get_label (self);
 
   if (label)
-    pango_direction = adw_find_base_dir (label, -1);
+    pango_direction = adap_find_base_dir (label, -1);
 
   if (pango_direction == PANGO_DIRECTION_RTL)
     return TRUE;
@@ -52,7 +52,7 @@ is_rtl (AdwFadingLabel *self)
 }
 
 static void
-adw_fading_label_measure (GtkWidget      *widget,
+adap_fading_label_measure (GtkWidget      *widget,
                           GtkOrientation  orientation,
                           int             for_size,
                           int             *min,
@@ -60,7 +60,7 @@ adw_fading_label_measure (GtkWidget      *widget,
                           int             *min_baseline,
                           int             *nat_baseline)
 {
-  AdwFadingLabel *self = ADW_FADING_LABEL (widget);
+  AdapFadingLabel *self = ADAP_FADING_LABEL (widget);
 
   gtk_widget_measure (self->label, orientation, for_size,
                       min, nat, min_baseline, nat_baseline);
@@ -70,12 +70,12 @@ adw_fading_label_measure (GtkWidget      *widget,
 }
 
 static void
-adw_fading_label_size_allocate (GtkWidget *widget,
+adap_fading_label_size_allocate (GtkWidget *widget,
                                 int        width,
                                 int        height,
                                 int        baseline)
 {
-  AdwFadingLabel *self = ADW_FADING_LABEL (widget);
+  AdapFadingLabel *self = ADAP_FADING_LABEL (widget);
   float align = is_rtl (self) ? 1 - self->align : self->align;
   int child_width;
   float offset;
@@ -91,10 +91,10 @@ adw_fading_label_size_allocate (GtkWidget *widget,
 }
 
 static void
-adw_fading_label_snapshot (GtkWidget   *widget,
+adap_fading_label_snapshot (GtkWidget   *widget,
                            GtkSnapshot *snapshot)
 {
-  AdwFadingLabel *self = ADW_FADING_LABEL (widget);
+  AdapFadingLabel *self = ADAP_FADING_LABEL (widget);
   float align = is_rtl (self) ? 1 - self->align : self->align;
   int width = gtk_widget_get_width (widget);
   int clipped_size;
@@ -163,20 +163,20 @@ adw_fading_label_snapshot (GtkWidget   *widget,
 }
 
 static void
-adw_fading_label_get_property (GObject    *object,
+adap_fading_label_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  AdwFadingLabel *self = ADW_FADING_LABEL (object);
+  AdapFadingLabel *self = ADAP_FADING_LABEL (object);
 
   switch (prop_id) {
   case PROP_LABEL:
-    g_value_set_string (value, adw_fading_label_get_label (self));
+    g_value_set_string (value, adap_fading_label_get_label (self));
     break;
 
   case PROP_ALIGN:
-    g_value_set_float (value, adw_fading_label_get_align (self));
+    g_value_set_float (value, adap_fading_label_get_align (self));
     break;
 
   default:
@@ -185,20 +185,20 @@ adw_fading_label_get_property (GObject    *object,
 }
 
 static void
-adw_fading_label_set_property (GObject      *object,
+adap_fading_label_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
-  AdwFadingLabel *self = ADW_FADING_LABEL (object);
+  AdapFadingLabel *self = ADAP_FADING_LABEL (object);
 
   switch (prop_id) {
   case PROP_LABEL:
-    adw_fading_label_set_label (self, g_value_get_string (value));
+    adap_fading_label_set_label (self, g_value_get_string (value));
     break;
 
   case PROP_ALIGN:
-    adw_fading_label_set_align (self, g_value_get_float (value));
+    adap_fading_label_set_align (self, g_value_get_float (value));
     break;
 
   default:
@@ -207,28 +207,28 @@ adw_fading_label_set_property (GObject      *object,
 }
 
 static void
-adw_fading_label_dispose (GObject *object)
+adap_fading_label_dispose (GObject *object)
 {
-  AdwFadingLabel *self = ADW_FADING_LABEL (object);
+  AdapFadingLabel *self = ADAP_FADING_LABEL (object);
 
   g_clear_pointer (&self->label, gtk_widget_unparent);
 
-  G_OBJECT_CLASS (adw_fading_label_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_fading_label_parent_class)->dispose (object);
 }
 
 static void
-adw_fading_label_class_init (AdwFadingLabelClass *klass)
+adap_fading_label_class_init (AdapFadingLabelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_fading_label_get_property;
-  object_class->set_property = adw_fading_label_set_property;
-  object_class->dispose = adw_fading_label_dispose;
+  object_class->get_property = adap_fading_label_get_property;
+  object_class->set_property = adap_fading_label_set_property;
+  object_class->dispose = adap_fading_label_dispose;
 
-  widget_class->measure = adw_fading_label_measure;
-  widget_class->size_allocate = adw_fading_label_size_allocate;
-  widget_class->snapshot = adw_fading_label_snapshot;
+  widget_class->measure = adap_fading_label_measure;
+  widget_class->size_allocate = adap_fading_label_size_allocate;
+  widget_class->snapshot = adap_fading_label_snapshot;
 
   props[PROP_LABEL] =
     g_param_spec_string ("label", NULL, NULL,
@@ -244,7 +244,7 @@ adw_fading_label_class_init (AdwFadingLabelClass *klass)
 }
 
 static void
-adw_fading_label_init (AdwFadingLabel *self)
+adap_fading_label_init (AdapFadingLabel *self)
 {
   self->label = gtk_label_new (NULL);
   gtk_label_set_single_line_mode (GTK_LABEL (self->label), TRUE);
@@ -253,20 +253,20 @@ adw_fading_label_init (AdwFadingLabel *self)
 }
 
 const char *
-adw_fading_label_get_label (AdwFadingLabel *self)
+adap_fading_label_get_label (AdapFadingLabel *self)
 {
-  g_return_val_if_fail (ADW_IS_FADING_LABEL (self), NULL);
+  g_return_val_if_fail (ADAP_IS_FADING_LABEL (self), NULL);
 
   return gtk_label_get_label (GTK_LABEL (self->label));
 }
 
 void
-adw_fading_label_set_label (AdwFadingLabel *self,
+adap_fading_label_set_label (AdapFadingLabel *self,
                             const char     *label)
 {
-  g_return_if_fail (ADW_IS_FADING_LABEL (self));
+  g_return_if_fail (ADAP_IS_FADING_LABEL (self));
 
-  if (!g_strcmp0 (label, adw_fading_label_get_label (self)))
+  if (!g_strcmp0 (label, adap_fading_label_get_label (self)))
     return;
 
   gtk_label_set_label (GTK_LABEL (self->label), label);
@@ -275,18 +275,18 @@ adw_fading_label_set_label (AdwFadingLabel *self,
 }
 
 float
-adw_fading_label_get_align (AdwFadingLabel *self)
+adap_fading_label_get_align (AdapFadingLabel *self)
 {
-  g_return_val_if_fail (ADW_IS_FADING_LABEL (self), 0.0f);
+  g_return_val_if_fail (ADAP_IS_FADING_LABEL (self), 0.0f);
 
   return self->align;
 }
 
 void
-adw_fading_label_set_align (AdwFadingLabel *self,
+adap_fading_label_set_align (AdapFadingLabel *self,
                             float           align)
 {
-  g_return_if_fail (ADW_IS_FADING_LABEL (self));
+  g_return_if_fail (ADAP_IS_FADING_LABEL (self));
 
   align = CLAMP (align, 0.0, 1.0);
 

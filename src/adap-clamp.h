@@ -6,48 +6,48 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-length-unit.h"
+#include "adap-length-unit.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_CLAMP (adw_clamp_get_type())
+#define ADAP_TYPE_CLAMP (adap_clamp_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwClamp, adw_clamp, ADW, CLAMP, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapClamp, adap_clamp, ADAP, CLAMP, GtkWidget)
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_clamp_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_clamp_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_clamp_get_child (AdwClamp  *self);
-ADW_AVAILABLE_IN_ALL
-void       adw_clamp_set_child (AdwClamp  *self,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_clamp_get_child (AdapClamp  *self);
+ADAP_AVAILABLE_IN_ALL
+void       adap_clamp_set_child (AdapClamp  *self,
                                 GtkWidget *child);
 
-ADW_AVAILABLE_IN_ALL
-int  adw_clamp_get_maximum_size (AdwClamp *self);
-ADW_AVAILABLE_IN_ALL
-void adw_clamp_set_maximum_size (AdwClamp *self,
+ADAP_AVAILABLE_IN_ALL
+int  adap_clamp_get_maximum_size (AdapClamp *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_clamp_set_maximum_size (AdapClamp *self,
                                  int       maximum_size);
 
-ADW_AVAILABLE_IN_ALL
-int  adw_clamp_get_tightening_threshold (AdwClamp *self);
-ADW_AVAILABLE_IN_ALL
-void adw_clamp_set_tightening_threshold (AdwClamp *self,
+ADAP_AVAILABLE_IN_ALL
+int  adap_clamp_get_tightening_threshold (AdapClamp *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_clamp_set_tightening_threshold (AdapClamp *self,
                                          int       tightening_threshold);
 
-ADW_AVAILABLE_IN_1_4
-AdwLengthUnit adw_clamp_get_unit (AdwClamp      *self);
-ADW_AVAILABLE_IN_1_4
-void          adw_clamp_set_unit (AdwClamp      *self,
-                                  AdwLengthUnit  unit);
+ADAP_AVAILABLE_IN_1_4
+AdapLengthUnit adap_clamp_get_unit (AdapClamp      *self);
+ADAP_AVAILABLE_IN_1_4
+void          adap_clamp_set_unit (AdapClamp      *self,
+                                  AdapLengthUnit  unit);
 
 G_END_DECLS

@@ -12,141 +12,141 @@
 
 #pragma once
 
-#if !defined  (_ADWAITA_INSIDE) && !defined  (ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined  (_ADAPTA_INSIDE) && !defined  (ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_VIEW_STACK_PAGE (adw_view_stack_page_get_type())
+#define ADAP_TYPE_VIEW_STACK_PAGE (adap_view_stack_page_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwViewStackPage, adw_view_stack_page, ADW, VIEW_STACK_PAGE, GObject)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapViewStackPage, adap_view_stack_page, ADAP, VIEW_STACK_PAGE, GObject)
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_view_stack_page_get_child (AdwViewStackPage *self);
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_view_stack_page_get_child (AdapViewStackPage *self);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_view_stack_page_get_name (AdwViewStackPage *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_view_stack_page_set_name (AdwViewStackPage *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_view_stack_page_get_name (AdapViewStackPage *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_view_stack_page_set_name (AdapViewStackPage *self,
                                           const char       *name);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_view_stack_page_get_title (AdwViewStackPage *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_view_stack_page_set_title (AdwViewStackPage *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_view_stack_page_get_title (AdapViewStackPage *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_view_stack_page_set_title (AdapViewStackPage *self,
                                            const char       *title);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_view_stack_page_get_use_underline (AdwViewStackPage *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_view_stack_page_set_use_underline (AdwViewStackPage *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_view_stack_page_get_use_underline (AdapViewStackPage *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_view_stack_page_set_use_underline (AdapViewStackPage *self,
                                                 gboolean          use_underline);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_view_stack_page_get_icon_name (AdwViewStackPage *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_view_stack_page_set_icon_name (AdwViewStackPage *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_view_stack_page_get_icon_name (AdapViewStackPage *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_view_stack_page_set_icon_name (AdapViewStackPage *self,
                                                const char       *icon_name);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_view_stack_page_get_needs_attention (AdwViewStackPage *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_view_stack_page_set_needs_attention (AdwViewStackPage *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_view_stack_page_get_needs_attention (AdapViewStackPage *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_view_stack_page_set_needs_attention (AdapViewStackPage *self,
                                                   gboolean          needs_attention);
 
-ADW_AVAILABLE_IN_ALL
-guint adw_view_stack_page_get_badge_number (AdwViewStackPage *self);
-ADW_AVAILABLE_IN_ALL
-void  adw_view_stack_page_set_badge_number (AdwViewStackPage *self,
+ADAP_AVAILABLE_IN_ALL
+guint adap_view_stack_page_get_badge_number (AdapViewStackPage *self);
+ADAP_AVAILABLE_IN_ALL
+void  adap_view_stack_page_set_badge_number (AdapViewStackPage *self,
                                             guint             badge_number);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_view_stack_page_get_visible (AdwViewStackPage *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_view_stack_page_set_visible (AdwViewStackPage *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_view_stack_page_get_visible (AdapViewStackPage *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_view_stack_page_set_visible (AdapViewStackPage *self,
                                           gboolean          visible);
 
-#define ADW_TYPE_VIEW_STACK (adw_view_stack_get_type())
+#define ADAP_TYPE_VIEW_STACK (adap_view_stack_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwViewStack, adw_view_stack, ADW, VIEW_STACK, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapViewStack, adap_view_stack, ADAP, VIEW_STACK, GtkWidget)
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_view_stack_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_view_stack_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-AdwViewStackPage *adw_view_stack_add       (AdwViewStack *self,
+ADAP_AVAILABLE_IN_ALL
+AdapViewStackPage *adap_view_stack_add       (AdapViewStack *self,
                                             GtkWidget    *child);
-ADW_AVAILABLE_IN_ALL
-AdwViewStackPage *adw_view_stack_add_named (AdwViewStack *self,
+ADAP_AVAILABLE_IN_ALL
+AdapViewStackPage *adap_view_stack_add_named (AdapViewStack *self,
                                             GtkWidget    *child,
                                             const char   *name);
-ADW_AVAILABLE_IN_ALL
-AdwViewStackPage *adw_view_stack_add_titled (AdwViewStack *self,
+ADAP_AVAILABLE_IN_ALL
+AdapViewStackPage *adap_view_stack_add_titled (AdapViewStack *self,
                                              GtkWidget    *child,
                                              const char   *name,
                                              const char   *title);
-ADW_AVAILABLE_IN_1_2
-AdwViewStackPage *adw_view_stack_add_titled_with_icon (AdwViewStack *self,
+ADAP_AVAILABLE_IN_1_2
+AdapViewStackPage *adap_view_stack_add_titled_with_icon (AdapViewStack *self,
                                                        GtkWidget    *child,
                                                        const char   *name,
                                                        const char   *title,
                                                        const char   *icon_name);
 
-ADW_AVAILABLE_IN_ALL
-void adw_view_stack_remove (AdwViewStack *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_view_stack_remove (AdapViewStack *self,
                             GtkWidget    *child);
 
-ADW_AVAILABLE_IN_ALL
-AdwViewStackPage *adw_view_stack_get_page (AdwViewStack *self,
+ADAP_AVAILABLE_IN_ALL
+AdapViewStackPage *adap_view_stack_get_page (AdapViewStack *self,
                                            GtkWidget    *child);
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_view_stack_get_child_by_name (AdwViewStack *self,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_view_stack_get_child_by_name (AdapViewStack *self,
                                              const char   *name);
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_view_stack_get_visible_child (AdwViewStack *self);
-ADW_AVAILABLE_IN_ALL
-void       adw_view_stack_set_visible_child (AdwViewStack *self,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_view_stack_get_visible_child (AdapViewStack *self);
+ADAP_AVAILABLE_IN_ALL
+void       adap_view_stack_set_visible_child (AdapViewStack *self,
                                              GtkWidget    *child);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_view_stack_get_visible_child_name (AdwViewStack *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_view_stack_set_visible_child_name (AdwViewStack *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_view_stack_get_visible_child_name (AdapViewStack *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_view_stack_set_visible_child_name (AdapViewStack *self,
                                                    const char   *name);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_view_stack_get_hhomogeneous (AdwViewStack *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_view_stack_set_hhomogeneous (AdwViewStack *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_view_stack_get_hhomogeneous (AdapViewStack *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_view_stack_set_hhomogeneous (AdapViewStack *self,
                                           gboolean      hhomogeneous);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_view_stack_get_vhomogeneous (AdwViewStack *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_view_stack_set_vhomogeneous (AdwViewStack *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_view_stack_get_vhomogeneous (AdapViewStack *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_view_stack_set_vhomogeneous (AdapViewStack *self,
                                           gboolean      vhomogeneous);
 
-ADW_AVAILABLE_IN_ALL
-GtkSelectionModel *adw_view_stack_get_pages (AdwViewStack *self);
+ADAP_AVAILABLE_IN_ALL
+GtkSelectionModel *adap_view_stack_get_pages (AdapViewStack *self);
 
-#define ADW_TYPE_VIEW_STACK_PAGES (adw_view_stack_pages_get_type ())
+#define ADAP_TYPE_VIEW_STACK_PAGES (adap_view_stack_pages_get_type ())
 
-ADW_AVAILABLE_IN_1_4
-G_DECLARE_FINAL_TYPE (AdwViewStackPages, adw_view_stack_pages, ADW, VIEW_STACK_PAGES, GObject)
+ADAP_AVAILABLE_IN_1_4
+G_DECLARE_FINAL_TYPE (AdapViewStackPages, adap_view_stack_pages, ADAP, VIEW_STACK_PAGES, GObject)
 
-ADW_AVAILABLE_IN_1_4
-AdwViewStackPage *adw_view_stack_pages_get_selected_page (AdwViewStackPages *self);
-ADW_AVAILABLE_IN_1_4
-void              adw_view_stack_pages_set_selected_page (AdwViewStackPages *self,
-                                                          AdwViewStackPage  *page);
+ADAP_AVAILABLE_IN_1_4
+AdapViewStackPage *adap_view_stack_pages_get_selected_page (AdapViewStackPages *self);
+ADAP_AVAILABLE_IN_1_4
+void              adap_view_stack_pages_set_selected_page (AdapViewStackPages *self,
+                                                          AdapViewStackPage  *page);
 
 G_END_DECLS

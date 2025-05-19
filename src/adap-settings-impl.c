@@ -8,9 +8,9 @@
 
 #include "config.h"
 
-#include "adw-settings-impl-private.h"
+#include "adap-settings-impl-private.h"
 
-#include "adw-marshalers.h"
+#include "adap-marshalers.h"
 
 typedef struct
 {
@@ -18,12 +18,12 @@ typedef struct
   gboolean has_high_contrast;
   gboolean has_theme_name;
 
-  AdwSystemColorScheme color_scheme;
+  AdapSystemColorScheme color_scheme;
   gboolean high_contrast;
   gchar *theme_name;
-} AdwSettingsImplPrivate;
+} AdapSettingsImplPrivate;
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (AdwSettingsImpl, adw_settings_impl, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (AdapSettingsImpl, adap_settings_impl, G_TYPE_OBJECT)
 
 enum {
   SIGNAL_PREPARE,
@@ -36,7 +36,7 @@ enum {
 static guint signals[SIGNAL_LAST_SIGNAL];
 
 static void
-adw_settings_impl_class_init (AdwSettingsImplClass *klass)
+adap_settings_impl_class_init (AdapSettingsImplClass *klass)
 {
   signals[SIGNAL_COLOR_SCHEME_CHANGED] =
     g_signal_new ("color-scheme-changed",
@@ -44,13 +44,13 @@ adw_settings_impl_class_init (AdwSettingsImplClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__ENUM,
+                  adap_marshal_VOID__ENUM,
                   G_TYPE_NONE,
                   1,
-                  ADW_TYPE_SYSTEM_COLOR_SCHEME);
+                  ADAP_TYPE_SYSTEM_COLOR_SCHEME);
   g_signal_set_va_marshaller (signals[SIGNAL_COLOR_SCHEME_CHANGED],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__ENUMv);
+                              adap_marshal_VOID__ENUMv);
 
   signals[SIGNAL_HIGH_CONTRAST_CHANGED] =
     g_signal_new ("high-contrast-changed",
@@ -58,7 +58,7 @@ adw_settings_impl_class_init (AdwSettingsImplClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__BOOLEAN,
+                  adap_marshal_VOID__BOOLEAN,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_BOOLEAN);
@@ -68,83 +68,83 @@ adw_settings_impl_class_init (AdwSettingsImplClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__STRING,
+                  adap_marshal_VOID__STRING,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRING);
 
   g_signal_set_va_marshaller (signals[SIGNAL_HIGH_CONTRAST_CHANGED],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__BOOLEANv);
+                              adap_marshal_VOID__BOOLEANv);
 }
 
 static void
-adw_settings_impl_init (AdwSettingsImpl *self)
+adap_settings_impl_init (AdapSettingsImpl *self)
 {
 }
 
 gboolean
-adw_settings_impl_get_has_theme_name (AdwSettingsImpl *self)
+adap_settings_impl_get_has_theme_name (AdapSettingsImpl *self)
 {
-  AdwSettingsImplPrivate *priv = adw_settings_impl_get_instance_private (self);
+  AdapSettingsImplPrivate *priv = adap_settings_impl_get_instance_private (self);
 
-  g_return_val_if_fail (ADW_IS_SETTINGS_IMPL (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SETTINGS_IMPL (self), FALSE);
 
   return priv->has_theme_name;
 }
 
 gboolean
-adw_settings_impl_get_has_color_scheme (AdwSettingsImpl *self)
+adap_settings_impl_get_has_color_scheme (AdapSettingsImpl *self)
 {
-  AdwSettingsImplPrivate *priv = adw_settings_impl_get_instance_private (self);
+  AdapSettingsImplPrivate *priv = adap_settings_impl_get_instance_private (self);
 
-  g_return_val_if_fail (ADW_IS_SETTINGS_IMPL (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SETTINGS_IMPL (self), FALSE);
 
   return priv->has_color_scheme;
 }
 
 gboolean
-adw_settings_impl_get_has_high_contrast (AdwSettingsImpl *self)
+adap_settings_impl_get_has_high_contrast (AdapSettingsImpl *self)
 {
-  AdwSettingsImplPrivate *priv = adw_settings_impl_get_instance_private (self);
+  AdapSettingsImplPrivate *priv = adap_settings_impl_get_instance_private (self);
 
-  g_return_val_if_fail (ADW_IS_SETTINGS_IMPL (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SETTINGS_IMPL (self), FALSE);
 
   return priv->has_high_contrast;
 }
 
 void
-adw_settings_impl_set_features (AdwSettingsImpl *self,
+adap_settings_impl_set_features (AdapSettingsImpl *self,
                                 gboolean         has_theme_name,
                                 gboolean         has_color_scheme,
                                 gboolean         has_high_contrast)
 {
-  AdwSettingsImplPrivate *priv = adw_settings_impl_get_instance_private (self);
+  AdapSettingsImplPrivate *priv = adap_settings_impl_get_instance_private (self);
 
-  g_return_if_fail (ADW_IS_SETTINGS_IMPL (self));
+  g_return_if_fail (ADAP_IS_SETTINGS_IMPL (self));
 
   priv->has_theme_name = !!has_theme_name;
   priv->has_color_scheme = !!has_color_scheme;
   priv->has_high_contrast = !!has_high_contrast;
 }
 
-AdwSystemColorScheme
-adw_settings_impl_get_color_scheme (AdwSettingsImpl *self)
+AdapSystemColorScheme
+adap_settings_impl_get_color_scheme (AdapSettingsImpl *self)
 {
-  AdwSettingsImplPrivate *priv = adw_settings_impl_get_instance_private (self);
+  AdapSettingsImplPrivate *priv = adap_settings_impl_get_instance_private (self);
 
-  g_return_val_if_fail (ADW_IS_SETTINGS_IMPL (self), ADW_SYSTEM_COLOR_SCHEME_DEFAULT);
+  g_return_val_if_fail (ADAP_IS_SETTINGS_IMPL (self), ADAP_SYSTEM_COLOR_SCHEME_DEFAULT);
 
   return priv->color_scheme;
 }
 
 void
-adw_settings_impl_set_color_scheme (AdwSettingsImpl      *self,
-                                    AdwSystemColorScheme  color_scheme)
+adap_settings_impl_set_color_scheme (AdapSettingsImpl      *self,
+                                    AdapSystemColorScheme  color_scheme)
 {
-  AdwSettingsImplPrivate *priv = adw_settings_impl_get_instance_private (self);
+  AdapSettingsImplPrivate *priv = adap_settings_impl_get_instance_private (self);
 
-  g_return_if_fail (ADW_IS_SETTINGS_IMPL (self));
+  g_return_if_fail (ADAP_IS_SETTINGS_IMPL (self));
 
   if (priv->color_scheme == color_scheme)
     return;
@@ -156,22 +156,22 @@ adw_settings_impl_set_color_scheme (AdwSettingsImpl      *self,
 }
 
 gboolean
-adw_settings_impl_get_high_contrast (AdwSettingsImpl *self)
+adap_settings_impl_get_high_contrast (AdapSettingsImpl *self)
 {
-  AdwSettingsImplPrivate *priv = adw_settings_impl_get_instance_private (self);
+  AdapSettingsImplPrivate *priv = adap_settings_impl_get_instance_private (self);
 
-  g_return_val_if_fail (ADW_IS_SETTINGS_IMPL (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SETTINGS_IMPL (self), FALSE);
 
   return priv->high_contrast;
 }
 
 void
-adw_settings_impl_set_high_contrast (AdwSettingsImpl *self,
+adap_settings_impl_set_high_contrast (AdapSettingsImpl *self,
                                      gboolean         high_contrast)
 {
-  AdwSettingsImplPrivate *priv = adw_settings_impl_get_instance_private (self);
+  AdapSettingsImplPrivate *priv = adap_settings_impl_get_instance_private (self);
 
-  g_return_if_fail (ADW_IS_SETTINGS_IMPL (self));
+  g_return_if_fail (ADAP_IS_SETTINGS_IMPL (self));
 
   high_contrast = !!high_contrast;
 
@@ -185,12 +185,12 @@ adw_settings_impl_set_high_contrast (AdwSettingsImpl *self,
 }
 
 void
-adw_settings_impl_set_theme_name (AdwSettingsImpl *self,
+adap_settings_impl_set_theme_name (AdapSettingsImpl *self,
                                   const gchar     *theme_name)
 {
-  AdwSettingsImplPrivate *priv = adw_settings_impl_get_instance_private (self);
+  AdapSettingsImplPrivate *priv = adap_settings_impl_get_instance_private (self);
 
-  g_return_if_fail (ADW_IS_SETTINGS_IMPL (self));
+  g_return_if_fail (ADAP_IS_SETTINGS_IMPL (self));
 
   if (g_strcmp0 (theme_name, priv->theme_name) != 0)
     {
@@ -201,19 +201,19 @@ adw_settings_impl_set_theme_name (AdwSettingsImpl *self,
 }
 
 const gchar *
-adw_settings_impl_get_theme_name (AdwSettingsImpl *self)
+adap_settings_impl_get_theme_name (AdapSettingsImpl *self)
 {
-  AdwSettingsImplPrivate *priv = adw_settings_impl_get_instance_private (self);
+  AdapSettingsImplPrivate *priv = adap_settings_impl_get_instance_private (self);
 
-  g_return_val_if_fail (ADW_IS_SETTINGS_IMPL (self), NULL);
+  g_return_val_if_fail (ADAP_IS_SETTINGS_IMPL (self), NULL);
 
   return priv->theme_name;
 }
 
 gboolean
-adw_get_disable_portal (void)
+adap_get_disable_portal (void)
 {
-  const char *disable_portal = g_getenv ("ADW_DISABLE_PORTAL");
+  const char *disable_portal = g_getenv ("ADAP_DISABLE_PORTAL");
 
   return disable_portal && disable_portal[0] == '1';
 }

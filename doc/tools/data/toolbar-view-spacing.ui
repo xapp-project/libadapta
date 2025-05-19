@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwWindow" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapWindow" id="widget">
     <property name="default-height">150</property>
     <property name="default-width">360</property>
     <property name="content">
-      <object class="AdwToolbarView">
+      <object class="AdapToolbarView">
         <property name="top-bar-style">raised</property>
         <property name="bottom-bar-style">raised</property>
         <child type="top">
@@ -18,7 +18,7 @@
               </object>
             </child>
             <property name="title-widget">
-              <object class="AdwWindowTitle">
+              <object class="AdapWindowTitle">
                 <property name="title">Toolbar View</property>
               </object>
             </property>

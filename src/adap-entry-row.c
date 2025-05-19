@@ -6,20 +6,20 @@
  */
 
 #include "config.h"
-#include "adw-entry-row-private.h"
+#include "adap-entry-row-private.h"
 
-#include "adw-animation-private.h"
-#include "adw-animation-util.h"
-#include "adw-gizmo-private.h"
-#include "adw-marshalers.h"
-#include "adw-timed-animation.h"
-#include "adw-widget-utils-private.h"
+#include "adap-animation-private.h"
+#include "adap-animation-util.h"
+#include "adap-gizmo-private.h"
+#include "adap-marshalers.h"
+#include "adap-timed-animation.h"
+#include "adap-widget-utils-private.h"
 
 #define EMPTY_ANIMATION_DURATION 150
 #define TITLE_SPACING 3
 
 /**
- * AdwEntryRow:
+ * AdapEntryRow:
  *
  * A [class@Gtk.ListBoxRow] with an embedded text entry.
  *
@@ -28,23 +28,23 @@
  *   <img src="entry-row.png" alt="entry-row">
  * </picture>
  *
- * `AdwEntryRow` has a title that doubles as placeholder text. It shows an icon
+ * `AdapEntryRow` has a title that doubles as placeholder text. It shows an icon
  * indicating that it's editable and can receive additional widgets before or
  * after the editable part.
  *
- * If [property@EntryRow:show-apply-button] is set to `TRUE`, `AdwEntryRow` can
+ * If [property@EntryRow:show-apply-button] is set to `TRUE`, `AdapEntryRow` can
  * show an apply button when editing its contents. This can be useful if
  * changing its contents can result in an expensive operation, such as network
  * activity.
  *
- * `AdwEntryRow` provides only minimal API and should be used with the
+ * `AdapEntryRow` provides only minimal API and should be used with the
  * [iface@Gtk.Editable] API.
  *
  * See also [class@PasswordEntryRow].
  *
- * ## AdwEntryRow as GtkBuildable
+ * ## AdapEntryRow as GtkBuildable
  *
- * The `AdwEntryRow` implementation of the [iface@Gtk.Buildable] interface
+ * The `AdapEntryRow` implementation of the [iface@Gtk.Buildable] interface
  * supports adding a child at its end by specifying “suffix” or omitting the
  * “type” attribute of a <child> element.
  *
@@ -53,7 +53,7 @@
  *
  * ## CSS nodes
  *
- * `AdwEntryRow` has a single CSS node with name `row` and the `.entry` style
+ * `AdapEntryRow` has a single CSS node with name `row` and the `.entry` style
  * class.
  *
  * Since: 1.2
@@ -75,22 +75,22 @@ typedef struct
 
   gboolean empty;
   double empty_progress;
-  AdwAnimation *empty_animation;
+  AdapAnimation *empty_animation;
 
   gboolean editing;
   gboolean show_apply_button;
   gboolean text_changed;
   gboolean show_indicator;
   gboolean activates_default;
-} AdwEntryRowPrivate;
+} AdapEntryRowPrivate;
 
-static void adw_entry_row_buildable_init (GtkBuildableIface *iface);
-static void adw_entry_row_editable_init (GtkEditableInterface *iface);
+static void adap_entry_row_buildable_init (GtkBuildableIface *iface);
+static void adap_entry_row_editable_init (GtkEditableInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (AdwEntryRow, adw_entry_row, ADW_TYPE_PREFERENCES_ROW,
-                         G_ADD_PRIVATE (AdwEntryRow)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_entry_row_buildable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE, adw_entry_row_editable_init))
+G_DEFINE_TYPE_WITH_CODE (AdapEntryRow, adap_entry_row, ADAP_TYPE_PREFERENCES_ROW,
+                         G_ADD_PRIVATE (AdapEntryRow)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_entry_row_buildable_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE, adap_entry_row_editable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -118,9 +118,9 @@ static guint signals[SIGNAL_LAST_SIGNAL];
 
 static void
 empty_animation_value_cb (double       value,
-                          AdwEntryRow *self)
+                          AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
 
   priv->empty_progress = value;
 
@@ -132,18 +132,18 @@ empty_animation_value_cb (double       value,
 }
 
 static gboolean
-is_text_focused (AdwEntryRow *self)
+is_text_focused (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
   GtkStateFlags flags = gtk_widget_get_state_flags (priv->text);
 
   return !!(flags & GTK_STATE_FLAG_FOCUS_WITHIN);
 }
 
 static void
-update_empty (AdwEntryRow *self)
+update_empty (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
   GtkEntryBuffer *buffer = gtk_text_get_buffer (GTK_TEXT (priv->text));
   gboolean focused = is_text_focused (self);
   gboolean editable = gtk_editable_get_editable (GTK_EDITABLE (priv->text));
@@ -158,17 +158,17 @@ update_empty (AdwEntryRow *self)
 
   gtk_widget_queue_allocate (priv->editable_area);
 
-  adw_timed_animation_set_value_from (ADW_TIMED_ANIMATION (priv->empty_animation),
+  adap_timed_animation_set_value_from (ADAP_TIMED_ANIMATION (priv->empty_animation),
                                       priv->empty_progress);
-  adw_timed_animation_set_value_to (ADW_TIMED_ANIMATION (priv->empty_animation),
+  adap_timed_animation_set_value_to (ADAP_TIMED_ANIMATION (priv->empty_animation),
                                     priv->empty ? 0 : 1);
-  adw_animation_play (priv->empty_animation);
+  adap_animation_play (priv->empty_animation);
 }
 
 static void
-text_changed_cb (AdwEntryRow *self)
+text_changed_cb (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
 
   if (priv->show_apply_button && priv->editing)
     priv->text_changed = TRUE;
@@ -177,9 +177,9 @@ text_changed_cb (AdwEntryRow *self)
 }
 
 static void
-text_state_flags_changed_cb (AdwEntryRow *self)
+text_state_flags_changed_cb (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
 
   priv->editing = is_text_focused (self);
 
@@ -192,7 +192,7 @@ text_state_flags_changed_cb (AdwEntryRow *self)
 }
 
 static gboolean
-text_keynav_failed_cb (AdwEntryRow      *self,
+text_keynav_failed_cb (AdapEntryRow      *self,
                        GtkDirectionType  direction)
 {
   if (direction == GTK_DIR_LEFT || direction == GTK_DIR_RIGHT)
@@ -206,9 +206,9 @@ pressed_cb (GtkGesture  *gesture,
             int          n_press,
             double       x,
             double       y,
-            AdwEntryRow *self)
+            AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
   GtkWidget *picked;
 
   picked = gtk_widget_pick (GTK_WIDGET (self), x, y, GTK_PICK_DEFAULT);
@@ -229,9 +229,9 @@ pressed_cb (GtkGesture  *gesture,
 }
 
 static void
-apply_button_clicked_cb (AdwEntryRow *self)
+apply_button_clicked_cb (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
 
   if (gtk_widget_has_focus (priv->apply_button))
     gtk_widget_grab_focus (GTK_WIDGET (self));
@@ -243,9 +243,9 @@ apply_button_clicked_cb (AdwEntryRow *self)
 }
 
 static void
-text_activated_cb (AdwEntryRow *self)
+text_activated_cb (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
 
   if (gtk_widget_get_visible (priv->apply_button)) {
     apply_button_clicked_cb (self);
@@ -258,7 +258,7 @@ text_activated_cb (AdwEntryRow *self)
 }
 
 static void
-on_length_changed (AdwEntryRow    *self,
+on_length_changed (AdapEntryRow    *self,
                    GtkEntryBuffer *buffer)
 {
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_TEXT_LENGTH]);
@@ -273,8 +273,8 @@ measure_editable_area (GtkWidget      *widget,
                        int            *minimum_baseline,
                        int            *natural_baseline)
 {
-  AdwEntryRow *self = g_object_get_data (G_OBJECT (widget), "row");
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRow *self = g_object_get_data (G_OBJECT (widget), "row");
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
   int text_min = 0, text_nat = 0;
   int title_min = 0, title_nat = 0;
   int empty_min = 0, empty_nat = 0;
@@ -305,8 +305,8 @@ allocate_editable_area (GtkWidget *widget,
                         int        height,
                         int        baseline)
 {
-  AdwEntryRow *self = g_object_get_data (G_OBJECT (widget), "row");
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRow *self = g_object_get_data (G_OBJECT (widget), "row");
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
   gboolean is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
   GskTransform *transform;
   int empty_height = 0, title_height = 0, text_height = 0, text_baseline = -1;
@@ -319,9 +319,9 @@ allocate_editable_area (GtkWidget *widget,
   gtk_widget_measure (priv->text, GTK_ORIENTATION_VERTICAL, width,
                       NULL, &text_height, NULL, &text_baseline);
 
-  empty_scale = (float) adw_lerp (1.0, (double) title_height / empty_height, priv->empty_progress);
-  title_scale = (float) adw_lerp ((double) empty_height / title_height, 1.0, priv->empty_progress);
-  title_offset = (float) adw_lerp ((double) (height - empty_height) / 2.0,
+  empty_scale = (float) adap_lerp (1.0, (double) title_height / empty_height, priv->empty_progress);
+  title_scale = (float) adap_lerp ((double) empty_height / title_height, 1.0, priv->empty_progress);
+  title_offset = (float) adap_lerp ((double) (height - empty_height) / 2.0,
                                    (double) (height - title_height - text_height - TITLE_SPACING) / 2.0,
                                    priv->empty_progress);
 
@@ -346,46 +346,46 @@ allocate_editable_area (GtkWidget *widget,
 }
 
 static gboolean
-adw_entry_row_grab_focus (GtkWidget *widget)
+adap_entry_row_grab_focus (GtkWidget *widget)
 {
-  AdwEntryRow *self = ADW_ENTRY_ROW (widget);
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRow *self = ADAP_ENTRY_ROW (widget);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
 
   return gtk_widget_grab_focus (priv->text);
 }
 
 static void
-adw_entry_row_get_property (GObject     *object,
+adap_entry_row_get_property (GObject     *object,
                             guint        prop_id,
                             GValue      *value,
                             GParamSpec  *pspec)
 {
-  AdwEntryRow *self = ADW_ENTRY_ROW (object);
+  AdapEntryRow *self = ADAP_ENTRY_ROW (object);
 
   if (gtk_editable_delegate_get_property (object, prop_id, value, pspec))
     return;
 
   switch (prop_id) {
   case PROP_SHOW_APPLY_BUTTON:
-    g_value_set_boolean (value, adw_entry_row_get_show_apply_button (self));
+    g_value_set_boolean (value, adap_entry_row_get_show_apply_button (self));
     break;
   case PROP_INPUT_HINTS:
-    g_value_set_flags (value, adw_entry_row_get_input_hints (self));
+    g_value_set_flags (value, adap_entry_row_get_input_hints (self));
     break;
   case PROP_INPUT_PURPOSE:
-    g_value_set_enum (value, adw_entry_row_get_input_purpose (self));
+    g_value_set_enum (value, adap_entry_row_get_input_purpose (self));
     break;
   case PROP_ATTRIBUTES:
-    g_value_set_boxed (value, adw_entry_row_get_attributes (self));
+    g_value_set_boxed (value, adap_entry_row_get_attributes (self));
     break;
   case PROP_ENABLE_EMOJI_COMPLETION:
-    g_value_set_boolean (value, adw_entry_row_get_enable_emoji_completion (self));
+    g_value_set_boolean (value, adap_entry_row_get_enable_emoji_completion (self));
     break;
   case PROP_ACTIVATES_DEFAULT:
-    g_value_set_boolean (value, adw_entry_row_get_activates_default (self));
+    g_value_set_boolean (value, adap_entry_row_get_activates_default (self));
     break;
   case PROP_TEXT_LENGTH:
-    g_value_set_uint (value, adw_entry_row_get_text_length (self));
+    g_value_set_uint (value, adap_entry_row_get_text_length (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -393,12 +393,12 @@ adw_entry_row_get_property (GObject     *object,
 }
 
 static void
-adw_entry_row_set_property (GObject       *object,
+adap_entry_row_set_property (GObject       *object,
                             guint          prop_id,
                             const GValue  *value,
                             GParamSpec    *pspec)
 {
-  AdwEntryRow *self = ADW_ENTRY_ROW (object);
+  AdapEntryRow *self = ADAP_ENTRY_ROW (object);
 
   if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
   {
@@ -413,22 +413,22 @@ adw_entry_row_set_property (GObject       *object,
 
   switch (prop_id) {
   case PROP_SHOW_APPLY_BUTTON:
-    adw_entry_row_set_show_apply_button (self, g_value_get_boolean (value));
+    adap_entry_row_set_show_apply_button (self, g_value_get_boolean (value));
     break;
   case PROP_INPUT_HINTS:
-    adw_entry_row_set_input_hints (self, g_value_get_flags (value));
+    adap_entry_row_set_input_hints (self, g_value_get_flags (value));
     break;
   case PROP_INPUT_PURPOSE:
-    adw_entry_row_set_input_purpose (self, g_value_get_enum (value));
+    adap_entry_row_set_input_purpose (self, g_value_get_enum (value));
     break;
   case PROP_ATTRIBUTES:
-    adw_entry_row_set_attributes (self, g_value_get_boxed (value));
+    adap_entry_row_set_attributes (self, g_value_get_boxed (value));
     break;
   case PROP_ENABLE_EMOJI_COMPLETION:
-    adw_entry_row_set_enable_emoji_completion (self, g_value_get_boolean (value));
+    adap_entry_row_set_enable_emoji_completion (self, g_value_get_boolean (value));
     break;
   case PROP_ACTIVATES_DEFAULT:
-    adw_entry_row_set_activates_default (self, g_value_get_boolean (value));
+    adap_entry_row_set_activates_default (self, g_value_get_boolean (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -436,34 +436,34 @@ adw_entry_row_set_property (GObject       *object,
 }
 
 static void
-adw_entry_row_dispose (GObject *object)
+adap_entry_row_dispose (GObject *object)
 {
-  AdwEntryRow *self = ADW_ENTRY_ROW (object);
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRow *self = ADAP_ENTRY_ROW (object);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
 
   g_clear_object (&priv->empty_animation);
 
   if (priv->text)
     gtk_editable_finish_delegate (GTK_EDITABLE (self));
 
-  G_OBJECT_CLASS (adw_entry_row_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_entry_row_parent_class)->dispose (object);
 }
 
 static void
-adw_entry_row_class_init (AdwEntryRowClass *klass)
+adap_entry_row_class_init (AdapEntryRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_entry_row_get_property;
-  object_class->set_property = adw_entry_row_set_property;
-  object_class->dispose = adw_entry_row_dispose;
+  object_class->get_property = adap_entry_row_get_property;
+  object_class->set_property = adap_entry_row_set_property;
+  object_class->dispose = adap_entry_row_dispose;
 
-  widget_class->focus = adw_widget_focus_child;
-  widget_class->grab_focus = adw_entry_row_grab_focus;
+  widget_class->focus = adap_widget_focus_child;
+  widget_class->grab_focus = adap_entry_row_grab_focus;
 
   /**
-   * AdwEntryRow:show-apply-button: (attributes org.gtk.Property.get=adw_entry_row_get_show_apply_button org.gtk.Property.set=adw_entry_row_set_show_apply_button)
+   * AdapEntryRow:show-apply-button: (attributes org.gtk.Property.get=adap_entry_row_get_show_apply_button org.gtk.Property.set=adap_entry_row_set_show_apply_button)
    *
    * Whether to show the apply button.
    *
@@ -483,13 +483,13 @@ adw_entry_row_class_init (AdwEntryRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwEntryRow:input-hints: (attributes org.gtk.Property.get=adw_entry_row_get_input_hints org.gtk.Property.set=adw_entry_row_set_input_hints)
+   * AdapEntryRow:input-hints: (attributes org.gtk.Property.get=adap_entry_row_get_input_hints org.gtk.Property.set=adap_entry_row_set_input_hints)
    *
    * Additional input hints for the entry row.
    *
    * Input hints allow input methods to fine-tune their behavior.
    *
-   * See also: [property@Adw.EntryRow:input-purpose]
+   * See also: [property@Adap.EntryRow:input-purpose]
    *
    * Since: 1.2
    */
@@ -500,7 +500,7 @@ adw_entry_row_class_init (AdwEntryRowClass *klass)
                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwEntryRow:input-purpose: (attributes org.gtk.Property.get=adw_entry_row_get_input_purpose org.gtk.Property.set=adw_entry_row_set_input_purpose)
+   * AdapEntryRow:input-purpose: (attributes org.gtk.Property.get=adap_entry_row_get_input_purpose org.gtk.Property.set=adap_entry_row_set_input_purpose)
    *
    * The input purpose of the entry row.
    *
@@ -515,7 +515,7 @@ adw_entry_row_class_init (AdwEntryRowClass *klass)
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwEntryRow:attributes: (attributes org.gtk.Property.get=adw_entry_row_get_attributes org.gtk.Property.set=adw_entry_row_set_attributes)
+   * AdapEntryRow:attributes: (attributes org.gtk.Property.get=adap_entry_row_get_attributes org.gtk.Property.set=adap_entry_row_set_attributes)
    *
    * A list of Pango attributes to apply to the text of the embedded entry.
    *
@@ -530,7 +530,7 @@ adw_entry_row_class_init (AdwEntryRowClass *klass)
                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwEntryRow:enable-emoji-completion: (attributes org.gtk.Property.get=adw_entry_row_get_enable_emoji_completion org.gtk.Property.set=adw_entry_row_set_enable_emoji_completion)
+   * AdapEntryRow:enable-emoji-completion: (attributes org.gtk.Property.get=adap_entry_row_get_enable_emoji_completion org.gtk.Property.set=adap_entry_row_set_enable_emoji_completion)
    *
    * Whether to suggest emoji replacements on the entry row.
    *
@@ -544,7 +544,7 @@ adw_entry_row_class_init (AdwEntryRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwEntryRow:activates-default: (attributes org.gtk.Property.get=adw_entry_row_get_activates_default org.gtk.Property.set=adw_entry_row_set_activates_default)
+   * AdapEntryRow:activates-default: (attributes org.gtk.Property.get=adap_entry_row_get_activates_default org.gtk.Property.set=adap_entry_row_set_activates_default)
    *
    * Whether activating the embedded entry can activate the default widget.
    *
@@ -556,7 +556,7 @@ adw_entry_row_class_init (AdwEntryRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwEntryRow:text-length: (attributes org.gtk.Property.get=adw_entry_row_get_text_length)
+   * AdapEntryRow:text-length: (attributes org.gtk.Property.get=adap_entry_row_get_text_length)
    *
    * The length of the text in the entry row.
    *
@@ -572,7 +572,7 @@ adw_entry_row_class_init (AdwEntryRowClass *klass)
   gtk_editable_install_properties (object_class, PROP_LAST_PROP);
 
   /**
-   * AdwEntryRow::apply:
+   * AdapEntryRow::apply:
    *
    * Emitted when the apply button is pressed.
    *
@@ -586,15 +586,15 @@ adw_entry_row_class_init (AdwEntryRowClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_APPLY],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   /**
-   * AdwEntryRow::entry-activated:
+   * AdapEntryRow::entry-activated:
    *
    * Emitted when the embedded entry is activated.
    *
@@ -606,26 +606,26 @@ adw_entry_row_class_init (AdwEntryRowClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_ENTRY_ACTIVATED],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-entry-row.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, AdwEntryRow, header);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwEntryRow, prefixes);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwEntryRow, suffixes);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwEntryRow, editable_area);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwEntryRow, text);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwEntryRow, empty_title);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwEntryRow, title);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwEntryRow, edit_icon);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwEntryRow, apply_button);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwEntryRow, indicator);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwEntryRow, buffer_signals);
+                                               "/org/gnome/Adapta/ui/adap-entry-row.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, AdapEntryRow, header);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapEntryRow, prefixes);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapEntryRow, suffixes);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapEntryRow, editable_area);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapEntryRow, text);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapEntryRow, empty_title);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapEntryRow, title);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapEntryRow, edit_icon);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapEntryRow, apply_button);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapEntryRow, indicator);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapEntryRow, buffer_signals);
 
   gtk_widget_class_bind_template_callback (widget_class, pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, text_state_flags_changed_cb);
@@ -635,32 +635,32 @@ adw_entry_row_class_init (AdwEntryRowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, text_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, apply_button_clicked_cb);
 
-  g_type_ensure (ADW_TYPE_GIZMO);
+  g_type_ensure (ADAP_TYPE_GIZMO);
 }
 
 static void
-adw_entry_row_init (AdwEntryRow *self)
+adap_entry_row_init (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
-  AdwAnimationTarget *target;
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
+  AdapAnimationTarget *target;
 
   gtk_widget_init_template (GTK_WIDGET (self));
   gtk_editable_init_delegate (GTK_EDITABLE (self));
 
-  adw_gizmo_set_measure_func (ADW_GIZMO (priv->editable_area), (AdwGizmoMeasureFunc) measure_editable_area);
-  adw_gizmo_set_allocate_func (ADW_GIZMO (priv->editable_area), (AdwGizmoAllocateFunc) allocate_editable_area);
-  adw_gizmo_set_focus_func (ADW_GIZMO (priv->editable_area), (AdwGizmoFocusFunc) adw_widget_focus_child);
+  adap_gizmo_set_measure_func (ADAP_GIZMO (priv->editable_area), (AdapGizmoMeasureFunc) measure_editable_area);
+  adap_gizmo_set_allocate_func (ADAP_GIZMO (priv->editable_area), (AdapGizmoAllocateFunc) allocate_editable_area);
+  adap_gizmo_set_focus_func (ADAP_GIZMO (priv->editable_area), (AdapGizmoFocusFunc) adap_widget_focus_child);
 
   g_object_set_data (G_OBJECT (priv->editable_area), "row", self);
 
   priv->empty_progress = 0.0;
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               empty_animation_value_cb,
                                               self, NULL);
 
   priv->empty_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 0, 0,
+    adap_timed_animation_new (GTK_WIDGET (self), 0, 0,
                              EMPTY_ANIMATION_DURATION, target);
 
   g_signal_group_connect_swapped (priv->buffer_signals, "notify::length",
@@ -674,65 +674,65 @@ adw_entry_row_init (AdwEntryRow *self)
 }
 
 static void
-adw_entry_row_buildable_add_child (GtkBuildable *buildable,
+adap_entry_row_buildable_add_child (GtkBuildable *buildable,
                                    GtkBuilder   *builder,
                                    GObject      *child,
                                    const char   *type)
 {
-  AdwEntryRow *self = ADW_ENTRY_ROW (buildable);
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRow *self = ADAP_ENTRY_ROW (buildable);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
 
   if (!priv->header)
     parent_buildable_iface->add_child (buildable, builder, child, type);
   else if (g_strcmp0 (type, "prefix") == 0)
-    adw_entry_row_add_prefix (self, GTK_WIDGET (child));
+    adap_entry_row_add_prefix (self, GTK_WIDGET (child));
   else if (g_strcmp0 (type, "suffix") == 0)
-    adw_entry_row_add_suffix (self, GTK_WIDGET (child));
+    adap_entry_row_add_suffix (self, GTK_WIDGET (child));
   else if (!type && GTK_IS_WIDGET (child))
-    adw_entry_row_add_suffix (self, GTK_WIDGET (child));
+    adap_entry_row_add_suffix (self, GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_entry_row_buildable_init (GtkBuildableIface *iface)
+adap_entry_row_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->add_child = adw_entry_row_buildable_add_child;
+  iface->add_child = adap_entry_row_buildable_add_child;
 }
 
 static GtkEditable *
-adw_entry_row_get_delegate (GtkEditable *editable)
+adap_entry_row_get_delegate (GtkEditable *editable)
 {
-  AdwEntryRow *self = ADW_ENTRY_ROW (editable);
-  AdwEntryRowPrivate *priv = adw_entry_row_get_instance_private (self);
+  AdapEntryRow *self = ADAP_ENTRY_ROW (editable);
+  AdapEntryRowPrivate *priv = adap_entry_row_get_instance_private (self);
 
   return GTK_EDITABLE (priv->text);
 }
 
 void
-adw_entry_row_editable_init (GtkEditableInterface *iface)
+adap_entry_row_editable_init (GtkEditableInterface *iface)
 {
-  iface->get_delegate = adw_entry_row_get_delegate;
+  iface->get_delegate = adap_entry_row_get_delegate;
 }
 
 /**
- * adw_entry_row_new:
+ * adap_entry_row_new:
  *
- * Creates a new `AdwEntryRow`.
+ * Creates a new `AdapEntryRow`.
  *
- * Returns: the newly created `AdwEntryRow`
+ * Returns: the newly created `AdapEntryRow`
  *
  * Since: 1.2
  */
 GtkWidget *
-adw_entry_row_new (void)
+adap_entry_row_new (void)
 {
-  return g_object_new (ADW_TYPE_ENTRY_ROW, NULL);
+  return g_object_new (ADAP_TYPE_ENTRY_ROW, NULL);
 }
 
 /**
- * adw_entry_row_add_prefix:
+ * adap_entry_row_add_prefix:
  * @self: an entry row
  * @widget: a widget
  *
@@ -741,23 +741,23 @@ adw_entry_row_new (void)
  * Since: 1.2
  */
 void
-adw_entry_row_add_prefix (AdwEntryRow *self,
+adap_entry_row_add_prefix (AdapEntryRow *self,
                           GtkWidget   *widget)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_parent (widget) == NULL);
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   gtk_box_prepend (priv->prefixes, widget);
   gtk_widget_set_visible (GTK_WIDGET (priv->prefixes), TRUE);
 }
 
 /**
- * adw_entry_row_add_suffix:
+ * adap_entry_row_add_suffix:
  * @self: an entry row
  * @widget: a widget
  *
@@ -766,23 +766,23 @@ adw_entry_row_add_prefix (AdwEntryRow *self,
  * Since: 1.2
  */
 void
-adw_entry_row_add_suffix (AdwEntryRow *self,
+adap_entry_row_add_suffix (AdapEntryRow *self,
                           GtkWidget    *widget)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_parent (widget) == NULL);
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   gtk_box_append (priv->suffixes, widget);
   gtk_widget_set_visible (GTK_WIDGET (priv->suffixes), TRUE);
 }
 
 /**
- * adw_entry_row_remove:
+ * adap_entry_row_remove:
  * @self: an entry row
  * @widget: the child to be removed
  *
@@ -791,16 +791,16 @@ adw_entry_row_add_suffix (AdwEntryRow *self,
  * Since: 1.2
  */
 void
-adw_entry_row_remove (AdwEntryRow *self,
+adap_entry_row_remove (AdapEntryRow *self,
                       GtkWidget   *child)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
   GtkWidget *parent;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   parent = gtk_widget_get_parent (child);
 
@@ -809,12 +809,12 @@ adw_entry_row_remove (AdwEntryRow *self,
     gtk_widget_set_visible (parent, gtk_widget_get_first_child (parent) != NULL);
   }
   else {
-    ADW_CRITICAL_CANNOT_REMOVE_CHILD (self, child);
+    ADAP_CRITICAL_CANNOT_REMOVE_CHILD (self, child);
   }
 }
 
 /**
- * adw_entry_row_get_show_apply_button: (attributes org.gtk.Method.get_property=show-apply-button)
+ * adap_entry_row_get_show_apply_button: (attributes org.gtk.Method.get_property=show-apply-button)
  * @self: an entry row
  *
  * Gets whether @self can show the apply button.
@@ -824,19 +824,19 @@ adw_entry_row_remove (AdwEntryRow *self,
  * Since: 1.2
  */
 gboolean
-adw_entry_row_get_show_apply_button (AdwEntryRow *self)
+adap_entry_row_get_show_apply_button (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ENTRY_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_ENTRY_ROW (self), FALSE);
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   return priv->show_apply_button;
 }
 
 /**
- * adw_entry_row_set_show_apply_button: (attributes org.gtk.Method.set_property=show-apply-button)
+ * adap_entry_row_set_show_apply_button: (attributes org.gtk.Method.set_property=show-apply-button)
  * @self: an entry row
  * @show_apply_button: whether to show the apply button
  *
@@ -853,14 +853,14 @@ adw_entry_row_get_show_apply_button (AdwEntryRow *self)
  * Since: 1.2
  */
 void
-adw_entry_row_set_show_apply_button (AdwEntryRow *self,
+adap_entry_row_set_show_apply_button (AdapEntryRow *self,
                                      gboolean     show_apply_button)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   show_apply_button = !!show_apply_button;
 
@@ -878,7 +878,7 @@ adw_entry_row_set_show_apply_button (AdwEntryRow *self,
 }
 
 /**
- * adw_entry_row_get_input_hints: (attributes org.gtk.Method.get_property=input-hints)
+ * adap_entry_row_get_input_hints: (attributes org.gtk.Method.get_property=input-hints)
  * @self: an entry row
  *
  * Gets the additional input hints of @self.
@@ -888,19 +888,19 @@ adw_entry_row_set_show_apply_button (AdwEntryRow *self,
  * Since: 1.2
  */
 GtkInputHints
-adw_entry_row_get_input_hints (AdwEntryRow *self)
+adap_entry_row_get_input_hints (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ENTRY_ROW (self), GTK_INPUT_HINT_NONE);
+  g_return_val_if_fail (ADAP_IS_ENTRY_ROW (self), GTK_INPUT_HINT_NONE);
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   return gtk_text_get_input_hints (GTK_TEXT (priv->text));
 }
 
 /**
- * adw_entry_row_set_input_hints: (attributes org.gtk.Method.set_property=input-hints)
+ * adap_entry_row_set_input_hints: (attributes org.gtk.Method.set_property=input-hints)
  * @self: an entry row
  * @hints: the hints
  *
@@ -908,21 +908,21 @@ adw_entry_row_get_input_hints (AdwEntryRow *self)
  *
  * Input hints allow input methods to fine-tune their behavior.
  *
- * See also: [property@AdwEntryRow:input-purpose]
+ * See also: [property@AdapEntryRow:input-purpose]
  *
  * Since: 1.2
  */
 void
-adw_entry_row_set_input_hints (AdwEntryRow   *self,
+adap_entry_row_set_input_hints (AdapEntryRow   *self,
                                GtkInputHints  hints)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
-  if (hints == adw_entry_row_get_input_hints (self))
+  if (hints == adap_entry_row_get_input_hints (self))
     return;
 
   gtk_text_set_input_hints (GTK_TEXT (priv->text), hints);
@@ -931,7 +931,7 @@ adw_entry_row_set_input_hints (AdwEntryRow   *self,
 }
 
 /**
- * adw_entry_row_get_input_purpose: (attributes org.gtk.Method.get_property=input-purpose)
+ * adap_entry_row_get_input_purpose: (attributes org.gtk.Method.get_property=input-purpose)
  * @self: an entry row
  *
  * Gets the input purpose of @self.
@@ -941,19 +941,19 @@ adw_entry_row_set_input_hints (AdwEntryRow   *self,
  * Since: 1.2
  */
 GtkInputPurpose
-adw_entry_row_get_input_purpose (AdwEntryRow *self)
+adap_entry_row_get_input_purpose (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ENTRY_ROW (self), GTK_INPUT_PURPOSE_FREE_FORM);
+  g_return_val_if_fail (ADAP_IS_ENTRY_ROW (self), GTK_INPUT_PURPOSE_FREE_FORM);
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   return gtk_text_get_input_purpose (GTK_TEXT (priv->text));
 }
 
 /**
- * adw_entry_row_set_input_purpose: (attributes org.gtk.Method.set_property=input-purpose)
+ * adap_entry_row_set_input_purpose: (attributes org.gtk.Method.set_property=input-purpose)
  * @self: an entry row
  * @purpose: the purpose
  *
@@ -964,16 +964,16 @@ adw_entry_row_get_input_purpose (AdwEntryRow *self)
  * Since: 1.2
  */
 void
-adw_entry_row_set_input_purpose (AdwEntryRow     *self,
+adap_entry_row_set_input_purpose (AdapEntryRow     *self,
                                  GtkInputPurpose  purpose)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
-  if (purpose == adw_entry_row_get_input_purpose (self))
+  if (purpose == adap_entry_row_get_input_purpose (self))
     return;
 
   gtk_text_set_input_purpose (GTK_TEXT (priv->text), purpose);
@@ -982,7 +982,7 @@ adw_entry_row_set_input_purpose (AdwEntryRow     *self,
 }
 
 /**
- * adw_entry_row_get_attributes: (attributes org.gtk.Method.get_property=attributes)
+ * adap_entry_row_get_attributes: (attributes org.gtk.Method.get_property=attributes)
  * @self: an entry row
  *
  * Gets Pango attributes applied to the text of the embedded entry.
@@ -992,19 +992,19 @@ adw_entry_row_set_input_purpose (AdwEntryRow     *self,
  * Since: 1.2
  */
 PangoAttrList *
-adw_entry_row_get_attributes (AdwEntryRow *self)
+adap_entry_row_get_attributes (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ENTRY_ROW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ENTRY_ROW (self), NULL);
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   return gtk_text_get_attributes (GTK_TEXT (priv->text));
 }
 
 /**
- * adw_entry_row_set_attributes: (attributes org.gtk.Method.set_property=attributes)
+ * adap_entry_row_set_attributes: (attributes org.gtk.Method.set_property=attributes)
  * @self: an entry row
  * @attributes: (nullable): a list of attributes
  *
@@ -1016,16 +1016,16 @@ adw_entry_row_get_attributes (AdwEntryRow *self)
  * Since: 1.2
  */
 void
-adw_entry_row_set_attributes (AdwEntryRow   *self,
+adap_entry_row_set_attributes (AdapEntryRow   *self,
                               PangoAttrList *attributes)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
-  if (attributes == adw_entry_row_get_attributes (self))
+  if (attributes == adap_entry_row_get_attributes (self))
     return;
 
   gtk_text_set_attributes (GTK_TEXT (priv->text), attributes);
@@ -1034,7 +1034,7 @@ adw_entry_row_set_attributes (AdwEntryRow   *self,
 }
 
 /**
- * adw_entry_row_get_enable_emoji_completion: (attributes org.gtk.Method.get_property=enable-emoji-completion)
+ * adap_entry_row_get_enable_emoji_completion: (attributes org.gtk.Method.get_property=enable-emoji-completion)
  * @self: an entry row
  *
  * Gets whether to suggest emoji replacements on @self.
@@ -1044,19 +1044,19 @@ adw_entry_row_set_attributes (AdwEntryRow   *self,
  * Since: 1.2
  */
 gboolean
-adw_entry_row_get_enable_emoji_completion (AdwEntryRow *self)
+adap_entry_row_get_enable_emoji_completion (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ENTRY_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_ENTRY_ROW (self), FALSE);
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   return gtk_text_get_enable_emoji_completion (GTK_TEXT (priv->text));
 }
 
 /**
- * adw_entry_row_set_enable_emoji_completion: (attributes org.gtk.Method.set_property=enable-emoji-completion)
+ * adap_entry_row_set_enable_emoji_completion: (attributes org.gtk.Method.set_property=enable-emoji-completion)
  * @self: an entry row
  * @enable_emoji_completion: Whether emoji completion should be enabled or not
  *
@@ -1067,18 +1067,18 @@ adw_entry_row_get_enable_emoji_completion (AdwEntryRow *self)
  * Since: 1.2
  */
 void
-adw_entry_row_set_enable_emoji_completion (AdwEntryRow *self,
+adap_entry_row_set_enable_emoji_completion (AdapEntryRow *self,
                                            gboolean     enable_emoji_completion)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   enable_emoji_completion = !!enable_emoji_completion;
 
-  if (enable_emoji_completion == adw_entry_row_get_enable_emoji_completion (self))
+  if (enable_emoji_completion == adap_entry_row_get_enable_emoji_completion (self))
     return;
 
   gtk_text_set_enable_emoji_completion (GTK_TEXT (priv->text), enable_emoji_completion);
@@ -1087,7 +1087,7 @@ adw_entry_row_set_enable_emoji_completion (AdwEntryRow *self,
 }
 
 /**
- * adw_entry_row_get_activates_default: (attributes org.gtk.Method.get_property=activates-default)
+ * adap_entry_row_get_activates_default: (attributes org.gtk.Method.get_property=activates-default)
  * @self: an entry row
  *
  * Gets whether activating the embedded entry can activate the default widget.
@@ -1097,19 +1097,19 @@ adw_entry_row_set_enable_emoji_completion (AdwEntryRow *self,
  * Since: 1.2
  */
 gboolean
-adw_entry_row_get_activates_default (AdwEntryRow *self)
+adap_entry_row_get_activates_default (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ENTRY_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_ENTRY_ROW (self), FALSE);
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   return priv->activates_default;
 }
 
 /**
- * adw_entry_row_set_activates_default: (attributes org.gtk.Method.set_property=activates-default)
+ * adap_entry_row_set_activates_default: (attributes org.gtk.Method.set_property=activates-default)
  * @self: an entry row
  * @activates: whether to activate the default widget
  *
@@ -1118,14 +1118,14 @@ adw_entry_row_get_activates_default (AdwEntryRow *self)
  * Since: 1.2
  */
 void
-adw_entry_row_set_activates_default (AdwEntryRow *self,
+adap_entry_row_set_activates_default (AdapEntryRow *self,
                                      gboolean     activates)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   if (priv->activates_default == activates)
     return;
@@ -1136,40 +1136,40 @@ adw_entry_row_set_activates_default (AdwEntryRow *self,
 }
 
 void
-adw_entry_row_set_indicator_icon_name (AdwEntryRow *self,
+adap_entry_row_set_indicator_icon_name (AdapEntryRow *self,
                                        const char  *icon_name)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   gtk_image_set_from_icon_name (GTK_IMAGE (priv->indicator), icon_name);
 }
 
 void
-adw_entry_row_set_indicator_tooltip (AdwEntryRow *self,
+adap_entry_row_set_indicator_tooltip (AdapEntryRow *self,
                                      const char  *tooltip)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   gtk_widget_set_tooltip_text (priv->indicator, tooltip);
 }
 
 void
-adw_entry_row_set_show_indicator (AdwEntryRow *self,
+adap_entry_row_set_show_indicator (AdapEntryRow *self,
                                   gboolean     show_indicator)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ENTRY_ROW (self));
+  g_return_if_fail (ADAP_IS_ENTRY_ROW (self));
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   show_indicator = !!show_indicator;
 
@@ -1179,7 +1179,7 @@ adw_entry_row_set_show_indicator (AdwEntryRow *self,
 }
 
 /**
- * adw_entry_row_get_text_length:
+ * adap_entry_row_get_text_length:
  * @self: an entry row
  *
  * Retrieves the current length of the text in @self.
@@ -1189,19 +1189,19 @@ adw_entry_row_set_show_indicator (AdwEntryRow *self,
  * Since: 1.5
  */
 guint
-adw_entry_row_get_text_length (AdwEntryRow *self)
+adap_entry_row_get_text_length (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ENTRY_ROW (self), 0);
+  g_return_val_if_fail (ADAP_IS_ENTRY_ROW (self), 0);
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   return gtk_text_get_text_length (GTK_TEXT (priv->text));
 }
 
 /**
- * adw_entry_row_grab_focus_without_selecting:
+ * adap_entry_row_grab_focus_without_selecting:
  * @self: an entry row
  *
  * Causes @self to have keyboard focus without selecting the text.
@@ -1213,13 +1213,13 @@ adw_entry_row_get_text_length (AdwEntryRow *self)
  * Since: 1.3
  */
 gboolean
-adw_entry_row_grab_focus_without_selecting (AdwEntryRow *self)
+adap_entry_row_grab_focus_without_selecting (AdapEntryRow *self)
 {
-  AdwEntryRowPrivate *priv;
+  AdapEntryRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ENTRY_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_ENTRY_ROW (self), FALSE);
 
-  priv = adw_entry_row_get_instance_private (self);
+  priv = adap_entry_row_get_instance_private (self);
 
   return gtk_text_grab_focus_without_selecting (GTK_TEXT (priv->text));
 }

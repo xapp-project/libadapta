@@ -297,7 +297,7 @@ treeview spinbutton:not(.vertical) {
   }
 }
 
-// The following styles are deprecated in libadwaita and should be removed in 2.x
+// The following styles are deprecated in libadapta and should be removed in 2.x
 
 // Deprecated: use .boxed-list instead
 list.content {
@@ -336,7 +336,7 @@ list.content {
   font-size: 24pt;
 }
 
-// Deprecated: use AdwToolbarView
+// Deprecated: use AdapToolbarView
 
 headerbar.flat {
   @extend %headerbar-flat;

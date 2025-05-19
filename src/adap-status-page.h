@@ -6,52 +6,52 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_STATUS_PAGE (adw_status_page_get_type())
+#define ADAP_TYPE_STATUS_PAGE (adap_status_page_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwStatusPage, adw_status_page, ADW, STATUS_PAGE, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapStatusPage, adap_status_page, ADAP, STATUS_PAGE, GtkWidget)
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_status_page_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_status_page_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_status_page_get_icon_name (AdwStatusPage *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_status_page_set_icon_name (AdwStatusPage *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_status_page_get_icon_name (AdapStatusPage *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_status_page_set_icon_name (AdapStatusPage *self,
                                            const char    *icon_name);
 
-ADW_AVAILABLE_IN_ALL
-GdkPaintable *adw_status_page_get_paintable (AdwStatusPage *self);
-ADW_AVAILABLE_IN_ALL
-void          adw_status_page_set_paintable (AdwStatusPage *self,
+ADAP_AVAILABLE_IN_ALL
+GdkPaintable *adap_status_page_get_paintable (AdapStatusPage *self);
+ADAP_AVAILABLE_IN_ALL
+void          adap_status_page_set_paintable (AdapStatusPage *self,
                                              GdkPaintable  *paintable);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_status_page_get_title (AdwStatusPage *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_status_page_set_title (AdwStatusPage *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_status_page_get_title (AdapStatusPage *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_status_page_set_title (AdapStatusPage *self,
                                        const char    *title);
 
-ADW_AVAILABLE_IN_ALL
-const char      *adw_status_page_get_description (AdwStatusPage *self);
-ADW_AVAILABLE_IN_ALL
-void             adw_status_page_set_description (AdwStatusPage *self,
+ADAP_AVAILABLE_IN_ALL
+const char      *adap_status_page_get_description (AdapStatusPage *self);
+ADAP_AVAILABLE_IN_ALL
+void             adap_status_page_set_description (AdapStatusPage *self,
                                                   const char    *description);
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_status_page_get_child (AdwStatusPage *self);
-ADW_AVAILABLE_IN_ALL
-void       adw_status_page_set_child (AdwStatusPage *self,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_status_page_get_child (AdapStatusPage *self);
+ADAP_AVAILABLE_IN_ALL
+void       adap_status_page_set_child (AdapStatusPage *self,
                                       GtkWidget     *child);
 
 G_END_DECLS

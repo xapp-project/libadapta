@@ -6,21 +6,21 @@
  */
 
 #include "config.h"
-#include "adw-flap.h"
+#include "adap-flap.h"
 
 #include <math.h>
 
-#include "adw-animation-util.h"
-#include "adw-gizmo-private.h"
-#include "adw-shadow-helper-private.h"
-#include "adw-spring-animation.h"
-#include "adw-swipeable.h"
-#include "adw-swipe-tracker-private.h"
-#include "adw-timed-animation.h"
-#include "adw-widget-utils-private.h"
+#include "adap-animation-util.h"
+#include "adap-gizmo-private.h"
+#include "adap-shadow-helper-private.h"
+#include "adap-spring-animation.h"
+#include "adap-swipeable.h"
+#include "adap-swipe-tracker-private.h"
+#include "adap-timed-animation.h"
+#include "adap-widget-utils-private.h"
 
 /**
- * AdwFlap:
+ * AdapFlap:
  *
  * An adaptive container acting like a box or an overlay.
  *
@@ -33,11 +33,11 @@
  *   <img src="flap-narrow.png" alt="flap-narrow">
  * </picture>
  *
- * The `AdwFlap` widget can display its children like a [class@Gtk.Box] does or
+ * The `AdapFlap` widget can display its children like a [class@Gtk.Box] does or
  * like a [class@Gtk.Overlay] does, according to the
  * [property@Flap:fold-policy] value.
  *
- * `AdwFlap` has at most three children: [property@Flap:content],
+ * `AdapFlap` has at most three children: [property@Flap:content],
  * [property@Flap:flap] and [property@Flap:separator]. Content is the primary
  * child, flap is displayed next to it when unfolded, or overlays it when
  * folded. Flap can be shown or hidden by changing the
@@ -68,41 +68,41 @@
  * overlap the window content (for example, in fullscreen mode) and bottom
  * sheets.
  *
- * ## AdwFlap as GtkBuildable
+ * ## AdapFlap as GtkBuildable
  *
- * The `AdwFlap` implementation of the [iface@Gtk.Buildable] interface supports
+ * The `AdapFlap` implementation of the [iface@Gtk.Buildable] interface supports
  * setting the flap child by specifying “flap” as the “type” attribute of a
  * `<child>` element, and separator by specifying “separator”. Specifying
  * “content” child type or omitting it results in setting the content child.
  *
  * ## CSS nodes
  *
- * `AdwFlap` has a single CSS node with name `flap`. The node will get the style
+ * `AdapFlap` has a single CSS node with name `flap`. The node will get the style
  * classes `.folded` when it is folded, and `.unfolded` when it's not.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 
 /**
- * AdwFlapFoldPolicy:
- * @ADW_FLAP_FOLD_POLICY_NEVER: Disable folding, the flap cannot reach narrow
+ * AdapFlapFoldPolicy:
+ * @ADAP_FLAP_FOLD_POLICY_NEVER: Disable folding, the flap cannot reach narrow
  *   sizes.
- * @ADW_FLAP_FOLD_POLICY_ALWAYS: Keep the flap always folded.
- * @ADW_FLAP_FOLD_POLICY_AUTO: Fold and unfold the flap based on available
+ * @ADAP_FLAP_FOLD_POLICY_ALWAYS: Keep the flap always folded.
+ * @ADAP_FLAP_FOLD_POLICY_AUTO: Fold and unfold the flap based on available
  *   space.
  *
  * Describes the possible folding behavior of a [class@Flap] widget.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 
 /**
- * AdwFlapTransitionType:
- * @ADW_FLAP_TRANSITION_TYPE_OVER: The flap slides over the content, which is
+ * AdapFlapTransitionType:
+ * @ADAP_FLAP_TRANSITION_TYPE_OVER: The flap slides over the content, which is
  *   dimmed. When folded, only the flap can be swiped.
- * @ADW_FLAP_TRANSITION_TYPE_UNDER: The content slides over the flap. Only the
+ * @ADAP_FLAP_TRANSITION_TYPE_UNDER: The content slides over the flap. Only the
  *   content can be swiped.
- * @ADW_FLAP_TRANSITION_TYPE_SLIDE: The flap slides offscreen when hidden,
+ * @ADAP_FLAP_TRANSITION_TYPE_SLIDE: The flap slides offscreen when hidden,
  *   neither the flap nor content overlap each other. Both widgets can be
  *   swiped.
  *
@@ -112,7 +112,7 @@
  * [class@Flap] widget, as well as which areas can be swiped via
  * [property@Flap:swipe-to-open] and [property@Flap:swipe-to-close].
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 
 typedef struct {
@@ -120,7 +120,7 @@ typedef struct {
   GtkAllocation allocation;
 } ChildInfo;
 
-struct _AdwFlap
+struct _AdapFlap
 {
   GtkWidget parent_instance;
 
@@ -129,9 +129,9 @@ struct _AdwFlap
   ChildInfo separator;
   GtkWidget *shield;
 
-  AdwFlapFoldPolicy fold_policy;
-  AdwFoldThresholdPolicy fold_threshold_policy;
-  AdwFlapTransitionType transition_type;
+  AdapFlapFoldPolicy fold_policy;
+  AdapFoldThresholdPolicy fold_threshold_policy;
+  AdapFlapTransitionType transition_type;
   GtkPackType flap_position;
   gboolean reveal_flap;
   gboolean locked;
@@ -139,33 +139,33 @@ struct _AdwFlap
 
   guint fold_duration;
   double fold_progress;
-  AdwAnimation *fold_animation;
+  AdapAnimation *fold_animation;
 
   double reveal_progress;
-  AdwAnimation *reveal_animation;
+  AdapAnimation *reveal_animation;
 
   gboolean schedule_fold;
 
   GtkOrientation orientation;
 
-  AdwShadowHelper *shadow_helper;
+  AdapShadowHelper *shadow_helper;
 
   gboolean swipe_to_open;
   gboolean swipe_to_close;
-  AdwSwipeTracker *tracker;
+  AdapSwipeTracker *tracker;
   gboolean swipe_active;
 
   gboolean modal;
   GtkEventController *shortcut_controller;
 };
 
-static void adw_flap_buildable_init (GtkBuildableIface *iface);
-static void adw_flap_swipeable_init (AdwSwipeableInterface *iface);
+static void adap_flap_buildable_init (GtkBuildableIface *iface);
+static void adap_flap_swipeable_init (AdapSwipeableInterface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwFlap, adw_flap, GTK_TYPE_WIDGET,
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapFlap, adap_flap, GTK_TYPE_WIDGET,
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_flap_buildable_init)
-                               G_IMPLEMENT_INTERFACE (ADW_TYPE_SWIPEABLE, adw_flap_swipeable_init))
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_flap_buildable_init)
+                               G_IMPLEMENT_INTERFACE (ADAP_TYPE_SWIPEABLE, adap_flap_swipeable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -197,7 +197,7 @@ enum {
 static GParamSpec *props[LAST_PROP];
 
 static void
-update_swipe_tracker (AdwFlap *self)
+update_swipe_tracker (AdapFlap *self)
 {
   gboolean reverse = self->flap_position == GTK_PACK_START;
 
@@ -208,15 +208,15 @@ update_swipe_tracker (AdwFlap *self)
       gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
     reverse = !reverse;
 
-  adw_swipe_tracker_set_enabled (self->tracker, self->flap.widget &&
+  adap_swipe_tracker_set_enabled (self->tracker, self->flap.widget &&
                                  (self->swipe_to_open || self->swipe_to_close));
-  adw_swipe_tracker_set_reversed (self->tracker, reverse);
+  adap_swipe_tracker_set_reversed (self->tracker, reverse);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self->tracker),
                                   self->orientation);
 }
 
 static void
-set_orientation (AdwFlap        *self,
+set_orientation (AdapFlap        *self,
                  GtkOrientation  orientation)
 {
   if (self->orientation == orientation)
@@ -231,7 +231,7 @@ set_orientation (AdwFlap        *self,
 }
 
 static void
-update_child_visibility (AdwFlap *self)
+update_child_visibility (AdapFlap *self)
 {
   gboolean visible = self->reveal_progress > 0;
 
@@ -241,7 +241,7 @@ update_child_visibility (AdwFlap *self)
   if (self->separator.widget)
     gtk_widget_set_child_visible (self->separator.widget, visible);
 
-  if (self->fold_policy == ADW_FLAP_FOLD_POLICY_NEVER)
+  if (self->fold_policy == ADAP_FLAP_FOLD_POLICY_NEVER)
     gtk_widget_queue_resize (GTK_WIDGET (self));
   else
     gtk_widget_queue_allocate (GTK_WIDGET (self));
@@ -249,7 +249,7 @@ update_child_visibility (AdwFlap *self)
 
 
 static void
-update_shield (AdwFlap *self)
+update_shield (AdapFlap *self)
 {
   if (self->shield)
     gtk_widget_set_child_visible (self->shield,
@@ -261,7 +261,7 @@ update_shield (AdwFlap *self)
 }
 
 static void
-update_shortcuts (AdwFlap *self)
+update_shortcuts (AdapFlap *self)
 {
   gtk_event_controller_set_propagation_phase (self->shortcut_controller,
                                               self->modal ? GTK_PHASE_BUBBLE : GTK_PHASE_NONE);
@@ -271,7 +271,7 @@ update_shortcuts (AdwFlap *self)
 
 static void
 set_reveal_progress (double   progress,
-                     AdwFlap *self)
+                     AdapFlap *self)
 {
   self->reveal_progress = progress;
 
@@ -283,7 +283,7 @@ set_reveal_progress (double   progress,
 
 static void
 fold_animation_value_cb (double   value,
-                         AdwFlap *self)
+                         AdapFlap *self)
 {
   self->fold_progress = value;
 
@@ -293,22 +293,22 @@ fold_animation_value_cb (double   value,
 }
 
 static void
-animate_fold (AdwFlap *self)
+animate_fold (AdapFlap *self)
 {
-  adw_timed_animation_set_value_from (ADW_TIMED_ANIMATION (self->fold_animation),
+  adap_timed_animation_set_value_from (ADAP_TIMED_ANIMATION (self->fold_animation),
                                       self->fold_progress);
-  adw_timed_animation_set_value_to (ADW_TIMED_ANIMATION (self->fold_animation),
+  adap_timed_animation_set_value_to (ADAP_TIMED_ANIMATION (self->fold_animation),
                                     self->folded ? 1 : 0);
 
   /* When the flap is completely hidden, we can skip animation */
-  adw_timed_animation_set_duration (ADW_TIMED_ANIMATION (self->fold_animation),
+  adap_timed_animation_set_duration (ADAP_TIMED_ANIMATION (self->fold_animation),
                                     (self->reveal_progress > 0) ? self->fold_duration : 0);
 
-  adw_animation_play (self->fold_animation);
+  adap_animation_play (self->fold_animation);
 }
 
 static void
-reveal_animation_done_cb (AdwFlap *self)
+reveal_animation_done_cb (AdapFlap *self)
 {
   if (self->schedule_fold) {
     self->schedule_fold = FALSE;
@@ -320,26 +320,26 @@ reveal_animation_done_cb (AdwFlap *self)
 }
 
 static void
-animate_reveal (AdwFlap *self,
+animate_reveal (AdapFlap *self,
                 double   to,
                 double   velocity)
 {
-  adw_spring_animation_set_value_from (ADW_SPRING_ANIMATION (self->reveal_animation),
+  adap_spring_animation_set_value_from (ADAP_SPRING_ANIMATION (self->reveal_animation),
                                        self->reveal_progress);
-  adw_spring_animation_set_value_to (ADW_SPRING_ANIMATION (self->reveal_animation), to);
+  adap_spring_animation_set_value_to (ADAP_SPRING_ANIMATION (self->reveal_animation), to);
 
   if (!G_APPROX_VALUE (self->reveal_progress, to, DBL_EPSILON))
-    adw_spring_animation_set_initial_velocity (ADW_SPRING_ANIMATION (self->reveal_animation),
-                                               velocity / adw_swipeable_get_distance (ADW_SWIPEABLE (self)));
+    adap_spring_animation_set_initial_velocity (ADAP_SPRING_ANIMATION (self->reveal_animation),
+                                               velocity / adap_swipeable_get_distance (ADAP_SWIPEABLE (self)));
   else
-    adw_spring_animation_set_initial_velocity (ADW_SPRING_ANIMATION (self->reveal_animation),
+    adap_spring_animation_set_initial_velocity (ADAP_SPRING_ANIMATION (self->reveal_animation),
                                                velocity);
 
-  adw_animation_play (self->reveal_animation);
+  adap_animation_play (self->reveal_animation);
 }
 
 static void
-set_reveal_flap (AdwFlap  *self,
+set_reveal_flap (AdapFlap  *self,
                  gboolean  reveal_flap,
                  double    velocity)
 {
@@ -357,7 +357,7 @@ set_reveal_flap (AdwFlap  *self,
 }
 
 static void
-set_folded (AdwFlap  *self,
+set_folded (AdapFlap  *self,
             gboolean  folded)
 {
   folded = !!folded;
@@ -393,7 +393,7 @@ set_folded (AdwFlap  *self,
 }
 
 static inline GtkPackType
-get_start_or_end (AdwFlap *self)
+get_start_or_end (AdapFlap *self)
 {
   GtkTextDirection direction = gtk_widget_get_direction (GTK_WIDGET (self));
   gboolean is_rtl = direction == GTK_TEXT_DIR_RTL;
@@ -403,8 +403,8 @@ get_start_or_end (AdwFlap *self)
 }
 
 static void
-begin_swipe_cb (AdwSwipeTracker *tracker,
-                AdwFlap         *self)
+begin_swipe_cb (AdapSwipeTracker *tracker,
+                AdapFlap         *self)
 {
   if ((G_APPROX_VALUE (self->reveal_progress, 0, DBL_EPSILON) ||
        self->reveal_progress < 0) &&
@@ -416,24 +416,24 @@ begin_swipe_cb (AdwSwipeTracker *tracker,
       !self->swipe_to_close)
     return;
 
-  adw_animation_pause (self->reveal_animation);
+  adap_animation_pause (self->reveal_animation);
 
   self->swipe_active = TRUE;
 }
 
 static void
-update_swipe_cb (AdwSwipeTracker *tracker,
+update_swipe_cb (AdapSwipeTracker *tracker,
                  double           progress,
-                 AdwFlap         *self)
+                 AdapFlap         *self)
 {
   set_reveal_progress (progress, self);
 }
 
 static void
-end_swipe_cb (AdwSwipeTracker *tracker,
+end_swipe_cb (AdapSwipeTracker *tracker,
               double           velocity,
               double           to,
-              AdwFlap         *self)
+              AdapFlap         *self)
 {
   if (!self->swipe_active)
     return;
@@ -451,20 +451,20 @@ released_cb (GtkGestureClick *gesture,
              int              n_press,
              double           x,
              double           y,
-             AdwFlap         *self)
+             AdapFlap         *self)
 {
-  adw_flap_set_reveal_flap (self, FALSE);
+  adap_flap_set_reveal_flap (self, FALSE);
 }
 
 static gboolean
-transition_is_content_above_flap (AdwFlap *self)
+transition_is_content_above_flap (AdapFlap *self)
 {
   switch (self->transition_type) {
-  case ADW_FLAP_TRANSITION_TYPE_OVER:
+  case ADAP_FLAP_TRANSITION_TYPE_OVER:
     return FALSE;
 
-  case ADW_FLAP_TRANSITION_TYPE_UNDER:
-  case ADW_FLAP_TRANSITION_TYPE_SLIDE:
+  case ADAP_FLAP_TRANSITION_TYPE_UNDER:
+  case ADAP_FLAP_TRANSITION_TYPE_SLIDE:
     return TRUE;
 
   default:
@@ -473,14 +473,14 @@ transition_is_content_above_flap (AdwFlap *self)
 }
 
 static gboolean
-transition_should_clip (AdwFlap *self)
+transition_should_clip (AdapFlap *self)
 {
   switch (self->transition_type) {
-  case ADW_FLAP_TRANSITION_TYPE_OVER:
-  case ADW_FLAP_TRANSITION_TYPE_SLIDE:
+  case ADAP_FLAP_TRANSITION_TYPE_OVER:
+  case ADAP_FLAP_TRANSITION_TYPE_SLIDE:
     return FALSE;
 
-  case ADW_FLAP_TRANSITION_TYPE_UNDER:
+  case ADAP_FLAP_TRANSITION_TYPE_UNDER:
     return TRUE;
 
   default:
@@ -489,14 +489,14 @@ transition_should_clip (AdwFlap *self)
 }
 
 static double
-transition_get_content_motion_factor (AdwFlap *self)
+transition_get_content_motion_factor (AdapFlap *self)
 {
   switch (self->transition_type) {
-  case ADW_FLAP_TRANSITION_TYPE_OVER:
+  case ADAP_FLAP_TRANSITION_TYPE_OVER:
     return 0;
 
-  case ADW_FLAP_TRANSITION_TYPE_UNDER:
-  case ADW_FLAP_TRANSITION_TYPE_SLIDE:
+  case ADAP_FLAP_TRANSITION_TYPE_UNDER:
+  case ADAP_FLAP_TRANSITION_TYPE_SLIDE:
     return 1;
 
   default:
@@ -505,14 +505,14 @@ transition_get_content_motion_factor (AdwFlap *self)
 }
 
 static double
-transition_get_flap_motion_factor (AdwFlap *self)
+transition_get_flap_motion_factor (AdapFlap *self)
 {
   switch (self->transition_type) {
-  case ADW_FLAP_TRANSITION_TYPE_OVER:
-  case ADW_FLAP_TRANSITION_TYPE_SLIDE:
+  case ADAP_FLAP_TRANSITION_TYPE_OVER:
+  case ADAP_FLAP_TRANSITION_TYPE_SLIDE:
     return 1;
 
-  case ADW_FLAP_TRANSITION_TYPE_UNDER:
+  case ADAP_FLAP_TRANSITION_TYPE_UNDER:
     return 0;
 
   default:
@@ -521,7 +521,7 @@ transition_get_flap_motion_factor (AdwFlap *self)
 }
 
 static void
-restack_children (AdwFlap *self)
+restack_children (AdapFlap *self)
 {
   if (transition_is_content_above_flap (self)) {
     if (self->flap.widget)
@@ -545,7 +545,7 @@ restack_children (AdwFlap *self)
 }
 
 static void
-add_child (AdwFlap   *self,
+add_child (AdapFlap   *self,
            ChildInfo *info)
 {
   gtk_widget_set_parent (info->widget, GTK_WIDGET (self));
@@ -554,7 +554,7 @@ add_child (AdwFlap   *self,
 }
 
 static void
-remove_child (AdwFlap   *self,
+remove_child (AdapFlap   *self,
               ChildInfo *info)
 {
   gtk_widget_unparent (info->widget);
@@ -570,7 +570,7 @@ get_preferred_size (GtkWidget      *widget,
 }
 
 static void
-compute_sizes (AdwFlap  *self,
+compute_sizes (AdapFlap  *self,
                int       width,
                int       height,
                gboolean  folded,
@@ -681,7 +681,7 @@ compute_sizes (AdwFlap  *self,
 }
 
 static inline void
-interpolate_reveal (AdwFlap  *self,
+interpolate_reveal (AdapFlap  *self,
                     int       width,
                     int       height,
                     gboolean  folded,
@@ -702,19 +702,19 @@ interpolate_reveal (AdwFlap  *self,
     compute_sizes (self, width, height, folded, FALSE, &flap_hidden, &content_hidden, &separator_hidden);
 
     *flap_size =
-      (int) round (adw_lerp (flap_hidden, flap_revealed,
+      (int) round (adap_lerp (flap_hidden, flap_revealed,
                               self->reveal_progress));
     *content_size =
-      (int) round (adw_lerp (content_hidden, content_revealed,
+      (int) round (adap_lerp (content_hidden, content_revealed,
                               self->reveal_progress));
     *separator_size =
-      (int) round (adw_lerp (separator_hidden, separator_revealed,
+      (int) round (adap_lerp (separator_hidden, separator_revealed,
                               self->reveal_progress));
   }
 }
 
 static inline void
-interpolate_fold (AdwFlap *self,
+interpolate_fold (AdapFlap *self,
                   int      width,
                   int      height,
                   int     *flap_size,
@@ -733,19 +733,19 @@ interpolate_fold (AdwFlap *self,
     interpolate_reveal (self, width, height, FALSE, &flap_unfolded, &content_unfolded, &separator_unfolded);
 
     *flap_size =
-      (int) round (adw_lerp (flap_unfolded, flap_folded,
+      (int) round (adap_lerp (flap_unfolded, flap_folded,
                               self->fold_progress));
     *content_size =
-      (int) round (adw_lerp (content_unfolded, content_folded,
+      (int) round (adap_lerp (content_unfolded, content_folded,
                               self->fold_progress));
     *separator_size =
-      (int) round (adw_lerp (separator_unfolded, separator_folded,
+      (int) round (adap_lerp (separator_unfolded, separator_folded,
                               self->fold_progress));
   }
 }
 
 static void
-compute_allocation (AdwFlap       *self,
+compute_allocation (AdapFlap       *self,
                     int            width,
                     int            height,
                     GtkAllocation *flap_alloc,
@@ -819,7 +819,7 @@ compute_allocation (AdwFlap       *self,
 }
 
 static inline void
-allocate_child (AdwFlap   *self,
+allocate_child (AdapFlap   *self,
                 ChildInfo *info,
                 int        baseline)
 {
@@ -830,7 +830,7 @@ allocate_child (AdwFlap   *self,
 }
 
 static void
-allocate_shadow (AdwFlap *self,
+allocate_shadow (AdapFlap *self,
                  int      width,
                  int      height,
                  int      baseline)
@@ -865,15 +865,15 @@ allocate_shadow (AdwFlap *self,
   }
 
   switch (self->transition_type) {
-  case ADW_FLAP_TRANSITION_TYPE_OVER:
+  case ADAP_FLAP_TRANSITION_TYPE_OVER:
     shadow_progress = 1 - MIN (self->reveal_progress, self->fold_progress);
     break;
 
-  case ADW_FLAP_TRANSITION_TYPE_UNDER:
+  case ADAP_FLAP_TRANSITION_TYPE_UNDER:
     shadow_progress = self->reveal_progress;
     break;
 
-  case ADW_FLAP_TRANSITION_TYPE_SLIDE:
+  case ADAP_FLAP_TRANSITION_TYPE_SLIDE:
     shadow_progress = 1;
     break;
 
@@ -881,25 +881,25 @@ allocate_shadow (AdwFlap *self,
     g_assert_not_reached ();
   }
 
-  adw_shadow_helper_size_allocate (self->shadow_helper, width, height,
+  adap_shadow_helper_size_allocate (self->shadow_helper, width, height,
                                    baseline, shadow_x, shadow_y,
                                    shadow_progress, shadow_direction);
 }
 
 static void
-adw_flap_size_allocate (GtkWidget *widget,
+adap_flap_size_allocate (GtkWidget *widget,
                         int        width,
                         int        height,
                         int        baseline)
 {
-  AdwFlap *self = ADW_FLAP (widget);
+  AdapFlap *self = ADAP_FLAP (widget);
 
-  if (self->fold_policy == ADW_FLAP_FOLD_POLICY_AUTO) {
+  if (self->fold_policy == ADAP_FLAP_FOLD_POLICY_AUTO) {
     GtkRequisition flap_size = { 0, 0 };
     GtkRequisition content_size = { 0, 0 };
     GtkRequisition separator_size = { 0, 0 };
 
-    if (self->fold_threshold_policy == ADW_FOLD_THRESHOLD_POLICY_MINIMUM) {
+    if (self->fold_threshold_policy == ADAP_FOLD_THRESHOLD_POLICY_MINIMUM) {
       if (self->flap.widget)
         gtk_widget_get_preferred_size (self->flap.widget, &flap_size, NULL);
       if (self->content.widget)
@@ -939,7 +939,7 @@ adw_flap_size_allocate (GtkWidget *widget,
 }
 
 static void
-adw_flap_measure (GtkWidget      *widget,
+adap_flap_measure (GtkWidget      *widget,
                   GtkOrientation  orientation,
                   int             for_size,
                   int            *minimum,
@@ -947,7 +947,7 @@ adw_flap_measure (GtkWidget      *widget,
                   int            *minimum_baseline,
                   int            *natural_baseline)
 {
-  AdwFlap *self = ADW_FLAP (widget);
+  AdapFlap *self = ADAP_FLAP (widget);
 
   int content_min = 0, content_nat = 0;
   int flap_min = 0, flap_nat = 0;
@@ -967,17 +967,17 @@ adw_flap_measure (GtkWidget      *widget,
     double min_progress, nat_progress;
 
     switch (self->fold_policy) {
-    case ADW_FLAP_FOLD_POLICY_NEVER:
+    case ADAP_FLAP_FOLD_POLICY_NEVER:
       min_progress = (1 - self->fold_progress) * self->reveal_progress;
       nat_progress = min_progress;
       break;
 
-    case ADW_FLAP_FOLD_POLICY_ALWAYS:
+    case ADAP_FLAP_FOLD_POLICY_ALWAYS:
       min_progress = 0;
       nat_progress = 0;
       break;
 
-    case ADW_FLAP_FOLD_POLICY_AUTO:
+    case ADAP_FLAP_FOLD_POLICY_AUTO:
       min_progress = 0;
       nat_progress = self->locked ? self->reveal_progress : 1;
       break;
@@ -1004,10 +1004,10 @@ adw_flap_measure (GtkWidget      *widget,
 }
 
 static void
-adw_flap_snapshot (GtkWidget   *widget,
+adap_flap_snapshot (GtkWidget   *widget,
                    GtkSnapshot *snapshot)
 {
-  AdwFlap *self = ADW_FLAP (widget);
+  AdapFlap *self = ADAP_FLAP (widget);
   int width, height;
   int shadow_x = 0, shadow_y = 0;
   double shadow_progress;
@@ -1033,15 +1033,15 @@ adw_flap_snapshot (GtkWidget   *widget,
   }
 
   switch (self->transition_type) {
-  case ADW_FLAP_TRANSITION_TYPE_OVER:
+  case ADAP_FLAP_TRANSITION_TYPE_OVER:
     shadow_progress = 1 - MIN (self->reveal_progress, self->fold_progress);
     break;
 
-  case ADW_FLAP_TRANSITION_TYPE_UNDER:
+  case ADAP_FLAP_TRANSITION_TYPE_UNDER:
     shadow_progress = self->reveal_progress;
     break;
 
-  case ADW_FLAP_TRANSITION_TYPE_SLIDE:
+  case ADAP_FLAP_TRANSITION_TYPE_SLIDE:
     shadow_progress = 1;
     break;
 
@@ -1085,77 +1085,77 @@ adw_flap_snapshot (GtkWidget   *widget,
       gtk_widget_snapshot_child (widget, self->content.widget, snapshot);
   }
 
-  adw_shadow_helper_snapshot (self->shadow_helper, snapshot);
+  adap_shadow_helper_snapshot (self->shadow_helper, snapshot);
 }
 
 static void
-adw_flap_direction_changed (GtkWidget        *widget,
+adap_flap_direction_changed (GtkWidget        *widget,
                             GtkTextDirection  previous_direction)
 {
-  AdwFlap *self = ADW_FLAP (widget);
+  AdapFlap *self = ADAP_FLAP (widget);
 
   update_swipe_tracker (self);
 
-  GTK_WIDGET_CLASS (adw_flap_parent_class)->direction_changed (widget,
+  GTK_WIDGET_CLASS (adap_flap_parent_class)->direction_changed (widget,
                                                                previous_direction);
 }
 
 static void
-adw_flap_get_property (GObject    *object,
+adap_flap_get_property (GObject    *object,
                        guint       prop_id,
                        GValue     *value,
                        GParamSpec *pspec)
 {
-  AdwFlap *self = ADW_FLAP (object);
+  AdapFlap *self = ADAP_FLAP (object);
 
   switch (prop_id) {
   case PROP_CONTENT:
-    g_value_set_object (value, adw_flap_get_content (self));
+    g_value_set_object (value, adap_flap_get_content (self));
     break;
   case PROP_FLAP:
-    g_value_set_object (value, adw_flap_get_flap (self));
+    g_value_set_object (value, adap_flap_get_flap (self));
     break;
   case PROP_SEPARATOR:
-    g_value_set_object (value, adw_flap_get_separator (self));
+    g_value_set_object (value, adap_flap_get_separator (self));
     break;
   case PROP_FLAP_POSITION:
-    g_value_set_enum (value, adw_flap_get_flap_position (self));
+    g_value_set_enum (value, adap_flap_get_flap_position (self));
     break;
   case PROP_REVEAL_FLAP:
-    g_value_set_boolean (value, adw_flap_get_reveal_flap (self));
+    g_value_set_boolean (value, adap_flap_get_reveal_flap (self));
     break;
   case PROP_REVEAL_PARAMS:
-    g_value_set_boxed (value, adw_flap_get_reveal_params (self));
+    g_value_set_boxed (value, adap_flap_get_reveal_params (self));
     break;
   case PROP_REVEAL_PROGRESS:
-    g_value_set_double (value, adw_flap_get_reveal_progress (self));
+    g_value_set_double (value, adap_flap_get_reveal_progress (self));
     break;
   case PROP_FOLD_POLICY:
-    g_value_set_enum (value, adw_flap_get_fold_policy (self));
+    g_value_set_enum (value, adap_flap_get_fold_policy (self));
     break;
   case PROP_FOLD_THRESHOLD_POLICY:
-    g_value_set_enum (value, adw_flap_get_fold_threshold_policy (self));
+    g_value_set_enum (value, adap_flap_get_fold_threshold_policy (self));
     break;
   case PROP_FOLD_DURATION:
-    g_value_set_uint (value, adw_flap_get_fold_duration (self));
+    g_value_set_uint (value, adap_flap_get_fold_duration (self));
     break;
   case PROP_FOLDED:
-    g_value_set_boolean (value, adw_flap_get_folded (self));
+    g_value_set_boolean (value, adap_flap_get_folded (self));
     break;
   case PROP_LOCKED:
-    g_value_set_boolean (value, adw_flap_get_locked (self));
+    g_value_set_boolean (value, adap_flap_get_locked (self));
     break;
   case PROP_TRANSITION_TYPE:
-    g_value_set_enum (value, adw_flap_get_transition_type (self));
+    g_value_set_enum (value, adap_flap_get_transition_type (self));
     break;
   case PROP_MODAL:
-    g_value_set_boolean (value, adw_flap_get_modal (self));
+    g_value_set_boolean (value, adap_flap_get_modal (self));
     break;
   case PROP_SWIPE_TO_OPEN:
-    g_value_set_boolean (value, adw_flap_get_swipe_to_open (self));
+    g_value_set_boolean (value, adap_flap_get_swipe_to_open (self));
     break;
   case PROP_SWIPE_TO_CLOSE:
-    g_value_set_boolean (value, adw_flap_get_swipe_to_close (self));
+    g_value_set_boolean (value, adap_flap_get_swipe_to_close (self));
     break;
   case PROP_ORIENTATION:
     g_value_set_enum (value, self->orientation);
@@ -1166,55 +1166,55 @@ adw_flap_get_property (GObject    *object,
 }
 
 static void
-adw_flap_set_property (GObject      *object,
+adap_flap_set_property (GObject      *object,
                        guint         prop_id,
                        const GValue *value,
                        GParamSpec   *pspec)
 {
-  AdwFlap *self = ADW_FLAP (object);
+  AdapFlap *self = ADAP_FLAP (object);
 
   switch (prop_id) {
   case PROP_CONTENT:
-    adw_flap_set_content (self, g_value_get_object (value));
+    adap_flap_set_content (self, g_value_get_object (value));
     break;
   case PROP_FLAP:
-    adw_flap_set_flap (self, g_value_get_object (value));
+    adap_flap_set_flap (self, g_value_get_object (value));
     break;
   case PROP_SEPARATOR:
-    adw_flap_set_separator (self, g_value_get_object (value));
+    adap_flap_set_separator (self, g_value_get_object (value));
     break;
   case PROP_FLAP_POSITION:
-    adw_flap_set_flap_position (self, g_value_get_enum (value));
+    adap_flap_set_flap_position (self, g_value_get_enum (value));
     break;
   case PROP_REVEAL_FLAP:
-    adw_flap_set_reveal_flap (self, g_value_get_boolean (value));
+    adap_flap_set_reveal_flap (self, g_value_get_boolean (value));
     break;
   case PROP_REVEAL_PARAMS:
-    adw_flap_set_reveal_params (self, g_value_get_boxed (value));
+    adap_flap_set_reveal_params (self, g_value_get_boxed (value));
     break;
   case PROP_FOLD_POLICY:
-    adw_flap_set_fold_policy (self, g_value_get_enum (value));
+    adap_flap_set_fold_policy (self, g_value_get_enum (value));
     break;
   case PROP_FOLD_THRESHOLD_POLICY:
-    adw_flap_set_fold_threshold_policy (self, g_value_get_enum (value));
+    adap_flap_set_fold_threshold_policy (self, g_value_get_enum (value));
     break;
   case PROP_FOLD_DURATION:
-    adw_flap_set_fold_duration (self, g_value_get_uint (value));
+    adap_flap_set_fold_duration (self, g_value_get_uint (value));
     break;
   case PROP_LOCKED:
-    adw_flap_set_locked (self, g_value_get_boolean (value));
+    adap_flap_set_locked (self, g_value_get_boolean (value));
     break;
   case PROP_TRANSITION_TYPE:
-    adw_flap_set_transition_type (self, g_value_get_enum (value));
+    adap_flap_set_transition_type (self, g_value_get_enum (value));
     break;
   case PROP_MODAL:
-    adw_flap_set_modal (self, g_value_get_boolean (value));
+    adap_flap_set_modal (self, g_value_get_boolean (value));
     break;
   case PROP_SWIPE_TO_OPEN:
-    adw_flap_set_swipe_to_open (self, g_value_get_boolean (value));
+    adap_flap_set_swipe_to_open (self, g_value_get_boolean (value));
     break;
   case PROP_SWIPE_TO_CLOSE:
-    adw_flap_set_swipe_to_close (self, g_value_get_boolean (value));
+    adap_flap_set_swipe_to_close (self, g_value_get_boolean (value));
     break;
   case PROP_ORIENTATION:
     set_orientation (self, g_value_get_enum (value));
@@ -1225,9 +1225,9 @@ adw_flap_set_property (GObject      *object,
 }
 
 static void
-adw_flap_dispose (GObject *object)
+adap_flap_dispose (GObject *object)
 {
-  AdwFlap *self = ADW_FLAP (object);
+  AdapFlap *self = ADAP_FLAP (object);
 
   g_clear_pointer (&self->flap.widget, gtk_widget_unparent);
   g_clear_pointer (&self->separator.widget, gtk_widget_unparent);
@@ -1241,34 +1241,34 @@ adw_flap_dispose (GObject *object)
 
   self->shortcut_controller = NULL;
 
-  G_OBJECT_CLASS (adw_flap_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_flap_parent_class)->dispose (object);
 }
 
 static void
-adw_flap_class_init (AdwFlapClass *klass)
+adap_flap_class_init (AdapFlapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_flap_get_property;
-  object_class->set_property = adw_flap_set_property;
-  object_class->dispose = adw_flap_dispose;
+  object_class->get_property = adap_flap_get_property;
+  object_class->set_property = adap_flap_set_property;
+  object_class->dispose = adap_flap_dispose;
 
-  widget_class->measure = adw_flap_measure;
-  widget_class->size_allocate = adw_flap_size_allocate;
-  widget_class->snapshot = adw_flap_snapshot;
-  widget_class->direction_changed = adw_flap_direction_changed;
-  widget_class->get_request_mode = adw_widget_get_request_mode;
-  widget_class->compute_expand = adw_widget_compute_expand;
+  widget_class->measure = adap_flap_measure;
+  widget_class->size_allocate = adap_flap_size_allocate;
+  widget_class->snapshot = adap_flap_snapshot;
+  widget_class->direction_changed = adap_flap_direction_changed;
+  widget_class->get_request_mode = adap_widget_get_request_mode;
+  widget_class->compute_expand = adap_widget_compute_expand;
 
   /**
-   * AdwFlap:content: (attributes org.gtk.Property.get=adw_flap_get_content org.gtk.Property.set=adw_flap_set_content)
+   * AdapFlap:content: (attributes org.gtk.Property.get=adap_flap_get_content org.gtk.Property.set=adap_flap_set_content)
    *
    * The content widget.
    *
    * It's always displayed when unfolded, and partially visible when folded.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_CONTENT] =
     g_param_spec_object ("content", NULL, NULL,
@@ -1276,13 +1276,13 @@ adw_flap_class_init (AdwFlapClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:flap: (attributes org.gtk.Property.get=adw_flap_get_flap org.gtk.Property.set=adw_flap_set_flap)
+   * AdapFlap:flap: (attributes org.gtk.Property.get=adap_flap_get_flap org.gtk.Property.set=adap_flap_set_flap)
    *
    * The flap widget.
    *
    * It's only visible when [property@Flap:reveal-progress] is greater than 0.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_FLAP] =
     g_param_spec_object ("flap", NULL, NULL,
@@ -1290,7 +1290,7 @@ adw_flap_class_init (AdwFlapClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:separator: (attributes org.gtk.Property.get=adw_flap_get_separator org.gtk.Property.set=adw_flap_set_separator)
+   * AdapFlap:separator: (attributes org.gtk.Property.get=adap_flap_get_separator org.gtk.Property.set=adap_flap_set_separator)
    *
    * The separator widget.
    *
@@ -1298,7 +1298,7 @@ adw_flap_class_init (AdwFlapClass *klass)
    * When exactly it's visible depends on the [property@Flap:transition-type]
    * value.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_SEPARATOR] =
     g_param_spec_object ("separator", NULL, NULL,
@@ -1306,14 +1306,14 @@ adw_flap_class_init (AdwFlapClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:flap-position: (attributes org.gtk.Property.get=adw_flap_get_flap_position org.gtk.Property.set=adw_flap_set_flap_position)
+   * AdapFlap:flap-position: (attributes org.gtk.Property.get=adap_flap_get_flap_position org.gtk.Property.set=adap_flap_set_flap_position)
    *
    * The flap position.
    *
    * If it's set to `GTK_PACK_START`, the flap is displayed before the content,
    * if `GTK_PACK_END`, it's displayed after the content.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_FLAP_POSITION] =
     g_param_spec_enum ("flap-position", NULL, NULL,
@@ -1322,11 +1322,11 @@ adw_flap_class_init (AdwFlapClass *klass)
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:reveal-flap: (attributes org.gtk.Property.get=adw_flap_get_reveal_flap org.gtk.Property.set=adw_flap_set_reveal_flap)
+   * AdapFlap:reveal-flap: (attributes org.gtk.Property.get=adap_flap_get_reveal_flap org.gtk.Property.set=adap_flap_set_reveal_flap)
    *
    * Whether the flap widget is revealed.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_REVEAL_FLAP] =
     g_param_spec_boolean ("reveal-flap", NULL, NULL,
@@ -1334,25 +1334,25 @@ adw_flap_class_init (AdwFlapClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:reveal-params: (attributes org.gtk.Property.get=adw_flap_get_reveal_params org.gtk.Property.set=adw_flap_set_reveal_params)
+   * AdapFlap:reveal-params: (attributes org.gtk.Property.get=adap_flap_get_reveal_params org.gtk.Property.set=adap_flap_set_reveal_params)
    *
    * The reveal animation spring parameters.
    *
    * The default value is equivalent to:
    *
    * ```c
-   * adw_spring_params_new (1, 0.5, 500)
+   * adap_spring_params_new (1, 0.5, 500)
    * ```
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_REVEAL_PARAMS] =
     g_param_spec_boxed ("reveal-params", NULL, NULL,
-                        ADW_TYPE_SPRING_PARAMS,
+                        ADAP_TYPE_SPRING_PARAMS,
                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:reveal-progress: (attributes org.gtk.Property.get=adw_flap_get_reveal_progress)
+   * AdapFlap:reveal-progress: (attributes org.gtk.Property.get=adap_flap_get_reveal_progress)
    *
    * The current reveal transition progress.
    *
@@ -1360,7 +1360,7 @@ adw_flap_class_init (AdwFlapClass *klass)
    *
    * See [property@Flap:reveal-flap].
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_REVEAL_PROGRESS] =
     g_param_spec_double ("reveal-progress", NULL, NULL,
@@ -1368,44 +1368,44 @@ adw_flap_class_init (AdwFlapClass *klass)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:fold-policy: (attributes org.gtk.Property.get=adw_flap_get_fold_policy org.gtk.Property.set=adw_flap_set_fold_policy)
+   * AdapFlap:fold-policy: (attributes org.gtk.Property.get=adap_flap_get_fold_policy org.gtk.Property.set=adap_flap_set_fold_policy)
    *
    * The fold policy for the flap.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_FOLD_POLICY] =
     g_param_spec_enum ("fold-policy", NULL, NULL,
-                       ADW_TYPE_FLAP_FOLD_POLICY,
-                       ADW_FLAP_FOLD_POLICY_AUTO,
+                       ADAP_TYPE_FLAP_FOLD_POLICY,
+                       ADAP_FLAP_FOLD_POLICY_AUTO,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:fold-threshold-policy: (attributes org.gtk.Property.get=adw_flap_get_fold_threshold_policy org.gtk.Property.set=adw_flap_set_fold_threshold_policy)
+   * AdapFlap:fold-threshold-policy: (attributes org.gtk.Property.get=adap_flap_get_fold_threshold_policy org.gtk.Property.set=adap_flap_set_fold_threshold_policy)
    *
    * Determines when the flap will fold.
    *
-   * If set to `ADW_FOLD_THRESHOLD_POLICY_MINIMUM`, flap will only fold when
-   * the children cannot fit anymore. With `ADW_FOLD_THRESHOLD_POLICY_NATURAL`,
+   * If set to `ADAP_FOLD_THRESHOLD_POLICY_MINIMUM`, flap will only fold when
+   * the children cannot fit anymore. With `ADAP_FOLD_THRESHOLD_POLICY_NATURAL`,
    * it will fold as soon as children don't get their natural size.
    *
    * This can be useful if you have a long ellipsizing label and want to let it
    * ellipsize instead of immediately folding.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_FOLD_THRESHOLD_POLICY] =
     g_param_spec_enum ("fold-threshold-policy", NULL, NULL,
-                       ADW_TYPE_FOLD_THRESHOLD_POLICY,
-                       ADW_FOLD_THRESHOLD_POLICY_MINIMUM,
+                       ADAP_TYPE_FOLD_THRESHOLD_POLICY,
+                       ADAP_FOLD_THRESHOLD_POLICY_MINIMUM,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:fold-duration: (attributes org.gtk.Property.get=adw_flap_get_fold_duration org.gtk.Property.set=adw_flap_set_fold_duration)
+   * AdapFlap:fold-duration: (attributes org.gtk.Property.get=adap_flap_get_fold_duration org.gtk.Property.set=adap_flap_set_fold_duration)
    *
    * The fold transition animation duration, in milliseconds.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_FOLD_DURATION] =
     g_param_spec_uint ("fold-duration", NULL, NULL,
@@ -1414,13 +1414,13 @@ adw_flap_class_init (AdwFlapClass *klass)
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:folded: (attributes org.gtk.Property.get=adw_flap_get_folded)
+   * AdapFlap:folded: (attributes org.gtk.Property.get=adap_flap_get_folded)
    *
    * Whether the flap is currently folded.
    *
    * See [property@Flap:fold-policy].
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_FOLDED] =
     g_param_spec_boolean ("folded", NULL, NULL,
@@ -1428,7 +1428,7 @@ adw_flap_class_init (AdwFlapClass *klass)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:locked: (attributes org.gtk.Property.get=adw_flap_get_locked org.gtk.Property.set=adw_flap_set_locked)
+   * AdapFlap:locked: (attributes org.gtk.Property.get=adap_flap_get_locked org.gtk.Property.set=adap_flap_set_locked)
    *
    * Whether the flap is locked.
    *
@@ -1436,7 +1436,7 @@ adw_flap_class_init (AdwFlapClass *klass)
    * unfolding it when the flap is not revealed opens it. If `TRUE`,
    * [property@Flap:reveal-flap] value never changes on its own.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_LOCKED] =
     g_param_spec_boolean ("locked", NULL, NULL,
@@ -1444,25 +1444,25 @@ adw_flap_class_init (AdwFlapClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:transition-type: (attributes org.gtk.Property.get=adw_flap_get_transition_type org.gtk.Property.set=adw_flap_set_transition_type)
+   * AdapFlap:transition-type: (attributes org.gtk.Property.get=adap_flap_get_transition_type org.gtk.Property.set=adap_flap_set_transition_type)
    *
    * the type of animation used for reveal and fold transitions.
    *
    * [property@Flap:flap] is transparent by default, which means the content
-   * will be seen through it with `ADW_FLAP_TRANSITION_TYPE_OVER` transitions;
+   * will be seen through it with `ADAP_FLAP_TRANSITION_TYPE_OVER` transitions;
    * add the [`.background`](style-classes.html#background) style class to it if
    * this is unwanted.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_TRANSITION_TYPE] =
     g_param_spec_enum ("transition-type", NULL, NULL,
-                       ADW_TYPE_FLAP_TRANSITION_TYPE,
-                       ADW_FLAP_TRANSITION_TYPE_OVER,
+                       ADAP_TYPE_FLAP_TRANSITION_TYPE,
+                       ADAP_FLAP_TRANSITION_TYPE_OVER,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:modal: (attributes org.gtk.Property.get=adw_flap_get_modal org.gtk.Property.set=adw_flap_set_modal)
+   * AdapFlap:modal: (attributes org.gtk.Property.get=adap_flap_get_modal org.gtk.Property.set=adap_flap_set_modal)
    *
    * Whether the flap is modal.
    *
@@ -1470,7 +1470,7 @@ adw_flap_class_init (AdwFlapClass *klass)
    * pressing the <kbd>Esc</kbd> key, will close the flap. If `FALSE`, clicks
    * are passed through to the content widget.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_MODAL] =
     g_param_spec_boolean ("modal", NULL, NULL,
@@ -1478,14 +1478,14 @@ adw_flap_class_init (AdwFlapClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:swipe-to-open: (attributes org.gtk.Property.get=adw_flap_get_swipe_to_open org.gtk.Property.set=adw_flap_set_swipe_to_open)
+   * AdapFlap:swipe-to-open: (attributes org.gtk.Property.get=adap_flap_get_swipe_to_open org.gtk.Property.set=adap_flap_set_swipe_to_open)
    *
    * Whether the flap can be opened with a swipe gesture.
    *
    * The area that can be swiped depends on the [property@Flap:transition-type]
    * value.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_SWIPE_TO_OPEN] =
     g_param_spec_boolean ("swipe-to-open", NULL, NULL,
@@ -1493,14 +1493,14 @@ adw_flap_class_init (AdwFlapClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
-   * AdwFlap:swipe-to-close: (attributes org.gtk.Property.get=adw_flap_get_swipe_to_close org.gtk.Property.set=adw_flap_set_swipe_to_close)
+   * AdapFlap:swipe-to-close: (attributes org.gtk.Property.get=adap_flap_get_swipe_to_close org.gtk.Property.set=adap_flap_set_swipe_to_close)
    *
    * Whether the flap can be closed with a swipe gesture.
    *
    * The area that can be swiped depends on the [property@Flap:transition-type]
    * value.
    *
-   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+   * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
    */
   props[PROP_SWIPE_TO_CLOSE] =
     g_param_spec_boolean ("swipe-to-close", NULL, NULL,
@@ -1517,7 +1517,7 @@ adw_flap_class_init (AdwFlapClass *klass)
 }
 
 static gboolean
-flap_close_cb (AdwFlap *self)
+flap_close_cb (AdapFlap *self)
 {
   if (G_APPROX_VALUE (self->reveal_progress, 0, DBL_EPSILON) ||
       self->reveal_progress < 0 ||
@@ -1525,23 +1525,23 @@ flap_close_cb (AdwFlap *self)
       self->fold_progress < 0)
     return GDK_EVENT_PROPAGATE;
 
-  adw_flap_set_reveal_flap (ADW_FLAP (self), FALSE);
+  adap_flap_set_reveal_flap (ADAP_FLAP (self), FALSE);
 
   return GDK_EVENT_STOP;
 }
 
 static void
-adw_flap_init (AdwFlap *self)
+adap_flap_init (AdapFlap *self)
 {
   GtkEventController *gesture;
   GtkShortcut *shortcut;
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
 
   self->orientation = GTK_ORIENTATION_HORIZONTAL;
   self->flap_position = GTK_PACK_START;
-  self->fold_policy = ADW_FLAP_FOLD_POLICY_AUTO;
-  self->fold_threshold_policy = ADW_FOLD_THRESHOLD_POLICY_MINIMUM;
-  self->transition_type = ADW_FLAP_TRANSITION_TYPE_OVER;
+  self->fold_policy = ADAP_FLAP_FOLD_POLICY_AUTO;
+  self->fold_threshold_policy = ADAP_FOLD_THRESHOLD_POLICY_MINIMUM;
+  self->transition_type = ADAP_FLAP_TRANSITION_TYPE_OVER;
   self->reveal_flap = TRUE;
   self->locked = FALSE;
   self->reveal_progress = 1;
@@ -1552,9 +1552,9 @@ adw_flap_init (AdwFlap *self)
   self->swipe_to_open = TRUE;
   self->swipe_to_close = TRUE;
 
-  self->shadow_helper = adw_shadow_helper_new (GTK_WIDGET (self));
-  self->tracker = adw_swipe_tracker_new (ADW_SWIPEABLE (self));
-  adw_swipe_tracker_set_enabled (self->tracker, FALSE);
+  self->shadow_helper = adap_shadow_helper_new (GTK_WIDGET (self));
+  self->tracker = adap_swipe_tracker_new (ADAP_SWIPEABLE (self));
+  adap_swipe_tracker_set_enabled (self->tracker, FALSE);
 
   g_signal_connect_object (self->tracker, "begin-swipe", G_CALLBACK (begin_swipe_cb), self, 0);
   g_signal_connect_object (self->tracker, "update-swipe", G_CALLBACK (update_swipe_cb), self, 0);
@@ -1562,7 +1562,7 @@ adw_flap_init (AdwFlap *self)
 
   update_swipe_tracker (self);
 
-  self->shield = adw_gizmo_new ("widget", NULL, NULL, NULL, NULL, NULL, NULL);
+  self->shield = adap_gizmo_new ("widget", NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (self->shield, GTK_WIDGET (self));
 
   gesture = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
@@ -1584,19 +1584,19 @@ adw_flap_init (AdwFlap *self)
 
   gtk_widget_add_css_class (GTK_WIDGET (self), "unfolded");
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               fold_animation_value_cb,
                                               self, NULL);
   self->fold_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 0, 0, 0, target);
+    adap_timed_animation_new (GTK_WIDGET (self), 0, 0, 0, target);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               set_reveal_progress,
                                               self, NULL);
   self->reveal_animation =
-    adw_spring_animation_new (GTK_WIDGET (self), 0, 0,
-                             adw_spring_params_new (1, 0.5, 500), target);
-  adw_spring_animation_set_clamp (ADW_SPRING_ANIMATION (self->reveal_animation),
+    adap_spring_animation_new (GTK_WIDGET (self), 0, 0,
+                             adap_spring_params_new (1, 0.5, 500), target);
+  adap_spring_animation_set_clamp (ADAP_SPRING_ANIMATION (self->reveal_animation),
                                   TRUE);
 
   g_signal_connect_swapped (self->reveal_animation, "done",
@@ -1607,35 +1607,35 @@ adw_flap_init (AdwFlap *self)
 }
 
 static void
-adw_flap_add_child (GtkBuildable *buildable,
+adap_flap_add_child (GtkBuildable *buildable,
                     GtkBuilder   *builder,
                     GObject      *child,
                     const char   *type)
 {
   if (!g_strcmp0 (type, "content"))
-    adw_flap_set_content (ADW_FLAP (buildable), GTK_WIDGET (child));
+    adap_flap_set_content (ADAP_FLAP (buildable), GTK_WIDGET (child));
   else if (!g_strcmp0 (type, "flap"))
-    adw_flap_set_flap (ADW_FLAP (buildable), GTK_WIDGET (child));
+    adap_flap_set_flap (ADAP_FLAP (buildable), GTK_WIDGET (child));
   else if (!g_strcmp0 (type, "separator"))
-    adw_flap_set_separator (ADW_FLAP (buildable), GTK_WIDGET (child));
+    adap_flap_set_separator (ADAP_FLAP (buildable), GTK_WIDGET (child));
   else if (!type && GTK_IS_WIDGET (child))
-    adw_flap_set_content (ADW_FLAP (buildable), GTK_WIDGET (child));
+    adap_flap_set_content (ADAP_FLAP (buildable), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_flap_buildable_init (GtkBuildableIface *iface)
+adap_flap_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_flap_add_child;
+  iface->add_child = adap_flap_add_child;
 }
 
 static double
-adw_flap_get_distance (AdwSwipeable *swipeable)
+adap_flap_get_distance (AdapSwipeable *swipeable)
 {
-  AdwFlap *self = ADW_FLAP (swipeable);
+  AdapFlap *self = ADAP_FLAP (swipeable);
   int flap, separator;
 
   if (!self->flap.widget)
@@ -1656,10 +1656,10 @@ adw_flap_get_distance (AdwSwipeable *swipeable)
 }
 
 static double *
-adw_flap_get_snap_points (AdwSwipeable *swipeable,
+adap_flap_get_snap_points (AdapSwipeable *swipeable,
                           int          *n_snap_points)
 {
-  AdwFlap *self = ADW_FLAP (swipeable);
+  AdapFlap *self = ADAP_FLAP (swipeable);
   gboolean can_open = self->reveal_progress > 0 || self->swipe_to_open || self->swipe_active;
   gboolean can_close = self->reveal_progress < 1 || self->swipe_to_close || self->swipe_active;
   double *points;
@@ -1690,28 +1690,28 @@ adw_flap_get_snap_points (AdwSwipeable *swipeable,
 }
 
 static double
-adw_flap_get_progress (AdwSwipeable *swipeable)
+adap_flap_get_progress (AdapSwipeable *swipeable)
 {
-  AdwFlap *self = ADW_FLAP (swipeable);
+  AdapFlap *self = ADAP_FLAP (swipeable);
 
   return self->reveal_progress;
 }
 
 static double
-adw_flap_get_cancel_progress (AdwSwipeable *swipeable)
+adap_flap_get_cancel_progress (AdapSwipeable *swipeable)
 {
-  AdwFlap *self = ADW_FLAP (swipeable);
+  AdapFlap *self = ADAP_FLAP (swipeable);
 
   return round (self->reveal_progress);
 }
 
 static void
-adw_flap_get_swipe_area (AdwSwipeable           *swipeable,
-                         AdwNavigationDirection  navigation_direction,
+adap_flap_get_swipe_area (AdapSwipeable           *swipeable,
+                         AdapNavigationDirection  navigation_direction,
                          gboolean                is_drag,
                          GdkRectangle           *rect)
 {
-  AdwFlap *self = ADW_FLAP (swipeable);
+  AdapFlap *self = ADAP_FLAP (swipeable);
   GtkAllocation *alloc;
   int width, height;
   double flap_factor, content_factor;
@@ -1752,9 +1752,9 @@ adw_flap_get_swipe_area (AdwSwipeable           *swipeable,
   if (self->orientation == GTK_ORIENTATION_HORIZONTAL) {
     if (alloc->x <= 0) {
       rect->x = 0;
-      rect->width = MAX (alloc->width + alloc->x, ADW_SWIPE_BORDER);
+      rect->width = MAX (alloc->width + alloc->x, ADAP_SWIPE_BORDER);
     } else if (alloc->x + alloc->width >= width) {
-      rect->width = MAX (width - alloc->x, ADW_SWIPE_BORDER);
+      rect->width = MAX (width - alloc->x, ADAP_SWIPE_BORDER);
       rect->x = width - rect->width;
     } else {
       g_assert_not_reached ();
@@ -1765,9 +1765,9 @@ adw_flap_get_swipe_area (AdwSwipeable           *swipeable,
   } else {
     if (alloc->y <= 0) {
       rect->y = 0;
-      rect->height = MAX (alloc->height + alloc->y, ADW_SWIPE_BORDER);
+      rect->height = MAX (alloc->height + alloc->y, ADAP_SWIPE_BORDER);
     } else if (alloc->y + alloc->height >= height) {
-      rect->height = MAX (height - alloc->y, ADW_SWIPE_BORDER);
+      rect->height = MAX (height - alloc->y, ADAP_SWIPE_BORDER);
       rect->y = height - rect->height;
     } else {
       g_assert_not_reached ();
@@ -1779,50 +1779,50 @@ adw_flap_get_swipe_area (AdwSwipeable           *swipeable,
 }
 
 static void
-adw_flap_swipeable_init (AdwSwipeableInterface *iface)
+adap_flap_swipeable_init (AdapSwipeableInterface *iface)
 {
-  iface->get_distance = adw_flap_get_distance;
-  iface->get_snap_points = adw_flap_get_snap_points;
-  iface->get_progress = adw_flap_get_progress;
-  iface->get_cancel_progress = adw_flap_get_cancel_progress;
-  iface->get_swipe_area = adw_flap_get_swipe_area;
+  iface->get_distance = adap_flap_get_distance;
+  iface->get_snap_points = adap_flap_get_snap_points;
+  iface->get_progress = adap_flap_get_progress;
+  iface->get_cancel_progress = adap_flap_get_cancel_progress;
+  iface->get_swipe_area = adap_flap_get_swipe_area;
 }
 
 /**
- * adw_flap_new:
+ * adap_flap_new:
  *
- * Creates a new `AdwFlap`.
+ * Creates a new `AdapFlap`.
  *
- * Returns: the newly created `AdwFlap`
+ * Returns: the newly created `AdapFlap`
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 GtkWidget *
-adw_flap_new (void)
+adap_flap_new (void)
 {
-  return g_object_new (ADW_TYPE_FLAP, NULL);
+  return g_object_new (ADAP_TYPE_FLAP, NULL);
 }
 
 /**
- * adw_flap_get_content: (attributes org.gtk.Method.get_property=content)
+ * adap_flap_get_content: (attributes org.gtk.Method.get_property=content)
  * @self: a flap
  *
  * Gets the content widget for @self.
  *
  * Returns: (transfer none) (nullable): the content widget for @self
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 GtkWidget *
-adw_flap_get_content (AdwFlap *self)
+adap_flap_get_content (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), NULL);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), NULL);
 
   return self->content.widget;
 }
 
 /**
- * adw_flap_set_content: (attributes org.gtk.Method.set_property=content)
+ * adap_flap_set_content: (attributes org.gtk.Method.set_property=content)
  * @self: a flap
  * @content: (nullable): the content widget
  *
@@ -1830,13 +1830,13 @@ adw_flap_get_content (AdwFlap *self)
  *
  * It's always displayed when unfolded, and partially visible when folded.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_content (AdwFlap   *self,
+adap_flap_set_content (AdapFlap   *self,
                       GtkWidget *content)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
+  g_return_if_fail (ADAP_IS_FLAP (self));
   g_return_if_fail (content == NULL || GTK_IS_WIDGET (content));
 
   if (content)
@@ -1859,25 +1859,25 @@ adw_flap_set_content (AdwFlap   *self,
 }
 
 /**
- * adw_flap_get_flap: (attributes org.gtk.Method.get_property=flap)
+ * adap_flap_get_flap: (attributes org.gtk.Method.get_property=flap)
  * @self: a flap
  *
  * Gets the flap widget for @self.
  *
  * Returns: (transfer none) (nullable): the flap widget for @self
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 GtkWidget *
-adw_flap_get_flap (AdwFlap *self)
+adap_flap_get_flap (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), NULL);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), NULL);
 
   return self->flap.widget;
 }
 
 /**
- * adw_flap_set_flap: (attributes org.gtk.Method.set_property=flap)
+ * adap_flap_set_flap: (attributes org.gtk.Method.set_property=flap)
  * @self: a flap
  * @flap: (nullable): the flap widget
  *
@@ -1885,13 +1885,13 @@ adw_flap_get_flap (AdwFlap *self)
  *
  * It's only visible when [property@Flap:reveal-progress] is greater than 0.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_flap (AdwFlap   *self,
+adap_flap_set_flap (AdapFlap   *self,
                    GtkWidget *flap)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
+  g_return_if_fail (ADAP_IS_FLAP (self));
   g_return_if_fail (flap == NULL || GTK_IS_WIDGET (flap));
 
   if (flap)
@@ -1915,25 +1915,25 @@ adw_flap_set_flap (AdwFlap   *self,
 }
 
 /**
- * adw_flap_get_separator: (attributes org.gtk.Method.get_property=separator)
+ * adap_flap_get_separator: (attributes org.gtk.Method.get_property=separator)
  * @self: a flap
  *
  * Gets the separator widget for @self.
  *
  * Returns: (transfer none) (nullable): the separator widget for @self
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 GtkWidget *
-adw_flap_get_separator (AdwFlap *self)
+adap_flap_get_separator (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), NULL);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), NULL);
 
   return self->separator.widget;
 }
 
 /**
- * adw_flap_set_separator: (attributes org.gtk.Method.set_property=separator)
+ * adap_flap_set_separator: (attributes org.gtk.Method.set_property=separator)
  * @self: a flap
  * @separator: (nullable): the separator widget
  *
@@ -1943,13 +1943,13 @@ adw_flap_get_separator (AdwFlap *self)
  * When exactly it's visible depends on the [property@Flap:transition-type]
  * value.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_separator (AdwFlap   *self,
+adap_flap_set_separator (AdapFlap   *self,
                         GtkWidget *separator)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
+  g_return_if_fail (ADAP_IS_FLAP (self));
   g_return_if_fail (separator == NULL || GTK_IS_WIDGET (separator));
 
   if (separator)
@@ -1972,25 +1972,25 @@ adw_flap_set_separator (AdwFlap   *self,
 }
 
 /**
- * adw_flap_get_flap_position: (attributes org.gtk.Method.get_property=flap-position)
+ * adap_flap_get_flap_position: (attributes org.gtk.Method.get_property=flap-position)
  * @self: a flap
  *
  * Gets the flap position for @self.
  *
  * Returns: the flap position for @self
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 GtkPackType
-adw_flap_get_flap_position (AdwFlap *self)
+adap_flap_get_flap_position (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), GTK_PACK_START);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), GTK_PACK_START);
 
   return self->flap_position;
 }
 
 /**
- * adw_flap_set_flap_position: (attributes org.gtk.Method.set_property=flap-position)
+ * adap_flap_set_flap_position: (attributes org.gtk.Method.set_property=flap-position)
  * @self: a flap
  * @position: the new value
  *
@@ -1999,13 +1999,13 @@ adw_flap_get_flap_position (AdwFlap *self)
  * If it's set to `GTK_PACK_START`, the flap is displayed before the content,
  * if `GTK_PACK_END`, it's displayed after the content.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_flap_position (AdwFlap     *self,
+adap_flap_set_flap_position (AdapFlap     *self,
                             GtkPackType  position)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
+  g_return_if_fail (ADAP_IS_FLAP (self));
   g_return_if_fail (position <= GTK_PACK_END);
 
   if (self->flap_position == position)
@@ -2020,61 +2020,61 @@ adw_flap_set_flap_position (AdwFlap     *self,
 }
 
 /**
- * adw_flap_get_reveal_flap: (attributes org.gtk.Method.get_property=reveal-flap)
+ * adap_flap_get_reveal_flap: (attributes org.gtk.Method.get_property=reveal-flap)
  * @self: a flap
  *
  * Gets whether the flap widget is revealed for @self.
  *
  * Returns: `TRUE` if the flap widget is revealed
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 gboolean
-adw_flap_get_reveal_flap (AdwFlap *self)
+adap_flap_get_reveal_flap (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), FALSE);
 
   return self->reveal_flap;
 }
 
 /**
- * adw_flap_set_reveal_flap: (attributes org.gtk.Method.set_property=reveal-flap)
+ * adap_flap_set_reveal_flap: (attributes org.gtk.Method.set_property=reveal-flap)
  * @self: a flap
  * @reveal_flap: whether to reveal the flap widget
  *
  * Sets whether the flap widget is revealed for @self.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_reveal_flap (AdwFlap  *self,
+adap_flap_set_reveal_flap (AdapFlap  *self,
                           gboolean  reveal_flap)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
+  g_return_if_fail (ADAP_IS_FLAP (self));
 
   set_reveal_flap (self, reveal_flap, 0);
 }
 
 /**
- * adw_flap_get_reveal_params: (attributes org.gtk.Method.get_property=reveal-params)
+ * adap_flap_get_reveal_params: (attributes org.gtk.Method.get_property=reveal-params)
  * @self: a flap
  *
  * Gets the reveal animation spring parameters for @self.
  *
  * Returns: the reveal animation parameters
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
-AdwSpringParams *
-adw_flap_get_reveal_params (AdwFlap *self)
+AdapSpringParams *
+adap_flap_get_reveal_params (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), NULL);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), NULL);
 
-  return adw_spring_animation_get_spring_params (ADW_SPRING_ANIMATION (self->reveal_animation));
+  return adap_spring_animation_get_spring_params (ADAP_SPRING_ANIMATION (self->reveal_animation));
 }
 
 /**
- * adw_flap_set_reveal_params: (attributes org.gtk.Method.set_property=reveal-params)
+ * adap_flap_set_reveal_params: (attributes org.gtk.Method.set_property=reveal-params)
  * @self: a flap
  * @params: the new parameters
  *
@@ -2083,29 +2083,29 @@ adw_flap_get_reveal_params (AdwFlap *self)
  * The default value is equivalent to:
  *
  * ```c
- * adw_spring_params_new (1, 0.5, 500)
+ * adap_spring_params_new (1, 0.5, 500)
  * ```
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_reveal_params (AdwFlap         *self,
-                            AdwSpringParams *params)
+adap_flap_set_reveal_params (AdapFlap         *self,
+                            AdapSpringParams *params)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
+  g_return_if_fail (ADAP_IS_FLAP (self));
   g_return_if_fail (params != NULL);
 
-  if (adw_flap_get_reveal_params (self) == params)
+  if (adap_flap_get_reveal_params (self) == params)
     return;
 
-  adw_spring_animation_set_spring_params (ADW_SPRING_ANIMATION (self->reveal_animation),
+  adap_spring_animation_set_spring_params (ADAP_SPRING_ANIMATION (self->reveal_animation),
                                           params);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_REVEAL_PARAMS]);
 }
 
 /**
- * adw_flap_get_reveal_progress: (attributes org.gtk.Method.get_property=reveal-progress)
+ * adap_flap_get_reveal_progress: (attributes org.gtk.Method.get_property=reveal-progress)
  * @self: a flap
  *
  * Gets the current reveal progress for @self.
@@ -2116,49 +2116,49 @@ adw_flap_set_reveal_params (AdwFlap         *self,
  *
  * Returns: the current reveal progress for @self
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 double
-adw_flap_get_reveal_progress (AdwFlap *self)
+adap_flap_get_reveal_progress (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), 0.0);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), 0.0);
 
   return self->reveal_progress;
 }
 
 /**
- * adw_flap_get_fold_policy: (attributes org.gtk.Method.get_property=fold-policy)
+ * adap_flap_get_fold_policy: (attributes org.gtk.Method.get_property=fold-policy)
  * @self: a flap
  *
  * Gets the fold policy for @self.
  *
  * Returns: the fold policy for @self
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
-AdwFlapFoldPolicy
-adw_flap_get_fold_policy (AdwFlap *self)
+AdapFlapFoldPolicy
+adap_flap_get_fold_policy (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), ADW_FLAP_FOLD_POLICY_NEVER);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), ADAP_FLAP_FOLD_POLICY_NEVER);
 
   return self->fold_policy;
 }
 
 /**
- * adw_flap_set_fold_policy: (attributes org.gtk.Method.set_property=fold-policy)
+ * adap_flap_set_fold_policy: (attributes org.gtk.Method.set_property=fold-policy)
  * @self: a flap
  * @policy: the fold policy
  *
  * Sets the fold policy for @self.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_fold_policy (AdwFlap           *self,
-                          AdwFlapFoldPolicy  policy)
+adap_flap_set_fold_policy (AdapFlap           *self,
+                          AdapFlapFoldPolicy  policy)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
-  g_return_if_fail (policy <= ADW_FLAP_FOLD_POLICY_AUTO);
+  g_return_if_fail (ADAP_IS_FLAP (self));
+  g_return_if_fail (policy <= ADAP_FLAP_FOLD_POLICY_AUTO);
 
   if (self->fold_policy == policy)
     return;
@@ -2166,15 +2166,15 @@ adw_flap_set_fold_policy (AdwFlap           *self,
   self->fold_policy = policy;
 
   switch (self->fold_policy) {
-  case ADW_FLAP_FOLD_POLICY_NEVER:
+  case ADAP_FLAP_FOLD_POLICY_NEVER:
     set_folded (self, FALSE);
     break;
 
-  case ADW_FLAP_FOLD_POLICY_ALWAYS:
+  case ADAP_FLAP_FOLD_POLICY_ALWAYS:
     set_folded (self, TRUE);
     break;
 
-  case ADW_FLAP_FOLD_POLICY_AUTO:
+  case ADAP_FLAP_FOLD_POLICY_AUTO:
     gtk_widget_queue_allocate (GTK_WIDGET (self));
     break;
 
@@ -2186,45 +2186,45 @@ adw_flap_set_fold_policy (AdwFlap           *self,
 }
 
 /**
- * adw_flap_get_fold_threshold_policy: (attributes org.gtk.Method.get_property=fold-threshold-policy)
+ * adap_flap_get_fold_threshold_policy: (attributes org.gtk.Method.get_property=fold-threshold-policy)
  * @self: a flap
  *
  * Gets the fold threshold policy for @self.
  *
  * Returns: the fold threshold policy
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
-AdwFoldThresholdPolicy
-adw_flap_get_fold_threshold_policy (AdwFlap *self)
+AdapFoldThresholdPolicy
+adap_flap_get_fold_threshold_policy (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), ADW_FOLD_THRESHOLD_POLICY_MINIMUM);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), ADAP_FOLD_THRESHOLD_POLICY_MINIMUM);
 
   return self->fold_threshold_policy;
 }
 
 /**
- * adw_flap_set_fold_threshold_policy: (attributes org.gtk.Method.set_property=fold-threshold-policy)
+ * adap_flap_set_fold_threshold_policy: (attributes org.gtk.Method.set_property=fold-threshold-policy)
  * @self: a flap
  * @policy: the policy to use
  *
  * Sets the fold threshold policy for @self.
  *
- * If set to `ADW_FOLD_THRESHOLD_POLICY_MINIMUM`, flap will only fold when the
- * children cannot fit anymore. With `ADW_FOLD_THRESHOLD_POLICY_NATURAL`, it
+ * If set to `ADAP_FOLD_THRESHOLD_POLICY_MINIMUM`, flap will only fold when the
+ * children cannot fit anymore. With `ADAP_FOLD_THRESHOLD_POLICY_NATURAL`, it
  * will fold as soon as children don't get their natural size.
  *
  * This can be useful if you have a long ellipsizing label and want to let it
  * ellipsize instead of immediately folding.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_fold_threshold_policy (AdwFlap                *self,
-                                    AdwFoldThresholdPolicy  policy)
+adap_flap_set_fold_threshold_policy (AdapFlap                *self,
+                                    AdapFoldThresholdPolicy  policy)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
-  g_return_if_fail (policy <= ADW_FOLD_THRESHOLD_POLICY_NATURAL);
+  g_return_if_fail (ADAP_IS_FLAP (self));
+  g_return_if_fail (policy <= ADAP_FOLD_THRESHOLD_POLICY_NATURAL);
 
   if (self->fold_threshold_policy == policy)
     return;
@@ -2237,37 +2237,37 @@ adw_flap_set_fold_threshold_policy (AdwFlap                *self,
 }
 
 /**
- * adw_flap_get_fold_duration: (attributes org.gtk.Method.get_property=fold-duration)
+ * adap_flap_get_fold_duration: (attributes org.gtk.Method.get_property=fold-duration)
  * @self: a flap
  *
  * Gets the fold transition animation duration for @self, in milliseconds.
  *
  * Returns: the fold transition duration
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 guint
-adw_flap_get_fold_duration (AdwFlap *self)
+adap_flap_get_fold_duration (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), 0);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), 0);
 
   return self->fold_duration;
 }
 
 /**
- * adw_flap_set_fold_duration: (attributes org.gtk.Method.set_property=fold-duration)
+ * adap_flap_set_fold_duration: (attributes org.gtk.Method.set_property=fold-duration)
  * @self: a flap
  * @duration: the new duration, in milliseconds
  *
  * Sets the fold transition animation duration for @self, in milliseconds.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_fold_duration (AdwFlap *self,
+adap_flap_set_fold_duration (AdapFlap *self,
                             guint    duration)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
+  g_return_if_fail (ADAP_IS_FLAP (self));
 
   if (self->fold_duration == duration)
     return;
@@ -2278,7 +2278,7 @@ adw_flap_set_fold_duration (AdwFlap *self,
 }
 
 /**
- * adw_flap_get_folded: (attributes org.gtk.Method.get_property=folded)
+ * adap_flap_get_folded: (attributes org.gtk.Method.get_property=folded)
  * @self: a flap
  *
  * Gets whether @self is currently folded.
@@ -2287,36 +2287,36 @@ adw_flap_set_fold_duration (AdwFlap *self,
  *
  * Returns: `TRUE` if @self is currently folded
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 gboolean
-adw_flap_get_folded (AdwFlap *self)
+adap_flap_get_folded (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), FALSE);
 
   return self->folded;
 }
 
 /**
- * adw_flap_get_locked: (attributes org.gtk.Method.get_property=locked)
+ * adap_flap_get_locked: (attributes org.gtk.Method.get_property=locked)
  * @self: a flap
  *
  * Gets whether @self is locked.
  *
  * Returns: `TRUE` if @self is locked
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 gboolean
-adw_flap_get_locked (AdwFlap *self)
+adap_flap_get_locked (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), FALSE);
 
   return self->locked;
 }
 
 /**
- * adw_flap_set_locked: (attributes org.gtk.Method.set_property=locked)
+ * adap_flap_set_locked: (attributes org.gtk.Method.set_property=locked)
  * @self: a flap
  * @locked: the new value
  *
@@ -2326,13 +2326,13 @@ adw_flap_get_locked (AdwFlap *self)
  * unfolding it when the flap is not revealed opens it. If `TRUE`,
  * [property@Flap:reveal-flap] value never changes on its own.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_locked (AdwFlap  *self,
+adap_flap_set_locked (AdapFlap  *self,
                      gboolean  locked)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
+  g_return_if_fail (ADAP_IS_FLAP (self));
 
   locked = !!locked;
 
@@ -2345,43 +2345,43 @@ adw_flap_set_locked (AdwFlap  *self,
 }
 
 /**
- * adw_flap_get_transition_type: (attributes org.gtk.Method.get_property=transition-type)
+ * adap_flap_get_transition_type: (attributes org.gtk.Method.get_property=transition-type)
  * @self: a flap
  *
  * Gets the type of animation used for reveal and fold transitions in @self.
  *
  * Returns: the current transition type of @self
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
-AdwFlapTransitionType
-adw_flap_get_transition_type (AdwFlap *self)
+AdapFlapTransitionType
+adap_flap_get_transition_type (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), ADW_FLAP_TRANSITION_TYPE_OVER);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), ADAP_FLAP_TRANSITION_TYPE_OVER);
 
   return self->transition_type;
 }
 
 /**
- * adw_flap_set_transition_type: (attributes org.gtk.Method.set_property=transition-type)
+ * adap_flap_set_transition_type: (attributes org.gtk.Method.set_property=transition-type)
  * @self: a flap
  * @transition_type: the new transition type
  *
  * Sets the type of animation used for reveal and fold transitions in @self.
  *
  * [property@Flap:flap] is transparent by default, which means the content will
- * be seen through it with `ADW_FLAP_TRANSITION_TYPE_OVER` transitions; add the
+ * be seen through it with `ADAP_FLAP_TRANSITION_TYPE_OVER` transitions; add the
  * [`.background`](style-classes.html#background) style class to it if this is
  * unwanted.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_transition_type (AdwFlap               *self,
-                              AdwFlapTransitionType  transition_type)
+adap_flap_set_transition_type (AdapFlap               *self,
+                              AdapFlapTransitionType  transition_type)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
-  g_return_if_fail (transition_type <= ADW_FLAP_TRANSITION_TYPE_SLIDE);
+  g_return_if_fail (ADAP_IS_FLAP (self));
+  g_return_if_fail (transition_type <= ADAP_FLAP_TRANSITION_TYPE_SLIDE);
 
   if (self->transition_type == transition_type)
     return;
@@ -2397,25 +2397,25 @@ adw_flap_set_transition_type (AdwFlap               *self,
 }
 
 /**
- * adw_flap_get_modal: (attributes org.gtk.Method.get_property=modal)
+ * adap_flap_get_modal: (attributes org.gtk.Method.get_property=modal)
  * @self: a flap
  *
  * Gets whether @self is modal.
  *
  * Returns: `TRUE` if @self is modal
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 gboolean
-adw_flap_get_modal (AdwFlap *self)
+adap_flap_get_modal (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), FALSE);
 
   return self->modal;
 }
 
 /**
- * adw_flap_set_modal: (attributes org.gtk.Method.set_property=modal)
+ * adap_flap_set_modal: (attributes org.gtk.Method.set_property=modal)
  * @self: a flap
  * @modal: whether @self is modal
  *
@@ -2425,13 +2425,13 @@ adw_flap_get_modal (AdwFlap *self)
  * pressing the <kbd>Esc</kbd> key, will close the flap. If `FALSE`, clicks are
  * passed through to the content widget.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_modal (AdwFlap  *self,
+adap_flap_set_modal (AdapFlap  *self,
                     gboolean  modal)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
+  g_return_if_fail (ADAP_IS_FLAP (self));
 
   modal = !!modal;
 
@@ -2449,25 +2449,25 @@ adw_flap_set_modal (AdwFlap  *self,
 }
 
 /**
- * adw_flap_get_swipe_to_open: (attributes org.gtk.Method.get_property=swipe-to-open)
+ * adap_flap_get_swipe_to_open: (attributes org.gtk.Method.get_property=swipe-to-open)
  * @self: a flap
  *
  * Gets whether @self can be opened with a swipe gesture.
  *
  * Returns: `TRUE` if @self can be opened with a swipe gesture
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 gboolean
-adw_flap_get_swipe_to_open (AdwFlap *self)
+adap_flap_get_swipe_to_open (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), FALSE);
 
   return self->swipe_to_open;
 }
 
 /**
- * adw_flap_set_swipe_to_open: (attributes org.gtk.Method.set_property=swipe-to-open)
+ * adap_flap_set_swipe_to_open: (attributes org.gtk.Method.set_property=swipe-to-open)
  * @self: a flap
  * @swipe_to_open: whether @self can be opened with a swipe gesture
  *
@@ -2476,13 +2476,13 @@ adw_flap_get_swipe_to_open (AdwFlap *self)
  * The area that can be swiped depends on the [property@Flap:transition-type]
  * value.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_swipe_to_open (AdwFlap  *self,
+adap_flap_set_swipe_to_open (AdapFlap  *self,
                             gboolean  swipe_to_open)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
+  g_return_if_fail (ADAP_IS_FLAP (self));
 
   swipe_to_open = !!swipe_to_open;
 
@@ -2497,25 +2497,25 @@ adw_flap_set_swipe_to_open (AdwFlap  *self,
 }
 
 /**
- * adw_flap_get_swipe_to_close: (attributes org.gtk.Method.get_property=swipe-to-close)
+ * adap_flap_get_swipe_to_close: (attributes org.gtk.Method.get_property=swipe-to-close)
  * @self: a flap
  *
  * Gets whether @self can be closed with a swipe gesture.
  *
  * Returns: `TRUE` if @self can be closed with a swipe gesture
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 gboolean
-adw_flap_get_swipe_to_close (AdwFlap *self)
+adap_flap_get_swipe_to_close (AdapFlap *self)
 {
-  g_return_val_if_fail (ADW_IS_FLAP (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_FLAP (self), FALSE);
 
   return self->swipe_to_close;
 }
 
 /**
- * adw_flap_set_swipe_to_close: (attributes org.gtk.Method.set_property=swipe-to-close)
+ * adap_flap_set_swipe_to_close: (attributes org.gtk.Method.set_property=swipe-to-close)
  * @self: a flap
  * @swipe_to_close: whether @self can be closed with a swipe gesture
  *
@@ -2524,13 +2524,13 @@ adw_flap_get_swipe_to_close (AdwFlap *self)
  * The area that can be swiped depends on the [property@Flap:transition-type]
  * value.
  *
- * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adwflap)
+ * Deprecated: 1.4: See [the migration guide](migrating-to-breakpoints.html#replace-adapflap)
  */
 void
-adw_flap_set_swipe_to_close (AdwFlap  *self,
+adap_flap_set_swipe_to_close (AdapFlap  *self,
                              gboolean  swipe_to_close)
 {
-  g_return_if_fail (ADW_IS_FLAP (self));
+  g_return_if_fail (ADAP_IS_FLAP (self));
 
   swipe_to_close = !!swipe_to_close;
 

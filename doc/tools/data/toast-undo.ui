@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
+  <requires lib="libadapta" version="1.0"/>
   <object class="GtkBox" id="widget">
     <property name="orientation">vertical</property>
     <property name="width-request">400</property>
     <child>
-      <object class="AdwToastOverlay">
+      <object class="AdapToastOverlay">
         <child>
-          <object class="AdwToast">
+          <object class="AdapToast">
             <property name="title">‘Lorem Ipsum’ deleted</property>
             <property name="button-label">Undo</property>
           </object>
@@ -16,9 +16,9 @@
       </object>
     </child>
     <child>
-      <object class="AdwToastOverlay">
+      <object class="AdapToastOverlay">
         <child>
-          <object class="AdwToast">
+          <object class="AdapToast">
             <property name="title">&lt;span font_features='tnum=1'&gt;2&lt;/span&gt; items deleted</property>
             <property name="button-label">Undo</property>
           </object>

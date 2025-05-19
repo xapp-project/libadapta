@@ -6,25 +6,25 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-breakpoint.h"
-#include "adw-dialog.h"
+#include "adap-breakpoint.h"
+#include "adap-dialog.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_APPLICATION_WINDOW (adw_application_window_get_type())
+#define ADAP_TYPE_APPLICATION_WINDOW (adap_application_window_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_DERIVABLE_TYPE (AdwApplicationWindow, adw_application_window, ADW, APPLICATION_WINDOW, GtkApplicationWindow)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (AdapApplicationWindow, adap_application_window, ADAP, APPLICATION_WINDOW, GtkApplicationWindow)
 
-struct _AdwApplicationWindowClass
+struct _AdapApplicationWindowClass
 {
   GtkApplicationWindowClass parent_class;
 
@@ -32,26 +32,26 @@ struct _AdwApplicationWindowClass
   gpointer padding[4];
 };
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_application_window_new (GtkApplication *app) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_application_window_new (GtkApplication *app) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-void       adw_application_window_set_content (AdwApplicationWindow *self,
+ADAP_AVAILABLE_IN_ALL
+void       adap_application_window_set_content (AdapApplicationWindow *self,
                                                GtkWidget            *content);
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_application_window_get_content (AdwApplicationWindow *self);
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_application_window_get_content (AdapApplicationWindow *self);
 
-ADW_AVAILABLE_IN_1_4
-void adw_application_window_add_breakpoint (AdwApplicationWindow *self,
-                                            AdwBreakpoint        *breakpoint);
+ADAP_AVAILABLE_IN_1_4
+void adap_application_window_add_breakpoint (AdapApplicationWindow *self,
+                                            AdapBreakpoint        *breakpoint);
 
-ADW_AVAILABLE_IN_1_4
-AdwBreakpoint *adw_application_window_get_current_breakpoint (AdwApplicationWindow *self);
+ADAP_AVAILABLE_IN_1_4
+AdapBreakpoint *adap_application_window_get_current_breakpoint (AdapApplicationWindow *self);
 
-ADW_AVAILABLE_IN_1_5
-GListModel *adw_application_window_get_dialogs (AdwApplicationWindow *self);
+ADAP_AVAILABLE_IN_1_5
+GListModel *adap_application_window_get_dialogs (AdapApplicationWindow *self);
 
-ADW_AVAILABLE_IN_1_5
-AdwDialog *adw_application_window_get_visible_dialog (AdwApplicationWindow *self);
+ADAP_AVAILABLE_IN_1_5
+AdapDialog *adap_application_window_get_visible_dialog (AdapApplicationWindow *self);
 
 G_END_DECLS

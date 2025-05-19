@@ -6,43 +6,43 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_ENUM_LIST_ITEM (adw_enum_list_item_get_type())
+#define ADAP_TYPE_ENUM_LIST_ITEM (adap_enum_list_item_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwEnumListItem, adw_enum_list_item, ADW, ENUM_LIST_ITEM, GObject)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapEnumListItem, adap_enum_list_item, ADAP, ENUM_LIST_ITEM, GObject)
 
-ADW_AVAILABLE_IN_ALL
-int adw_enum_list_item_get_value (AdwEnumListItem *self);
+ADAP_AVAILABLE_IN_ALL
+int adap_enum_list_item_get_value (AdapEnumListItem *self);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_enum_list_item_get_name (AdwEnumListItem *self);
+ADAP_AVAILABLE_IN_ALL
+const char *adap_enum_list_item_get_name (AdapEnumListItem *self);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_enum_list_item_get_nick (AdwEnumListItem *self);
+ADAP_AVAILABLE_IN_ALL
+const char *adap_enum_list_item_get_nick (AdapEnumListItem *self);
 
-#define ADW_TYPE_ENUM_LIST_MODEL (adw_enum_list_model_get_type())
+#define ADAP_TYPE_ENUM_LIST_MODEL (adap_enum_list_model_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwEnumListModel, adw_enum_list_model, ADW, ENUM_LIST_MODEL, GObject)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapEnumListModel, adap_enum_list_model, ADAP, ENUM_LIST_MODEL, GObject)
 
-ADW_AVAILABLE_IN_ALL
-AdwEnumListModel *adw_enum_list_model_new (GType enum_type) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+AdapEnumListModel *adap_enum_list_model_new (GType enum_type) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-GType adw_enum_list_model_get_enum_type (AdwEnumListModel *self);
+ADAP_AVAILABLE_IN_ALL
+GType adap_enum_list_model_get_enum_type (AdapEnumListModel *self);
 
-ADW_AVAILABLE_IN_ALL
-guint adw_enum_list_model_find_position (AdwEnumListModel *self,
+ADAP_AVAILABLE_IN_ALL
+guint adap_enum_list_model_find_position (AdapEnumListModel *self,
                                          int               value);
 
 G_END_DECLS

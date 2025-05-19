@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwComboRow" parent="AdwActionRow">
+  <template class="AdapComboRow" parent="AdapActionRow">
     <style>
       <class name="combo"/>
     </style>
     <child>
       <object class="GtkListView" id="current">
-        <property name="visible" bind-source="AdwComboRow" bind-property="use-subtitle" bind-flags="sync-create|invert-boolean"/>
+        <property name="visible" bind-source="AdapComboRow" bind-property="use-subtitle" bind-flags="sync-create|invert-boolean"/>
         <property name="valign">center</property>
         <property name="can-focus">False</property>
         <property name="can-target">False</property>
@@ -47,7 +47,7 @@
                     <property name="visible">False</property>
                     <property name="max-width-chars">6</property>
                     <property name="width-chars">6</property>
-                    <property name="placeholder-text" translatable="yes" comments="Translators: This is a placeholder text of the search entry from AdwComboRow. It should be phrased as a verb.">Search</property>
+                    <property name="placeholder-text" translatable="yes" comments="Translators: This is a placeholder text of the search entry from AdapComboRow. It should be phrased as a verb.">Search</property>
                   </object>
                 </child>
                 <child>

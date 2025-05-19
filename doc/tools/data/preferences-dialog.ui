@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwWindow" id="window">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapWindow" id="window">
     <property name="default-width">700</property>
     <property name="default-height">650</property>
     <property name="content">
-      <object class="AdwToolbarView">
+      <object class="AdapToolbarView">
         <child type="top">
-          <object class="AdwHeaderBar">
+          <object class="AdapHeaderBar">
             <property name="show-title">False</property>
           </object>
         </child>
       </object>
     </property>
   </object>
-  <object class="AdwPreferencesDialog" id="widget">
+  <object class="AdapPreferencesDialog" id="widget">
     <child>
-      <object class="AdwPreferencesPage">
+      <object class="AdapPreferencesPage">
         <property name="title">Page 1</property>
         <property name="icon-name">applications-system-symbolic</property>
         <child>
-          <object class="AdwPreferencesGroup">
+          <object class="AdapPreferencesGroup">
             <property name="title">Group Title</property>
             <property name="description">Group description.</property>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="AdwPreferencesGroup">
+          <object class="AdapPreferencesGroup">
             <property name="title">Group Title</property>
             <property name="description">Group description.</property>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>
@@ -65,46 +65,46 @@
       </object>
     </child>
     <child>
-      <object class="AdwPreferencesPage">
+      <object class="AdapPreferencesPage">
         <property name="title">Page 2</property>
         <property name="icon-name">applications-system-symbolic</property>
         <child>
-          <object class="AdwPreferencesGroup">
+          <object class="AdapPreferencesGroup">
             <property name="title">Group Title</property>
             <property name="description">Group description.</property>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="AdwPreferencesGroup">
+          <object class="AdapPreferencesGroup">
             <property name="title">Group Title</property>
             <property name="description">Group description.</property>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
+              <object class="AdapActionRow">
                 <property name="title">Row Title</property>
               </object>
             </child>

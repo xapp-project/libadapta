@@ -8,17 +8,17 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-tab-overview.h"
+#include "adap-tab-overview.h"
 
-#include "adw-tab-grid-private.h"
+#include "adap-tab-grid-private.h"
 
 G_BEGIN_DECLS
 
-AdwTabGrid *adw_tab_overview_get_tab_grid        (AdwTabOverview *self);
-AdwTabGrid *adw_tab_overview_get_pinned_tab_grid (AdwTabOverview *self);
+AdapTabGrid *adap_tab_overview_get_tab_grid        (AdapTabOverview *self);
+AdapTabGrid *adap_tab_overview_get_pinned_tab_grid (AdapTabOverview *self);
 
 G_END_DECLS

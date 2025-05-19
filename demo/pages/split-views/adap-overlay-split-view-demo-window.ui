@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <template class="AdwOverlaySplitViewDemoWindow" parent="AdwDialog">
+  <requires lib="libadapta" version="1.0"/>
+  <template class="AdapOverlaySplitViewDemoWindow" parent="AdapDialog">
     <property name="width-request">360</property>
     <property name="height-request">200</property>
     <property name="content-width">640</property>
     <property name="content-height">480</property>
     <property name="title" translatable="yes">Overlay Split View</property>
     <child>
-      <object class="AdwBreakpoint">
+      <object class="AdapBreakpoint">
         <condition>max-width: 400sp</condition>
         <setter object="split_view" property="collapsed">True</setter>
       </object>
     </child>
     <property name="child">
-      <object class="AdwToolbarView">
+      <object class="AdapToolbarView">
         <property name="top-bar-style">raised</property>
         <child type="top">
-          <object class="AdwHeaderBar">
+          <object class="AdapHeaderBar">
             <child type="start">
               <object class="GtkToggleButton" id="show_sidebar_button">
                 <property name="icon-name">view-sidebar-start-symbolic</property>
@@ -38,10 +38,10 @@
           </object>
         </child>
         <property name="content">
-          <object class="AdwOverlaySplitView" id="split_view">
+          <object class="AdapOverlaySplitView" id="split_view">
             <property name="show-sidebar" bind-source="show_sidebar_button" bind-property="active" bind-flags="sync-create|bidirectional"/>
             <property name="sidebar">
-              <object class="AdwStatusPage">
+              <object class="AdapStatusPage">
                 <property name="title">Sidebar</property>
                 <property name="child">
                   <object class="GtkBox">
@@ -74,7 +74,7 @@
               </object>
             </property>
             <property name="content">
-              <object class="AdwStatusPage">
+              <object class="AdapStatusPage">
                 <property name="title" translatable="yes">Content</property>
               </object>
             </property>

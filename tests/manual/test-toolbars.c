@@ -1,4 +1,4 @@
-#include <adwaita.h>
+#include <adapta.h>
 
 static GtkWidget *
 create_content (void)
@@ -9,32 +9,32 @@ create_content (void)
 
   /* Left column */
 
-  toolbar_view = adw_toolbar_view_new ();
+  toolbar_view = adap_toolbar_view_new ();
   gtk_widget_set_hexpand (toolbar_view, TRUE);
   gtk_widget_set_size_request (toolbar_view, 360, -1);
   gtk_box_append (GTK_BOX (box), toolbar_view);
 
-  adw_toolbar_view_set_top_bar_style (ADW_TOOLBAR_VIEW (toolbar_view),
-                                      ADW_TOOLBAR_RAISED);
+  adap_toolbar_view_set_top_bar_style (ADAP_TOOLBAR_VIEW (toolbar_view),
+                                      ADAP_TOOLBAR_RAISED);
 
-  adw_toolbar_view_set_bottom_bar_style (ADW_TOOLBAR_VIEW (toolbar_view),
-                                         ADW_TOOLBAR_RAISED);
+  adap_toolbar_view_set_bottom_bar_style (ADAP_TOOLBAR_VIEW (toolbar_view),
+                                         ADAP_TOOLBAR_RAISED);
 
   /* Contents */
   {
-    AdwTabPage *page;
+    AdapTabPage *page;
 
-    tab_view = GTK_WIDGET (adw_tab_view_new ());
+    tab_view = GTK_WIDGET (adap_tab_view_new ());
 
-    page = adw_tab_view_add_page (ADW_TAB_VIEW (tab_view),
+    page = adap_tab_view_add_page (ADAP_TAB_VIEW (tab_view),
                                   gtk_label_new ("Page 1"), NULL);
-    adw_tab_page_set_title (page, "Page 1");
+    adap_tab_page_set_title (page, "Page 1");
 
-    page = adw_tab_view_add_page (ADW_TAB_VIEW (tab_view),
+    page = adap_tab_view_add_page (ADAP_TAB_VIEW (tab_view),
                                   gtk_label_new ("Page 2"), NULL);
-    adw_tab_page_set_title (page, "Page 2");
+    adap_tab_page_set_title (page, "Page 2");
 
-    adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (toolbar_view), tab_view);
+    adap_toolbar_view_set_content (ADAP_TOOLBAR_VIEW (toolbar_view), tab_view);
   }
 
   /* Header bar .default-decoration */
@@ -42,7 +42,7 @@ create_content (void)
     GtkWidget *headerbar = gtk_header_bar_new ();
     gtk_widget_add_css_class (headerbar, "default-decoration");
 
-    adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (toolbar_view), headerbar);
+    adap_toolbar_view_add_top_bar (ADAP_TOOLBAR_VIEW (toolbar_view), headerbar);
   }
 
   /* Menu bar */
@@ -67,7 +67,7 @@ create_content (void)
 
     menubar = gtk_popover_menu_bar_new_from_model (G_MENU_MODEL (menu));
 
-    adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (toolbar_view), menubar);
+    adap_toolbar_view_add_top_bar (ADAP_TOOLBAR_VIEW (toolbar_view), menubar);
 
     g_object_unref (menu);
   }
@@ -82,10 +82,10 @@ create_content (void)
     gtk_box_append (GTK_BOX (toolbar),
                     gtk_button_new_from_icon_name ("document-new-symbolic"));
 
-    content = adw_button_content_new ();
-    adw_button_content_set_icon_name (ADW_BUTTON_CONTENT (content),
+    content = adap_button_content_new ();
+    adap_button_content_set_icon_name (ADAP_BUTTON_CONTENT (content),
                                       "document-open-symbolic");
-    adw_button_content_set_label (ADW_BUTTON_CONTENT (content), "Open");
+    adap_button_content_set_label (ADAP_BUTTON_CONTENT (content), "Open");
 
     button = gtk_button_new ();
     gtk_button_set_child (GTK_BUTTON (button), content);
@@ -103,37 +103,37 @@ create_content (void)
     gtk_box_append (GTK_BOX (toolbar),
                     gtk_button_new_from_icon_name ("edit-redo-symbolic"));
 
-    adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (toolbar_view), toolbar);
+    adap_toolbar_view_add_top_bar (ADAP_TOOLBAR_VIEW (toolbar_view), toolbar);
   }
 
   /* Tab bar */
   {
     GtkWidget *tabbar, *button;
 
-    tabbar = GTK_WIDGET (adw_tab_bar_new ());
-    adw_tab_bar_set_view (ADW_TAB_BAR (tabbar), ADW_TAB_VIEW (tab_view));
+    tabbar = GTK_WIDGET (adap_tab_bar_new ());
+    adap_tab_bar_set_view (ADAP_TAB_BAR (tabbar), ADAP_TAB_VIEW (tab_view));
 
     button = gtk_button_new_from_icon_name ("pan-down-symbolic");
     gtk_widget_add_css_class (button, "flat");
-    adw_tab_bar_set_start_action_widget (ADW_TAB_BAR (tabbar), button);
+    adap_tab_bar_set_start_action_widget (ADAP_TAB_BAR (tabbar), button);
 
     button = gtk_button_new_from_icon_name ("pan-down-symbolic");
     gtk_widget_add_css_class (button, "flat");
-    adw_tab_bar_set_end_action_widget (ADW_TAB_BAR (tabbar), button);
+    adap_tab_bar_set_end_action_widget (ADAP_TAB_BAR (tabbar), button);
 
-    adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (toolbar_view), tabbar);
+    adap_toolbar_view_add_top_bar (ADAP_TOOLBAR_VIEW (toolbar_view), tabbar);
   }
 
   /* .toolbar */
   {
     GtkWidget *clamp;
 
-    clamp = adw_clamp_new ();
+    clamp = adap_clamp_new ();
     gtk_widget_add_css_class (clamp, "toolbar");
-    adw_clamp_set_maximum_size (ADW_CLAMP (clamp), 400);
-    adw_clamp_set_child (ADW_CLAMP (clamp), gtk_entry_new ());
+    adap_clamp_set_maximum_size (ADAP_CLAMP (clamp), 400);
+    adap_clamp_set_child (ADAP_CLAMP (clamp), gtk_entry_new ());
 
-    adw_toolbar_view_add_bottom_bar (ADW_TOOLBAR_VIEW (toolbar_view), clamp);
+    adap_toolbar_view_add_bottom_bar (ADAP_TOOLBAR_VIEW (toolbar_view), clamp);
   }
 
   /* .toolbar */
@@ -144,8 +144,8 @@ create_content (void)
     gtk_widget_add_css_class (toolbar, "toolbar");
     gtk_box_set_homogeneous (GTK_BOX (toolbar), TRUE);
 
-    button = adw_tab_button_new ();
-    adw_tab_button_set_view (ADW_TAB_BUTTON (button), ADW_TAB_VIEW (tab_view));
+    button = adap_tab_button_new ();
+    adap_tab_button_set_view (ADAP_TAB_BUTTON (button), ADAP_TAB_VIEW (tab_view));
 
     gtk_box_append (GTK_BOX (toolbar),
                     gtk_button_new_from_icon_name ("go-previous-symbolic"));
@@ -157,53 +157,53 @@ create_content (void)
     gtk_box_append (GTK_BOX (toolbar),
                     gtk_button_new_from_icon_name ("open-menu-symbolic"));
 
-    clamp = adw_clamp_new ();
-    adw_clamp_set_maximum_size (ADW_CLAMP (clamp), 400);
-    adw_clamp_set_child (ADW_CLAMP (clamp), toolbar);
+    clamp = adap_clamp_new ();
+    adap_clamp_set_maximum_size (ADAP_CLAMP (clamp), 400);
+    adap_clamp_set_child (ADAP_CLAMP (clamp), toolbar);
 
-    adw_toolbar_view_add_bottom_bar (ADW_TOOLBAR_VIEW (toolbar_view), clamp);
+    adap_toolbar_view_add_bottom_bar (ADAP_TOOLBAR_VIEW (toolbar_view), clamp);
   }
 
   gtk_box_append (GTK_BOX (box), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
 
   /* Right column */
 
-  toolbar_view = adw_toolbar_view_new ();
+  toolbar_view = adap_toolbar_view_new ();
   gtk_widget_set_hexpand (toolbar_view, TRUE);
   gtk_widget_set_size_request (toolbar_view, 360, -1);
   gtk_box_append (GTK_BOX (box), toolbar_view);
 
-  adw_toolbar_view_set_top_bar_style (ADW_TOOLBAR_VIEW (toolbar_view),
-                                      ADW_TOOLBAR_RAISED);
+  adap_toolbar_view_set_top_bar_style (ADAP_TOOLBAR_VIEW (toolbar_view),
+                                      ADAP_TOOLBAR_RAISED);
 
-  adw_toolbar_view_set_bottom_bar_style (ADW_TOOLBAR_VIEW (toolbar_view),
-                                         ADW_TOOLBAR_RAISED);
+  adap_toolbar_view_set_bottom_bar_style (ADAP_TOOLBAR_VIEW (toolbar_view),
+                                         ADAP_TOOLBAR_RAISED);
 
   /* Contents */
   {
-    AdwViewStackPage *page;
+    AdapViewStackPage *page;
 
-    stack = adw_view_stack_new ();
+    stack = adap_view_stack_new ();
 
-    page = adw_view_stack_add_titled_with_icon (ADW_VIEW_STACK (stack),
+    page = adap_view_stack_add_titled_with_icon (ADAP_VIEW_STACK (stack),
                                                 gtk_label_new ("Page 1"),
                                                 NULL,
                                                 "Page 1",
                                                 "emblem-system-symbolic");
-    page = adw_view_stack_add_titled_with_icon (ADW_VIEW_STACK (stack),
+    page = adap_view_stack_add_titled_with_icon (ADAP_VIEW_STACK (stack),
                                                 gtk_label_new ("Page 2"),
                                                 NULL,
                                                 "Page 2",
                                                 "emblem-system-symbolic");
-    adw_view_stack_page_set_needs_attention (page, TRUE);
-    adw_view_stack_page_set_badge_number (page, 3);
-    page = adw_view_stack_add_titled_with_icon (ADW_VIEW_STACK (stack),
+    adap_view_stack_page_set_needs_attention (page, TRUE);
+    adap_view_stack_page_set_badge_number (page, 3);
+    page = adap_view_stack_add_titled_with_icon (ADAP_VIEW_STACK (stack),
                                                 gtk_label_new ("Page 3"),
                                                 NULL,
                                                 "Page 3",
                                                 "emblem-system-symbolic");
 
-    adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (toolbar_view), stack);
+    adap_toolbar_view_set_content (ADAP_TOOLBAR_VIEW (toolbar_view), stack);
   }
 
   /* Header bar */
@@ -214,7 +214,7 @@ create_content (void)
     gtk_header_bar_pack_end (GTK_HEADER_BAR (headerbar),
                              gtk_button_new_from_icon_name ("open-menu-symbolic"));
 
-    adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (toolbar_view), headerbar);
+    adap_toolbar_view_add_top_bar (ADAP_TOOLBAR_VIEW (toolbar_view), headerbar);
   }
 
   /* Search bar */
@@ -223,14 +223,14 @@ create_content (void)
 
     entry = gtk_search_entry_new ();
 
-    clamp = adw_clamp_new ();
-    adw_clamp_set_maximum_size (ADW_CLAMP (clamp), 400);
-    adw_clamp_set_child (ADW_CLAMP (clamp), entry);
+    clamp = adap_clamp_new ();
+    adap_clamp_set_maximum_size (ADAP_CLAMP (clamp), 400);
+    adap_clamp_set_child (ADAP_CLAMP (clamp), entry);
 
     searchbar = gtk_search_bar_new ();
     gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (searchbar), TRUE);
     gtk_search_bar_set_child (GTK_SEARCH_BAR (searchbar), clamp);
-    adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (toolbar_view), searchbar);
+    adap_toolbar_view_add_top_bar (ADAP_TOOLBAR_VIEW (toolbar_view), searchbar);
   }
 
   /* Action bar */
@@ -247,19 +247,19 @@ create_content (void)
     gtk_action_bar_pack_end (GTK_ACTION_BAR (actionbar),
                                gtk_button_new_from_icon_name ("view-more-symbolic"));
 
-    adw_toolbar_view_add_bottom_bar (ADW_TOOLBAR_VIEW (toolbar_view), actionbar);
+    adap_toolbar_view_add_bottom_bar (ADAP_TOOLBAR_VIEW (toolbar_view), actionbar);
   }
 
   /* Switcher bar */
   {
     GtkWidget *switcher;
 
-    switcher = adw_view_switcher_bar_new ();
-    adw_view_switcher_bar_set_reveal (ADW_VIEW_SWITCHER_BAR (switcher), TRUE);
-    adw_view_switcher_bar_set_stack (ADW_VIEW_SWITCHER_BAR (switcher),
-                                     ADW_VIEW_STACK (stack));
+    switcher = adap_view_switcher_bar_new ();
+    adap_view_switcher_bar_set_reveal (ADAP_VIEW_SWITCHER_BAR (switcher), TRUE);
+    adap_view_switcher_bar_set_stack (ADAP_VIEW_SWITCHER_BAR (switcher),
+                                     ADAP_VIEW_STACK (stack));
 
-    adw_toolbar_view_add_bottom_bar (ADW_TOOLBAR_VIEW (toolbar_view), switcher);
+    adap_toolbar_view_add_bottom_bar (ADAP_TOOLBAR_VIEW (toolbar_view), switcher);
   }
 
   return box;
@@ -278,12 +278,12 @@ main (int   argc,
   GtkWidget *window;
   gboolean done = FALSE;
 
-  adw_init ();
+  adap_init ();
 
-  window = adw_window_new ();
+  window = adap_window_new ();
   g_signal_connect_swapped (window, "destroy", G_CALLBACK (close_cb), &done);
   gtk_window_set_title (GTK_WINDOW (window), "Toolbars");
-  adw_window_set_content (ADW_WINDOW (window), create_content ());
+  adap_window_set_content (ADAP_WINDOW (window), create_content ());
   gtk_window_set_default_size (GTK_WINDOW (window), 720, 400);
   gtk_window_present (GTK_WINDOW (window));
 

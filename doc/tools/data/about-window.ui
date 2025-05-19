@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwAboutWindow" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapAboutWindow" id="widget">
     <property name="application-icon">application-x-executable</property>
     <property name="application-name" translatable="yes">Application</property>
     <property name="developer-name" translatable="yes">Developer Name</property>

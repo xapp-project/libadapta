@@ -6,14 +6,14 @@
 
 #include "config.h"
 
-#include "adw-preferences-row.h"
+#include "adap-preferences-row.h"
 
 /**
- * AdwPreferencesRow:
+ * AdapPreferencesRow:
  *
  * A [class@Gtk.ListBoxRow] used to present preferences.
  *
- * The `AdwPreferencesRow` widget has a title that [class@PreferencesDialog]
+ * The `AdapPreferencesRow` widget has a title that [class@PreferencesDialog]
  * will use to let the user look for a preference. It doesn't present the title
  * in any way and lets you present the preference as you please.
  *
@@ -29,9 +29,9 @@ typedef struct
   gboolean use_underline;
   gboolean title_selectable;
   gboolean use_markup;
-} AdwPreferencesRowPrivate;
+} AdapPreferencesRowPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (AdwPreferencesRow, adw_preferences_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_TYPE_WITH_PRIVATE (AdapPreferencesRow, adap_preferences_row, GTK_TYPE_LIST_BOX_ROW)
 
 enum {
   PROP_0,
@@ -45,24 +45,24 @@ enum {
 static GParamSpec *props[LAST_PROP];
 
 static void
-adw_preferences_row_get_property (GObject    *object,
+adap_preferences_row_get_property (GObject    *object,
                                   guint       prop_id,
                                   GValue     *value,
                                   GParamSpec *pspec)
 {
-  AdwPreferencesRow *self = ADW_PREFERENCES_ROW (object);
+  AdapPreferencesRow *self = ADAP_PREFERENCES_ROW (object);
   switch (prop_id) {
   case PROP_TITLE:
-    g_value_set_string (value, adw_preferences_row_get_title (self));
+    g_value_set_string (value, adap_preferences_row_get_title (self));
     break;
   case PROP_USE_UNDERLINE:
-    g_value_set_boolean (value, adw_preferences_row_get_use_underline (self));
+    g_value_set_boolean (value, adap_preferences_row_get_use_underline (self));
     break;
   case PROP_TITLE_SELECTABLE:
-    g_value_set_boolean (value, adw_preferences_row_get_title_selectable (self));
+    g_value_set_boolean (value, adap_preferences_row_get_title_selectable (self));
     break;
   case PROP_USE_MARKUP:
-    g_value_set_boolean (value, adw_preferences_row_get_use_markup (self));
+    g_value_set_boolean (value, adap_preferences_row_get_use_markup (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -70,25 +70,25 @@ adw_preferences_row_get_property (GObject    *object,
 }
 
 static void
-adw_preferences_row_set_property (GObject      *object,
+adap_preferences_row_set_property (GObject      *object,
                                   guint         prop_id,
                                   const GValue *value,
                                   GParamSpec   *pspec)
 {
-  AdwPreferencesRow *self = ADW_PREFERENCES_ROW (object);
+  AdapPreferencesRow *self = ADAP_PREFERENCES_ROW (object);
 
   switch (prop_id) {
   case PROP_TITLE:
-    adw_preferences_row_set_title (self, g_value_get_string (value));
+    adap_preferences_row_set_title (self, g_value_get_string (value));
     break;
   case PROP_USE_UNDERLINE:
-    adw_preferences_row_set_use_underline (self, g_value_get_boolean (value));
+    adap_preferences_row_set_use_underline (self, g_value_get_boolean (value));
     break;
   case PROP_TITLE_SELECTABLE:
-    adw_preferences_row_set_title_selectable (self, g_value_get_boolean (value));
+    adap_preferences_row_set_title_selectable (self, g_value_get_boolean (value));
     break;
   case PROP_USE_MARKUP:
-    adw_preferences_row_set_use_markup (self, g_value_get_boolean (value));
+    adap_preferences_row_set_use_markup (self, g_value_get_boolean (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -96,27 +96,27 @@ adw_preferences_row_set_property (GObject      *object,
 }
 
 static void
-adw_preferences_row_finalize (GObject *object)
+adap_preferences_row_finalize (GObject *object)
 {
-  AdwPreferencesRow *self = ADW_PREFERENCES_ROW (object);
-  AdwPreferencesRowPrivate *priv = adw_preferences_row_get_instance_private (self);
+  AdapPreferencesRow *self = ADAP_PREFERENCES_ROW (object);
+  AdapPreferencesRowPrivate *priv = adap_preferences_row_get_instance_private (self);
 
   g_free (priv->title);
 
-  G_OBJECT_CLASS (adw_preferences_row_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_preferences_row_parent_class)->finalize (object);
 }
 
 static void
-adw_preferences_row_class_init (AdwPreferencesRowClass *klass)
+adap_preferences_row_class_init (AdapPreferencesRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->get_property = adw_preferences_row_get_property;
-  object_class->set_property = adw_preferences_row_set_property;
-  object_class->finalize = adw_preferences_row_finalize;
+  object_class->get_property = adap_preferences_row_get_property;
+  object_class->set_property = adap_preferences_row_set_property;
+  object_class->finalize = adap_preferences_row_finalize;
 
   /**
-   * AdwPreferencesRow:title: (attributes org.gtk.Property.get=adw_preferences_row_get_title org.gtk.Property.set=adw_preferences_row_set_title)
+   * AdapPreferencesRow:title: (attributes org.gtk.Property.get=adap_preferences_row_get_title org.gtk.Property.set=adap_preferences_row_set_title)
    *
    * The title of the preference represented by this row.
    *
@@ -129,7 +129,7 @@ adw_preferences_row_class_init (AdwPreferencesRowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwPreferencesRow:use-underline: (attributes org.gtk.Property.get=adw_preferences_row_get_use_underline org.gtk.Property.set=adw_preferences_row_set_use_underline)
+   * AdapPreferencesRow:use-underline: (attributes org.gtk.Property.get=adap_preferences_row_get_use_underline org.gtk.Property.set=adap_preferences_row_set_use_underline)
    *
    * Whether an embedded underline in the title indicates a mnemonic.
    */
@@ -139,7 +139,7 @@ adw_preferences_row_class_init (AdwPreferencesRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwPreferencesRow:title-selectable: (attributes org.gtk.Property.get=adw_preferences_row_get_title_selectable org.gtk.Property.set=adw_preferences_row_set_title_selectable)
+   * AdapPreferencesRow:title-selectable: (attributes org.gtk.Property.get=adap_preferences_row_get_title_selectable org.gtk.Property.set=adap_preferences_row_set_title_selectable)
    *
    * Whether the user can copy the title from the label.
    *
@@ -153,7 +153,7 @@ adw_preferences_row_class_init (AdwPreferencesRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwPreferencesRow:use-markup: (attributes org.gtk.Property.get=adw_preferences_row_get_use_markup org.gtk.Property.set=adw_preferences_row_set_use_markup)
+   * AdapPreferencesRow:use-markup: (attributes org.gtk.Property.get=adap_preferences_row_get_use_markup org.gtk.Property.set=adap_preferences_row_set_use_markup)
    *
    * Whether to use Pango markup for the title label.
    *
@@ -172,28 +172,28 @@ adw_preferences_row_class_init (AdwPreferencesRowClass *klass)
 }
 
 static void
-adw_preferences_row_init (AdwPreferencesRow *self)
+adap_preferences_row_init (AdapPreferencesRow *self)
 {
-    AdwPreferencesRowPrivate *priv = adw_preferences_row_get_instance_private (self);
+    AdapPreferencesRowPrivate *priv = adap_preferences_row_get_instance_private (self);
     priv->title = g_strdup ("");
     priv->use_markup = TRUE;
 }
 
 /**
- * adw_preferences_row_new:
+ * adap_preferences_row_new:
  *
- * Creates a new `AdwPreferencesRow`.
+ * Creates a new `AdapPreferencesRow`.
  *
- * Returns: the newly created `AdwPreferencesRow`
+ * Returns: the newly created `AdapPreferencesRow`
  */
 GtkWidget *
-adw_preferences_row_new (void)
+adap_preferences_row_new (void)
 {
-  return g_object_new (ADW_TYPE_PREFERENCES_ROW, NULL);
+  return g_object_new (ADAP_TYPE_PREFERENCES_ROW, NULL);
 }
 
 /**
- * adw_preferences_row_get_title: (attributes org.gtk.Method.get_property=title)
+ * adap_preferences_row_get_title: (attributes org.gtk.Method.get_property=title)
  * @self: a preferences row
  *
  * Gets the title of the preference represented by @self.
@@ -201,19 +201,19 @@ adw_preferences_row_new (void)
  * Returns: the title
  */
 const char *
-adw_preferences_row_get_title (AdwPreferencesRow *self)
+adap_preferences_row_get_title (AdapPreferencesRow *self)
 {
-  AdwPreferencesRowPrivate *priv;
+  AdapPreferencesRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_PREFERENCES_ROW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_PREFERENCES_ROW (self), NULL);
 
-  priv = adw_preferences_row_get_instance_private (self);
+  priv = adap_preferences_row_get_instance_private (self);
 
   return priv->title;
 }
 
 /**
- * adw_preferences_row_set_title: (attributes org.gtk.Method.set_property=title)
+ * adap_preferences_row_set_title: (attributes org.gtk.Method.set_property=title)
  * @self: a preferences row
  * @title: the title
  *
@@ -223,14 +223,14 @@ adw_preferences_row_get_title (AdwPreferencesRow *self)
  * [property@PreferencesRow:use-markup] is set to `FALSE`.
  */
 void
-adw_preferences_row_set_title (AdwPreferencesRow *self,
+adap_preferences_row_set_title (AdapPreferencesRow *self,
                                const char        *title)
 {
-  AdwPreferencesRowPrivate *priv;
+  AdapPreferencesRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_PREFERENCES_ROW (self));
+  g_return_if_fail (ADAP_IS_PREFERENCES_ROW (self));
 
-  priv = adw_preferences_row_get_instance_private (self);
+  priv = adap_preferences_row_get_instance_private (self);
 
   if (!g_set_str (&priv->title, title ? title : ""))
     return;
@@ -239,7 +239,7 @@ adw_preferences_row_set_title (AdwPreferencesRow *self,
 }
 
 /**
- * adw_preferences_row_get_use_underline: (attributes org.gtk.Method.get_property=use-underline)
+ * adap_preferences_row_get_use_underline: (attributes org.gtk.Method.get_property=use-underline)
  * @self: a preferences row
  *
  * Gets whether an embedded underline in the title indicates a mnemonic.
@@ -247,33 +247,33 @@ adw_preferences_row_set_title (AdwPreferencesRow *self,
  * Returns: whether an embedded underline in the title indicates a mnemonic
  */
 gboolean
-adw_preferences_row_get_use_underline (AdwPreferencesRow *self)
+adap_preferences_row_get_use_underline (AdapPreferencesRow *self)
 {
-  AdwPreferencesRowPrivate *priv;
+  AdapPreferencesRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_PREFERENCES_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_PREFERENCES_ROW (self), FALSE);
 
-  priv = adw_preferences_row_get_instance_private (self);
+  priv = adap_preferences_row_get_instance_private (self);
 
   return priv->use_underline;
 }
 
 /**
- * adw_preferences_row_set_use_underline: (attributes org.gtk.Method.set_property=use-underline)
+ * adap_preferences_row_set_use_underline: (attributes org.gtk.Method.set_property=use-underline)
  * @self: a preferences row
  * @use_underline: `TRUE` if underlines in the text indicate mnemonics
  *
  * Sets whether an embedded underline in the title indicates a mnemonic.
  */
 void
-adw_preferences_row_set_use_underline (AdwPreferencesRow *self,
+adap_preferences_row_set_use_underline (AdapPreferencesRow *self,
                                        gboolean           use_underline)
 {
-  AdwPreferencesRowPrivate *priv;
+  AdapPreferencesRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_PREFERENCES_ROW (self));
+  g_return_if_fail (ADAP_IS_PREFERENCES_ROW (self));
 
-  priv = adw_preferences_row_get_instance_private (self);
+  priv = adap_preferences_row_get_instance_private (self);
 
   use_underline = !!use_underline;
 
@@ -286,8 +286,8 @@ adw_preferences_row_set_use_underline (AdwPreferencesRow *self,
 }
 
 /**
- * adw_preferences_row_get_title_selectable: (attributes org.gtk.Method.get_property=title-selectable)
- * @self: a `AdwPreferencesRow`
+ * adap_preferences_row_get_title_selectable: (attributes org.gtk.Method.get_property=title-selectable)
+ * @self: a `AdapPreferencesRow`
  *
  * Gets whether the user can copy the title from the label
  *
@@ -296,18 +296,18 @@ adw_preferences_row_set_use_underline (AdwPreferencesRow *self,
  * Since: 1.1
  */
 gboolean
-adw_preferences_row_get_title_selectable (AdwPreferencesRow *self)
+adap_preferences_row_get_title_selectable (AdapPreferencesRow *self)
 {
-  AdwPreferencesRowPrivate *priv = adw_preferences_row_get_instance_private (self);
+  AdapPreferencesRowPrivate *priv = adap_preferences_row_get_instance_private (self);
 
-  g_return_val_if_fail (ADW_IS_PREFERENCES_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_PREFERENCES_ROW (self), FALSE);
 
   return priv->title_selectable;
 }
 
 /**
- * adw_preferences_row_set_title_selectable: (attributes org.gtk.Method.set_property=title-selectable)
- * @self: a `AdwPreferencesRow`
+ * adap_preferences_row_set_title_selectable: (attributes org.gtk.Method.set_property=title-selectable)
+ * @self: a `AdapPreferencesRow`
  * @title_selectable: `TRUE` if the user can copy the title from the label
  *
  * Sets whether the user can copy the title from the label
@@ -317,12 +317,12 @@ adw_preferences_row_get_title_selectable (AdwPreferencesRow *self)
  * Since: 1.1
  */
 void
-adw_preferences_row_set_title_selectable (AdwPreferencesRow *self,
+adap_preferences_row_set_title_selectable (AdapPreferencesRow *self,
                                           gboolean           title_selectable)
 {
-  AdwPreferencesRowPrivate *priv = adw_preferences_row_get_instance_private (self);
+  AdapPreferencesRowPrivate *priv = adap_preferences_row_get_instance_private (self);
 
-  g_return_if_fail (ADW_IS_PREFERENCES_ROW (self));
+  g_return_if_fail (ADAP_IS_PREFERENCES_ROW (self));
 
   title_selectable = !!title_selectable;
 
@@ -335,7 +335,7 @@ adw_preferences_row_set_title_selectable (AdwPreferencesRow *self,
 }
 
 /**
- * adw_preferences_row_get_use_markup: (attributes org.gtk.Method.get_property=use-markup)
+ * adap_preferences_row_get_use_markup: (attributes org.gtk.Method.get_property=use-markup)
  * @self: a preferences row
  *
  * Gets whether to use Pango markup for the title label.
@@ -345,19 +345,19 @@ adw_preferences_row_set_title_selectable (AdwPreferencesRow *self,
  * Since: 1.2
  */
 gboolean
-adw_preferences_row_get_use_markup (AdwPreferencesRow *self)
+adap_preferences_row_get_use_markup (AdapPreferencesRow *self)
 {
-  AdwPreferencesRowPrivate *priv;
+  AdapPreferencesRowPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_PREFERENCES_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_PREFERENCES_ROW (self), FALSE);
 
-  priv = adw_preferences_row_get_instance_private (self);
+  priv = adap_preferences_row_get_instance_private (self);
 
   return priv->use_markup;
 }
 
 /**
- * adw_preferences_row_set_use_markup: (attributes org.gtk.Method.set_property=use-markup)
+ * adap_preferences_row_set_use_markup: (attributes org.gtk.Method.set_property=use-markup)
  * @self: a preferences row
  * @use_markup: whether to use markup
  *
@@ -370,14 +370,14 @@ adw_preferences_row_get_use_markup (AdwPreferencesRow *self)
  * Since: 1.2
  */
 void
-adw_preferences_row_set_use_markup (AdwPreferencesRow *self,
+adap_preferences_row_set_use_markup (AdapPreferencesRow *self,
                                     gboolean           use_markup)
 {
-  AdwPreferencesRowPrivate *priv;
+  AdapPreferencesRowPrivate *priv;
 
-  g_return_if_fail (ADW_IS_PREFERENCES_ROW (self));
+  g_return_if_fail (ADAP_IS_PREFERENCES_ROW (self));
 
-  priv = adw_preferences_row_get_instance_private (self);
+  priv = adap_preferences_row_get_instance_private (self);
 
   use_markup = !!use_markup;
 

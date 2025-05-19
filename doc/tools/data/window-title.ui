@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwBin" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapBin" id="widget">
     <property name="child">
-      <object class="AdwWindowTitle">
+      <object class="AdapWindowTitle">
         <property name="title">Window Title</property>
         <property name="subtitle">Window Subtitle</property>
         <property name="margin-top">12</property>

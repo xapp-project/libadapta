@@ -6,7 +6,7 @@
  * Author: Alice Mikhaylenko <alice.mikhaylenko@puri.sm>
  */
 
-#include <adwaita.h>
+#include <adapta.h>
 
 static void
 increment (int *data)
@@ -15,10 +15,10 @@ increment (int *data)
 }
 
 static void
-test_adw_tab_overview_view (void)
+test_adap_tab_overview_view (void)
 {
-  AdwTabOverview *overview = g_object_ref_sink (ADW_TAB_OVERVIEW (adw_tab_overview_new ()));
-  AdwTabView *view;
+  AdapTabOverview *overview = g_object_ref_sink (ADAP_TAB_OVERVIEW (adap_tab_overview_new ()));
+  AdapTabView *view;
   int notified = 0;
 
   g_assert_nonnull (overview);
@@ -28,16 +28,16 @@ test_adw_tab_overview_view (void)
   g_object_get (overview, "view", &view, NULL);
   g_assert_null (view);
 
-  adw_tab_overview_set_view (overview, NULL);
+  adap_tab_overview_set_view (overview, NULL);
   g_assert_cmpint (notified, ==, 0);
 
-  view = g_object_ref_sink (ADW_TAB_VIEW (adw_tab_view_new ()));
-  adw_tab_overview_set_view (overview, view);
-  g_assert_true (adw_tab_overview_get_view (overview) == view);
+  view = g_object_ref_sink (ADAP_TAB_VIEW (adap_tab_view_new ()));
+  adap_tab_overview_set_view (overview, view);
+  g_assert_true (adap_tab_overview_get_view (overview) == view);
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (overview, "view", NULL, NULL);
-  g_assert_null (adw_tab_overview_get_view (overview));
+  g_assert_null (adap_tab_overview_get_view (overview));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (overview);
@@ -45,9 +45,9 @@ test_adw_tab_overview_view (void)
 }
 
 static void
-test_adw_tab_overview_child (void)
+test_adap_tab_overview_child (void)
 {
-  AdwTabOverview *overview = g_object_ref_sink (ADW_TAB_OVERVIEW (adw_tab_overview_new ()));
+  AdapTabOverview *overview = g_object_ref_sink (ADAP_TAB_OVERVIEW (adap_tab_overview_new ()));
   GtkWidget *widget = NULL;
   int notified = 0;
 
@@ -58,51 +58,51 @@ test_adw_tab_overview_child (void)
   g_object_get (overview, "child", &widget, NULL);
   g_assert_null (widget);
 
-  adw_tab_overview_set_child (overview, NULL);
+  adap_tab_overview_set_child (overview, NULL);
   g_assert_cmpint (notified, ==, 0);
 
   widget = gtk_button_new ();
-  adw_tab_overview_set_child (overview, widget);
-  g_assert_true (adw_tab_overview_get_child (overview) == widget);
+  adap_tab_overview_set_child (overview, widget);
+  g_assert_true (adap_tab_overview_get_child (overview) == widget);
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (overview, "child", NULL, NULL);
-  g_assert_null (adw_tab_overview_get_child (overview));
+  g_assert_null (adap_tab_overview_get_child (overview));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (overview);
 }
 
 static void
-test_adw_tab_overview_open (void)
+test_adap_tab_overview_open (void)
 {
-  AdwTabOverview *overview = g_object_ref_sink (ADW_TAB_OVERVIEW (adw_tab_overview_new ()));
-  AdwTabView *view = ADW_TAB_VIEW (adw_tab_view_new ());
+  AdapTabOverview *overview = g_object_ref_sink (ADAP_TAB_OVERVIEW (adap_tab_overview_new ()));
+  AdapTabView *view = ADAP_TAB_VIEW (adap_tab_view_new ());
   gboolean open = FALSE;
   int notified = 0;
 
   g_assert_nonnull (overview);
   g_assert_nonnull (view);
 
-  adw_tab_view_add_page (view, gtk_button_new (), NULL);
+  adap_tab_view_add_page (view, gtk_button_new (), NULL);
 
-  adw_tab_overview_set_child (overview, GTK_WIDGET (view));
-  adw_tab_overview_set_view (overview, g_object_ref (view));
+  adap_tab_overview_set_child (overview, GTK_WIDGET (view));
+  adap_tab_overview_set_view (overview, g_object_ref (view));
 
   g_signal_connect_swapped (overview, "notify::open", G_CALLBACK (increment), &notified);
 
   g_object_get (overview, "open", &open, NULL);
   g_assert_false (open);
 
-  adw_tab_overview_set_open (overview, FALSE);
+  adap_tab_overview_set_open (overview, FALSE);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_tab_overview_set_open (overview, TRUE);
-  g_assert_true (adw_tab_overview_get_open (overview));
+  adap_tab_overview_set_open (overview, TRUE);
+  g_assert_true (adap_tab_overview_get_open (overview));
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (overview, "open", FALSE, NULL);
-  g_assert_false (adw_tab_overview_get_open (overview));
+  g_assert_false (adap_tab_overview_get_open (overview));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (overview);
@@ -110,9 +110,9 @@ test_adw_tab_overview_open (void)
 }
 
 static void
-test_adw_tab_overview_inverted (void)
+test_adap_tab_overview_inverted (void)
 {
-  AdwTabOverview *overview = g_object_ref_sink (ADW_TAB_OVERVIEW (adw_tab_overview_new ()));
+  AdapTabOverview *overview = g_object_ref_sink (ADAP_TAB_OVERVIEW (adap_tab_overview_new ()));
   gboolean inverted = FALSE;
   int notified = 0;
 
@@ -123,24 +123,24 @@ test_adw_tab_overview_inverted (void)
   g_object_get (overview, "inverted", &inverted, NULL);
   g_assert_false (inverted);
 
-  adw_tab_overview_set_inverted (overview, FALSE);
+  adap_tab_overview_set_inverted (overview, FALSE);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_tab_overview_set_inverted (overview, TRUE);
-  g_assert_true (adw_tab_overview_get_inverted (overview));
+  adap_tab_overview_set_inverted (overview, TRUE);
+  g_assert_true (adap_tab_overview_get_inverted (overview));
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (overview, "inverted", FALSE, NULL);
-  g_assert_false (adw_tab_overview_get_inverted (overview));
+  g_assert_false (adap_tab_overview_get_inverted (overview));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (overview);
 }
 
 static void
-test_adw_tab_overview_enable_search (void)
+test_adap_tab_overview_enable_search (void)
 {
-  AdwTabOverview *overview = g_object_ref_sink (ADW_TAB_OVERVIEW (adw_tab_overview_new ()));
+  AdapTabOverview *overview = g_object_ref_sink (ADAP_TAB_OVERVIEW (adap_tab_overview_new ()));
   gboolean enable_search = FALSE;
   int notified = 0;
 
@@ -151,24 +151,24 @@ test_adw_tab_overview_enable_search (void)
   g_object_get (overview, "enable-search", &enable_search, NULL);
   g_assert_true (enable_search);
 
-  adw_tab_overview_set_enable_search (overview, TRUE);
+  adap_tab_overview_set_enable_search (overview, TRUE);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_tab_overview_set_enable_search (overview, FALSE);
-  g_assert_false (adw_tab_overview_get_enable_search (overview));
+  adap_tab_overview_set_enable_search (overview, FALSE);
+  g_assert_false (adap_tab_overview_get_enable_search (overview));
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (overview, "enable-search", TRUE, NULL);
-  g_assert_true (adw_tab_overview_get_enable_search (overview));
+  g_assert_true (adap_tab_overview_get_enable_search (overview));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (overview);
 }
 
 static void
-test_adw_tab_overview_enable_new_tab (void)
+test_adap_tab_overview_enable_new_tab (void)
 {
-  AdwTabOverview *overview = g_object_ref_sink (ADW_TAB_OVERVIEW (adw_tab_overview_new ()));
+  AdapTabOverview *overview = g_object_ref_sink (ADAP_TAB_OVERVIEW (adap_tab_overview_new ()));
   gboolean enable_new_tab = FALSE;
   int notified = 0;
 
@@ -179,24 +179,24 @@ test_adw_tab_overview_enable_new_tab (void)
   g_object_get (overview, "enable-new-tab", &enable_new_tab, NULL);
   g_assert_false (enable_new_tab);
 
-  adw_tab_overview_set_enable_new_tab (overview, FALSE);
+  adap_tab_overview_set_enable_new_tab (overview, FALSE);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_tab_overview_set_enable_new_tab (overview, TRUE);
-  g_assert_true (adw_tab_overview_get_enable_new_tab (overview));
+  adap_tab_overview_set_enable_new_tab (overview, TRUE);
+  g_assert_true (adap_tab_overview_get_enable_new_tab (overview));
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (overview, "enable-new-tab", FALSE, NULL);
-  g_assert_false (adw_tab_overview_get_enable_new_tab (overview));
+  g_assert_false (adap_tab_overview_get_enable_new_tab (overview));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (overview);
 }
 
 static void
-test_adw_tab_overview_show_start_title_buttons (void)
+test_adap_tab_overview_show_start_title_buttons (void)
 {
-  AdwTabOverview *overview = g_object_ref_sink (ADW_TAB_OVERVIEW (adw_tab_overview_new ()));
+  AdapTabOverview *overview = g_object_ref_sink (ADAP_TAB_OVERVIEW (adap_tab_overview_new ()));
   gboolean show_start_title_buttons = FALSE;
   int notified = 0;
 
@@ -207,24 +207,24 @@ test_adw_tab_overview_show_start_title_buttons (void)
   g_object_get (overview, "show-start-title-buttons", &show_start_title_buttons, NULL);
   g_assert_true (show_start_title_buttons);
 
-  adw_tab_overview_set_show_start_title_buttons (overview, TRUE);
+  adap_tab_overview_set_show_start_title_buttons (overview, TRUE);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_tab_overview_set_show_start_title_buttons (overview, FALSE);
-  g_assert_false (adw_tab_overview_get_show_start_title_buttons (overview));
+  adap_tab_overview_set_show_start_title_buttons (overview, FALSE);
+  g_assert_false (adap_tab_overview_get_show_start_title_buttons (overview));
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (overview, "show-start-title-buttons", TRUE, NULL);
-  g_assert_true (adw_tab_overview_get_show_start_title_buttons (overview));
+  g_assert_true (adap_tab_overview_get_show_start_title_buttons (overview));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (overview);
 }
 
 static void
-test_adw_tab_overview_show_end_title_buttons (void)
+test_adap_tab_overview_show_end_title_buttons (void)
 {
-  AdwTabOverview *overview = g_object_ref_sink (ADW_TAB_OVERVIEW (adw_tab_overview_new ()));
+  AdapTabOverview *overview = g_object_ref_sink (ADAP_TAB_OVERVIEW (adap_tab_overview_new ()));
   gboolean show_end_title_buttons = FALSE;
   int notified = 0;
 
@@ -235,24 +235,24 @@ test_adw_tab_overview_show_end_title_buttons (void)
   g_object_get (overview, "show-end-title-buttons", &show_end_title_buttons, NULL);
   g_assert_true (show_end_title_buttons);
 
-  adw_tab_overview_set_show_end_title_buttons (overview, TRUE);
+  adap_tab_overview_set_show_end_title_buttons (overview, TRUE);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_tab_overview_set_show_end_title_buttons (overview, FALSE);
-  g_assert_false (adw_tab_overview_get_show_end_title_buttons (overview));
+  adap_tab_overview_set_show_end_title_buttons (overview, FALSE);
+  g_assert_false (adap_tab_overview_get_show_end_title_buttons (overview));
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (overview, "show-end-title-buttons", TRUE, NULL);
-  g_assert_true (adw_tab_overview_get_show_end_title_buttons (overview));
+  g_assert_true (adap_tab_overview_get_show_end_title_buttons (overview));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (overview);
 }
 
 static void
-test_adw_tab_overview_secondary_menu (void)
+test_adap_tab_overview_secondary_menu (void)
 {
-  AdwTabOverview *overview = g_object_ref_sink (ADW_TAB_OVERVIEW (adw_tab_overview_new ()));
+  AdapTabOverview *overview = g_object_ref_sink (ADAP_TAB_OVERVIEW (adap_tab_overview_new ()));
   GMenuModel *model;
   GMenuModel *model1 = G_MENU_MODEL (g_menu_new ());
   GMenuModel *model2 = G_MENU_MODEL (g_menu_new ());
@@ -266,12 +266,12 @@ test_adw_tab_overview_secondary_menu (void)
   g_assert_null (model);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_tab_overview_set_secondary_menu (overview, model1);
-  g_assert_true (adw_tab_overview_get_secondary_menu (overview) == model1);
+  adap_tab_overview_set_secondary_menu (overview, model1);
+  g_assert_true (adap_tab_overview_get_secondary_menu (overview) == model1);
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (overview, "secondary-menu", model2, NULL);
-  g_assert_true (adw_tab_overview_get_secondary_menu (overview) == model2);
+  g_assert_true (adap_tab_overview_get_secondary_menu (overview) == model2);
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (overview);
@@ -280,26 +280,26 @@ test_adw_tab_overview_secondary_menu (void)
 }
 
 static void
-test_adw_tab_overview_actions (void)
+test_adap_tab_overview_actions (void)
 {
-  AdwTabOverview *overview = g_object_ref_sink (ADW_TAB_OVERVIEW (adw_tab_overview_new ()));
-  AdwTabView *view = ADW_TAB_VIEW (adw_tab_view_new ());
+  AdapTabOverview *overview = g_object_ref_sink (ADAP_TAB_OVERVIEW (adap_tab_overview_new ()));
+  AdapTabView *view = ADAP_TAB_VIEW (adap_tab_view_new ());
 
   g_assert_nonnull (overview);
   g_assert_nonnull (view);
 
-  adw_tab_view_add_page (view, gtk_button_new (), NULL);
+  adap_tab_view_add_page (view, gtk_button_new (), NULL);
 
-  adw_tab_overview_set_child (overview, GTK_WIDGET (view));
-  adw_tab_overview_set_view (overview, g_object_ref (view));
+  adap_tab_overview_set_child (overview, GTK_WIDGET (view));
+  adap_tab_overview_set_view (overview, g_object_ref (view));
 
   gtk_widget_activate_action (GTK_WIDGET (overview), "overview.open", NULL);
 
-  g_assert_true (adw_tab_overview_get_open (overview));
+  g_assert_true (adap_tab_overview_get_open (overview));
 
   gtk_widget_activate_action (GTK_WIDGET (overview), "overview.close", NULL);
 
-  g_assert_false (adw_tab_overview_get_open (overview));
+  g_assert_false (adap_tab_overview_get_open (overview));
 
   g_assert_finalize_object (overview);
   g_assert_finalize_object (view);
@@ -310,18 +310,18 @@ main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
-  adw_init ();
+  adap_init ();
 
-  g_test_add_func ("/Adwaita/TabOverview/view", test_adw_tab_overview_view);
-  g_test_add_func ("/Adwaita/TabOverview/child", test_adw_tab_overview_child);
-  g_test_add_func ("/Adwaita/TabOverview/open", test_adw_tab_overview_open);
-  g_test_add_func ("/Adwaita/TabOverview/inverted", test_adw_tab_overview_inverted);
-  g_test_add_func ("/Adwaita/TabOverview/enable_search", test_adw_tab_overview_enable_search);
-  g_test_add_func ("/Adwaita/TabOverview/enable_new_tab", test_adw_tab_overview_enable_new_tab);
-  g_test_add_func ("/Adwaita/TabOverview/secondary_menu", test_adw_tab_overview_secondary_menu);
-  g_test_add_func ("/Adwaita/TabOverview/show_start_title_buttons", test_adw_tab_overview_show_start_title_buttons);
-  g_test_add_func ("/Adwaita/TabOverview/show_end_title_buttons", test_adw_tab_overview_show_end_title_buttons);
-  g_test_add_func ("/Adwaita/TabOverview/actions", test_adw_tab_overview_actions);
+  g_test_add_func ("/Adapta/TabOverview/view", test_adap_tab_overview_view);
+  g_test_add_func ("/Adapta/TabOverview/child", test_adap_tab_overview_child);
+  g_test_add_func ("/Adapta/TabOverview/open", test_adap_tab_overview_open);
+  g_test_add_func ("/Adapta/TabOverview/inverted", test_adap_tab_overview_inverted);
+  g_test_add_func ("/Adapta/TabOverview/enable_search", test_adap_tab_overview_enable_search);
+  g_test_add_func ("/Adapta/TabOverview/enable_new_tab", test_adap_tab_overview_enable_new_tab);
+  g_test_add_func ("/Adapta/TabOverview/secondary_menu", test_adap_tab_overview_secondary_menu);
+  g_test_add_func ("/Adapta/TabOverview/show_start_title_buttons", test_adap_tab_overview_show_start_title_buttons);
+  g_test_add_func ("/Adapta/TabOverview/show_end_title_buttons", test_adap_tab_overview_show_end_title_buttons);
+  g_test_add_func ("/Adapta/TabOverview/actions", test_adap_tab_overview_actions);
 
   return g_test_run ();
 }

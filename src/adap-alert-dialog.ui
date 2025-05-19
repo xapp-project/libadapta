@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwAlertDialog" parent="AdwDialog">
+  <template class="AdapAlertDialog" parent="AdapDialog">
     <property name="follows-content-size">True</property>
     <property name="presentation-mode">floating</property>
     <accessibility>
@@ -11,7 +11,7 @@
       <class name="alert"/>
     </style>
     <property name="child">
-      <object class="AdwGizmo" id="contents">
+      <object class="AdapGizmo" id="contents">
         <child>
           <object class="GtkWindowHandle" id="window_handle">
             <property name="child">
@@ -60,7 +60,7 @@
                   <object class="GtkSeparator"/>
                 </child>
                 <child>
-                  <object class="AdwGizmo" id="response_area">
+                  <object class="AdapGizmo" id="response_area">
                     <style>
                       <class name="response-area"/>
                     </style>

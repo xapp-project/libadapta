@@ -8,73 +8,73 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-length-unit.h"
-#include "adw-navigation-view.h"
+#include "adap-length-unit.h"
+#include "adap-navigation-view.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_NAVIGATION_SPLIT_VIEW (adw_navigation_split_view_get_type())
+#define ADAP_TYPE_NAVIGATION_SPLIT_VIEW (adap_navigation_split_view_get_type())
 
-ADW_AVAILABLE_IN_1_4
-G_DECLARE_FINAL_TYPE (AdwNavigationSplitView, adw_navigation_split_view, ADW, NAVIGATION_SPLIT_VIEW, GtkWidget)
+ADAP_AVAILABLE_IN_1_4
+G_DECLARE_FINAL_TYPE (AdapNavigationSplitView, adap_navigation_split_view, ADAP, NAVIGATION_SPLIT_VIEW, GtkWidget)
 
-ADW_AVAILABLE_IN_1_4
-GtkWidget *adw_navigation_split_view_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_1_4
+GtkWidget *adap_navigation_split_view_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-AdwNavigationPage *adw_navigation_split_view_get_sidebar (AdwNavigationSplitView *self);
-ADW_AVAILABLE_IN_1_4
-void               adw_navigation_split_view_set_sidebar (AdwNavigationSplitView *self,
-                                                          AdwNavigationPage      *sidebar);
+ADAP_AVAILABLE_IN_1_4
+AdapNavigationPage *adap_navigation_split_view_get_sidebar (AdapNavigationSplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void               adap_navigation_split_view_set_sidebar (AdapNavigationSplitView *self,
+                                                          AdapNavigationPage      *sidebar);
 
-ADW_AVAILABLE_IN_1_4
-AdwNavigationPage *adw_navigation_split_view_get_content (AdwNavigationSplitView *self);
-ADW_AVAILABLE_IN_1_4
-void               adw_navigation_split_view_set_content (AdwNavigationSplitView *self,
-                                                          AdwNavigationPage      *content);
+ADAP_AVAILABLE_IN_1_4
+AdapNavigationPage *adap_navigation_split_view_get_content (AdapNavigationSplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void               adap_navigation_split_view_set_content (AdapNavigationSplitView *self,
+                                                          AdapNavigationPage      *content);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_navigation_split_view_get_collapsed (AdwNavigationSplitView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_navigation_split_view_set_collapsed (AdwNavigationSplitView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_navigation_split_view_get_collapsed (AdapNavigationSplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_navigation_split_view_set_collapsed (AdapNavigationSplitView *self,
                                                   gboolean                collapsed);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_navigation_split_view_get_show_content (AdwNavigationSplitView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_navigation_split_view_set_show_content (AdwNavigationSplitView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_navigation_split_view_get_show_content (AdapNavigationSplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_navigation_split_view_set_show_content (AdapNavigationSplitView *self,
                                                      gboolean                show_content);
 
-ADW_AVAILABLE_IN_1_4
-double adw_navigation_split_view_get_min_sidebar_width (AdwNavigationSplitView *self);
-ADW_AVAILABLE_IN_1_4
-void   adw_navigation_split_view_set_min_sidebar_width (AdwNavigationSplitView *self,
+ADAP_AVAILABLE_IN_1_4
+double adap_navigation_split_view_get_min_sidebar_width (AdapNavigationSplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void   adap_navigation_split_view_set_min_sidebar_width (AdapNavigationSplitView *self,
                                                         double                  width);
 
-ADW_AVAILABLE_IN_1_4
-double adw_navigation_split_view_get_max_sidebar_width (AdwNavigationSplitView *self);
-ADW_AVAILABLE_IN_1_4
-void   adw_navigation_split_view_set_max_sidebar_width (AdwNavigationSplitView *self,
+ADAP_AVAILABLE_IN_1_4
+double adap_navigation_split_view_get_max_sidebar_width (AdapNavigationSplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void   adap_navigation_split_view_set_max_sidebar_width (AdapNavigationSplitView *self,
                                                         double                  width);
 
-ADW_AVAILABLE_IN_1_4
-double adw_navigation_split_view_get_sidebar_width_fraction (AdwNavigationSplitView *self);
-ADW_AVAILABLE_IN_1_4
-void   adw_navigation_split_view_set_sidebar_width_fraction (AdwNavigationSplitView *self,
+ADAP_AVAILABLE_IN_1_4
+double adap_navigation_split_view_get_sidebar_width_fraction (AdapNavigationSplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void   adap_navigation_split_view_set_sidebar_width_fraction (AdapNavigationSplitView *self,
                                                              double                  fraction);
 
-ADW_AVAILABLE_IN_1_4
-AdwLengthUnit adw_navigation_split_view_get_sidebar_width_unit (AdwNavigationSplitView *self);
-ADW_AVAILABLE_IN_1_4
-void          adw_navigation_split_view_set_sidebar_width_unit (AdwNavigationSplitView *self,
-                                                                AdwLengthUnit           unit);
+ADAP_AVAILABLE_IN_1_4
+AdapLengthUnit adap_navigation_split_view_get_sidebar_width_unit (AdapNavigationSplitView *self);
+ADAP_AVAILABLE_IN_1_4
+void          adap_navigation_split_view_set_sidebar_width_unit (AdapNavigationSplitView *self,
+                                                                AdapLengthUnit           unit);
 
 G_END_DECLS

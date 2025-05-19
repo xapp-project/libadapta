@@ -8,101 +8,101 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-length-unit.h"
+#include "adap-length-unit.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_BREAKPOINT_CONDITION (adw_breakpoint_condition_get_type ())
+#define ADAP_TYPE_BREAKPOINT_CONDITION (adap_breakpoint_condition_get_type ())
 
 typedef enum {
-  ADW_BREAKPOINT_CONDITION_MIN_WIDTH,
-  ADW_BREAKPOINT_CONDITION_MAX_WIDTH,
-  ADW_BREAKPOINT_CONDITION_MIN_HEIGHT,
-  ADW_BREAKPOINT_CONDITION_MAX_HEIGHT,
-} AdwBreakpointConditionLengthType;
+  ADAP_BREAKPOINT_CONDITION_MIN_WIDTH,
+  ADAP_BREAKPOINT_CONDITION_MAX_WIDTH,
+  ADAP_BREAKPOINT_CONDITION_MIN_HEIGHT,
+  ADAP_BREAKPOINT_CONDITION_MAX_HEIGHT,
+} AdapBreakpointConditionLengthType;
 
 typedef enum {
-  ADW_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO,
-  ADW_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO,
-} AdwBreakpointConditionRatioType;
+  ADAP_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO,
+  ADAP_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO,
+} AdapBreakpointConditionRatioType;
 
-typedef struct _AdwBreakpointCondition AdwBreakpointCondition;
+typedef struct _AdapBreakpointCondition AdapBreakpointCondition;
 
-ADW_AVAILABLE_IN_1_4
-GType adw_breakpoint_condition_get_type (void) G_GNUC_CONST;
+ADAP_AVAILABLE_IN_1_4
+GType adap_breakpoint_condition_get_type (void) G_GNUC_CONST;
 
-ADW_AVAILABLE_IN_1_4
-AdwBreakpointCondition *adw_breakpoint_condition_new_length (AdwBreakpointConditionLengthType type,
+ADAP_AVAILABLE_IN_1_4
+AdapBreakpointCondition *adap_breakpoint_condition_new_length (AdapBreakpointConditionLengthType type,
                                                              double                           value,
-                                                             AdwLengthUnit                    unit) G_GNUC_WARN_UNUSED_RESULT;
+                                                             AdapLengthUnit                    unit) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-AdwBreakpointCondition *adw_breakpoint_condition_new_ratio (AdwBreakpointConditionRatioType type,
+ADAP_AVAILABLE_IN_1_4
+AdapBreakpointCondition *adap_breakpoint_condition_new_ratio (AdapBreakpointConditionRatioType type,
                                                             int                             width,
                                                             int                             height) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-AdwBreakpointCondition *adw_breakpoint_condition_new_and (AdwBreakpointCondition *condition_1,
-                                                          AdwBreakpointCondition *condition_2) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_1_4
+AdapBreakpointCondition *adap_breakpoint_condition_new_and (AdapBreakpointCondition *condition_1,
+                                                          AdapBreakpointCondition *condition_2) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-AdwBreakpointCondition *adw_breakpoint_condition_new_or (AdwBreakpointCondition *condition_1,
-                                                         AdwBreakpointCondition *condition_2) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_1_4
+AdapBreakpointCondition *adap_breakpoint_condition_new_or (AdapBreakpointCondition *condition_1,
+                                                         AdapBreakpointCondition *condition_2) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-AdwBreakpointCondition *adw_breakpoint_condition_copy (AdwBreakpointCondition *self);
-ADW_AVAILABLE_IN_1_4
-void                    adw_breakpoint_condition_free (AdwBreakpointCondition *self);
+ADAP_AVAILABLE_IN_1_4
+AdapBreakpointCondition *adap_breakpoint_condition_copy (AdapBreakpointCondition *self);
+ADAP_AVAILABLE_IN_1_4
+void                    adap_breakpoint_condition_free (AdapBreakpointCondition *self);
 
-ADW_AVAILABLE_IN_1_4
-AdwBreakpointCondition *adw_breakpoint_condition_parse (const char *str);
+ADAP_AVAILABLE_IN_1_4
+AdapBreakpointCondition *adap_breakpoint_condition_parse (const char *str);
 
-ADW_AVAILABLE_IN_1_4
-char *adw_breakpoint_condition_to_string (AdwBreakpointCondition *self);
+ADAP_AVAILABLE_IN_1_4
+char *adap_breakpoint_condition_to_string (AdapBreakpointCondition *self);
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (AdwBreakpointCondition, adw_breakpoint_condition_free)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (AdapBreakpointCondition, adap_breakpoint_condition_free)
 
-#define ADW_TYPE_BREAKPOINT (adw_breakpoint_get_type())
+#define ADAP_TYPE_BREAKPOINT (adap_breakpoint_get_type())
 
-ADW_AVAILABLE_IN_1_4
-G_DECLARE_FINAL_TYPE (AdwBreakpoint, adw_breakpoint, ADW, BREAKPOINT, GObject)
+ADAP_AVAILABLE_IN_1_4
+G_DECLARE_FINAL_TYPE (AdapBreakpoint, adap_breakpoint, ADAP, BREAKPOINT, GObject)
 
-ADW_AVAILABLE_IN_1_4
-AdwBreakpoint *adw_breakpoint_new (AdwBreakpointCondition *condition) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_1_4
+AdapBreakpoint *adap_breakpoint_new (AdapBreakpointCondition *condition) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-AdwBreakpointCondition *adw_breakpoint_get_condition (AdwBreakpoint          *self);
-ADW_AVAILABLE_IN_1_4
-void                    adw_breakpoint_set_condition (AdwBreakpoint          *self,
-                                                      AdwBreakpointCondition *condition);
+ADAP_AVAILABLE_IN_1_4
+AdapBreakpointCondition *adap_breakpoint_get_condition (AdapBreakpoint          *self);
+ADAP_AVAILABLE_IN_1_4
+void                    adap_breakpoint_set_condition (AdapBreakpoint          *self,
+                                                      AdapBreakpointCondition *condition);
 
-ADW_AVAILABLE_IN_1_4
-void adw_breakpoint_add_setter (AdwBreakpoint *self,
+ADAP_AVAILABLE_IN_1_4
+void adap_breakpoint_add_setter (AdapBreakpoint *self,
                                 GObject       *object,
                                 const char    *property,
                                 const GValue  *value);
 
-ADW_AVAILABLE_IN_1_4
-void adw_breakpoint_add_setters        (AdwBreakpoint *self,
+ADAP_AVAILABLE_IN_1_4
+void adap_breakpoint_add_setters        (AdapBreakpoint *self,
                                         GObject       *first_object,
                                         const char    *first_property,
                                         ...) G_GNUC_NULL_TERMINATED;
-ADW_AVAILABLE_IN_1_4
-void adw_breakpoint_add_settersv       (AdwBreakpoint *self,
+ADAP_AVAILABLE_IN_1_4
+void adap_breakpoint_add_settersv       (AdapBreakpoint *self,
                                         int            n_setters,
                                         GObject       *objects[],
                                         const char    *names[],
                                         const GValue  *values[]);
-ADW_AVAILABLE_IN_1_4
-void adw_breakpoint_add_setters_valist (AdwBreakpoint *self,
+ADAP_AVAILABLE_IN_1_4
+void adap_breakpoint_add_setters_valist (AdapBreakpoint *self,
                                         GObject       *first_object,
                                         const char    *first_property,
                                         va_list        args);

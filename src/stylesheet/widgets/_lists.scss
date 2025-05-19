@@ -111,7 +111,7 @@ row {
 }
 
 /****************
- * AdwActionRow *
+ * AdapActionRow *
  ****************/
 
 row {
@@ -175,7 +175,7 @@ row {
 }
 
 /******************************
- * AdwEntryRow and AdwSpinRow *
+ * AdapEntryRow and AdapSpinRow *
  ******************************/
 
 row.entry {
@@ -291,7 +291,7 @@ row.spin {
 }
 
 /***************
- * AdwComboRow *
+ * AdapComboRow *
  ***************/
 
 row.combo {
@@ -325,7 +325,7 @@ row.combo {
 }
 
 /******************
- * AdwExpanderRow *
+ * AdapExpanderRow *
  ******************/
 
 @mixin margin-start($margin) {
@@ -382,7 +382,7 @@ row.expander {
     @extend %boxed_list_row;
   }
 
-  // AdwExpanderRow arrow rotation
+  // AdapExpanderRow arrow rotation
 
   image.expander-row-arrow {
     @extend .dim-label;

@@ -6,26 +6,26 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_PREFERENCES_GROUP (adw_preferences_group_get_type())
+#define ADAP_TYPE_PREFERENCES_GROUP (adap_preferences_group_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_DERIVABLE_TYPE (AdwPreferencesGroup, adw_preferences_group, ADW, PREFERENCES_GROUP, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (AdapPreferencesGroup, adap_preferences_group, ADAP, PREFERENCES_GROUP, GtkWidget)
 
 /**
- * AdwPreferencesGroupClass
+ * AdapPreferencesGroupClass
  * @parent_class: The parent class
  */
-struct _AdwPreferencesGroupClass
+struct _AdapPreferencesGroupClass
 {
   GtkWidgetClass parent_class;
 
@@ -33,32 +33,32 @@ struct _AdwPreferencesGroupClass
   gpointer padding[4];
 };
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_preferences_group_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_preferences_group_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-void adw_preferences_group_add    (AdwPreferencesGroup *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_preferences_group_add    (AdapPreferencesGroup *self,
                                    GtkWidget           *child);
-ADW_AVAILABLE_IN_ALL
-void adw_preferences_group_remove (AdwPreferencesGroup *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_preferences_group_remove (AdapPreferencesGroup *self,
                                    GtkWidget           *child);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_preferences_group_get_title (AdwPreferencesGroup *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_preferences_group_set_title (AdwPreferencesGroup *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_preferences_group_get_title (AdapPreferencesGroup *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_preferences_group_set_title (AdapPreferencesGroup *self,
                                              const char          *title);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_preferences_group_get_description (AdwPreferencesGroup *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_preferences_group_set_description (AdwPreferencesGroup *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_preferences_group_get_description (AdapPreferencesGroup *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_preferences_group_set_description (AdapPreferencesGroup *self,
                                                    const char          *description);
 
-ADW_AVAILABLE_IN_1_1
-GtkWidget *adw_preferences_group_get_header_suffix (AdwPreferencesGroup *self);
-ADW_AVAILABLE_IN_1_1
-void       adw_preferences_group_set_header_suffix (AdwPreferencesGroup *self,
+ADAP_AVAILABLE_IN_1_1
+GtkWidget *adap_preferences_group_get_header_suffix (AdapPreferencesGroup *self);
+ADAP_AVAILABLE_IN_1_1
+void       adap_preferences_group_set_header_suffix (AdapPreferencesGroup *self,
                                                     GtkWidget           *suffix);
 
 G_END_DECLS

@@ -1,147 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
+  <requires lib="libadapta" version="1.0"/>
   <object class="GtkBox" id="widget">
     <property name="spacing">6</property>
     <child>
-      <object class="AdwTabButton">
+      <object class="AdapTabButton">
         <property name="view">view</property>
       </object>
     </child>
     <child>
-      <object class="AdwTabButton">
+      <object class="AdapTabButton">
         <property name="view">view2</property>
       </object>
     </child>
   </object>
-  <object class="AdwTabView" id="view">
+  <object class="AdapTabView" id="view">
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
   </object>
-  <object class="AdwTabView" id="view2">
+  <object class="AdapTabView" id="view2">
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="needs-attention">True</property>
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>
     <child>
-      <object class="AdwTabPage">
+      <object class="AdapTabPage">
         <property name="child">
-          <object class="AdwBin"/>
+          <object class="AdapBin"/>
         </property>
       </object>
     </child>

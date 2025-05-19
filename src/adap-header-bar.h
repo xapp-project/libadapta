@@ -21,79 +21,79 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_HEADER_BAR (adw_header_bar_get_type())
+#define ADAP_TYPE_HEADER_BAR (adap_header_bar_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwHeaderBar, adw_header_bar, ADW, HEADER_BAR, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapHeaderBar, adap_header_bar, ADAP, HEADER_BAR, GtkWidget)
 
 typedef enum {
-  ADW_CENTERING_POLICY_LOOSE,
-  ADW_CENTERING_POLICY_STRICT,
-} AdwCenteringPolicy;
+  ADAP_CENTERING_POLICY_LOOSE,
+  ADAP_CENTERING_POLICY_STRICT,
+} AdapCenteringPolicy;
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_header_bar_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_header_bar_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-void adw_header_bar_pack_start (AdwHeaderBar *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_header_bar_pack_start (AdapHeaderBar *self,
                                 GtkWidget    *child);
-ADW_AVAILABLE_IN_ALL
-void adw_header_bar_pack_end   (AdwHeaderBar *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_header_bar_pack_end   (AdapHeaderBar *self,
                                 GtkWidget    *child);
-ADW_AVAILABLE_IN_ALL
-void adw_header_bar_remove     (AdwHeaderBar *self,
+ADAP_AVAILABLE_IN_ALL
+void adap_header_bar_remove     (AdapHeaderBar *self,
                                 GtkWidget    *child);
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_header_bar_get_title_widget (AdwHeaderBar *self);
-ADW_AVAILABLE_IN_ALL
-void       adw_header_bar_set_title_widget (AdwHeaderBar *self,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_header_bar_get_title_widget (AdapHeaderBar *self);
+ADAP_AVAILABLE_IN_ALL
+void       adap_header_bar_set_title_widget (AdapHeaderBar *self,
                                             GtkWidget    *title_widget);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_header_bar_get_show_start_title_buttons (AdwHeaderBar *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_header_bar_set_show_start_title_buttons (AdwHeaderBar *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_header_bar_get_show_start_title_buttons (AdapHeaderBar *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_header_bar_set_show_start_title_buttons (AdapHeaderBar *self,
                                                       gboolean      setting);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_header_bar_get_show_end_title_buttons (AdwHeaderBar *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_header_bar_set_show_end_title_buttons (AdwHeaderBar *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_header_bar_get_show_end_title_buttons (AdapHeaderBar *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_header_bar_set_show_end_title_buttons (AdapHeaderBar *self,
                                                     gboolean      setting);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_header_bar_get_show_back_button (AdwHeaderBar *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_header_bar_set_show_back_button (AdwHeaderBar *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_header_bar_get_show_back_button (AdapHeaderBar *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_header_bar_set_show_back_button (AdapHeaderBar *self,
                                               gboolean      show_back_button);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_header_bar_get_decoration_layout (AdwHeaderBar *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_header_bar_set_decoration_layout (AdwHeaderBar *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_header_bar_get_decoration_layout (AdapHeaderBar *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_header_bar_set_decoration_layout (AdapHeaderBar *self,
                                                   const char   *layout);
 
-ADW_AVAILABLE_IN_ALL
-AdwCenteringPolicy adw_header_bar_get_centering_policy (AdwHeaderBar       *self);
-ADW_AVAILABLE_IN_ALL
-void               adw_header_bar_set_centering_policy (AdwHeaderBar       *self,
-                                                        AdwCenteringPolicy  centering_policy);
+ADAP_AVAILABLE_IN_ALL
+AdapCenteringPolicy adap_header_bar_get_centering_policy (AdapHeaderBar       *self);
+ADAP_AVAILABLE_IN_ALL
+void               adap_header_bar_set_centering_policy (AdapHeaderBar       *self,
+                                                        AdapCenteringPolicy  centering_policy);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_header_bar_get_show_title (AdwHeaderBar *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_header_bar_set_show_title (AdwHeaderBar *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_header_bar_get_show_title (AdapHeaderBar *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_header_bar_set_show_title (AdapHeaderBar *self,
                                         gboolean      show_title);
 
 G_END_DECLS

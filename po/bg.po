@@ -1,12 +1,12 @@
-# Bulgarian translation of libadwaita po-file.
+# Bulgarian translation of libadapta po-file.
 # Copyright (C) 2022, 2023 Alexander Shopov.
-# This file is distributed under the same license as the libadwaita package.
+# This file is distributed under the same license as the libadapta package.
 # Alexander Shopov <ash@kambanaria.org> 2022, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: libadwaita main\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadwaita/issues\n"
+"Project-Id-Version: libadapta main\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadapta/issues\n"
 "POT-Creation-Date: 2023-03-04 16:21+0000\n"
 "PO-Revision-Date: 2023-03-04 19:29+0200\n"
 "Last-Translator: Alexander Shopov <ash@kambanaria.org>\n"
@@ -17,94 +17,94 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/adw-about-window.c:203
+#: src/adap-about-window.c:203
 msgid "GNU General Public License, version 2 or later"
 msgstr "Общ публичен лиценз на GNU (GNU GPL), версия 2 или по-нова"
 
-#: src/adw-about-window.c:204
+#: src/adap-about-window.c:204
 msgid "GNU General Public License, version 3 or later"
 msgstr "Общ публичен лиценз на GNU (GNU GPL), версия 3 или по-нова"
 
-#: src/adw-about-window.c:205
+#: src/adap-about-window.c:205
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "По-малък общ публичен лиценз на GNU (GNU LGPL), версия 2.1 или по-нова"
 
-#: src/adw-about-window.c:206
+#: src/adap-about-window.c:206
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "По-малък общ публичен лиценз на GNU (GNU LGPL), версия 3 или по-нова"
 
-#: src/adw-about-window.c:207
+#: src/adap-about-window.c:207
 msgid "BSD 2-Clause License"
 msgstr "Двуклаузов лиценз на BSD"
 
-#: src/adw-about-window.c:208
+#: src/adap-about-window.c:208
 msgid "The MIT License (MIT)"
 msgstr "Лиценз на MIT"
 
-#: src/adw-about-window.c:209
+#: src/adap-about-window.c:209
 msgid "Artistic License 2.0"
 msgstr "Артистичен лиценз 2.0"
 
-#: src/adw-about-window.c:210
+#: src/adap-about-window.c:210
 msgid "GNU General Public License, version 2 only"
 msgstr "Общ публичен лиценз на GNU (GNU GPL), само версия 2"
 
-#: src/adw-about-window.c:211
+#: src/adap-about-window.c:211
 msgid "GNU General Public License, version 3 only"
 msgstr "Общ публичен лиценз на GNU (GNU GPL), само версия 3"
 
-#: src/adw-about-window.c:212
+#: src/adap-about-window.c:212
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "По-малък общ публичен лиценз на GNU (GNU LGPL), само версия 2.1"
 
-#: src/adw-about-window.c:213
+#: src/adap-about-window.c:213
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "По-малък общ публичен лиценз на GNU (GNU LGPL), само версия 3"
 
-#: src/adw-about-window.c:214
+#: src/adap-about-window.c:214
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "Общ публичен лиценз на GNU Affero (GNU GPL), версия 3 или по-нова"
 
-#: src/adw-about-window.c:215
+#: src/adap-about-window.c:215
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "Общ публичен лиценз на GNU Affero (GNU GPL), само версия 3"
 
-#: src/adw-about-window.c:216
+#: src/adap-about-window.c:216
 msgid "BSD 3-Clause License"
 msgstr "Триклаузов лиценз на BSD"
 
-#: src/adw-about-window.c:217
+#: src/adap-about-window.c:217
 msgid "Apache License, Version 2.0"
 msgstr "Лиценз на Apache, версия 2.0"
 
-#: src/adw-about-window.c:218
+#: src/adap-about-window.c:218
 msgid "Mozilla Public License 2.0"
 msgstr "Публичен лиценз на Mozilla, версия 2.0"
 
-#: src/adw-about-window.c:529
+#: src/adap-about-window.c:529
 msgid "Code by"
 msgstr "Код от"
 
-#: src/adw-about-window.c:530
+#: src/adap-about-window.c:530
 msgid "Design by"
 msgstr "Дизайн от"
 
-#: src/adw-about-window.c:531
+#: src/adap-about-window.c:531
 msgid "Artwork by"
 msgstr "Художествено оформление от"
 
-#: src/adw-about-window.c:532
+#: src/adap-about-window.c:532
 msgid "Documentation by"
 msgstr "Документирано от"
 
-#: src/adw-about-window.c:533
+#: src/adap-about-window.c:533
 msgid "Translated by"
 msgstr "Преведено от"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: src/adw-about-window.c:562
+#: src/adap-about-window.c:562
 #, c-format
 msgid ""
 "This application comes with absolutely no warranty. See the <a "
@@ -113,100 +113,100 @@ msgstr ""
 "Тази програма идва без всякаква гаранция. За повече информация вижте <a "
 "href='%s'>%s</a>."
 
-#: src/adw-about-window.c:640
+#: src/adap-about-window.c:640
 msgid "This Application"
 msgstr "Тази програма"
 
-#: src/adw-about-window.c:942
+#: src/adap-about-window.c:942
 #, c-format
 msgid "Version %s"
 msgstr "Версия %s"
 
-#: src/adw-about-window.c:968
+#: src/adap-about-window.c:968
 msgid "Unable to parse release notes:"
 msgstr "Бележките по изданието не може да се анализират:"
 
-#: src/adw-about-window.c:974
+#: src/adap-about-window.c:974
 #, c-format
 msgid "Line: %d, character: %d"
 msgstr "Ред: %d, знак: %d"
 
-#: src/adw-about-window.c:1267
+#: src/adap-about-window.c:1267
 msgid "Copied to clipboard"
 msgstr "Копирано в буфера за обмен"
 
-#: src/adw-about-window.c:1301
+#: src/adap-about-window.c:1301
 msgid "Unable to save debugging information"
 msgstr "Информацията за изчистване на грешки не може да се запази"
 
-#: src/adw-about-window.c:1306
+#: src/adap-about-window.c:1306
 msgid "Close"
 msgstr "Затваряне"
 
-#: src/adw-about-window.c:1322
+#: src/adap-about-window.c:1322
 msgid "Save debugging information"
 msgstr "Запазване на информацията за изчистване на грешки"
 
-#: src/adw-about-window.ui:5
+#: src/adap-about-window.ui:5
 msgid "About"
 msgstr "Относно"
 
-#: src/adw-about-window.ui:123
+#: src/adap-about-window.ui:123
 msgid "_What’s New"
 msgstr "Какво _ново"
 
-#: src/adw-about-window.ui:138
+#: src/adap-about-window.ui:138
 msgid "_Details"
 msgstr "_Подробности"
 
-#: src/adw-about-window.ui:153 src/adw-about-window.ui:395
+#: src/adap-about-window.ui:153 src/adap-about-window.ui:395
 msgid "_Website"
 msgstr "_Уеб сайт"
 
-#: src/adw-about-window.ui:176
+#: src/adap-about-window.ui:176
 msgid "_Support Questions"
 msgstr "_Въпроси по поддръжката"
 
-#: src/adw-about-window.ui:192
+#: src/adap-about-window.ui:192
 msgid "_Report an Issue"
 msgstr "_Докладване на грешка"
 
-#: src/adw-about-window.ui:207
+#: src/adap-about-window.ui:207
 msgid "_Troubleshooting"
 msgstr "_Справяне с проблеми"
 
-#: src/adw-about-window.ui:226
+#: src/adap-about-window.ui:226
 msgid "_Credits"
 msgstr "_Сътрудници"
 
-#: src/adw-about-window.ui:241
+#: src/adap-about-window.ui:241
 msgid "_Legal"
 msgstr "_Правни въпроси"
 
-#: src/adw-about-window.ui:256
+#: src/adap-about-window.ui:256
 msgid "_Acknowledgements"
 msgstr "_Признание"
 
-#: src/adw-about-window.ui:295
+#: src/adap-about-window.ui:295
 msgid "What’s New"
 msgstr "Какво ново"
 
-#: src/adw-about-window.ui:300 src/adw-about-window.ui:356
-#: src/adw-about-window.ui:437 src/adw-about-window.ui:512
-#: src/adw-about-window.ui:559 src/adw-about-window.ui:606
-#: src/adw-about-window.ui:653
+#: src/adap-about-window.ui:300 src/adap-about-window.ui:356
+#: src/adap-about-window.ui:437 src/adap-about-window.ui:512
+#: src/adap-about-window.ui:559 src/adap-about-window.ui:606
+#: src/adap-about-window.ui:653
 msgid "Back"
 msgstr "Назад"
 
-#: src/adw-about-window.ui:351
+#: src/adap-about-window.ui:351
 msgid "Details"
 msgstr "Подробности"
 
-#: src/adw-about-window.ui:432
+#: src/adap-about-window.ui:432
 msgid "Troubleshooting"
 msgstr "Справяне с проблеми"
 
-#: src/adw-about-window.ui:461
+#: src/adap-about-window.ui:461
 msgid ""
 "To assist in troubleshooting, you can view your debugging information. "
 "Providing this information to the application developers can help diagnose "
@@ -216,60 +216,60 @@ msgstr ""
 "с проблем. Ако я предоставите на разработчиците на грешки заедно с доклада "
 "за грешка, увеличавате шансовете им да открият и отстранят проблема."
 
-#: src/adw-about-window.ui:472
+#: src/adap-about-window.ui:472
 msgid "_Debugging Information"
 msgstr "_Информация за изчистване на грешки"
 
-#: src/adw-about-window.ui:507
+#: src/adap-about-window.ui:507
 msgid "Credits"
 msgstr "Заслуги"
 
-#: src/adw-about-window.ui:554
+#: src/adap-about-window.ui:554
 msgid "Legal"
 msgstr "Правна информация"
 
-#: src/adw-about-window.ui:601
+#: src/adap-about-window.ui:601
 msgid "Acknowledgements"
 msgstr "Признание"
 
-#: src/adw-about-window.ui:648
+#: src/adap-about-window.ui:648
 msgid "Debugging Information"
 msgstr "Информация за изчистване на грешки"
 
-#: src/adw-about-window.ui:696
+#: src/adap-about-window.ui:696
 msgid "_Copy Text"
 msgstr "_Копиране на текста"
 
-#: src/adw-about-window.ui:703
+#: src/adap-about-window.ui:703
 msgid "_Save as…"
 msgstr "_Запазване като…"
 
-#: src/adw-entry-row.ui:95
+#: src/adap-entry-row.ui:95
 msgid "Apply"
 msgstr "Прилагане"
 
-#: src/adw-inspector-page.c:75
+#: src/adap-inspector-page.c:75
 msgid "No Preference"
 msgstr "Няма настройки"
 
-#: src/adw-inspector-page.c:77
+#: src/adap-inspector-page.c:77
 msgid "Prefer Dark"
 msgstr "Предпочитане на тъмна"
 
-#: src/adw-inspector-page.c:79
+#: src/adap-inspector-page.c:79
 msgid "Prefer Light"
 msgstr "Предпочитане на светла"
 
 #. Translators: The name of the library, not the stylesheet
-#: src/adw-inspector-page.c:97
-msgid "Adwaita"
+#: src/adap-inspector-page.c:97
+msgid "Adapta"
 msgstr "Адвайта"
 
-#: src/adw-inspector-page.ui:10
+#: src/adap-inspector-page.ui:10
 msgid "System Appearance"
 msgstr "Системен изглед"
 
-#: src/adw-inspector-page.ui:11
+#: src/adap-inspector-page.ui:11
 msgid ""
 "Override settings for this application. They will be reset upon closing the "
 "inspector."
@@ -277,89 +277,89 @@ msgstr ""
 "Различни настройки за това приложение. Те ще се върнат към стандартните си "
 "стойности при затварянето на инспектора."
 
-#: src/adw-inspector-page.ui:14
+#: src/adap-inspector-page.ui:14
 msgid "System Supports Color Schemes"
 msgstr "Системата поддържа цветови схеми"
 
-#: src/adw-inspector-page.ui:26
+#: src/adap-inspector-page.ui:26
 msgid "Preferred Color Scheme"
 msgstr "Предпочитана цветова схема"
 
-#: src/adw-inspector-page.ui:43
+#: src/adap-inspector-page.ui:43
 msgid "High Contrast"
 msgstr "Висок контраст"
 
-#: src/adw-password-entry-row.c:70
+#: src/adap-password-entry-row.c:70
 msgid "Hide Text"
 msgstr "Скриване на текста"
 
-#: src/adw-password-entry-row.c:74
+#: src/adap-password-entry-row.c:74
 msgid "Show Text"
 msgstr "Показване на текста"
 
-#: src/adw-password-entry-row.c:168
+#: src/adap-password-entry-row.c:168
 msgid "Caps Lock is on"
 msgstr "Клавишът „Caps Lock“ е натиснат"
 
-#: src/adw-password-entry-row.c:176
+#: src/adap-password-entry-row.c:176
 msgid "_Show Text"
 msgstr "_Показване на _текста"
 
-#: src/adw-preferences-window.c:243
+#: src/adap-preferences-window.c:243
 msgid "Untitled page"
 msgstr "Страница без име"
 
-#: src/adw-preferences-window.ui:8
+#: src/adap-preferences-window.ui:8
 msgid "Preferences"
 msgstr "Настройки"
 
-#: src/adw-preferences-window.ui:69
+#: src/adap-preferences-window.ui:69
 msgid "Search"
 msgstr "Търсене"
 
-#: src/adw-preferences-window.ui:139
+#: src/adap-preferences-window.ui:139
 msgid "No Results Found"
 msgstr "Няма резултати"
 
-#: src/adw-preferences-window.ui:140 src/adw-tab-overview.ui:113
+#: src/adap-preferences-window.ui:140 src/adap-tab-overview.ui:113
 msgid "Try a different search."
 msgstr "Пробвайте различно търсене."
 
-#: src/adw-split-button.c:495 src/adw-split-button.c:957
+#: src/adap-split-button.c:495 src/adap-split-button.c:957
 msgid "More Options"
 msgstr "Повече настройки"
 
-#: src/adw-tab-button.ui:7
+#: src/adap-tab-button.ui:7
 msgid "View Open Tabs"
 msgstr "Преглед на отворените подпрозорци"
 
-#: src/adw-tab-overview.c:899
+#: src/adap-tab-overview.c:899
 #, c-format
 msgid "%u Tab"
 msgid_plural "%u Tabs"
 msgstr[0] "%u подпрозорец"
 msgstr[1] "%u подпрозореца"
 
-#: src/adw-tab-overview.ui:23
+#: src/adap-tab-overview.ui:23
 msgid "Search Tabs"
 msgstr "Търсене на подпрозорци"
 
-#: src/adw-tab-overview.ui:53
+#: src/adap-tab-overview.ui:53
 msgid "Search tabs"
 msgstr "Търсене на подпрозорци"
 
-#: src/adw-tab-overview.ui:99
+#: src/adap-tab-overview.ui:99
 msgid "No Open Tabs"
 msgstr "Няма отворени подпрозорци"
 
-#: src/adw-tab-overview.ui:112
+#: src/adap-tab-overview.ui:112
 msgid "No Tabs Found"
 msgstr "Не са открити подпрозорци"
 
-#: src/adw-tab-overview.ui:133
+#: src/adap-tab-overview.ui:133
 msgid "New _Tab"
 msgstr "Нов _подпрозорец"
 
-#: src/adw-tab-thumbnail.ui:39 src/adw-tab.ui:91
+#: src/adap-tab-thumbnail.ui:39 src/adap-tab.ui:91
 msgid "Close Tab"
 msgstr "Затваряне на подпрозорец"

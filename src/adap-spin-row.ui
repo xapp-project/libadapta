@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwSpinRow" parent="AdwActionRow">
+  <template class="AdapSpinRow" parent="AdapActionRow">
     <property name="activatable">True</property>
     <child type="suffix">
       <object class="GtkSpinButton" id="spin_button">
@@ -15,8 +15,8 @@
         <signal name="wrapped" handler="spin_button_wrapped_cb" swapped="yes"/>
         <signal name="notify::value" handler="spin_button_notify_value_cb" swapped="yes"/>
         <accessibility>
-          <relation name="labelled-by">AdwSpinRow</relation>
-          <relation name="described-by">AdwSpinRow</relation>
+          <relation name="labelled-by">AdapSpinRow</relation>
+          <relation name="described-by">AdapSpinRow</relation>
         </accessibility>
       </object>
     </child>

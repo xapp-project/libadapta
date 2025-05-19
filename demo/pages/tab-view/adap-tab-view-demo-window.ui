@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <template class="AdwTabViewDemoWindow" parent="AdwWindow">
+  <requires lib="libadapta" version="1.0"/>
+  <template class="AdapTabViewDemoWindow" parent="AdapWindow">
     <property name="title" translatable="yes">Tab View Demo</property>
     <property name="default-width">800</property>
     <property name="default-height">600</property>
     <property name="width-request">360</property>
     <property name="height-request">150</property>
     <property name="content">
-      <object class="AdwTabOverview" id="tab_overview">
+      <object class="AdapTabOverview" id="tab_overview">
         <property name="view">view</property>
         <property name="enable-new-tab">True</property>
         <signal name="extra-drag-drop" handler="extra_drag_drop_cb" swapped="true"/>
         <signal name="create-tab" handler="create_tab_cb" swapped="true"/>
         <property name="child">
-          <object class="AdwToolbarView">
+          <object class="AdapToolbarView">
             <property name="top-bar-style">raised</property>
             <child type="top">
               <object class="GtkHeaderBar">
@@ -27,7 +27,7 @@
                   </object>
                 </child>
                 <child type="end">
-                  <object class="AdwTabButton" id="narrow_overview_btn">
+                  <object class="AdapTabButton" id="narrow_overview_btn">
                     <property name="visible">False</property>
                     <property name="view">view</property>
                     <property name="action-name">overview.open</property>
@@ -50,13 +50,13 @@
               </object>
             </child>
             <child type="top">
-              <object class="AdwTabBar" id="tab_bar">
+              <object class="AdapTabBar" id="tab_bar">
                 <property name="view">view</property>
                 <signal name="extra-drag-drop" handler="extra_drag_drop_cb" swapped="true"/>
               </object>
             </child>
             <property name="content">
-              <object class="AdwTabView" id="view">
+              <object class="AdapTabView" id="view">
                 <property name="menu-model">tab_menu</property>
                 <signal name="page-detached" handler="page_detached_cb" swapped="true"/>
                 <signal name="setup-menu" handler="setup_menu_cb" swapped="true"/>
@@ -69,7 +69,7 @@
       </object>
     </property>
     <child>
-      <object class="AdwBreakpoint">
+      <object class="AdapBreakpoint">
         <condition>max-width: 600px</condition>
         <setter object="narrow_overview_btn" property="visible">True</setter>
         <setter object="overview_btn" property="visible">False</setter>

@@ -6,16 +6,16 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-swipe-tracker.h"
+#include "adap-swipe-tracker.h"
 
 G_BEGIN_DECLS
 
-#define ADW_SWIPE_BORDER 32
+#define ADAP_SWIPE_BORDER 32
 
-void adw_swipe_tracker_reset (AdwSwipeTracker *self);
+void adap_swipe_tracker_reset (AdapSwipeTracker *self);
 
 G_END_DECLS

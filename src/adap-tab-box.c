@@ -8,17 +8,17 @@
 
 #include "config.h"
 
-#include "adw-tab-box-private.h"
+#include "adap-tab-box-private.h"
 
-#include "adw-animation-util.h"
-#include "adw-easing.h"
-#include "adw-gizmo-private.h"
-#include "adw-marshalers.h"
-#include "adw-tab-private.h"
-#include "adw-tab-bar-private.h"
-#include "adw-tab-view-private.h"
-#include "adw-timed-animation.h"
-#include "adw-widget-utils-private.h"
+#include "adap-animation-util.h"
+#include "adap-easing.h"
+#include "adap-gizmo-private.h"
+#include "adap-marshalers.h"
+#include "adap-tab-private.h"
+#include "adap-tab-bar-private.h"
+#include "adap-tab-view-private.h"
+#include "adap-timed-animation.h"
+#include "adap-widget-utils-private.h"
 #include <math.h>
 
 #define SPACING 5
@@ -49,20 +49,20 @@ typedef enum {
 typedef struct {
   GdkDrag *drag;
 
-  AdwTab *tab;
+  AdapTab *tab;
 
   int hotspot_x;
   int hotspot_y;
 
   int width;
   int target_width;
-  AdwAnimation *resize_animation;
+  AdapAnimation *resize_animation;
 } DragIcon;
 
 typedef struct {
-  AdwTabBox *box;
-  AdwTabPage *page;
-  AdwTab *tab;
+  AdapTabBox *box;
+  AdapTabPage *page;
+  AdapTab *tab;
   GtkWidget *container;
   GtkWidget *separator;
 
@@ -77,22 +77,22 @@ typedef struct {
   double end_reorder_offset;
   double reorder_offset;
 
-  AdwAnimation *reorder_animation;
+  AdapAnimation *reorder_animation;
   gboolean reorder_ignore_bounds;
 
   double appear_progress;
-  AdwAnimation *appear_animation;
+  AdapAnimation *appear_animation;
 
   gulong notify_needs_attention_id;
 } TabInfo;
 
-struct _AdwTabBox
+struct _AdapTabBox
 {
   GtkWidget parent_instance;
 
   gboolean pinned;
-  AdwTabBar *tab_bar;
-  AdwTabView *view;
+  AdapTabBar *tab_bar;
+  AdapTabView *view;
   GtkAdjustment *adjustment;
   gboolean expand_tabs;
   gboolean inverted;
@@ -111,14 +111,14 @@ struct _AdwTabBox
   int initial_end_padding;
   int final_end_padding;
   TabResizeMode tab_resize_mode;
-  AdwAnimation *resize_animation;
+  AdapAnimation *resize_animation;
 
   TabInfo *selected_tab;
 
   gboolean hovering;
   TabInfo *pressed_tab;
   TabInfo *reordered_tab;
-  AdwAnimation *reorder_animation;
+  AdapAnimation *reorder_animation;
 
   int reorder_x;
   int reorder_y;
@@ -134,10 +134,10 @@ struct _AdwTabBox
   guint drag_autoscroll_cb_id;
   gint64 drag_autoscroll_prev_time;
 
-  AdwTabPage *detached_page;
+  AdapTabPage *detached_page;
   int detached_index;
   TabInfo *reorder_placeholder;
-  AdwTabPage *placeholder_page;
+  AdapTabPage *placeholder_page;
   int placeholder_scroll_offset;
   gboolean can_remove_placeholder;
   DragIcon *drag_icon;
@@ -148,7 +148,7 @@ struct _AdwTabBox
   guint reset_drop_target_tab_id;
   double drop_target_x;
 
-  AdwAnimation *scroll_animation;
+  AdapAnimation *scroll_animation;
   gboolean scroll_animation_done;
   double scroll_animation_from;
   double scroll_animation_offset;
@@ -167,7 +167,7 @@ struct _AdwTabBox
   TabInfo *middle_clicked_tab;
 };
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwTabBox, adw_tab_box, GTK_TYPE_WIDGET,
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapTabBox, adap_tab_box, GTK_TYPE_WIDGET,
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 enum {
@@ -206,7 +206,7 @@ remove_and_free_tab_info (TabInfo *info)
 }
 
 static inline int
-get_tab_position (AdwTabBox *self,
+get_tab_position (AdapTabBox *self,
                   TabInfo   *info,
                   gboolean   final)
 {
@@ -217,7 +217,7 @@ get_tab_position (AdwTabBox *self,
 }
 
 static inline TabInfo *
-find_tab_info_at (AdwTabBox *self,
+find_tab_info_at (AdapTabBox *self,
                   double     x)
 {
   GList *l;
@@ -243,8 +243,8 @@ find_tab_info_at (AdwTabBox *self,
 }
 
 static inline GList *
-find_link_for_page (AdwTabBox  *self,
-                    AdwTabPage *page)
+find_link_for_page (AdapTabBox  *self,
+                    AdapTabPage *page)
 {
   GList *l;
 
@@ -259,8 +259,8 @@ find_link_for_page (AdwTabBox  *self,
 }
 
 static inline TabInfo *
-find_info_for_page (AdwTabBox  *self,
-                    AdwTabPage *page)
+find_info_for_page (AdapTabBox  *self,
+                    AdapTabPage *page)
 {
   GList *l = find_link_for_page (self, page);
 
@@ -268,7 +268,7 @@ find_info_for_page (AdwTabBox  *self,
 }
 
 static GList *
-find_nth_alive_tab (AdwTabBox *self,
+find_nth_alive_tab (AdapTabBox *self,
                     guint      position)
 {
   GList *l;
@@ -294,7 +294,7 @@ calculate_tab_width (TabInfo  *info,
 }
 
 static int
-get_base_tab_width (AdwTabBox *self,
+get_base_tab_width (AdapTabBox *self,
                     gboolean   target_end_padding,
                     gboolean   target_animations)
 {
@@ -334,7 +334,7 @@ get_base_tab_width (AdwTabBox *self,
 }
 
 static int
-predict_tab_width (AdwTabBox *self,
+predict_tab_width (AdapTabBox *self,
                    TabInfo   *info,
                    gboolean   assume_placeholder)
 {
@@ -343,9 +343,9 @@ predict_tab_width (AdwTabBox *self,
   int min;
 
   if (self->pinned)
-    n = adw_tab_view_get_n_pinned_pages (self->view);
+    n = adap_tab_view_get_n_pinned_pages (self->view);
   else
-    n = adw_tab_view_get_n_pages (self->view) - adw_tab_view_get_n_pinned_pages (self->view);
+    n = adap_tab_view_get_n_pages (self->view) - adap_tab_view_get_n_pinned_pages (self->view);
 
   if (assume_placeholder)
       n++;
@@ -363,7 +363,7 @@ predict_tab_width (AdwTabBox *self,
 }
 
 static int
-calculate_tab_offset (AdwTabBox *self,
+calculate_tab_offset (AdapTabBox *self,
                       TabInfo   *info,
                       gboolean target)
 {
@@ -381,7 +381,7 @@ calculate_tab_offset (AdwTabBox *self,
 }
 
 static void
-get_visible_range (AdwTabBox *self,
+get_visible_range (AdapTabBox *self,
                    int       *lower,
                    int       *upper)
 {
@@ -421,7 +421,7 @@ is_touchscreen (GtkGesture *gesture)
 }
 
 static void
-update_separators (AdwTabBox *self)
+update_separators (AdapTabBox *self)
 {
   GList *l;
   GtkStateFlags mask = GTK_STATE_FLAG_PRELIGHT |
@@ -432,7 +432,7 @@ update_separators (AdwTabBox *self)
   /* We have a separator between pinned and non-pinned tabs, and we need to
    * sync it same as the ones within each tab box */
   if (!self->pinned) {
-    AdwTabBox *box = adw_tab_bar_get_pinned_tab_box (self->tab_bar);
+    AdapTabBox *box = adap_tab_bar_get_pinned_tab_box (self->tab_bar);
 
     l = g_list_last (box->tabs);
 
@@ -501,7 +501,7 @@ update_separators (AdwTabBox *self)
   /* Since the first non-pinned separator depends on pinned tabs, we need to
    * notify the non-pinned box. We don't need to do the opposite though. */
   if (self->pinned) {
-    AdwTabBox *box = adw_tab_bar_get_tab_box (self->tab_bar);
+    AdapTabBox *box = adap_tab_bar_get_tab_box (self->tab_bar);
 
     update_separators (box);
   }
@@ -510,14 +510,14 @@ update_separators (AdwTabBox *self)
 /* Single tab style */
 
 static void
-update_single_tab_style (AdwTabBox *self)
+update_single_tab_style (AdapTabBox *self)
 {
   if (self->pinned)
     return;
 
   if (self->view &&
-      adw_tab_view_get_n_pages (self->view) <= 1 &&
-      adw_tab_view_get_n_pinned_pages (self->view) == 0 &&
+      adap_tab_view_get_n_pages (self->view) <= 1 &&
+      adap_tab_view_get_n_pinned_pages (self->view) == 0 &&
       self->expand_tabs &&
       self->tab_resize_mode == TAB_RESIZE_NORMAL)
     gtk_widget_add_css_class (GTK_WIDGET (self), "single-tab");
@@ -529,7 +529,7 @@ update_single_tab_style (AdwTabBox *self)
 
 static void
 resize_animation_value_cb (double     value,
-                           AdwTabBox *self)
+                           AdapTabBox *self)
 {
   double target_end_padding = 0;
 
@@ -548,13 +548,13 @@ resize_animation_value_cb (double     value,
     target_end_padding = MAX (target_end_padding, 0);
   }
 
-  self->end_padding = (int) floor (adw_lerp (self->initial_end_padding, target_end_padding, value));
+  self->end_padding = (int) floor (adap_lerp (self->initial_end_padding, target_end_padding, value));
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 static void
-resize_animation_done_cb (AdwTabBox *self)
+resize_animation_done_cb (AdapTabBox *self)
 {
   self->end_padding = 0;
   self->final_end_padding = 0;
@@ -562,7 +562,7 @@ resize_animation_done_cb (AdwTabBox *self)
 }
 
 static void
-set_tab_resize_mode (AdwTabBox     *self,
+set_tab_resize_mode (AdapTabBox     *self,
                      TabResizeMode  mode)
 {
   gboolean notify;
@@ -590,7 +590,7 @@ set_tab_resize_mode (AdwTabBox     *self,
   if (mode == TAB_RESIZE_NORMAL) {
     self->initial_end_padding = self->end_padding;
 
-    adw_animation_play (self->resize_animation);
+    adap_animation_play (self->resize_animation);
   }
 
   notify = (self->tab_resize_mode == TAB_RESIZE_NORMAL) !=
@@ -607,14 +607,14 @@ set_tab_resize_mode (AdwTabBox     *self,
 /* Hover */
 
 static void
-update_hover (AdwTabBox *self)
+update_hover (AdapTabBox *self)
 {
   if (!self->dragging && !self->hovering)
     set_tab_resize_mode (self, TAB_RESIZE_NORMAL);
 }
 
 static void
-motion_cb (AdwTabBox          *self,
+motion_cb (AdapTabBox          *self,
            double              x,
            double              y,
            GtkEventController *controller)
@@ -634,7 +634,7 @@ motion_cb (AdwTabBox          *self,
 }
 
 static void
-leave_cb (AdwTabBox          *self,
+leave_cb (AdapTabBox          *self,
           GtkEventController *controller)
 {
   self->hovering = FALSE;
@@ -645,7 +645,7 @@ leave_cb (AdwTabBox          *self,
 /* Keybindings */
 
 static void
-focus_tab_cb (AdwTabBox *self,
+focus_tab_cb (AdapTabBox *self,
               GVariant  *args)
 {
   GtkDirectionType direction;
@@ -666,14 +666,14 @@ focus_tab_cb (AdwTabBox *self,
 
   if (direction == GTK_DIR_TAB_BACKWARD) {
     if (last)
-      success = adw_tab_view_select_first_page (self->view);
+      success = adap_tab_view_select_first_page (self->view);
     else
-      success = adw_tab_view_select_previous_page (self->view);
+      success = adap_tab_view_select_previous_page (self->view);
   } else if (direction == GTK_DIR_TAB_FORWARD) {
     if (last)
-      success = adw_tab_view_select_last_page (self->view);
+      success = adap_tab_view_select_last_page (self->view);
     else
-      success = adw_tab_view_select_next_page (self->view);
+      success = adap_tab_view_select_next_page (self->view);
   }
 
   if (!success)
@@ -681,7 +681,7 @@ focus_tab_cb (AdwTabBox *self,
 }
 
 static void
-reorder_tab_cb (AdwTabBox *self,
+reorder_tab_cb (AdapTabBox *self,
                 GVariant  *args)
 {
   GtkDirectionType direction;
@@ -702,14 +702,14 @@ reorder_tab_cb (AdwTabBox *self,
 
   if (direction == GTK_DIR_TAB_BACKWARD) {
     if (last)
-      success = adw_tab_view_reorder_first (self->view, self->selected_tab->page);
+      success = adap_tab_view_reorder_first (self->view, self->selected_tab->page);
     else
-      success = adw_tab_view_reorder_backward (self->view, self->selected_tab->page);
+      success = adap_tab_view_reorder_backward (self->view, self->selected_tab->page);
   } else if (direction == GTK_DIR_TAB_FORWARD) {
     if (last)
-      success = adw_tab_view_reorder_last (self->view, self->selected_tab->page);
+      success = adap_tab_view_reorder_last (self->view, self->selected_tab->page);
     else
-      success = adw_tab_view_reorder_forward (self->view, self->selected_tab->page);
+      success = adap_tab_view_reorder_forward (self->view, self->selected_tab->page);
   }
 
   if (!success)
@@ -751,14 +751,14 @@ add_reorder_bindings (GtkWidgetClass   *widget_class,
 }
 
 static void
-activate_tab (AdwTabBox *self)
+activate_tab (AdapTabBox *self)
 {
   GtkWidget *child;
 
   if (!self->selected_tab || !self->selected_tab->page)
     return;
 
-  child = adw_tab_page_get_child (self->selected_tab->page);
+  child = adap_tab_page_get_child (self->selected_tab->page);
 
   gtk_widget_grab_focus (child);
 }
@@ -766,7 +766,7 @@ activate_tab (AdwTabBox *self)
 /* Scrolling */
 
 static void
-update_visible (AdwTabBox *self)
+update_visible (AdapTabBox *self)
 {
   gboolean left = FALSE, right = FALSE;
   GList *l;
@@ -790,13 +790,13 @@ update_visible (AdwTabBox *self)
 
     pos = get_tab_position (self, info, FALSE);
 
-    adw_tab_set_fully_visible (info->tab,
+    adap_tab_set_fully_visible (info->tab,
                                (G_APPROX_VALUE (pos - SPACING, value, DBL_EPSILON) ||
                                 pos - SPACING > value) &&
                                (G_APPROX_VALUE (pos + info->width + SPACING, value + page_size, DBL_EPSILON) ||
                                 pos + info->width + SPACING < value + page_size));
 
-    if (!adw_tab_page_get_needs_attention (info->page))
+    if (!adap_tab_page_get_needs_attention (info->page))
       continue;
 
     if (pos + info->width / 2.0 <= value)
@@ -812,14 +812,14 @@ update_visible (AdwTabBox *self)
 }
 
 static double
-get_scroll_animation_value (AdwTabBox *self)
+get_scroll_animation_value (AdapTabBox *self)
 {
   double to, value;
 
   g_assert (self->scroll_animation);
 
-  if (adw_animation_get_state (self->scroll_animation) != ADW_ANIMATION_PLAYING &&
-      adw_animation_get_state (self->scroll_animation) != ADW_ANIMATION_FINISHED)
+  if (adap_animation_get_state (self->scroll_animation) != ADAP_ANIMATION_PLAYING &&
+      adap_animation_get_state (self->scroll_animation) != ADAP_ANIMATION_FINISHED)
     return gtk_adjustment_get_value (self->adjustment);
 
   to = self->scroll_animation_offset;
@@ -831,21 +831,21 @@ get_scroll_animation_value (AdwTabBox *self)
     to = CLAMP (to, 0, self->allocated_width - page_size);
   }
 
-  value = adw_animation_get_value (self->scroll_animation);
+  value = adap_animation_get_value (self->scroll_animation);
 
-  return round (adw_lerp (self->scroll_animation_from, to, value));
+  return round (adap_lerp (self->scroll_animation_from, to, value));
 }
 
 static void
-drop_switch_timeout_cb (AdwTabBox *self)
+drop_switch_timeout_cb (AdapTabBox *self)
 {
   self->drop_switch_timeout_id = 0;
-  adw_tab_view_set_selected_page (self->view,
+  adap_tab_view_set_selected_page (self->view,
                                   self->drop_target_tab->page);
 }
 
 static void
-set_drop_target_tab (AdwTabBox *self,
+set_drop_target_tab (AdapTabBox *self,
                      TabInfo   *info)
 {
   if (self->drop_target_tab == info)
@@ -865,7 +865,7 @@ set_drop_target_tab (AdwTabBox *self,
 }
 
 static void
-adjustment_value_changed_cb (AdwTabBox *self)
+adjustment_value_changed_cb (AdapTabBox *self)
 {
   double value = gtk_adjustment_get_value (self->adjustment);
 
@@ -881,13 +881,13 @@ adjustment_value_changed_cb (AdwTabBox *self)
   if (self->block_scrolling)
       return;
 
-  adw_animation_pause (self->scroll_animation);
+  adap_animation_pause (self->scroll_animation);
 
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
 static void
-animate_scroll (AdwTabBox *self,
+animate_scroll (AdapTabBox *self,
                 TabInfo   *info,
                 double     offset,
                 guint      duration)
@@ -902,19 +902,19 @@ animate_scroll (AdwTabBox *self,
   self->scroll_animation_tab = info;
   self->scroll_animation_offset = offset;
 
-  adw_timed_animation_set_duration (ADW_TIMED_ANIMATION (self->scroll_animation),
+  adap_timed_animation_set_duration (ADAP_TIMED_ANIMATION (self->scroll_animation),
                                     duration);
-  adw_animation_play (self->scroll_animation);
+  adap_animation_play (self->scroll_animation);
 }
 
 static void
-animate_scroll_relative (AdwTabBox *self,
+animate_scroll_relative (AdapTabBox *self,
                          double     delta,
                          guint      duration)
 {
   double current_value = gtk_adjustment_get_value (self->adjustment);
 
-  if (adw_animation_get_state (self->scroll_animation) == ADW_ANIMATION_PLAYING) {
+  if (adap_animation_get_state (self->scroll_animation) == ADAP_ANIMATION_PLAYING) {
     current_value = self->scroll_animation_offset;
 
     if (self->scroll_animation_tab)
@@ -925,7 +925,7 @@ animate_scroll_relative (AdwTabBox *self,
 }
 
 static gboolean
-scroll_to_tab_full (AdwTabBox *self,
+scroll_to_tab_full (AdapTabBox *self,
                     TabInfo   *info,
                     int        pos,
                     guint      duration,
@@ -962,7 +962,7 @@ scroll_to_tab_full (AdwTabBox *self,
 }
 
 static gboolean
-scroll_to_tab (AdwTabBox *self,
+scroll_to_tab (AdapTabBox *self,
                TabInfo   *info,
                guint      duration)
 {
@@ -970,7 +970,7 @@ scroll_to_tab (AdwTabBox *self,
 }
 
 static gboolean
-scroll_cb (AdwTabBox          *self,
+scroll_cb (AdapTabBox          *self,
            double              dx,
            double              dy,
            GtkEventController *controller)
@@ -1004,20 +1004,20 @@ scroll_cb (AdwTabBox          *self,
 
 static void
 scroll_animation_cb (double     value,
-                     AdwTabBox *self)
+                     AdapTabBox *self)
 {
   gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 static void
-scroll_animation_done_cb (AdwTabBox *self)
+scroll_animation_done_cb (AdapTabBox *self)
 {
   self->scroll_animation_done = TRUE;
   gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 static void
-set_hadjustment (AdwTabBox     *self,
+set_hadjustment (AdapTabBox     *self,
                  GtkAdjustment *adjustment)
 {
   if (adjustment == self->adjustment)
@@ -1041,7 +1041,7 @@ set_hadjustment (AdwTabBox     *self,
 /* Reordering */
 
 static void
-force_end_reordering (AdwTabBox *self)
+force_end_reordering (AdapTabBox *self)
 {
   GList *l;
 
@@ -1049,18 +1049,18 @@ force_end_reordering (AdwTabBox *self)
     return;
 
   if (self->reorder_animation)
-    adw_animation_skip (self->reorder_animation);
+    adap_animation_skip (self->reorder_animation);
 
   for (l = self->tabs; l; l = l->next) {
     TabInfo *info = l->data;
 
     if (info->reorder_animation)
-      adw_animation_skip (info->reorder_animation);
+      adap_animation_skip (info->reorder_animation);
   }
 }
 
 static void
-check_end_reordering (AdwTabBox *self)
+check_end_reordering (AdapTabBox *self)
 {
   GList *l;
 
@@ -1097,7 +1097,7 @@ check_end_reordering (AdwTabBox *self)
 }
 
 static void
-start_reordering (AdwTabBox *self,
+start_reordering (AdapTabBox *self,
                   TabInfo   *info)
 {
   self->reordered_tab = info;
@@ -1112,7 +1112,7 @@ start_reordering (AdwTabBox *self,
 }
 
 static int
-get_reorder_position (AdwTabBox *self)
+get_reorder_position (AdapTabBox *self)
 {
   int lower, upper;
 
@@ -1128,7 +1128,7 @@ static void
 reorder_animation_value_cb (double   value,
                             TabInfo *dest_tab)
 {
-  AdwTabBox *self = dest_tab->box;
+  AdapTabBox *self = dest_tab->box;
   gboolean is_rtl = gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL;
   double x1, x2;
 
@@ -1138,38 +1138,38 @@ reorder_animation_value_cb (double   value,
   if (dest_tab->end_reorder_offset * (is_rtl ? 1 : -1) > 0)
     x2 += dest_tab->width - self->reordered_tab->width;
 
-  self->reorder_window_x = (int) round (adw_lerp (x1, x2, value));
+  self->reorder_window_x = (int) round (adap_lerp (x1, x2, value));
 
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
 static void
-reorder_animation_done_cb (AdwTabBox *self)
+reorder_animation_done_cb (AdapTabBox *self)
 {
   g_clear_object (&self->reorder_animation);
   check_end_reordering (self);
 }
 
 static void
-animate_reordering (AdwTabBox *self,
+animate_reordering (AdapTabBox *self,
                     TabInfo   *dest_tab)
 {
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
 
   if (self->reorder_animation)
-    adw_animation_skip (self->reorder_animation);
+    adap_animation_skip (self->reorder_animation);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               reorder_animation_value_cb,
                                               dest_tab, NULL);
   self->reorder_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 0, 1,
+    adap_timed_animation_new (GTK_WIDGET (self), 0, 1,
                              REORDER_ANIMATION_DURATION, target);
 
   g_signal_connect_swapped (self->reorder_animation, "done",
                             G_CALLBACK (reorder_animation_done_cb), self);
 
-  adw_animation_play (self->reorder_animation);
+  adap_animation_play (self->reorder_animation);
 
   check_end_reordering (self);
 }
@@ -1178,7 +1178,7 @@ static void
 reorder_offset_animation_value_cb (double   value,
                                    TabInfo *info)
 {
-  AdwTabBox *self = info->box;
+  AdapTabBox *self = info->box;
 
   info->reorder_offset = value;
   gtk_widget_queue_allocate (GTK_WIDGET (self));
@@ -1187,19 +1187,19 @@ reorder_offset_animation_value_cb (double   value,
 static void
 reorder_offset_animation_done_cb (TabInfo *info)
 {
-  AdwTabBox *self = info->box;
+  AdapTabBox *self = info->box;
 
   g_clear_object (&info->reorder_animation);
   check_end_reordering (self);
 }
 
 static void
-animate_reorder_offset (AdwTabBox *self,
+animate_reorder_offset (AdapTabBox *self,
                         TabInfo   *info,
                         double     offset)
 {
   gboolean is_rtl = gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL;
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
   double start_offset;
 
   offset *= (is_rtl ? -1 : 1);
@@ -1211,28 +1211,28 @@ animate_reorder_offset (AdwTabBox *self,
   start_offset = info->reorder_offset;
 
   if (info->reorder_animation)
-    adw_animation_skip (info->reorder_animation);
+    adap_animation_skip (info->reorder_animation);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               reorder_offset_animation_value_cb,
                                               info, NULL);
   info->reorder_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), start_offset, offset,
+    adap_timed_animation_new (GTK_WIDGET (self), start_offset, offset,
                              REORDER_ANIMATION_DURATION, target);
 
   g_signal_connect_swapped (info->reorder_animation, "done",
                             G_CALLBACK (reorder_offset_animation_done_cb), info);
 
-  adw_animation_play (info->reorder_animation);
+  adap_animation_play (info->reorder_animation);
 }
 
 static void
-reset_reorder_animations (AdwTabBox *self)
+reset_reorder_animations (AdapTabBox *self)
 {
   int i, original_index;
   GList *l;
 
-  if (!adw_get_enable_animations (GTK_WIDGET (self)))
+  if (!adap_get_enable_animations (GTK_WIDGET (self)))
       return;
 
   l = find_link_for_page (self, self->reordered_tab->page);
@@ -1254,8 +1254,8 @@ reset_reorder_animations (AdwTabBox *self)
 }
 
 static void
-page_reordered_cb (AdwTabBox  *self,
-                   AdwTabPage *page,
+page_reordered_cb (AdapTabBox  *self,
+                   AdapTabPage *page,
                    int         index)
 {
   GList *link;
@@ -1263,7 +1263,7 @@ page_reordered_cb (AdwTabBox  *self,
   TabInfo *info, *dest_tab;
   gboolean is_rtl;
 
-  if (adw_tab_page_get_pinned (page) != self->pinned)
+  if (adap_tab_page_get_pinned (page) != self->pinned)
     return;
 
   self->continue_reorder = self->reordered_tab && page == self->reordered_tab->page;
@@ -1288,7 +1288,7 @@ page_reordered_cb (AdwTabBox  *self,
   self->reorder_index = index;
 
   if (!self->pinned)
-    self->reorder_index -= adw_tab_view_get_n_pinned_pages (self->view);
+    self->reorder_index -= adap_tab_view_get_n_pinned_pages (self->view);
 
   dest_tab = g_list_nth_data (self->tabs, self->reorder_index);
 
@@ -1304,7 +1304,7 @@ page_reordered_cb (AdwTabBox  *self,
    * it's too late to animate these, so we get a crash.
    */
 
-  if (adw_get_enable_animations (GTK_WIDGET (self)) &&
+  if (adap_get_enable_animations (GTK_WIDGET (self)) &&
       gtk_widget_get_mapped (GTK_WIDGET (self))) {
     int i;
 
@@ -1327,7 +1327,7 @@ page_reordered_cb (AdwTabBox  *self,
 }
 
 static void
-update_drag_reodering (AdwTabBox *self)
+update_drag_reodering (AdapTabBox *self)
 {
   gboolean is_rtl;
   int old_index = -1, new_index = -1;
@@ -1398,7 +1398,7 @@ update_drag_reodering (AdwTabBox *self)
 static gboolean
 drag_autoscroll_cb (GtkWidget     *widget,
                     GdkFrameClock *frame_clock,
-                    AdwTabBox     *self)
+                    AdapTabBox     *self)
 {
   double value, page_size;
   double x, delta_ms, start_threshold, end_threshold, autoscroll_factor;
@@ -1442,7 +1442,7 @@ drag_autoscroll_cb (GtkWidget     *widget,
     autoscroll_factor = (x - end_threshold) / autoscroll_area;
 
   autoscroll_factor = CLAMP (autoscroll_factor, -1, 1);
-  autoscroll_factor = adw_easing_ease (ADW_EASE_IN_CUBIC,
+  autoscroll_factor = adap_easing_ease (ADAP_EASE_IN_CUBIC,
                                        autoscroll_factor);
   self->drag_autoscroll_prev_time = time;
 
@@ -1462,7 +1462,7 @@ drag_autoscroll_cb (GtkWidget     *widget,
 }
 
 static void
-start_autoscroll (AdwTabBox *self)
+start_autoscroll (AdapTabBox *self)
 {
   GdkFrameClock *frame_clock;
 
@@ -1482,7 +1482,7 @@ start_autoscroll (AdwTabBox *self)
 }
 
 static void
-end_autoscroll (AdwTabBox *self)
+end_autoscroll (AdapTabBox *self)
 {
   if (self->drag_autoscroll_cb_id) {
     gtk_widget_remove_tick_callback (GTK_WIDGET (self),
@@ -1492,7 +1492,7 @@ end_autoscroll (AdwTabBox *self)
 }
 
 static void
-start_drag_reodering (AdwTabBox *self,
+start_drag_reodering (AdapTabBox *self,
                       TabInfo   *info,
                       double     x,
                       double     y)
@@ -1507,7 +1507,7 @@ start_drag_reodering (AdwTabBox *self,
 
   if (self->continue_reorder) {
     if (self->reorder_animation)
-      adw_animation_skip (self->reorder_animation);
+      adap_animation_skip (self->reorder_animation);
 
     reset_reorder_animations (self);
 
@@ -1524,7 +1524,7 @@ start_drag_reodering (AdwTabBox *self,
 }
 
 static void
-end_drag_reodering (AdwTabBox *self)
+end_drag_reodering (AdapTabBox *self)
 {
   TabInfo *dest_tab;
 
@@ -1541,12 +1541,12 @@ end_drag_reodering (AdwTabBox *self)
     int index = self->reorder_index;
 
     if (!self->pinned)
-      index += adw_tab_view_get_n_pinned_pages (self->view);
+      index += adap_tab_view_get_n_pinned_pages (self->view);
 
     /* We've already reordered the tab here, no need to do it again */
     g_signal_handlers_block_by_func (self->view, page_reordered_cb, self);
 
-    adw_tab_view_reorder_page (self->view, self->reordered_tab->page, index);
+    adap_tab_view_reorder_page (self->view, self->reordered_tab->page, index);
 
     g_signal_handlers_unblock_by_func (self->view, page_reordered_cb, self);
   }
@@ -1557,7 +1557,7 @@ end_drag_reodering (AdwTabBox *self)
 }
 
 static void
-reorder_begin_cb (AdwTabBox  *self,
+reorder_begin_cb (AdapTabBox  *self,
                   double      start_x,
                   double      start_y,
                   GtkGesture *gesture)
@@ -1597,7 +1597,7 @@ gtk_drag_check_threshold_double (GtkWidget *widget,
 }
 
 static gboolean
-check_dnd_threshold (AdwTabBox *self,
+check_dnd_threshold (AdapTabBox *self,
                      double     x,
                      double     y)
 {
@@ -1618,11 +1618,11 @@ check_dnd_threshold (AdwTabBox *self,
   return !graphene_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (x, y));
 }
 
-static void begin_drag (AdwTabBox *self,
+static void begin_drag (AdapTabBox *self,
                         GdkDevice *device);
 
 static void
-reorder_update_cb (AdwTabBox  *self,
+reorder_update_cb (AdapTabBox  *self,
                    double      offset_x,
                    double      offset_y,
                    GtkGesture *gesture)
@@ -1649,7 +1649,7 @@ reorder_update_cb (AdwTabBox  *self,
   start_drag_reodering (self, self->pressed_tab, x, y);
 
   if (self->dragging) {
-    adw_tab_view_set_selected_page (self->view, self->pressed_tab->page);
+    adap_tab_view_set_selected_page (self->view, self->pressed_tab->page);
     gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
   } else {
     gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
@@ -1664,7 +1664,7 @@ reorder_update_cb (AdwTabBox  *self,
   if (!self->pinned &&
       self->pressed_tab != self->reorder_placeholder &&
       !is_touchscreen (gesture) &&
-      adw_tab_view_get_n_pages (self->view) > 1 &&
+      adap_tab_view_get_n_pages (self->view) > 1 &&
       check_dnd_threshold (self, x, y)) {
     begin_drag (self, device);
 
@@ -1677,7 +1677,7 @@ reorder_update_cb (AdwTabBox  *self,
 }
 
 static void
-reorder_end_cb (AdwTabBox  *self,
+reorder_end_cb (AdapTabBox  *self,
                 double      offset_x,
                 double      offset_y,
                 GtkGesture *gesture)
@@ -1688,14 +1688,14 @@ reorder_end_cb (AdwTabBox  *self,
 /* Selection */
 
 static void
-reset_focus (AdwTabBox *self)
+reset_focus (AdapTabBox *self)
 {
   gtk_widget_set_focus_child (GTK_WIDGET (self), NULL);
 }
 
 static void
-select_page (AdwTabBox  *self,
-             AdwTabPage *page)
+select_page (AdapTabBox  *self,
+             AdapTabPage *page)
 {
   if (!page) {
     self->selected_tab = NULL;
@@ -1714,7 +1714,7 @@ select_page (AdwTabBox  *self,
     return;
   }
 
-  if (adw_tab_bar_tabs_have_visible_focus (self->tab_bar))
+  if (adap_tab_bar_tabs_have_visible_focus (self->tab_bar))
     gtk_widget_grab_focus (self->selected_tab->container);
 
   gtk_widget_set_focus_child (GTK_WIDGET (self),
@@ -1727,13 +1727,13 @@ select_page (AdwTabBox  *self,
 /* Opening */
 
 static gboolean
-extra_drag_drop_cb (AdwTab       *tab,
+extra_drag_drop_cb (AdapTab       *tab,
                     GValue       *value,
                     GdkDragAction current_action,
-                    AdwTabBox    *self)
+                    AdapTabBox    *self)
 {
   gboolean ret = GDK_EVENT_PROPAGATE;
-  AdwTabPage *page = adw_tab_get_page (tab);
+  AdapTabPage *page = adap_tab_get_page (tab);
 
   g_signal_emit (self, signals[SIGNAL_EXTRA_DRAG_DROP], 0, page, value, current_action, &ret);
 
@@ -1741,12 +1741,12 @@ extra_drag_drop_cb (AdwTab       *tab,
 }
 
 static GdkDragAction
-extra_drag_value_cb (AdwTab    *tab,
+extra_drag_value_cb (AdapTab    *tab,
                      GValue    *value,
-                     AdwTabBox *self)
+                     AdapTabBox *self)
 {
   GdkDragAction preferred_action;
-  AdwTabPage *page = adw_tab_get_page (tab);
+  AdapTabPage *page = adap_tab_get_page (tab);
 
   g_signal_emit (self, signals[SIGNAL_EXTRA_DRAG_VALUE], 0, page, value, &preferred_action);
 
@@ -1770,7 +1770,7 @@ open_animation_done_cb (TabInfo *info)
 }
 
 static void
-measure_tab (AdwGizmo       *widget,
+measure_tab (AdapGizmo       *widget,
              GtkOrientation  orientation,
              int             for_size,
              int            *minimum,
@@ -1789,7 +1789,7 @@ measure_tab (AdwGizmo       *widget,
 }
 
 static void
-allocate_tab (AdwGizmo *widget,
+allocate_tab (AdapGizmo *widget,
               int       width,
               int       height,
               int       baseline)
@@ -1806,7 +1806,7 @@ allocate_tab (AdwGizmo *widget,
 static void
 state_flags_changed_cb (GtkWidget     *tab,
                         GtkStateFlags  previous,
-                        AdwTabBox     *self)
+                        AdapTabBox     *self)
 {
   GtkStateFlags flags = gtk_widget_get_state_flags (tab);
   GtkStateFlags mask = GTK_STATE_FLAG_PRELIGHT |
@@ -1818,8 +1818,8 @@ state_flags_changed_cb (GtkWidget     *tab,
 }
 
 static TabInfo *
-create_tab_info (AdwTabBox  *self,
-                 AdwTabPage *page)
+create_tab_info (AdapTabBox  *self,
+                 AdapTabPage *page)
 {
   TabInfo *info;
 
@@ -1829,25 +1829,25 @@ create_tab_info (AdwTabBox  *self,
   info->unshifted_pos = -1;
   info->pos = -1;
   info->width = -1;
-  info->container = adw_gizmo_new_with_role ("tabboxchild",
+  info->container = adap_gizmo_new_with_role ("tabboxchild",
                                              GTK_ACCESSIBLE_ROLE_GROUP,
                                              measure_tab, allocate_tab,
                                              NULL, NULL,
-                                             (AdwGizmoFocusFunc) adw_widget_focus_child,
-                                             (AdwGizmoGrabFocusFunc) adw_widget_grab_focus_child);
-  info->tab = adw_tab_new (self->view, self->pinned);
+                                             (AdapGizmoFocusFunc) adap_widget_focus_child,
+                                             (AdapGizmoGrabFocusFunc) adap_widget_grab_focus_child);
+  info->tab = adap_tab_new (self->view, self->pinned);
 
   g_object_set_data (G_OBJECT (info->container), "info", info);
   gtk_widget_set_overflow (info->container, GTK_OVERFLOW_HIDDEN);
   gtk_widget_set_focusable (info->container, TRUE);
 
-  adw_tab_set_page (info->tab, page);
-  adw_tab_set_inverted (info->tab, self->inverted);
-  adw_tab_setup_extra_drop_target (info->tab,
+  adap_tab_set_page (info->tab, page);
+  adap_tab_set_inverted (info->tab, self->inverted);
+  adap_tab_setup_extra_drop_target (info->tab,
                                    self->extra_drag_actions,
                                    self->extra_drag_types,
                                    self->extra_drag_n_types);
-  adw_tab_set_extra_drag_preload (info->tab, self->extra_drag_preload);
+  adap_tab_set_extra_drag_preload (info->tab, self->extra_drag_preload);
 
   info->separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
   gtk_widget_set_can_target (info->separator, FALSE);
@@ -1864,19 +1864,19 @@ create_tab_info (AdwTabBox  *self,
 }
 
 static void
-page_attached_cb (AdwTabBox  *self,
-                  AdwTabPage *page,
+page_attached_cb (AdapTabBox  *self,
+                  AdapTabPage *page,
                   int         position)
 {
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
   TabInfo *info;
   GList *l;
 
-  if (adw_tab_page_get_pinned (page) != self->pinned)
+  if (adap_tab_page_get_pinned (page) != self->pinned)
     return;
 
   if (!self->pinned)
-    position -= adw_tab_view_get_n_pinned_pages (self->view);
+    position -= adap_tab_view_get_n_pinned_pages (self->view);
 
   set_tab_resize_mode (self, TAB_RESIZE_NORMAL);
   force_end_reordering (self);
@@ -1890,11 +1890,11 @@ page_attached_cb (AdwTabBox  *self,
                              self,
                              G_CONNECT_SWAPPED);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               appear_animation_value_cb,
                                               info, NULL);
   info->appear_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 0, 1,
+    adap_timed_animation_new (GTK_WIDGET (self), 0, 1,
                              OPEN_ANIMATION_DURATION, target);
 
   g_signal_connect_swapped (info->appear_animation, "done",
@@ -1905,10 +1905,10 @@ page_attached_cb (AdwTabBox  *self,
 
   self->n_tabs++;
 
-  adw_animation_play (info->appear_animation);
+  adap_animation_play (info->appear_animation);
 
-  if (page == adw_tab_view_get_selected_page (self->view)) {
-    adw_tab_box_select_page (self, page);
+  if (page == adap_tab_view_get_selected_page (self->view)) {
+    adap_tab_box_select_page (self, page);
   } else {
     int pos = -1;
 
@@ -1929,17 +1929,17 @@ page_attached_cb (AdwTabBox  *self,
 static void
 close_animation_done_cb (TabInfo *info)
 {
-  AdwTabBox *self = info->box;
+  AdapTabBox *self = info->box;
 
   g_clear_object (&info->appear_animation);
 
   self->tabs = g_list_remove (self->tabs, info);
 
   if (info->reorder_animation)
-    adw_animation_skip (info->reorder_animation);
+    adap_animation_skip (info->reorder_animation);
 
   if (self->reorder_animation)
-    adw_animation_skip (self->reorder_animation);
+    adap_animation_skip (self->reorder_animation);
 
   if (self->pressed_tab == info)
     self->pressed_tab = NULL;
@@ -1958,10 +1958,10 @@ close_animation_done_cb (TabInfo *info)
 }
 
 static void
-page_detached_cb (AdwTabBox  *self,
-                  AdwTabPage *page)
+page_detached_cb (AdapTabBox  *self,
+                  AdapTabPage *page)
 {
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
   TabInfo *info;
   GList *page_link;
 
@@ -1997,12 +1997,12 @@ page_detached_cb (AdwTabBox  *self,
   g_assert (info->page);
 
   if (gtk_widget_is_focus (info->container))
-    adw_tab_box_try_focus_selected_tab (self);
+    adap_tab_box_try_focus_selected_tab (self);
 
   if (info == self->selected_tab)
-    adw_tab_box_select_page (self, NULL);
+    adap_tab_box_select_page (self, NULL);
 
-  adw_tab_set_page (info->tab, NULL);
+  adap_tab_set_page (info->tab, NULL);
 
   if (info->notify_needs_attention_id > 0) {
     g_signal_handler_disconnect (info->page, info->notify_needs_attention_id);
@@ -2012,44 +2012,44 @@ page_detached_cb (AdwTabBox  *self,
   info->page = NULL;
 
   if (info->appear_animation)
-    adw_animation_skip (info->appear_animation);
+    adap_animation_skip (info->appear_animation);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               appear_animation_value_cb,
                                               info, NULL);
   info->appear_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), info->appear_progress, 0,
+    adap_timed_animation_new (GTK_WIDGET (self), info->appear_progress, 0,
                              CLOSE_ANIMATION_DURATION, target);
 
   g_signal_connect_swapped (info->appear_animation, "done",
                             G_CALLBACK (close_animation_done_cb), info);
 
-  adw_animation_play (info->appear_animation);
+  adap_animation_play (info->appear_animation);
 }
 
 /* Tab DND */
 
-#define ADW_TYPE_TAB_BOX_ROOT_CONTENT (adw_tab_box_root_content_get_type ())
+#define ADAP_TYPE_TAB_BOX_ROOT_CONTENT (adap_tab_box_root_content_get_type ())
 
-G_DECLARE_FINAL_TYPE (AdwTabBoxRootContent, adw_tab_box_root_content, ADW, TAB_BOX_ROOT_CONTENT, GdkContentProvider)
+G_DECLARE_FINAL_TYPE (AdapTabBoxRootContent, adap_tab_box_root_content, ADAP, TAB_BOX_ROOT_CONTENT, GdkContentProvider)
 
-struct _AdwTabBoxRootContent
+struct _AdapTabBoxRootContent
 {
   GdkContentProvider parent_instance;
 
-  AdwTabBox *tab_box;
+  AdapTabBox *tab_box;
 };
 
-G_DEFINE_FINAL_TYPE (AdwTabBoxRootContent, adw_tab_box_root_content, GDK_TYPE_CONTENT_PROVIDER)
+G_DEFINE_FINAL_TYPE (AdapTabBoxRootContent, adap_tab_box_root_content, GDK_TYPE_CONTENT_PROVIDER)
 
 static GdkContentFormats *
-adw_tab_box_root_content_ref_formats (GdkContentProvider *provider)
+adap_tab_box_root_content_ref_formats (GdkContentProvider *provider)
 {
   return gdk_content_formats_new ((const char *[1]) { "application/x-rootwindow-drop" }, 1);
 }
 
 static void
-adw_tab_box_root_content_write_mime_type_async (GdkContentProvider  *provider,
+adap_tab_box_root_content_write_mime_type_async (GdkContentProvider  *provider,
                                                 const char          *mime_type,
                                                 GOutputStream       *stream,
                                                 int                  io_priority,
@@ -2057,21 +2057,21 @@ adw_tab_box_root_content_write_mime_type_async (GdkContentProvider  *provider,
                                                 GAsyncReadyCallback  callback,
                                                 gpointer             user_data)
 {
-  AdwTabBoxRootContent *self = ADW_TAB_BOX_ROOT_CONTENT (provider);
+  AdapTabBoxRootContent *self = ADAP_TAB_BOX_ROOT_CONTENT (provider);
   GTask *task;
 
   self->tab_box->should_detach_into_new_window = TRUE;
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
-  g_task_set_source_tag (task, adw_tab_box_root_content_write_mime_type_async);
+  g_task_set_source_tag (task, adap_tab_box_root_content_write_mime_type_async);
   g_task_return_boolean (task, TRUE);
 
   g_object_unref (task);
 }
 
 static gboolean
-adw_tab_box_root_content_write_mime_type_finish (GdkContentProvider  *provider,
+adap_tab_box_root_content_write_mime_type_finish (GdkContentProvider  *provider,
                                                  GAsyncResult        *result,
                                                  GError             **error)
 {
@@ -2079,37 +2079,37 @@ adw_tab_box_root_content_write_mime_type_finish (GdkContentProvider  *provider,
 }
 
 static void
-adw_tab_box_root_content_finalize (GObject *object)
+adap_tab_box_root_content_finalize (GObject *object)
 {
-  AdwTabBoxRootContent *self = ADW_TAB_BOX_ROOT_CONTENT (object);
+  AdapTabBoxRootContent *self = ADAP_TAB_BOX_ROOT_CONTENT (object);
 
   g_clear_object (&self->tab_box);
 
-  G_OBJECT_CLASS (adw_tab_box_root_content_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_tab_box_root_content_parent_class)->finalize (object);
 }
 
 static void
-adw_tab_box_root_content_class_init (AdwTabBoxRootContentClass *klass)
+adap_tab_box_root_content_class_init (AdapTabBoxRootContentClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS (klass);
 
-  object_class->finalize = adw_tab_box_root_content_finalize;
+  object_class->finalize = adap_tab_box_root_content_finalize;
 
-  provider_class->ref_formats = adw_tab_box_root_content_ref_formats;
-  provider_class->write_mime_type_async = adw_tab_box_root_content_write_mime_type_async;
-  provider_class->write_mime_type_finish = adw_tab_box_root_content_write_mime_type_finish;
+  provider_class->ref_formats = adap_tab_box_root_content_ref_formats;
+  provider_class->write_mime_type_async = adap_tab_box_root_content_write_mime_type_async;
+  provider_class->write_mime_type_finish = adap_tab_box_root_content_write_mime_type_finish;
 }
 
 static void
-adw_tab_box_root_content_init (AdwTabBoxRootContent *self)
+adap_tab_box_root_content_init (AdapTabBoxRootContent *self)
 {
 }
 
 static GdkContentProvider *
-adw_tab_box_root_content_new (AdwTabBox *tab_box)
+adap_tab_box_root_content_new (AdapTabBox *tab_box)
 {
-  AdwTabBoxRootContent *self = g_object_new (ADW_TYPE_TAB_BOX_ROOT_CONTENT, NULL);
+  AdapTabBoxRootContent *self = g_object_new (ADAP_TYPE_TAB_BOX_ROOT_CONTENT, NULL);
 
   self->tab_box = g_object_ref (tab_box);
 
@@ -2117,7 +2117,7 @@ adw_tab_box_root_content_new (AdwTabBox *tab_box)
 }
 
 static int
-calculate_placeholder_index (AdwTabBox *self,
+calculate_placeholder_index (AdapTabBox *self,
                              int        x)
 {
   int lower, upper, pos, i;
@@ -2153,7 +2153,7 @@ static void
 insert_animation_value_cb (double   value,
                            TabInfo *info)
 {
-  AdwTabBox *self = info->box;
+  AdapTabBox *self = info->box;
 
   appear_animation_value_cb (value, info);
 
@@ -2161,19 +2161,19 @@ insert_animation_value_cb (double   value,
 }
 
 static void
-insert_placeholder (AdwTabBox  *self,
-                    AdwTabPage *page,
+insert_placeholder (AdapTabBox  *self,
+                    AdapTabPage *page,
                     int         pos)
 {
   TabInfo *info = self->reorder_placeholder;
   double initial_progress = 0;
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
 
   if (info) {
     initial_progress = info->appear_progress;
 
     if (info->appear_animation)
-      adw_animation_skip (info->appear_animation);
+      adap_animation_skip (info->appear_animation);
   } else {
     int index;
 
@@ -2183,7 +2183,7 @@ insert_placeholder (AdwTabBox  *self,
 
     gtk_widget_set_opacity (info->container, 0);
 
-    adw_tab_set_dragging (info->tab, TRUE);
+    adap_tab_set_dragging (info->tab, TRUE);
 
     info->reorder_ignore_bounds = TRUE;
 
@@ -2211,17 +2211,17 @@ insert_placeholder (AdwTabBox  *self,
     animate_scroll_relative (self, self->placeholder_scroll_offset, OPEN_ANIMATION_DURATION);
   }
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               insert_animation_value_cb,
                                               info, NULL);
   info->appear_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), initial_progress, 1,
+    adap_timed_animation_new (GTK_WIDGET (self), initial_progress, 1,
                              OPEN_ANIMATION_DURATION, target);
 
   g_signal_connect_swapped (info->appear_animation, "done",
                             G_CALLBACK (open_animation_done_cb), info);
 
-  adw_animation_play (info->appear_animation);
+  adap_animation_play (info->appear_animation);
 
   update_separators (self);
 }
@@ -2229,7 +2229,7 @@ insert_placeholder (AdwTabBox  *self,
 static void
 replace_animation_done_cb (TabInfo *info)
 {
-  AdwTabBox *self = info->box;
+  AdapTabBox *self = info->box;
 
   g_clear_object (&info->appear_animation);
   self->reorder_placeholder = NULL;
@@ -2237,16 +2237,16 @@ replace_animation_done_cb (TabInfo *info)
 }
 
 static void
-replace_placeholder (AdwTabBox  *self,
-                     AdwTabPage *page)
+replace_placeholder (AdapTabBox  *self,
+                     AdapTabPage *page)
 {
   TabInfo *info = self->reorder_placeholder;
   double initial_progress;
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
 
   self->placeholder_scroll_offset = 0;
   gtk_widget_set_opacity (self->reorder_placeholder->container, 1);
-  adw_tab_set_dragging (info->tab, FALSE);
+  adap_tab_set_dragging (info->tab, FALSE);
 
   if (!info->appear_animation) {
     self->reorder_placeholder = NULL;
@@ -2258,33 +2258,33 @@ replace_placeholder (AdwTabBox  *self,
 
   self->can_remove_placeholder = FALSE;
 
-  adw_tab_set_page (info->tab, page);
+  adap_tab_set_page (info->tab, page);
   info->page = page;
 
-  adw_animation_skip (info->appear_animation);
+  adap_animation_skip (info->appear_animation);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               appear_animation_value_cb,
                                               info, NULL);
   info->appear_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), initial_progress, 1,
+    adap_timed_animation_new (GTK_WIDGET (self), initial_progress, 1,
                              OPEN_ANIMATION_DURATION, target);
 
   g_signal_connect_swapped (info->appear_animation, "done",
                             G_CALLBACK (replace_animation_done_cb), info);
 
-  adw_animation_play (info->appear_animation);
+  adap_animation_play (info->appear_animation);
 }
 
 static void
 remove_animation_done_cb (TabInfo *info)
 {
-  AdwTabBox *self = info->box;
+  AdapTabBox *self = info->box;
 
   g_clear_object (&info->appear_animation);
 
   if (!self->can_remove_placeholder) {
-    adw_tab_set_page (info->tab, self->placeholder_page);
+    adap_tab_set_page (info->tab, self->placeholder_page);
     info->page = self->placeholder_page;
 
     return;
@@ -2294,7 +2294,7 @@ remove_animation_done_cb (TabInfo *info)
     force_end_reordering (self);
 
     if (info->reorder_animation)
-      adw_animation_skip (info->reorder_animation);
+      adap_animation_skip (info->reorder_animation);
 
     self->reordered_tab = NULL;
   }
@@ -2314,43 +2314,43 @@ remove_animation_done_cb (TabInfo *info)
 }
 
 static void
-remove_placeholder_scroll_cb (AdwTabBox *self)
+remove_placeholder_scroll_cb (AdapTabBox *self)
 {
   animate_scroll_relative (self, -self->placeholder_scroll_offset, CLOSE_ANIMATION_DURATION);
   self->placeholder_scroll_offset = 0;
 }
 
 static void
-remove_placeholder (AdwTabBox *self)
+remove_placeholder (AdapTabBox *self)
 {
   TabInfo *info = self->reorder_placeholder;
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
 
   if (!info || !info->page)
     return;
 
-  adw_tab_set_page (info->tab, NULL);
+  adap_tab_set_page (info->tab, NULL);
   info->page = NULL;
 
   if (info->appear_animation)
-    adw_animation_skip (info->appear_animation);
+    adap_animation_skip (info->appear_animation);
 
   g_idle_add_once ((GSourceOnceFunc) remove_placeholder_scroll_cb, self);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               appear_animation_value_cb,
                                               info, NULL);
   info->appear_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), info->appear_progress, 0,
+    adap_timed_animation_new (GTK_WIDGET (self), info->appear_progress, 0,
                              CLOSE_ANIMATION_DURATION, target);
 
   g_signal_connect_swapped (info->appear_animation, "done",
                             G_CALLBACK (remove_animation_done_cb), info);
 
-  adw_animation_play (info->appear_animation);
+  adap_animation_play (info->appear_animation);
 }
 
-static inline AdwTabBox *
+static inline AdapTabBox *
 get_source_tab_box (GtkDropTarget *target)
 {
   GdkDrop *drop = gtk_drop_target_get_current_drop (target);
@@ -2359,16 +2359,16 @@ get_source_tab_box (GtkDropTarget *target)
   if (!drag)
     return NULL;
 
-  return ADW_TAB_BOX (g_object_get_data (G_OBJECT (drag),
-                      "adw-tab-bar-drag-origin"));
+  return ADAP_TAB_BOX (g_object_get_data (G_OBJECT (drag),
+                      "adap-tab-bar-drag-origin"));
 }
 
 static void
-do_drag_drop (AdwTabBox *self,
-              AdwTabBox *source_tab_box)
+do_drag_drop (AdapTabBox *self,
+              AdapTabBox *source_tab_box)
 {
-  AdwTabPage *page = source_tab_box->detached_page;
-  int offset = (self->pinned ? 0 : adw_tab_view_get_n_pinned_pages (self->view));
+  AdapTabPage *page = source_tab_box->detached_page;
+  int offset = (self->pinned ? 0 : adap_tab_view_get_n_pinned_pages (self->view));
 
   if (self->reorder_placeholder) {
     replace_placeholder (self, page);
@@ -2376,11 +2376,11 @@ do_drag_drop (AdwTabBox *self,
 
     g_signal_handlers_block_by_func (self->view, page_attached_cb, self);
 
-    adw_tab_view_attach_page (self->view, page, self->reorder_index + offset);
+    adap_tab_view_attach_page (self->view, page, self->reorder_index + offset);
 
     g_signal_handlers_unblock_by_func (self->view, page_attached_cb, self);
   } else {
-    adw_tab_view_attach_page (self->view, page, self->reorder_index + offset);
+    adap_tab_view_attach_page (self->view, page, self->reorder_index + offset);
   }
 
   source_tab_box->should_detach_into_new_window = FALSE;
@@ -2390,33 +2390,33 @@ do_drag_drop (AdwTabBox *self,
 }
 
 static void
-detach_into_new_window (AdwTabBox *self)
+detach_into_new_window (AdapTabBox *self)
 {
-  AdwTabPage *page;
-  AdwTabView *new_view;
+  AdapTabPage *page;
+  AdapTabView *new_view;
 
   page = self->detached_page;
 
-  new_view = adw_tab_view_create_window (self->view);
+  new_view = adap_tab_view_create_window (self->view);
 
-  if (ADW_IS_TAB_VIEW (new_view))
-    adw_tab_view_attach_page (new_view, page, 0);
+  if (ADAP_IS_TAB_VIEW (new_view))
+    adap_tab_view_attach_page (new_view, page, 0);
   else
-    adw_tab_view_attach_page (self->view, page, self->detached_index);
+    adap_tab_view_attach_page (self->view, page, self->detached_index);
 
   self->should_detach_into_new_window = FALSE;
 }
 
 static gboolean
-is_view_in_the_same_group (AdwTabBox  *self,
-                           AdwTabView *other_view)
+is_view_in_the_same_group (AdapTabBox  *self,
+                           AdapTabView *other_view)
 {
   /* TODO when we have groups, this should do the actual check */
   return TRUE;
 }
 
 static void
-drag_end (AdwTabBox *self,
+drag_end (AdapTabBox *self,
           GdkDrag   *drag,
           gboolean   success)
 {
@@ -2425,7 +2425,7 @@ drag_end (AdwTabBox *self,
   gdk_drag_drop_done (drag, success);
 
   if (!success) {
-    adw_tab_view_attach_page (self->view,
+    adap_tab_view_attach_page (self->view,
                               self->detached_page,
                               self->detached_index);
 
@@ -2443,7 +2443,7 @@ drag_end (AdwTabBox *self,
 }
 
 static void
-tab_drop_performed_cb (AdwTabBox *self,
+tab_drop_performed_cb (AdapTabBox *self,
                        GdkDrag   *drag)
 {
   /* Catch drops into our windows, but outside of tab views. If this is a false
@@ -2452,7 +2452,7 @@ tab_drop_performed_cb (AdwTabBox *self,
 }
 
 static void
-tab_dnd_finished_cb (AdwTabBox *self,
+tab_dnd_finished_cb (AdapTabBox *self,
                      GdkDrag   *drag)
 {
   if (self->should_detach_into_new_window)
@@ -2462,7 +2462,7 @@ tab_dnd_finished_cb (AdwTabBox *self,
 }
 
 static void
-tab_drag_cancel_cb (AdwTabBox           *self,
+tab_drag_cancel_cb (AdapTabBox           *self,
                     GdkDragCancelReason  reason,
                     GdkDrag             *drag)
 {
@@ -2497,11 +2497,11 @@ icon_resize_animation_value_cb (double    value,
 }
 
 static void
-create_drag_icon (AdwTabBox *self,
+create_drag_icon (AdapTabBox *self,
                   GdkDrag   *drag)
 {
   DragIcon *icon;
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
 
   icon = g_atomic_rc_box_new0 (DragIcon);
 
@@ -2510,10 +2510,10 @@ create_drag_icon (AdwTabBox *self,
   icon->width = predict_tab_width (self, self->reordered_tab, FALSE);
   icon->target_width = icon->width;
 
-  icon->tab = adw_tab_new (self->view, FALSE);
-  adw_tab_set_page (icon->tab, self->reordered_tab->page);
-  adw_tab_set_dragging (icon->tab, TRUE);
-  adw_tab_set_inverted (icon->tab, self->inverted);
+  icon->tab = adap_tab_new (self->view, FALSE);
+  adap_tab_set_page (icon->tab, self->reordered_tab->page);
+  adap_tab_set_dragging (icon->tab, TRUE);
+  adap_tab_set_inverted (icon->tab, self->inverted);
   gtk_widget_set_halign (GTK_WIDGET (icon->tab), GTK_ALIGN_START);
 
   gtk_drag_icon_set_child (GTK_DRAG_ICON (gtk_drag_icon_get_for_drag (drag)),
@@ -2526,18 +2526,18 @@ create_drag_icon (AdwTabBox *self,
 
   gdk_drag_set_hotspot (drag, icon->hotspot_x, icon->hotspot_y);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               icon_resize_animation_value_cb,
                                               g_atomic_rc_box_acquire (icon), NULL);
   icon->resize_animation =
-    adw_timed_animation_new (GTK_WIDGET (icon->tab), 0, 0,
+    adap_timed_animation_new (GTK_WIDGET (icon->tab), 0, 0,
                              ICON_RESIZE_ANIMATION_DURATION, target);
 
   self->drag_icon = icon;
 }
 
 static void
-resize_drag_icon (AdwTabBox *self,
+resize_drag_icon (AdapTabBox *self,
                   int        width)
 {
   DragIcon *icon = self->drag_icon;
@@ -2547,15 +2547,15 @@ resize_drag_icon (AdwTabBox *self,
 
   icon->target_width = width;
 
-  adw_timed_animation_set_value_from (ADW_TIMED_ANIMATION (icon->resize_animation),
+  adap_timed_animation_set_value_from (ADAP_TIMED_ANIMATION (icon->resize_animation),
                                       icon->width);
-  adw_timed_animation_set_value_to (ADW_TIMED_ANIMATION (icon->resize_animation),
+  adap_timed_animation_set_value_to (ADAP_TIMED_ANIMATION (icon->resize_animation),
                                     width);
-  adw_animation_play (icon->resize_animation);
+  adap_animation_play (icon->resize_animation);
 }
 
 static void
-begin_drag (AdwTabBox *self,
+begin_drag (AdapTabBox *self,
             GdkDevice *device)
 {
   GdkContentProvider *content;
@@ -2578,14 +2578,14 @@ begin_drag (AdwTabBox *self,
   self->indirect_reordering = TRUE;
 
   content = gdk_content_provider_new_union ((GdkContentProvider *[2]) {
-                                              adw_tab_box_root_content_new (self),
-                                              gdk_content_provider_new_typed (ADW_TYPE_TAB_PAGE, detached_info->page)
+                                              adap_tab_box_root_content_new (self),
+                                              gdk_content_provider_new_typed (ADAP_TYPE_TAB_PAGE, detached_info->page)
                                             }, 2);
 
   drag = gdk_drag_begin (surface, device, content, GDK_ACTION_MOVE,
                          self->reorder_x, self->reorder_y);
 
-  g_object_set_data (G_OBJECT (drag), "adw-tab-bar-drag-origin", self);
+  g_object_set_data (G_OBJECT (drag), "adap-tab-bar-drag-origin", self);
 
   g_signal_connect_swapped (drag, "drop-performed",
                             G_CALLBACK (tab_drop_performed_cb), self);
@@ -2600,9 +2600,9 @@ begin_drag (AdwTabBox *self,
   update_hover (self);
 
   gtk_widget_set_opacity (detached_tab, 0);
-  self->detached_index = adw_tab_view_get_page_position (self->view, self->detached_page);
+  self->detached_index = adap_tab_view_get_page_position (self->view, self->detached_page);
 
-  adw_tab_view_detach_page (self->view, self->detached_page);
+  adap_tab_view_detach_page (self->view, self->detached_page);
 
   self->indirect_reordering = FALSE;
 
@@ -2617,12 +2617,12 @@ begin_drag (AdwTabBox *self,
 }
 
 static GdkDragAction
-tab_drag_enter_motion_cb (AdwTabBox     *self,
+tab_drag_enter_motion_cb (AdapTabBox     *self,
                           double         x,
                           double         y,
                           GtkDropTarget *target)
 {
-  AdwTabBox *source_tab_box;
+  AdapTabBox *source_tab_box;
 
   if (self->pinned)
     return 0;
@@ -2640,7 +2640,7 @@ tab_drag_enter_motion_cb (AdwTabBox     *self,
   self->can_remove_placeholder = FALSE;
 
   if (!self->reorder_placeholder || !self->reorder_placeholder->page) {
-    AdwTabPage *page = source_tab_box->detached_page;
+    AdapTabPage *page = source_tab_box->detached_page;
     double center = x - source_tab_box->drag_icon->hotspot_x + source_tab_box->drag_icon->width / 2;
 
     insert_placeholder (self, page, center);
@@ -2648,7 +2648,7 @@ tab_drag_enter_motion_cb (AdwTabBox     *self,
     self->indirect_reordering = TRUE;
 
     resize_drag_icon (source_tab_box, predict_tab_width (self, self->reorder_placeholder, TRUE));
-    adw_tab_set_inverted (source_tab_box->drag_icon->tab, self->inverted);
+    adap_tab_set_inverted (source_tab_box->drag_icon->tab, self->inverted);
 
     self->drag_offset_x = source_tab_box->drag_icon->hotspot_x;
     self->drag_offset_y = source_tab_box->drag_icon->hotspot_y;
@@ -2668,10 +2668,10 @@ tab_drag_enter_motion_cb (AdwTabBox     *self,
 }
 
 static void
-tab_drag_leave_cb (AdwTabBox     *self,
+tab_drag_leave_cb (AdapTabBox     *self,
                    GtkDropTarget *target)
 {
-  AdwTabBox *source_tab_box;
+  AdapTabBox *source_tab_box;
 
   if (!self->indirect_reordering)
     return;
@@ -2696,13 +2696,13 @@ tab_drag_leave_cb (AdwTabBox     *self,
 }
 
 static gboolean
-tab_drag_drop_cb (AdwTabBox     *self,
+tab_drag_drop_cb (AdapTabBox     *self,
                   const GValue  *value,
                   double         x,
                   double         y,
                   GtkDropTarget *target)
 {
-  AdwTabBox *source_tab_box;
+  AdapTabBox *source_tab_box;
 
   if (self->pinned)
     return GDK_EVENT_PROPAGATE;
@@ -2721,13 +2721,13 @@ tab_drag_drop_cb (AdwTabBox     *self,
 }
 
 static gboolean
-view_drag_drop_cb (AdwTabBox      *self,
+view_drag_drop_cb (AdapTabBox      *self,
                    const GValue  *value,
                    double         x,
                    double         y,
                    GtkDropTarget *target)
 {
-  AdwTabBox *source_tab_box;
+  AdapTabBox *source_tab_box;
 
   if (self->pinned)
     return GDK_EVENT_PROPAGATE;
@@ -2740,8 +2740,8 @@ view_drag_drop_cb (AdwTabBox      *self,
   if (!self->view || !is_view_in_the_same_group (self, source_tab_box->view))
     return GDK_EVENT_PROPAGATE;
 
-  self->reorder_index = adw_tab_view_get_n_pages (self->view) -
-                        adw_tab_view_get_n_pinned_pages (self->view);
+  self->reorder_index = adap_tab_view_get_n_pages (self->view) -
+                        adap_tab_view_get_n_pinned_pages (self->view);
 
   do_drag_drop (self, source_tab_box);
 
@@ -2751,21 +2751,21 @@ view_drag_drop_cb (AdwTabBox      *self,
 /* DND autoscrolling */
 
 static void
-reset_drop_target_tab_cb (AdwTabBox *self)
+reset_drop_target_tab_cb (AdapTabBox *self)
 {
   self->reset_drop_target_tab_id = 0;
   set_drop_target_tab (self, NULL);
 }
 
 static void
-drag_leave_cb (AdwTabBox               *self,
+drag_leave_cb (AdapTabBox               *self,
                GtkDropControllerMotion *controller)
 {
   GdkDrop *drop = gtk_drop_controller_motion_get_drop (controller);
   GdkDrag *drag = gdk_drop_get_drag (drop);
-  AdwTabBox *source;
+  AdapTabBox *source;
 
-  source = drag ? g_object_get_data (G_OBJECT (drag), "adw-tab-bar-drag-origin") : NULL;
+  source = drag ? g_object_get_data (G_OBJECT (drag), "adap-tab-bar-drag-origin") : NULL;
 
   if (source)
     return;
@@ -2778,7 +2778,7 @@ drag_leave_cb (AdwTabBox               *self,
 }
 
 static void
-drag_enter_motion_cb (AdwTabBox               *self,
+drag_enter_motion_cb (AdapTabBox               *self,
                       double                   x,
                       double                   y,
                       GtkDropControllerMotion *controller)
@@ -2786,9 +2786,9 @@ drag_enter_motion_cb (AdwTabBox               *self,
   TabInfo *info;
   GdkDrop *drop = gtk_drop_controller_motion_get_drop (controller);
   GdkDrag *drag = gdk_drop_get_drag (drop);
-  AdwTabBox *source;
+  AdapTabBox *source;
 
-  source = drag ? g_object_get_data (G_OBJECT (drag), "adw-tab-bar-drag-origin") : NULL;
+  source = drag ? g_object_get_data (G_OBJECT (drag), "adap-tab-bar-drag-origin") : NULL;
 
   if (source)
     return;
@@ -2812,13 +2812,13 @@ drag_enter_motion_cb (AdwTabBox               *self,
 /* Context menu */
 
 static void
-reset_setup_menu_cb (AdwTabBox *self)
+reset_setup_menu_cb (AdapTabBox *self)
 {
   g_signal_emit_by_name (self->view, "setup-menu", NULL);
 }
 
 static void
-touch_menu_notify_visible_cb (AdwTabBox *self)
+touch_menu_notify_visible_cb (AdapTabBox *self)
 {
   if (!self->context_menu || gtk_widget_get_visible (self->context_menu))
     return;
@@ -2830,12 +2830,12 @@ touch_menu_notify_visible_cb (AdwTabBox *self)
 }
 
 static void
-do_popup (AdwTabBox *self,
+do_popup (AdapTabBox *self,
           TabInfo   *info,
           double     x,
           double     y)
 {
-  GMenuModel *model = adw_tab_view_get_menu_model (self->view);
+  GMenuModel *model = adap_tab_view_get_menu_model (self->view);
   GdkRectangle rect;
 
   if (!G_IS_MENU_MODEL (model))
@@ -2881,7 +2881,7 @@ do_popup (AdwTabBox *self,
 }
 
 static void
-long_pressed_cb (AdwTabBox  *self,
+long_pressed_cb (AdapTabBox  *self,
                  double      x,
                  double      y,
                  GtkGesture *gesture)
@@ -2908,7 +2908,7 @@ popup_menu_cb (GtkWidget  *widget,
                const char *action_name,
                GVariant   *parameter)
 {
-  AdwTabBox *self = ADW_TAB_BOX (widget);
+  AdapTabBox *self = ADAP_TAB_BOX (widget);
 
   if (self->selected_tab && self->selected_tab->page)
     do_popup (self, self->selected_tab, -1, -1);
@@ -2917,7 +2917,7 @@ popup_menu_cb (GtkWidget  *widget,
 /* Clicking */
 
 static void
-handle_click (AdwTabBox  *self,
+handle_click (AdapTabBox  *self,
               TabInfo    *info,
               GtkGesture *gesture,
               double      x,
@@ -2931,7 +2931,7 @@ handle_click (AdwTabBox  *self,
     return;
   }
 
-  if (!adw_tab_can_click_at (info->tab, point.x, point.y))
+  if (!adap_tab_can_click_at (info->tab, point.x, point.y))
     return;
 
   if (self->adjustment) {
@@ -2950,12 +2950,12 @@ handle_click (AdwTabBox  *self,
     }
   }
 
-  can_grab_focus = adw_tab_bar_tabs_have_visible_focus (self->tab_bar);
+  can_grab_focus = adap_tab_bar_tabs_have_visible_focus (self->tab_bar);
 
   if (info == self->selected_tab)
     can_grab_focus = TRUE;
   else
-    adw_tab_view_set_selected_page (self->view, info->page);
+    adap_tab_view_set_selected_page (self->view, info->page);
 
   if (can_grab_focus)
     gtk_widget_grab_focus (info->container);
@@ -2964,7 +2964,7 @@ handle_click (AdwTabBox  *self,
 }
 
 static void
-pressed_cb (AdwTabBox  *self,
+pressed_cb (AdapTabBox  *self,
             int         n_press,
             double      x,
             double      y,
@@ -3020,7 +3020,7 @@ pressed_cb (AdwTabBox  *self,
 }
 
 static void
-released_cb (AdwTabBox  *self,
+released_cb (AdapTabBox  *self,
              int         n_press,
              double      x,
              double      y,
@@ -3054,7 +3054,7 @@ released_cb (AdwTabBox  *self,
       return;
     }
 
-    adw_tab_view_close_page (self->view, info->page);
+    adap_tab_view_close_page (self->view, info->page);
     self->middle_clicked_tab = NULL;
 
     return;
@@ -3070,7 +3070,7 @@ released_cb (AdwTabBox  *self,
 /* Overrides */
 
 static void
-measure_tab_box (AdwTabBox      *self,
+measure_tab_box (AdapTabBox      *self,
                  GtkOrientation  orientation,
                  int            *minimum,
                  int            *natural,
@@ -3151,7 +3151,7 @@ measure_tab_box (AdwTabBox      *self,
 }
 
 static void
-adw_tab_box_measure (GtkWidget      *widget,
+adap_tab_box_measure (GtkWidget      *widget,
                      GtkOrientation  orientation,
                      int             for_size,
                      int            *minimum,
@@ -3159,7 +3159,7 @@ adw_tab_box_measure (GtkWidget      *widget,
                      int            *minimum_baseline,
                      int            *natural_baseline)
 {
-  AdwTabBox *self = ADW_TAB_BOX (widget);
+  AdapTabBox *self = ADAP_TAB_BOX (widget);
 
   measure_tab_box (self, orientation, minimum, natural, TRUE);
 
@@ -3171,12 +3171,12 @@ adw_tab_box_measure (GtkWidget      *widget,
 }
 
 static void
-adw_tab_box_size_allocate (GtkWidget *widget,
+adap_tab_box_size_allocate (GtkWidget *widget,
                            int        width,
                            int        height,
                            int        baseline)
 {
-  AdwTabBox *self = ADW_TAB_BOX (widget);
+  AdapTabBox *self = ADAP_TAB_BOX (widget);
   gboolean is_rtl;
   GList *l;
   GtkAllocation child_allocation;
@@ -3185,7 +3185,7 @@ adw_tab_box_size_allocate (GtkWidget *widget,
   int indicator_size;
   GskTransform *transform;
 
-  adw_tab_box_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+  adap_tab_box_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
                        &self->allocated_width, NULL, NULL, NULL);
   self->allocated_width = MAX (self->allocated_width, width);
 
@@ -3293,7 +3293,7 @@ adw_tab_box_size_allocate (GtkWidget *widget,
   if (self->scroll_animation_done) {
     self->scroll_animation_tab = NULL;
     self->scroll_animation_done = FALSE;
-    adw_animation_reset (self->scroll_animation);
+    adap_animation_reset (self->scroll_animation);
   }
 
   for (l = self->tabs; l; l = l->next) {
@@ -3337,7 +3337,7 @@ adw_tab_box_size_allocate (GtkWidget *widget,
 }
 
 static void
-snapshot_tabs (AdwTabBox   *self,
+snapshot_tabs (AdapTabBox   *self,
                GtkSnapshot *snapshot)
 {
   int w = gtk_widget_get_width (GTK_WIDGET (self));
@@ -3414,10 +3414,10 @@ snapshot_tabs (AdwTabBox   *self,
 }
 
 static void
-adw_tab_box_snapshot (GtkWidget   *widget,
+adap_tab_box_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
-  AdwTabBox *self = ADW_TAB_BOX (widget);
+  AdapTabBox *self = ADAP_TAB_BOX (widget);
   double value = gtk_adjustment_get_value (self->adjustment);
   double page_size = gtk_adjustment_get_page_size (self->adjustment);
   double upper = gtk_adjustment_get_upper (self->adjustment);
@@ -3481,10 +3481,10 @@ adw_tab_box_snapshot (GtkWidget   *widget,
 }
 
 static gboolean
-adw_tab_box_focus (GtkWidget        *widget,
+adap_tab_box_focus (GtkWidget        *widget,
                    GtkDirectionType  direction)
 {
-  AdwTabBox *self = ADW_TAB_BOX (widget);
+  AdapTabBox *self = ADAP_TAB_BOX (widget);
 
   if (!self->selected_tab)
     return GDK_EVENT_PROPAGATE;
@@ -3493,9 +3493,9 @@ adw_tab_box_focus (GtkWidget        *widget,
 }
 
 static void
-adw_tab_box_unmap (GtkWidget *widget)
+adap_tab_box_unmap (GtkWidget *widget)
 {
-  AdwTabBox *self = ADW_TAB_BOX (widget);
+  AdapTabBox *self = ADAP_TAB_BOX (widget);
 
   force_end_reordering (self);
 
@@ -3507,14 +3507,14 @@ adw_tab_box_unmap (GtkWidget *widget)
   self->hovering = FALSE;
   update_hover (self);
 
-  GTK_WIDGET_CLASS (adw_tab_box_parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (adap_tab_box_parent_class)->unmap (widget);
 }
 
 static void
-adw_tab_box_direction_changed (GtkWidget        *widget,
+adap_tab_box_direction_changed (GtkWidget        *widget,
                                GtkTextDirection  previous_direction)
 {
-  AdwTabBox *self = ADW_TAB_BOX (widget);
+  AdapTabBox *self = ADAP_TAB_BOX (widget);
   double upper, page_size;
 
   if (!self->adjustment)
@@ -3538,15 +3538,15 @@ adw_tab_box_direction_changed (GtkWidget        *widget,
 }
 
 static void
-adw_tab_box_dispose (GObject *object)
+adap_tab_box_dispose (GObject *object)
 {
-  AdwTabBox *self = ADW_TAB_BOX (object);
+  AdapTabBox *self = ADAP_TAB_BOX (object);
 
   g_clear_handle_id (&self->drop_switch_timeout_id, g_source_remove);
 
   self->drag_gesture = NULL;
   self->tab_bar = NULL;
-  adw_tab_box_set_view (self, NULL);
+  adap_tab_box_set_view (self, NULL);
   set_hadjustment (self, NULL);
 
   g_clear_object (&self->resize_animation);
@@ -3556,26 +3556,26 @@ adw_tab_box_dispose (GObject *object)
   g_clear_pointer (&self->needs_attention_right, gtk_widget_unparent);
   g_clear_pointer (&self->context_menu, gtk_widget_unparent);
 
-  G_OBJECT_CLASS (adw_tab_box_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_tab_box_parent_class)->dispose (object);
 }
 
 static void
-adw_tab_box_finalize (GObject *object)
+adap_tab_box_finalize (GObject *object)
 {
-  AdwTabBox *self = (AdwTabBox *) object;
+  AdapTabBox *self = (AdapTabBox *) object;
 
   g_clear_pointer (&self->extra_drag_types, g_free);
 
-  G_OBJECT_CLASS (adw_tab_box_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_tab_box_parent_class)->finalize (object);
 }
 
 static void
-adw_tab_box_get_property (GObject    *object,
+adap_tab_box_get_property (GObject    *object,
                           guint       prop_id,
                           GValue     *value,
                           GParamSpec *pspec)
 {
-  AdwTabBox *self = ADW_TAB_BOX (object);
+  AdapTabBox *self = ADAP_TAB_BOX (object);
 
   switch (prop_id) {
   case PROP_PINNED:
@@ -3609,12 +3609,12 @@ adw_tab_box_get_property (GObject    *object,
 }
 
 static void
-adw_tab_box_set_property (GObject      *object,
+adap_tab_box_set_property (GObject      *object,
                           guint         prop_id,
                           const GValue *value,
                           GParamSpec   *pspec)
 {
-  AdwTabBox *self = ADW_TAB_BOX (object);
+  AdapTabBox *self = ADAP_TAB_BOX (object);
 
   switch (prop_id) {
   case PROP_PINNED:
@@ -3626,7 +3626,7 @@ adw_tab_box_set_property (GObject      *object,
     break;
 
   case PROP_VIEW:
-    adw_tab_box_set_view (self, g_value_get_object (value));
+    adap_tab_box_set_view (self, g_value_get_object (value));
     break;
 
   case PROP_HADJUSTMENT:
@@ -3644,22 +3644,22 @@ adw_tab_box_set_property (GObject      *object,
 }
 
 static void
-adw_tab_box_class_init (AdwTabBoxClass *klass)
+adap_tab_box_class_init (AdapTabBoxClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_tab_box_dispose;
-  object_class->finalize = adw_tab_box_finalize;
-  object_class->get_property = adw_tab_box_get_property;
-  object_class->set_property = adw_tab_box_set_property;
+  object_class->dispose = adap_tab_box_dispose;
+  object_class->finalize = adap_tab_box_finalize;
+  object_class->get_property = adap_tab_box_get_property;
+  object_class->set_property = adap_tab_box_set_property;
 
-  widget_class->measure = adw_tab_box_measure;
-  widget_class->size_allocate = adw_tab_box_size_allocate;
-  widget_class->snapshot = adw_tab_box_snapshot;
-  widget_class->focus = adw_tab_box_focus;
-  widget_class->unmap = adw_tab_box_unmap;
-  widget_class->direction_changed = adw_tab_box_direction_changed;
+  widget_class->measure = adap_tab_box_measure;
+  widget_class->size_allocate = adap_tab_box_size_allocate;
+  widget_class->snapshot = adap_tab_box_snapshot;
+  widget_class->focus = adap_tab_box_focus;
+  widget_class->unmap = adap_tab_box_unmap;
+  widget_class->direction_changed = adap_tab_box_direction_changed;
 
   props[PROP_PINNED] =
     g_param_spec_boolean ("pinned", NULL, NULL,
@@ -3668,12 +3668,12 @@ adw_tab_box_class_init (AdwTabBoxClass *klass)
 
   props[PROP_TAB_BAR] =
     g_param_spec_object ("tab-bar", NULL, NULL,
-                         ADW_TYPE_TAB_BAR,
+                         ADAP_TYPE_TAB_BAR,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   props[PROP_VIEW] =
     g_param_spec_object ("view", NULL, NULL,
-                         ADW_TYPE_TAB_VIEW,
+                         ADAP_TYPE_TAB_VIEW,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_RESIZE_FROZEN] =
@@ -3694,12 +3694,12 @@ adw_tab_box_class_init (AdwTabBoxClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_STOP_KINETIC_SCROLLING],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   signals[SIGNAL_EXTRA_DRAG_DROP] =
     g_signal_new ("extra-drag-drop",
@@ -3710,7 +3710,7 @@ adw_tab_box_class_init (AdwTabBoxClass *klass)
                   NULL, NULL,
                   G_TYPE_BOOLEAN,
                   3,
-                  ADW_TYPE_TAB_PAGE,
+                  ADAP_TYPE_TAB_PAGE,
                   G_TYPE_VALUE,
                   GDK_TYPE_DRAG_ACTION);
 
@@ -3723,7 +3723,7 @@ adw_tab_box_class_init (AdwTabBoxClass *klass)
                   NULL, NULL,
                   GDK_TYPE_DRAG_ACTION,
                   2,
-                  ADW_TYPE_TAB_PAGE,
+                  ADAP_TYPE_TAB_PAGE,
                   G_TYPE_VALUE);
 
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, popup_menu_cb);
@@ -3748,10 +3748,10 @@ adw_tab_box_class_init (AdwTabBoxClass *klass)
 }
 
 static void
-adw_tab_box_init (AdwTabBox *self)
+adap_tab_box_init (AdapTabBox *self)
 {
   GtkEventController *controller;
-  AdwAnimationTarget *target;
+  AdapAnimationTarget *target;
   GtkWidget *widget;
 
   self->can_remove_placeholder = TRUE;
@@ -3797,7 +3797,7 @@ adw_tab_box_init (AdwTabBox *self)
   g_signal_connect_swapped (controller, "leave", G_CALLBACK (drag_leave_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
-  controller = GTK_EVENT_CONTROLLER (gtk_drop_target_new (ADW_TYPE_TAB_PAGE, GDK_ACTION_MOVE));
+  controller = GTK_EVENT_CONTROLLER (gtk_drop_target_new (ADAP_TYPE_TAB_PAGE, GDK_ACTION_MOVE));
   gtk_drop_target_set_preload (GTK_DROP_TARGET (controller), TRUE);
   g_signal_connect_swapped (controller, "enter", G_CALLBACK (tab_drag_enter_motion_cb), self);
   g_signal_connect_swapped (controller, "motion", G_CALLBACK (tab_drag_enter_motion_cb), self);
@@ -3805,11 +3805,11 @@ adw_tab_box_init (AdwTabBox *self)
   g_signal_connect_swapped (controller, "drop", G_CALLBACK (tab_drag_drop_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               resize_animation_value_cb,
                                               self, NULL);
   self->resize_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 0, 1,
+    adap_timed_animation_new (GTK_WIDGET (self), 0, 1,
                              RESIZE_ANIMATION_DURATION, target);
 
   g_signal_connect_swapped (self->resize_animation, "done",
@@ -3819,11 +3819,11 @@ adw_tab_box_init (AdwTabBox *self)
    * finishes, don't remove it right away, it will be done in size-allocate as
    * well after one last update, so that we don't miss the last frame.
    */
-  target = adw_callback_animation_target_new ((AdwAnimationTargetFunc)
+  target = adap_callback_animation_target_new ((AdapAnimationTargetFunc)
                                               scroll_animation_cb,
                                               self, NULL);
   self->scroll_animation =
-    adw_timed_animation_new (GTK_WIDGET (self), 0, 1,
+    adap_timed_animation_new (GTK_WIDGET (self), 0, 1,
                              SCROLL_ANIMATION_DURATION, target);
 
   g_signal_connect_swapped (self->scroll_animation, "done",
@@ -3836,7 +3836,7 @@ adw_tab_box_init (AdwTabBox *self)
   gtk_widget_set_can_focus (self->needs_attention_left, FALSE);
   gtk_widget_set_parent (self->needs_attention_left, GTK_WIDGET (self));
 
-  widget = adw_gizmo_new ("indicator", NULL, NULL, NULL, NULL, NULL, NULL);
+  widget = adap_gizmo_new ("indicator", NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_add_css_class (widget, "left");
   gtk_revealer_set_child (GTK_REVEALER (self->needs_attention_left), widget);
 
@@ -3847,17 +3847,17 @@ adw_tab_box_init (AdwTabBox *self)
   gtk_widget_set_can_focus (self->needs_attention_right, FALSE);
   gtk_widget_set_parent (self->needs_attention_right, GTK_WIDGET (self));
 
-  widget = adw_gizmo_new ("indicator", NULL, NULL, NULL, NULL, NULL, NULL);
+  widget = adap_gizmo_new ("indicator", NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_add_css_class (widget, "right");
   gtk_revealer_set_child (GTK_REVEALER (self->needs_attention_right), widget);
 }
 
 void
-adw_tab_box_set_view (AdwTabBox  *self,
-                      AdwTabView *view)
+adap_tab_box_set_view (AdapTabBox  *self,
+                      AdapTabView *view)
 {
-  g_return_if_fail (ADW_IS_TAB_BOX (self));
-  g_return_if_fail (view == NULL || ADW_IS_TAB_VIEW (view));
+  g_return_if_fail (ADAP_IS_TAB_BOX (self));
+  g_return_if_fail (view == NULL || ADAP_IS_TAB_VIEW (view));
 
   if (view == self->view)
     return;
@@ -3881,10 +3881,10 @@ adw_tab_box_set_view (AdwTabBox  *self,
   self->view = view;
 
   if (self->view) {
-    int i, n_pages = adw_tab_view_get_n_pages (self->view);
+    int i, n_pages = adap_tab_view_get_n_pages (self->view);
 
     for (i = n_pages - 1; i >= 0; i--)
-      page_attached_cb (self, adw_tab_view_get_nth_page (self->view, i), 0);
+      page_attached_cb (self, adap_tab_view_get_nth_page (self->view, i), 0);
 
     g_signal_connect_object (self->view, "page-attached", G_CALLBACK (page_attached_cb), self, G_CONNECT_SWAPPED);
     g_signal_connect_object (self->view, "page-detached", G_CALLBACK (page_detached_cb), self, G_CONNECT_SWAPPED);
@@ -3896,7 +3896,7 @@ adw_tab_box_set_view (AdwTabBox  *self,
 
       update_single_tab_style (self);
 
-      self->view_drop_target = GTK_EVENT_CONTROLLER (gtk_drop_target_new (ADW_TYPE_TAB_PAGE, GDK_ACTION_MOVE));
+      self->view_drop_target = GTK_EVENT_CONTROLLER (gtk_drop_target_new (ADAP_TYPE_TAB_PAGE, GDK_ACTION_MOVE));
 
       g_signal_connect_object (self->view_drop_target, "drop", G_CALLBACK (view_drag_drop_cb), self, G_CONNECT_SWAPPED);
 
@@ -3910,53 +3910,53 @@ adw_tab_box_set_view (AdwTabBox  *self,
 }
 
 void
-adw_tab_box_attach_page (AdwTabBox  *self,
-                         AdwTabPage *page,
+adap_tab_box_attach_page (AdapTabBox  *self,
+                         AdapTabPage *page,
                          int         position)
 {
-  g_return_if_fail (ADW_IS_TAB_BOX (self));
-  g_return_if_fail (ADW_IS_TAB_PAGE (page));
+  g_return_if_fail (ADAP_IS_TAB_BOX (self));
+  g_return_if_fail (ADAP_IS_TAB_PAGE (page));
 
   page_attached_cb (self, page, position);
 }
 
 void
-adw_tab_box_detach_page (AdwTabBox  *self,
-                         AdwTabPage *page)
+adap_tab_box_detach_page (AdapTabBox  *self,
+                         AdapTabPage *page)
 {
-  g_return_if_fail (ADW_IS_TAB_BOX (self));
-  g_return_if_fail (ADW_IS_TAB_PAGE (page));
+  g_return_if_fail (ADAP_IS_TAB_BOX (self));
+  g_return_if_fail (ADAP_IS_TAB_PAGE (page));
 
   page_detached_cb (self, page);
 }
 
 void
-adw_tab_box_select_page (AdwTabBox  *self,
-                         AdwTabPage *page)
+adap_tab_box_select_page (AdapTabBox  *self,
+                         AdapTabPage *page)
 {
-  g_return_if_fail (ADW_IS_TAB_BOX (self));
-  g_return_if_fail (page == NULL || ADW_IS_TAB_PAGE (page));
+  g_return_if_fail (ADAP_IS_TAB_BOX (self));
+  g_return_if_fail (page == NULL || ADAP_IS_TAB_PAGE (page));
 
   select_page (self, page);
 }
 
 void
-adw_tab_box_try_focus_selected_tab (AdwTabBox *self)
+adap_tab_box_try_focus_selected_tab (AdapTabBox *self)
 {
-  g_return_if_fail (ADW_IS_TAB_BOX (self));
+  g_return_if_fail (ADAP_IS_TAB_BOX (self));
 
   if (self->selected_tab)
     gtk_widget_grab_focus (self->selected_tab->container);
 }
 
 gboolean
-adw_tab_box_is_page_focused (AdwTabBox  *self,
-                             AdwTabPage *page)
+adap_tab_box_is_page_focused (AdapTabBox  *self,
+                             AdapTabPage *page)
 {
   TabInfo *info;
 
-  g_return_val_if_fail (ADW_IS_TAB_BOX (self), FALSE);
-  g_return_val_if_fail (ADW_IS_TAB_PAGE (page), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_BOX (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_PAGE (page), FALSE);
 
   info = find_info_for_page (self, page);
 
@@ -3964,14 +3964,14 @@ adw_tab_box_is_page_focused (AdwTabBox  *self,
 }
 
 void
-adw_tab_box_setup_extra_drop_target (AdwTabBox     *self,
+adap_tab_box_setup_extra_drop_target (AdapTabBox     *self,
                                      GdkDragAction  actions,
                                      GType         *types,
                                      gsize          n_types)
 {
   GList *l;
 
-  g_return_if_fail (ADW_IS_TAB_BOX (self));
+  g_return_if_fail (ADAP_IS_TAB_BOX (self));
   g_return_if_fail (n_types == 0 || types != NULL);
 
   g_clear_pointer (&self->extra_drag_types, g_free);
@@ -3983,7 +3983,7 @@ adw_tab_box_setup_extra_drop_target (AdwTabBox     *self,
   for (l = self->tabs; l; l = l->next) {
     TabInfo *info = l->data;
 
-    adw_tab_setup_extra_drop_target (info->tab,
+    adap_tab_setup_extra_drop_target (info->tab,
                                      self->extra_drag_actions,
                                      self->extra_drag_types,
                                      self->extra_drag_n_types);
@@ -3991,18 +3991,18 @@ adw_tab_box_setup_extra_drop_target (AdwTabBox     *self,
 }
 
 gboolean
-adw_tab_box_get_expand_tabs (AdwTabBox *self)
+adap_tab_box_get_expand_tabs (AdapTabBox *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_BOX (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_BOX (self), FALSE);
 
   return self->expand_tabs;
 }
 
 void
-adw_tab_box_set_expand_tabs (AdwTabBox *self,
+adap_tab_box_set_expand_tabs (AdapTabBox *self,
                              gboolean   expand_tabs)
 {
-  g_return_if_fail (ADW_IS_TAB_BOX (self));
+  g_return_if_fail (ADAP_IS_TAB_BOX (self));
 
   expand_tabs = !!expand_tabs;
 
@@ -4017,20 +4017,20 @@ adw_tab_box_set_expand_tabs (AdwTabBox *self,
 }
 
 gboolean
-adw_tab_box_get_inverted (AdwTabBox *self)
+adap_tab_box_get_inverted (AdapTabBox *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_BOX (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_BOX (self), FALSE);
 
   return self->inverted;
 }
 
 void
-adw_tab_box_set_inverted (AdwTabBox *self,
+adap_tab_box_set_inverted (AdapTabBox *self,
                           gboolean   inverted)
 {
   GList *l;
 
-  g_return_if_fail (ADW_IS_TAB_BOX (self));
+  g_return_if_fail (ADAP_IS_TAB_BOX (self));
 
   inverted = !!inverted;
 
@@ -4042,25 +4042,25 @@ adw_tab_box_set_inverted (AdwTabBox *self,
   for (l = self->tabs; l; l = l->next) {
     TabInfo *info = l->data;
 
-    adw_tab_set_inverted (info->tab, inverted);
+    adap_tab_set_inverted (info->tab, inverted);
   }
 }
 
 gboolean
-adw_tab_box_get_extra_drag_preload (AdwTabBox *self)
+adap_tab_box_get_extra_drag_preload (AdapTabBox *self)
 {
-  g_return_val_if_fail (ADW_IS_TAB_BOX (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_TAB_BOX (self), FALSE);
 
   return self->extra_drag_preload;
 }
 
 void
-adw_tab_box_set_extra_drag_preload (AdwTabBox *self,
+adap_tab_box_set_extra_drag_preload (AdapTabBox *self,
                                     gboolean   preload)
 {
   GList *l;
 
-  g_return_if_fail (ADW_IS_TAB_BOX (self));
+  g_return_if_fail (ADAP_IS_TAB_BOX (self));
 
   if (preload == self->extra_drag_preload)
     return;
@@ -4070,6 +4070,6 @@ adw_tab_box_set_extra_drag_preload (AdwTabBox *self,
   for (l = self->tabs; l; l = l->next) {
     TabInfo *info = l->data;
 
-    adw_tab_set_extra_drag_preload (info->tab, preload);
+    adap_tab_set_extra_drag_preload (info->tab, preload);
   }
 }

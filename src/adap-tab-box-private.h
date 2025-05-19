@@ -8,49 +8,49 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <gtk/gtk.h>
-#include "adw-tab-view.h"
+#include "adap-tab-view.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_TAB_BOX (adw_tab_box_get_type())
+#define ADAP_TYPE_TAB_BOX (adap_tab_box_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwTabBox, adw_tab_box, ADW, TAB_BOX, GtkWidget)
+G_DECLARE_FINAL_TYPE (AdapTabBox, adap_tab_box, ADAP, TAB_BOX, GtkWidget)
 
-void adw_tab_box_set_view (AdwTabBox  *self,
-                           AdwTabView *view);
+void adap_tab_box_set_view (AdapTabBox  *self,
+                           AdapTabView *view);
 
-void adw_tab_box_attach_page (AdwTabBox  *self,
-                              AdwTabPage *page,
+void adap_tab_box_attach_page (AdapTabBox  *self,
+                              AdapTabPage *page,
                               int         position);
-void adw_tab_box_detach_page (AdwTabBox  *self,
-                              AdwTabPage *page);
-void adw_tab_box_select_page (AdwTabBox  *self,
-                              AdwTabPage *page);
+void adap_tab_box_detach_page (AdapTabBox  *self,
+                              AdapTabPage *page);
+void adap_tab_box_select_page (AdapTabBox  *self,
+                              AdapTabPage *page);
 
-void adw_tab_box_try_focus_selected_tab (AdwTabBox  *self);
-gboolean adw_tab_box_is_page_focused    (AdwTabBox  *self,
-                                         AdwTabPage *page);
+void adap_tab_box_try_focus_selected_tab (AdapTabBox  *self);
+gboolean adap_tab_box_is_page_focused    (AdapTabBox  *self,
+                                         AdapTabPage *page);
 
-void adw_tab_box_setup_extra_drop_target (AdwTabBox     *self,
+void adap_tab_box_setup_extra_drop_target (AdapTabBox     *self,
                                           GdkDragAction  actions,
                                           GType         *types,
                                           gsize          n_types);
 
-gboolean adw_tab_box_get_extra_drag_preload (AdwTabBox *self);
-void     adw_tab_box_set_extra_drag_preload (AdwTabBox *self,
+gboolean adap_tab_box_get_extra_drag_preload (AdapTabBox *self);
+void     adap_tab_box_set_extra_drag_preload (AdapTabBox *self,
                                              gboolean   preload);
 
-gboolean adw_tab_box_get_expand_tabs (AdwTabBox *self);
-void     adw_tab_box_set_expand_tabs (AdwTabBox *self,
+gboolean adap_tab_box_get_expand_tabs (AdapTabBox *self);
+void     adap_tab_box_set_expand_tabs (AdapTabBox *self,
                                       gboolean   expand_tabs);
 
-gboolean adw_tab_box_get_inverted (AdwTabBox *self);
-void     adw_tab_box_set_inverted (AdwTabBox *self,
+gboolean adap_tab_box_get_inverted (AdapTabBox *self);
+void     adap_tab_box_set_inverted (AdapTabBox *self,
                                    gboolean   inverted);
 
 G_END_DECLS

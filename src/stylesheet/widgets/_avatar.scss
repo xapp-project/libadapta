@@ -5,7 +5,7 @@ avatar {
   // The list of colors to generate avatars.
   // Each avatar color is represented by a font color, a gradient start color and a gradient stop color.
   // There are 8 different colors for avtars in the list if you change the number of them you
-  // need to update the NUMBER_OF_COLORS in src/adw-avatar.c.
+  // need to update the NUMBER_OF_COLORS in src/adap-avatar.c.
   // The 2D list has this form: ((font-color, gradient-top-color, gradient-bottom-color)).
   $avatarcolorlist: (
    (#cfe1f5, #83b6ec, #337fdc), // blue

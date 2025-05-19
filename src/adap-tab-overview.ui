@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwTabOverview" parent="GtkWidget">
+  <template class="AdapTabOverview" parent="GtkWidget">
     <child>
-      <object class="AdwBin" id="child_bin"/>
+      <object class="AdapBin" id="child_bin"/>
     </child>
     <child>
-      <object class="AdwToolbarView" id="overview">
+      <object class="AdapToolbarView" id="overview">
         <property name="can-focus">False</property>
         <property name="can-target">False</property>
         <style>
@@ -14,7 +14,7 @@
           <class name="overview"/>
         </style>
         <child type="top">
-          <object class="AdwHeaderBar" id="header_bar">
+          <object class="AdapHeaderBar" id="header_bar">
             <child type="start">
               <object class="GtkToggleButton" id="search_button">
                 <property name="icon-name">edit-find-symbolic</property>
@@ -22,7 +22,7 @@
               </object>
             </child>
             <property name="title-widget">
-              <object class="AdwWindowTitle" id="title">
+              <object class="AdapWindowTitle" id="title">
                 <style>
                   <class name="numeric"/>
                 </style>
@@ -42,7 +42,7 @@
             <property name="search-mode-enabled" bind-source="search_button" bind-property="active" bind-flags="bidirectional"/>
             <property name="key-capture-widget">overview</property>
             <property name="child">
-              <object class="AdwClamp">
+              <object class="AdapClamp">
                 <property name="hexpand">True</property>
                 <property name="maximum-size">400</property>
                 <property name="child">
@@ -64,21 +64,21 @@
               <object class="GtkScrolledWindow" id="scrolled_window">
                 <property name="hscrollbar-policy">never</property>
                 <property name="child">
-                  <object class="AdwTabOverviewScrollable" id="scrollable">
+                  <object class="AdapTabOverviewScrollable" id="scrollable">
                     <property name="overview">overview</property>
                     <property name="new-button">new_tab_button</property>
                     <property name="pinned-grid">
-                      <object class="AdwTabGrid" id="pinned_grid">
+                      <object class="AdapTabGrid" id="pinned_grid">
                         <property name="pinned">True</property>
-                        <property name="tab-overview">AdwTabOverview</property>
+                        <property name="tab-overview">AdapTabOverview</property>
                         <signal name="extra-drag-drop" handler="extra_drag_drop_cb" swapped="yes"/>
                         <signal name="extra-drag-value" handler="extra_drag_value_cb" swapped="true"/>
                         <signal name="notify::empty" handler="empty_changed_cb" swapped="yes"/>
                       </object>
                     </property>
                     <property name="grid">
-                      <object class="AdwTabGrid" id="grid">
-                        <property name="tab-overview">AdwTabOverview</property>
+                      <object class="AdapTabGrid" id="grid">
+                        <property name="tab-overview">AdapTabOverview</property>
                         <signal name="extra-drag-drop" handler="extra_drag_drop_cb" swapped="yes"/>
                         <signal name="extra-drag-value" handler="extra_drag_value_cb" swapped="true"/>
                         <signal name="notify::empty" handler="empty_changed_cb" swapped="yes"/>
@@ -89,7 +89,7 @@
               </object>
             </property>
             <child type="overlay">
-              <object class="AdwStatusPage" id="empty_state">
+              <object class="AdapStatusPage" id="empty_state">
                 <property name="visible">False</property>
                 <property name="can-target">False</property>
                 <property name="can-focus">False</property>
@@ -102,7 +102,7 @@
               </object>
             </child>
             <child type="overlay">
-              <object class="AdwStatusPage" id="search_empty_state">
+              <object class="AdapStatusPage" id="search_empty_state">
                 <property name="visible">False</property>
                 <property name="can-target">False</property>
                 <property name="can-focus">False</property>
@@ -126,7 +126,7 @@
                   <property name="clip-overlay">True</property>
                 </layout>
                 <property name="child">
-                  <object class="AdwButtonContent">
+                  <object class="AdapButtonContent">
                     <property name="icon-name">tab-new-symbolic</property>
                     <property name="label" translatable="yes">New _Tab</property>
                     <property name="use-underline">True</property>

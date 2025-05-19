@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwWindow" id="window">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapWindow" id="window">
     <property name="default-width">600</property>
     <property name="default-height">650</property>
     <property name="content">
-      <object class="AdwToolbarView">
+      <object class="AdapToolbarView">
         <child type="top">
-          <object class="AdwHeaderBar">
+          <object class="AdapHeaderBar">
             <property name="show-title">False</property>
           </object>
         </child>
       </object>
     </property>
   </object>
-  <object class="AdwAboutDialog" id="widget">
+  <object class="AdapAboutDialog" id="widget">
     <property name="application-icon">application-x-executable</property>
     <property name="application-name" translatable="yes">Application</property>
     <property name="developer-name" translatable="yes">Developer Name</property>

@@ -6,7 +6,7 @@
  * Author: Alice Mikhaylenko <alice.mikhaylenko@puri.sm>
  */
 
-#include <adwaita.h>
+#include <adapta.h>
 
 static void
 increment (int *data)
@@ -15,10 +15,10 @@ increment (int *data)
 }
 
 static void
-test_adw_tab_button_view (void)
+test_adap_tab_button_view (void)
 {
-  AdwTabButton *button = g_object_ref_sink (ADW_TAB_BUTTON (adw_tab_button_new ()));
-  AdwTabView *view;
+  AdapTabButton *button = g_object_ref_sink (ADAP_TAB_BUTTON (adap_tab_button_new ()));
+  AdapTabView *view;
   int notified = 0;
 
   g_assert_nonnull (button);
@@ -28,16 +28,16 @@ test_adw_tab_button_view (void)
   g_object_get (button, "view", &view, NULL);
   g_assert_null (view);
 
-  adw_tab_button_set_view (button, NULL);
+  adap_tab_button_set_view (button, NULL);
   g_assert_cmpint (notified, ==, 0);
 
-  view = g_object_ref_sink (ADW_TAB_VIEW (adw_tab_view_new ()));
-  adw_tab_button_set_view (button, view);
-  g_assert_true (adw_tab_button_get_view (button) == view);
+  view = g_object_ref_sink (ADAP_TAB_VIEW (adap_tab_view_new ()));
+  adap_tab_button_set_view (button, view);
+  g_assert_true (adap_tab_button_get_view (button) == view);
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (button, "view", NULL, NULL);
-  g_assert_null (adw_tab_button_get_view (button));
+  g_assert_null (adap_tab_button_get_view (button));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (button);
@@ -49,9 +49,9 @@ main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
-  adw_init ();
+  adap_init ();
 
-  g_test_add_func ("/Adwaita/TabButton/view", test_adw_tab_button_view);
+  g_test_add_func ("/Adapta/TabButton/view", test_adap_tab_button_view);
 
   return g_test_run ();
 }

@@ -75,30 +75,30 @@ line preceding its prototype.
 *Good*:
 
 ```c
-ADW_AVAILABLE_IN_ALL
-AdwFoo *adw_foo_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+AdapFoo *adap_foo_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-AdwBar *adw_foo_get_bar (AdwFoo *self);
-ADW_AVAILABLE_IN_ALL
-void    adw_foo_set_bar (AdwFoo *self,
-                         AdwBar *bar);
+ADAP_AVAILABLE_IN_ALL
+AdapBar *adap_foo_get_bar (AdapFoo *self);
+ADAP_AVAILABLE_IN_ALL
+void    adap_foo_set_bar (AdapFoo *self,
+                         AdapBar *bar);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_foo_get_bit (AdwFoo   *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_foo_set_bit (AdwFoo   *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_foo_get_bit (AdapFoo   *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_foo_set_bit (AdapFoo   *self,
                           gboolean  bit);
 
-ADW_AVAILABLE_IN_ALL
-void adw_foo_add_baz    (AdwFoo *self,
-                         AdwBaz *baz);
-ADW_AVAILABLE_IN_ALL
-void adw_foo_remove_baz (AdwFoo *self,
-                         AdwBaz *baz);
+ADAP_AVAILABLE_IN_ALL
+void adap_foo_add_baz    (AdapFoo *self,
+                         AdapBaz *baz);
+ADAP_AVAILABLE_IN_ALL
+void adap_foo_remove_baz (AdapFoo *self,
+                         AdapBaz *baz);
 
-ADW_AVAILABLE_IN_ALL
-void adw_foo_frobnicate (AdwFoo *self);
+ADAP_AVAILABLE_IN_ALL
+void adap_foo_frobnicate (AdapFoo *self);
 ```
 
 If the function transfers a new handle to a resource, like a reference, a
@@ -111,25 +111,25 @@ a handle to the resource, e.g. in methods incrementing a reference counter.
 *Good*:
 
 ```c
-ADW_AVAILABLE_IN_ALL
-AdwFoo *adw_foo_new (void) G_GNUC_WARN_UNUSED_RESULT;
-ADW_AVAILABLE_IN_ALL
-AdwFoo *adw_foo_ref (AdwFoo *self);
+ADAP_AVAILABLE_IN_ALL
+AdapFoo *adap_foo_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+AdapFoo *adap_foo_ref (AdapFoo *self);
 
-ADW_AVAILABLE_IN_ALL
-char *adw_foo_to_string (AdwFoo *self) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+char *adap_foo_to_string (AdapFoo *self) G_GNUC_WARN_UNUSED_RESULT;
 ```
 
 *Bad*:
 
 ```c
-ADW_AVAILABLE_IN_ALL
-AdwFoo *adw_foo_new (void);
-ADW_AVAILABLE_IN_ALL
-AdwFoo *adw_foo_ref (AdwFoo *self) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+AdapFoo *adap_foo_new (void);
+ADAP_AVAILABLE_IN_ALL
+AdapFoo *adap_foo_ref (AdapFoo *self) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-char *adw_foo_to_string (AdwFoo *self);
+ADAP_AVAILABLE_IN_ALL
+char *adap_foo_to_string (AdapFoo *self);
 ```
 
 ### Braces
@@ -233,8 +233,8 @@ Internal headers (for consistency, whether they need to be installed or not)
 should contain the following guard to prevent users from directly including
 them:
 ```c
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 ```
 
@@ -319,7 +319,7 @@ Static functions don't need the class prefix.  E.g. with a type foo_bar:
 
 ```c
 static void
-selection_changed_cb (AdwViewSwitcher   *self,
+selection_changed_cb (AdapViewSwitcher   *self,
                       guint              position,
                       guint              n_items)
 ```
@@ -328,7 +328,7 @@ selection_changed_cb (AdwViewSwitcher   *self,
 
 ```c
 static void
-adw_view_switcher_selection_changed_cb (AdwViewSwitcher   *self,
+adap_view_switcher_selection_changed_cb (AdapViewSwitcher   *self,
                                         guint              position,
                                         guint              n_items)
 ```

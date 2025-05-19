@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwTabThumbnail" parent="GtkWidget">
+  <template class="AdapTabThumbnail" parent="GtkWidget">
     <child>
       <object class="GtkDropTarget" id="drop_target">
         <signal name="drop" handler="drop_cb" swapped="true"/>
@@ -52,7 +52,7 @@
                 </child>
                 <child type="overlay">
                   <object class="GtkImage" id="unpin_icon">
-                    <property name="icon-name">adw-tab-unpin-symbolic</property>
+                    <property name="icon-name">adap-tab-unpin-symbolic</property>
                     <property name="valign">start</property>
                     <property name="halign">end</property>
                     <layout>
@@ -69,8 +69,8 @@
                     <property name="valign">start</property>
                     <property name="halign">start</property>
                     <binding name="tooltip-markup">
-                      <lookup name="indicator-tooltip" type="AdwTabPage">
-                        <lookup name="page">AdwTabThumbnail</lookup>
+                      <lookup name="indicator-tooltip" type="AdapTabPage">
+                        <lookup name="page">AdapTabThumbnail</lookup>
                       </lookup>
                     </binding>
                     <signal name="clicked" handler="indicator_clicked_cb" swapped="true"/>
@@ -100,12 +100,12 @@
                   <class name="needs-attention"/>
                 </style>
                 <binding name="reveal-child">
-                  <lookup name="needs-attention" type="AdwTabPage">
-                    <lookup name="page">AdwTabThumbnail</lookup>
+                  <lookup name="needs-attention" type="AdapTabPage">
+                    <lookup name="page">AdapTabThumbnail</lookup>
                   </lookup>
                 </binding>
                 <property name="child">
-                  <object class="AdwGizmo"/>
+                  <object class="AdapGizmo"/>
                 </property>
               </object>
             </child>
@@ -144,10 +144,10 @@
               </object>
             </child>
             <child>
-              <object class="AdwFadingLabel">
+              <object class="AdapFadingLabel">
                 <binding name="label">
-                  <lookup name="title" type="AdwTabPage">
-                    <lookup name="page">AdwTabThumbnail</lookup>
+                  <lookup name="title" type="AdapTabPage">
+                    <lookup name="page">AdapTabThumbnail</lookup>
                   </lookup>
                 </binding>
               </object>

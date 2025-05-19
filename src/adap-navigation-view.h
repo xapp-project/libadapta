@@ -8,27 +8,27 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_NAVIGATION_PAGE (adw_navigation_page_get_type())
+#define ADAP_TYPE_NAVIGATION_PAGE (adap_navigation_page_get_type())
 
-ADW_AVAILABLE_IN_1_4
-G_DECLARE_DERIVABLE_TYPE (AdwNavigationPage, adw_navigation_page, ADW, NAVIGATION_PAGE, GtkWidget)
+ADAP_AVAILABLE_IN_1_4
+G_DECLARE_DERIVABLE_TYPE (AdapNavigationPage, adap_navigation_page, ADAP, NAVIGATION_PAGE, GtkWidget)
 
-struct _AdwNavigationPageClass
+struct _AdapNavigationPageClass
 {
   GtkWidgetClass parent_class;
 
   /**
-   * AdwNavigationPageClass::showing:
+   * AdapNavigationPageClass::showing:
    * @self: a navigation page
    *
    * Called when the page shows at the beginning of the navigation view
@@ -36,10 +36,10 @@ struct _AdwNavigationPageClass
    *
    * Since: 1.4
    */
-  void (* showing) (AdwNavigationPage *self);
+  void (* showing) (AdapNavigationPage *self);
 
   /**
-   * AdwNavigationPageClass::shown:
+   * AdapNavigationPageClass::shown:
    * @self: a navigation page
    *
    * Called when the navigation view transition has been completed and the page
@@ -47,10 +47,10 @@ struct _AdwNavigationPageClass
    *
    * Since: 1.4
    */
-  void (* shown)   (AdwNavigationPage *self);
+  void (* shown)   (AdapNavigationPage *self);
 
   /**
-   * AdwNavigationPageClass::hiding:
+   * AdapNavigationPageClass::hiding:
    * @self: a navigation page
    *
    * Called when the page starts hiding at the beginning of the navigation view
@@ -58,10 +58,10 @@ struct _AdwNavigationPageClass
    *
    * Since: 1.4
    */
-  void (* hiding)  (AdwNavigationPage *self);
+  void (* hiding)  (AdapNavigationPage *self);
 
   /**
-   * AdwNavigationPageClass::hidden:
+   * AdapNavigationPageClass::hidden:
    * @self: a navigation page
    *
    * Called when the navigation view transition has been completed and the page
@@ -69,114 +69,114 @@ struct _AdwNavigationPageClass
    *
    * Since: 1.4
    */
-  void (* hidden)  (AdwNavigationPage *self);
+  void (* hidden)  (AdapNavigationPage *self);
 
   /*< private >*/
   gpointer padding[8];
 };
 
-ADW_AVAILABLE_IN_1_4
-AdwNavigationPage *adw_navigation_page_new (GtkWidget  *child,
+ADAP_AVAILABLE_IN_1_4
+AdapNavigationPage *adap_navigation_page_new (GtkWidget  *child,
                                             const char *title) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-AdwNavigationPage *adw_navigation_page_new_with_tag (GtkWidget  *child,
+ADAP_AVAILABLE_IN_1_4
+AdapNavigationPage *adap_navigation_page_new_with_tag (GtkWidget  *child,
                                                      const char *title,
                                                      const char *tag) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-GtkWidget *adw_navigation_page_get_child (AdwNavigationPage *self);
-ADW_AVAILABLE_IN_1_4
-void       adw_navigation_page_set_child (AdwNavigationPage *self,
+ADAP_AVAILABLE_IN_1_4
+GtkWidget *adap_navigation_page_get_child (AdapNavigationPage *self);
+ADAP_AVAILABLE_IN_1_4
+void       adap_navigation_page_set_child (AdapNavigationPage *self,
                                           GtkWidget         *child);
 
-ADW_AVAILABLE_IN_1_4
-const char *adw_navigation_page_get_tag (AdwNavigationPage *self);
-ADW_AVAILABLE_IN_1_4
-void        adw_navigation_page_set_tag (AdwNavigationPage *self,
+ADAP_AVAILABLE_IN_1_4
+const char *adap_navigation_page_get_tag (AdapNavigationPage *self);
+ADAP_AVAILABLE_IN_1_4
+void        adap_navigation_page_set_tag (AdapNavigationPage *self,
                                          const char        *tag);
 
-ADW_AVAILABLE_IN_1_4
-const char *adw_navigation_page_get_title (AdwNavigationPage *self);
-ADW_AVAILABLE_IN_1_4
-void        adw_navigation_page_set_title (AdwNavigationPage *self,
+ADAP_AVAILABLE_IN_1_4
+const char *adap_navigation_page_get_title (AdapNavigationPage *self);
+ADAP_AVAILABLE_IN_1_4
+void        adap_navigation_page_set_title (AdapNavigationPage *self,
                                            const char        *title);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_navigation_page_get_can_pop (AdwNavigationPage *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_navigation_page_set_can_pop (AdwNavigationPage *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_navigation_page_get_can_pop (AdapNavigationPage *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_navigation_page_set_can_pop (AdapNavigationPage *self,
                                           gboolean           can_pop);
 
-#define ADW_TYPE_NAVIGATION_VIEW (adw_navigation_view_get_type())
+#define ADAP_TYPE_NAVIGATION_VIEW (adap_navigation_view_get_type())
 
-ADW_AVAILABLE_IN_1_4
-G_DECLARE_FINAL_TYPE (AdwNavigationView, adw_navigation_view, ADW, NAVIGATION_VIEW, GtkWidget)
+ADAP_AVAILABLE_IN_1_4
+G_DECLARE_FINAL_TYPE (AdapNavigationView, adap_navigation_view, ADAP, NAVIGATION_VIEW, GtkWidget)
 
-ADW_AVAILABLE_IN_1_4
-GtkWidget *adw_navigation_view_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_1_4
+GtkWidget *adap_navigation_view_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-void adw_navigation_view_add (AdwNavigationView *self,
-                              AdwNavigationPage *page);
+ADAP_AVAILABLE_IN_1_4
+void adap_navigation_view_add (AdapNavigationView *self,
+                              AdapNavigationPage *page);
 
-ADW_AVAILABLE_IN_1_4
-void adw_navigation_view_remove (AdwNavigationView *self,
-                                 AdwNavigationPage *page);
+ADAP_AVAILABLE_IN_1_4
+void adap_navigation_view_remove (AdapNavigationView *self,
+                                 AdapNavigationPage *page);
 
-ADW_AVAILABLE_IN_1_4
-AdwNavigationPage *adw_navigation_view_find_page (AdwNavigationView *self,
+ADAP_AVAILABLE_IN_1_4
+AdapNavigationPage *adap_navigation_view_find_page (AdapNavigationView *self,
                                                   const char        *tag);
 
-ADW_AVAILABLE_IN_1_4
-void adw_navigation_view_push (AdwNavigationView *self,
-                               AdwNavigationPage *page);
+ADAP_AVAILABLE_IN_1_4
+void adap_navigation_view_push (AdapNavigationView *self,
+                               AdapNavigationPage *page);
 
-ADW_AVAILABLE_IN_1_4
-void adw_navigation_view_push_by_tag (AdwNavigationView *self,
+ADAP_AVAILABLE_IN_1_4
+void adap_navigation_view_push_by_tag (AdapNavigationView *self,
                                       const char        *tag);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_navigation_view_pop (AdwNavigationView *self);
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_navigation_view_pop (AdapNavigationView *self);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_navigation_view_pop_to_page (AdwNavigationView *self,
-                                          AdwNavigationPage *page);
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_navigation_view_pop_to_page (AdapNavigationView *self,
+                                          AdapNavigationPage *page);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_navigation_view_pop_to_tag (AdwNavigationView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_navigation_view_pop_to_tag (AdapNavigationView *self,
                                          const char        *tag);
 
-ADW_AVAILABLE_IN_1_4
-void adw_navigation_view_replace (AdwNavigationView  *self,
-                                  AdwNavigationPage **pages,
+ADAP_AVAILABLE_IN_1_4
+void adap_navigation_view_replace (AdapNavigationView  *self,
+                                  AdapNavigationPage **pages,
                                   int                 n_pages);
 
-ADW_AVAILABLE_IN_1_4
-void adw_navigation_view_replace_with_tags (AdwNavigationView  *self,
+ADAP_AVAILABLE_IN_1_4
+void adap_navigation_view_replace_with_tags (AdapNavigationView  *self,
                                             const char * const *tags,
                                             int                 n_tags);
 
-ADW_AVAILABLE_IN_1_4
-AdwNavigationPage *adw_navigation_view_get_visible_page (AdwNavigationView *self);
+ADAP_AVAILABLE_IN_1_4
+AdapNavigationPage *adap_navigation_view_get_visible_page (AdapNavigationView *self);
 
-ADW_AVAILABLE_IN_1_4
-AdwNavigationPage *adw_navigation_view_get_previous_page (AdwNavigationView *self,
-                                                          AdwNavigationPage *page);
+ADAP_AVAILABLE_IN_1_4
+AdapNavigationPage *adap_navigation_view_get_previous_page (AdapNavigationView *self,
+                                                          AdapNavigationPage *page);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_navigation_view_get_animate_transitions (AdwNavigationView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_navigation_view_set_animate_transitions (AdwNavigationView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_navigation_view_get_animate_transitions (AdapNavigationView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_navigation_view_set_animate_transitions (AdapNavigationView *self,
                                                       gboolean           animate_transitions);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_navigation_view_get_pop_on_escape (AdwNavigationView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_navigation_view_set_pop_on_escape (AdwNavigationView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_navigation_view_get_pop_on_escape (AdapNavigationView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_navigation_view_set_pop_on_escape (AdapNavigationView *self,
                                                 gboolean           pop_on_escape);
 
-ADW_AVAILABLE_IN_1_4
-GListModel *adw_navigation_view_get_navigation_stack (AdwNavigationView *self);
+ADAP_AVAILABLE_IN_1_4
+GListModel *adap_navigation_view_get_navigation_stack (AdapNavigationView *self);
 
 G_END_DECLS

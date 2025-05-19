@@ -3,7 +3,7 @@ Slug: boxed-lists
 
 # Boxed Lists
 
-Libadwaita provides API to implement the [boxed lists](https://developer.gnome.org/hig/patterns/containers/boxed-lists.html)
+Libadapta provides API to implement the [boxed lists](https://developer.gnome.org/hig/patterns/containers/boxed-lists.html)
 pattern.
 
 Boxed lists are composed of a [class@Gtk.ListBox] with the
@@ -21,17 +21,17 @@ An example boxed list:
     <class name="boxed-list"/>
   </style>
   <child>
-    <object class="AdwActionRow">
+    <object class="AdapActionRow">
       <property name="title">Item 1</property>
     </object>
   </child>
   <child>
-    <object class="AdwActionRow">
+    <object class="AdapActionRow">
       <property name="title">Item 2</property>
     </object>
   </child>
   <child>
-    <object class="AdwActionRow">
+    <object class="AdapActionRow">
       <property name="title">Item 3</property>
     </object>
   </child>
@@ -127,7 +127,7 @@ and emphasize their subtitle instead, which is useful for displaying read-only
 properties:
 
 ```xml
-<object class="AdwActionRow">
+<object class="AdapActionRow">
   <property name="title" translatable="yes">Property Name</property>
   <property name="subtitle">Value</property>
   <property name="subtitle-selectable">True</property>

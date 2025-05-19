@@ -8,86 +8,86 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <gtk/gtk.h>
-#include "adw-tab-thumbnail-private.h"
-#include "adw-tab-view.h"
+#include "adap-tab-thumbnail-private.h"
+#include "adap-tab-view.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_TAB_GRID (adw_tab_grid_get_type())
+#define ADAP_TYPE_TAB_GRID (adap_tab_grid_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwTabGrid, adw_tab_grid, ADW, TAB_GRID, GtkWidget)
+G_DECLARE_FINAL_TYPE (AdapTabGrid, adap_tab_grid, ADAP, TAB_GRID, GtkWidget)
 
-void adw_tab_grid_set_view (AdwTabGrid *self,
-                            AdwTabView *view);
+void adap_tab_grid_set_view (AdapTabGrid *self,
+                            AdapTabView *view);
 
-void adw_tab_grid_attach_page (AdwTabGrid *self,
-                               AdwTabPage *page,
+void adap_tab_grid_attach_page (AdapTabGrid *self,
+                               AdapTabPage *page,
                                int         position);
-void adw_tab_grid_detach_page (AdwTabGrid *self,
-                               AdwTabPage *page);
-void adw_tab_grid_select_page (AdwTabGrid *self,
-                               AdwTabPage *page);
+void adap_tab_grid_detach_page (AdapTabGrid *self,
+                               AdapTabPage *page);
+void adap_tab_grid_select_page (AdapTabGrid *self,
+                               AdapTabPage *page);
 
-void adw_tab_grid_try_focus_selected_tab (AdwTabGrid *self,
+void adap_tab_grid_try_focus_selected_tab (AdapTabGrid *self,
                                           gboolean    animate);
-gboolean adw_tab_grid_is_page_focused    (AdwTabGrid *self,
-                                          AdwTabPage *page);
+gboolean adap_tab_grid_is_page_focused    (AdapTabGrid *self,
+                                          AdapTabPage *page);
 
-void adw_tab_grid_setup_extra_drop_target (AdwTabGrid    *self,
+void adap_tab_grid_setup_extra_drop_target (AdapTabGrid    *self,
                                            GdkDragAction  actions,
                                            GType         *types,
                                            gsize          n_types);
 
-gboolean adw_tab_grid_get_extra_drag_preload (AdwTabGrid *self);
-void     adw_tab_grid_set_extra_drag_preload (AdwTabGrid *self,
+gboolean adap_tab_grid_get_extra_drag_preload (AdapTabGrid *self);
+void     adap_tab_grid_set_extra_drag_preload (AdapTabGrid *self,
                                               gboolean    preload);
 
-gboolean adw_tab_grid_get_inverted (AdwTabGrid *self);
-void     adw_tab_grid_set_inverted (AdwTabGrid *self,
+gboolean adap_tab_grid_get_inverted (AdapTabGrid *self);
+void     adap_tab_grid_set_inverted (AdapTabGrid *self,
                                     gboolean    inverted);
 
-AdwTabThumbnail *adw_tab_grid_get_transition_thumbnail (AdwTabGrid *self);
+AdapTabThumbnail *adap_tab_grid_get_transition_thumbnail (AdapTabGrid *self);
 
-void adw_tab_grid_set_visible_range (AdwTabGrid *self,
+void adap_tab_grid_set_visible_range (AdapTabGrid *self,
                                      double      lower,
                                      double      upper,
                                      double      page_size,
                                      double      lower_inset,
                                      double      upper_inset);
 
-void adw_tab_grid_adjustment_shifted (AdwTabGrid *self,
+void adap_tab_grid_adjustment_shifted (AdapTabGrid *self,
                                       double      delta);
 
-double adw_tab_grid_get_scrolled_tab_y (AdwTabGrid *self);
+double adap_tab_grid_get_scrolled_tab_y (AdapTabGrid *self);
 
-void adw_tab_grid_reset_scrolled_tab (AdwTabGrid *self);
+void adap_tab_grid_reset_scrolled_tab (AdapTabGrid *self);
 
-void adw_tab_grid_scroll_to_page (AdwTabGrid *self,
-                                  AdwTabPage *page,
+void adap_tab_grid_scroll_to_page (AdapTabGrid *self,
+                                  AdapTabPage *page,
                                   gboolean    animate);
 
-void adw_tab_grid_set_hovering (AdwTabGrid *self,
+void adap_tab_grid_set_hovering (AdapTabGrid *self,
                                 gboolean    hovering);
 
-void adw_tab_grid_set_search_terms (AdwTabGrid *self,
+void adap_tab_grid_set_search_terms (AdapTabGrid *self,
                                     const char *terms);
 
-gboolean adw_tab_grid_get_empty (AdwTabGrid *self);
+gboolean adap_tab_grid_get_empty (AdapTabGrid *self);
 
-gboolean adw_tab_grid_focus_first_row (AdwTabGrid *self,
+gboolean adap_tab_grid_focus_first_row (AdapTabGrid *self,
                                        int         column);
-gboolean adw_tab_grid_focus_last_row  (AdwTabGrid *self,
+gboolean adap_tab_grid_focus_last_row  (AdapTabGrid *self,
                                        int         column);
 
-void adw_tab_grid_focus_page (AdwTabGrid *self,
-                              AdwTabPage *page);
+void adap_tab_grid_focus_page (AdapTabGrid *self,
+                              AdapTabPage *page);
 
-int adw_tab_grid_measure_height_final (AdwTabGrid *self,
+int adap_tab_grid_measure_height_final (AdapTabGrid *self,
                                        int         for_width);
 
 G_END_DECLS

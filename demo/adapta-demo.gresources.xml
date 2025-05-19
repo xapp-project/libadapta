@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/Adwaita1/Demo">
-    <file preprocess="xml-stripblanks" alias="icons/scalable/apps/org.gnome.Adwaita1.Demo.svg">data/org.gnome.Adwaita1.Demo.svg</file>
-    <file preprocess="xml-stripblanks" alias="icons/symbolic/apps/org.gnome.Adwaita1.Demo-symbolic.svg">data/org.gnome.Adwaita1.Demo-symbolic.svg</file>
-    <file preprocess="xml-stripblanks" alias="org.gnome.Adwaita1.Demo.metainfo.xml">data/org.gnome.Adwaita1.Demo.metainfo.xml</file>
+  <gresource prefix="/org/gnome/Adapta1/Demo">
+    <file preprocess="xml-stripblanks" alias="icons/scalable/apps/org.gnome.Adapta1.Demo.svg">data/org.gnome.Adapta1.Demo.svg</file>
+    <file preprocess="xml-stripblanks" alias="icons/symbolic/apps/org.gnome.Adapta1.Demo-symbolic.svg">data/org.gnome.Adapta1.Demo-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="org.gnome.Adapta1.Demo.metainfo.xml">data/org.gnome.Adapta1.Demo.metainfo.xml</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/avatar-delete-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/avatar-save-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/clock-alarm-symbolic.svg</file>
@@ -42,31 +42,31 @@
     <file compressed="true">style.css</file>
     <file compressed="true">style-dark.css</file>
   </gresource>
-  <gresource prefix="/org/gnome/Adwaita1/Demo/ui">
-    <file preprocess="xml-stripblanks">pages/about/adw-demo-page-about.ui</file>
-    <file preprocess="xml-stripblanks">pages/animations/adw-demo-page-animations.ui</file>
-    <file preprocess="xml-stripblanks">pages/avatar/adw-demo-page-avatar.ui</file>
-    <file preprocess="xml-stripblanks">pages/banners/adw-demo-page-banners.ui</file>
-    <file preprocess="xml-stripblanks">pages/buttons/adw-demo-page-buttons.ui</file>
-    <file preprocess="xml-stripblanks">pages/carousel/adw-demo-page-carousel.ui</file>
-    <file preprocess="xml-stripblanks">pages/clamp/adw-demo-page-clamp.ui</file>
-    <file preprocess="xml-stripblanks">pages/dialogs/adw-demo-page-dialogs.ui</file>
-    <file preprocess="xml-stripblanks">pages/lists/adw-demo-page-lists.ui</file>
-    <file preprocess="xml-stripblanks">pages/navigation-view/adw-demo-page-navigation-view.ui</file>
-    <file preprocess="xml-stripblanks">pages/navigation-view/adw-navigation-view-demo-window.ui</file>
-    <file preprocess="xml-stripblanks">pages/split-views/adw-demo-page-split-views.ui</file>
-    <file preprocess="xml-stripblanks">pages/split-views/adw-navigation-split-view-demo-window.ui</file>
-    <file preprocess="xml-stripblanks">pages/split-views/adw-overlay-split-view-demo-window.ui</file>
-    <file preprocess="xml-stripblanks">pages/styles/adw-demo-page-styles.ui</file>
-    <file preprocess="xml-stripblanks">pages/styles/adw-style-demo-window.ui</file>
-    <file preprocess="xml-stripblanks">pages/tab-view/adw-demo-page-tab-view.ui</file>
-    <file preprocess="xml-stripblanks">pages/tab-view/adw-tab-view-demo-page.ui</file>
-    <file preprocess="xml-stripblanks">pages/tab-view/adw-tab-view-demo-window.ui</file>
-    <file preprocess="xml-stripblanks">pages/toasts/adw-demo-page-toasts.ui</file>
-    <file preprocess="xml-stripblanks">pages/view-switcher/adw-demo-page-view-switcher.ui</file>
-    <file preprocess="xml-stripblanks">pages/view-switcher/adw-view-switcher-demo-window.ui</file>
-    <file preprocess="xml-stripblanks">pages/welcome/adw-demo-page-welcome.ui</file>
-    <file preprocess="xml-stripblanks">adw-demo-preferences-window.ui</file>
-    <file preprocess="xml-stripblanks">adw-demo-window.ui</file>
+  <gresource prefix="/org/gnome/Adapta1/Demo/ui">
+    <file preprocess="xml-stripblanks">pages/about/adap-demo-page-about.ui</file>
+    <file preprocess="xml-stripblanks">pages/animations/adap-demo-page-animations.ui</file>
+    <file preprocess="xml-stripblanks">pages/avatar/adap-demo-page-avatar.ui</file>
+    <file preprocess="xml-stripblanks">pages/banners/adap-demo-page-banners.ui</file>
+    <file preprocess="xml-stripblanks">pages/buttons/adap-demo-page-buttons.ui</file>
+    <file preprocess="xml-stripblanks">pages/carousel/adap-demo-page-carousel.ui</file>
+    <file preprocess="xml-stripblanks">pages/clamp/adap-demo-page-clamp.ui</file>
+    <file preprocess="xml-stripblanks">pages/dialogs/adap-demo-page-dialogs.ui</file>
+    <file preprocess="xml-stripblanks">pages/lists/adap-demo-page-lists.ui</file>
+    <file preprocess="xml-stripblanks">pages/navigation-view/adap-demo-page-navigation-view.ui</file>
+    <file preprocess="xml-stripblanks">pages/navigation-view/adap-navigation-view-demo-window.ui</file>
+    <file preprocess="xml-stripblanks">pages/split-views/adap-demo-page-split-views.ui</file>
+    <file preprocess="xml-stripblanks">pages/split-views/adap-navigation-split-view-demo-window.ui</file>
+    <file preprocess="xml-stripblanks">pages/split-views/adap-overlay-split-view-demo-window.ui</file>
+    <file preprocess="xml-stripblanks">pages/styles/adap-demo-page-styles.ui</file>
+    <file preprocess="xml-stripblanks">pages/styles/adap-style-demo-window.ui</file>
+    <file preprocess="xml-stripblanks">pages/tab-view/adap-demo-page-tab-view.ui</file>
+    <file preprocess="xml-stripblanks">pages/tab-view/adap-tab-view-demo-page.ui</file>
+    <file preprocess="xml-stripblanks">pages/tab-view/adap-tab-view-demo-window.ui</file>
+    <file preprocess="xml-stripblanks">pages/toasts/adap-demo-page-toasts.ui</file>
+    <file preprocess="xml-stripblanks">pages/view-switcher/adap-demo-page-view-switcher.ui</file>
+    <file preprocess="xml-stripblanks">pages/view-switcher/adap-view-switcher-demo-window.ui</file>
+    <file preprocess="xml-stripblanks">pages/welcome/adap-demo-page-welcome.ui</file>
+    <file preprocess="xml-stripblanks">adap-demo-preferences-window.ui</file>
+    <file preprocess="xml-stripblanks">adap-demo-window.ui</file>
   </gresource>
 </gresources>

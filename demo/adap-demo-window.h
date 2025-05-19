@@ -1,13 +1,13 @@
 #pragma once
 
-#include <adwaita.h>
+#include <adapta.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_DEMO_WINDOW (adw_demo_window_get_type())
+#define ADAP_TYPE_DEMO_WINDOW (adap_demo_window_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwDemoWindow, adw_demo_window, ADW, DEMO_WINDOW, AdwApplicationWindow)
+G_DECLARE_FINAL_TYPE (AdapDemoWindow, adap_demo_window, ADAP, DEMO_WINDOW, AdapApplicationWindow)
 
-AdwDemoWindow *adw_demo_window_new (GtkApplication *application);
+AdapDemoWindow *adap_demo_window_new (GtkApplication *application);
 
 G_END_DECLS

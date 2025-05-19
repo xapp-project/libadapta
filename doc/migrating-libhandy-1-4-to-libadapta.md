@@ -1,24 +1,24 @@
-Title: Migrating from Libhandy 1.4 to Libadwaita
-Slug: migrating-libhandy-1-4-to-libadwaita
+Title: Migrating from Libhandy 1.4 to Libadapta
+Slug: migrating-libhandy-1-4-to-libadapta
 
-# Migrating from Libhandy 1.4 to Libadwaita
+# Migrating from Libhandy 1.4 to Libadapta
 
-Libadwaita is being developed as a successor to Libhandy 1.4. As such, it
+Libadapta is being developed as a successor to Libhandy 1.4. As such, it
 offers to GTK 4 many features Libhandy was offering to GTK 3.
 
-Migrating from Libhandy 1.4 to Libadwaita implies migrating from GTK 3 to 4.
-This guide only focuses on on Libhandy and Libadwaita, and is designed to be
+Migrating from Libhandy 1.4 to Libadapta implies migrating from GTK 3 to 4.
+This guide only focuses on on Libhandy and Libadapta, and is designed to be
 used together with the [GTK 3 to 4 migration guide](https://docs.gtk.org/gtk4/migrating-3to4.html).
 
-If you notice that some differences between Libhandy and Libadwaita are missing
-in this guide, [please report them](https://gitlab.gnome.org/GNOME/libadwaita/-/issues/new).
+If you notice that some differences between Libhandy and Libadapta are missing
+in this guide, [please report them](https://gitlab.gnome.org/GNOME/libadapta/-/issues/new).
 
 # Preparation in Libhandy 1.4
 
 The steps outlined in the following sections assume that your software is
 working with Libhandy 1.4, which is the latest stable release of Libhandy 1.x.
 It includes all the necessary APIs and tools to help you port your software to
-Libadwaita. If you are using an older version of Libhandy, you should first get
+Libadapta. If you are using an older version of Libhandy, you should first get
 your software to build and work with Libhandy 1.4.
 
 ## Do not Use Deprecated Symbols
@@ -38,13 +38,13 @@ bar as a child widget.
 
 ## Stop Using `HdyKeypad`
 
-`HdyKeypad` has been removed from Libadwaita. Applications that had used it can
+`HdyKeypad` has been removed from Libadapta. Applications that had used it can
 copy it in tree instead.
 
 ## Stop Using Named WM Colors
 
 The following named colors have been removed from the stylesheet in
-Libadwaita:
+Libadapta:
 
 * <code>&#64;content_view_bg</code>
 * <code>&#64;text_view_bg</code>
@@ -67,7 +67,7 @@ Applications should not use them.
 ## Use `HdyFlap` Properties for Adding Children Instead of `gtk_container_add()`
 
 `HdyFlap` provides the `content`, `flap` and `separator` properties that can be
-used for managing children instead of `GtkContainer` API. In Libadwaita
+used for managing children instead of `GtkContainer` API. In Libadapta
 [property@Flap:content], [property@Flap:flap] and [property@Flap:separator] are
 the only way to manage [class@Flap] children.
 
@@ -89,12 +89,12 @@ light appearance as well. If that's not possible, set it to
 If your application is using light appearance, consider setting the color scheme
 to `HDY_COLOR_SCHEME_PREFER_LIGHT` and support dark appearance.
 
-In libadwaita color schemes will be the only way to request dark appearance.
+In libadapta color schemes will be the only way to request dark appearance.
 
 # Changes that Need to Be Done at the Time of the Switch
 
 This section outlines porting tasks that you need to tackle when you get to the
-point that you actually build your application against Libadwaita 1. Making it
+point that you actually build your application against Libadapta 1. Making it
 possible to prepare for these in GTK 3 would have been either impossible or
 impractical.
 
@@ -166,11 +166,11 @@ documentation for details.
 in conjunction with the [property@ComboRow:expression] property, for example:
 
 ```c
-expr = gtk_property_expression_new (ADW_TYPE_ENUM_LIST_ITEM, NULL, "nick");
-model = G_LIST_MODEL (adw_enum_list_model_new (GTK_TYPE_ORIENTATION));
+expr = gtk_property_expression_new (ADAP_TYPE_ENUM_LIST_ITEM, NULL, "nick");
+model = G_LIST_MODEL (adap_enum_list_model_new (GTK_TYPE_ORIENTATION));
 
-adw_combo_row_set_expression (row, expr);
-adw_combo_row_set_model (row, model);
+adap_combo_row_set_expression (row, expr);
+adap_combo_row_set_model (row, model);
 ```
 
 As with [class@Gtk.DropDown], if the model is a [class@Gtk.StringList], the
@@ -218,11 +218,11 @@ the [property@HeaderBar:show-start-title-buttons] and
 for example binding them to the [property@Leaflet:folded] property as follows:
 
 ```xml
-<object class="AdwLeaflet" id="leaflet">
+<object class="AdapLeaflet" id="leaflet">
   <child>
     <object class="GtkBox">
       <property name="orientation">vertical</property>
-      <object class="AdwHeaderBar">
+      <object class="AdapHeaderBar">
         <binding name="show-end-title-buttons">
           <lookup name="folded">leaflet</lookup>
         </binding>
@@ -234,7 +234,7 @@ for example binding them to the [property@Leaflet:folded] property as follows:
   <child>
     <object class="GtkBox">
        <property name="orientation">vertical</property>
-      <object class="AdwHeaderBar">
+      <object class="AdapHeaderBar">
         <binding name="show-start-title-buttons">
           <lookup name="folded">leaflet</lookup>
         </binding>
@@ -273,7 +273,7 @@ to make them homogeneous if needed.
 The `interpolate-size` property has been removed with no replacement, it's
 always enabled when [property@Leaflet:homogeneous] is set to `FALSE`.
 
-`AdwLeaflet` now uses spring animations instead of timed animations for child
+`AdapLeaflet` now uses spring animations instead of timed animations for child
 transitions. As such, the `child-transition-duration` property has been replaced
 with [property@Leaflet:child-transition-params], allowing to customize the
 animation. Unlike the duration, spring parameters are also used for animation
@@ -281,7 +281,7 @@ triggered by swipe gestures.
 
 ## Adapt to [class@Flap] API Changes
 
-`AdwFlap` now uses spring animations instead of timed animations for reveal
+`AdapFlap` now uses spring animations instead of timed animations for reveal
 animations. As such, the `reveal-duration` property has been replaced with
 [property@Flap:reveal-params], allowing to customize the animation. Unlike
 the duration, spring parameters are also used for transitions triggered by swipe
@@ -289,13 +289,13 @@ gestures.
 
 ## Adapt to [class@Carousel] API changes
 
-`AdwCarousel` now uses spring animations instead of timed animations for
+`AdapCarousel` now uses spring animations instead of timed animations for
 scrolling. As such, the `animation-duration` property has been replaced with
 [property@Carousel:scroll-params], allowing to customize the animation. Unlike
 the duration, spring parameters are also used for animation triggered by swipe
 gestures.
 
-The `adw_carousel_scroll_to_full()` method has been removed. Instead,
+The `adap_carousel_scroll_to_full()` method has been removed. Instead,
 [method@Carousel.scroll_to] has got an additional parameter `animate`.
 
 ## Adapt to View Switcher API Changes
@@ -345,11 +345,11 @@ uses the avatar's current size, with no replacement.
 
 ## Adapt to [class@StyleManager] API Changes
 
-When used with the default style manager, `ADW_COLOR_SCHEME_DEFAULT` is now
-equivalent to `ADW_COLOR_SCHEME_PREFER_LIGHT` instead of
+When used with the default style manager, `ADAP_COLOR_SCHEME_DEFAULT` is now
+equivalent to `ADAP_COLOR_SCHEME_PREFER_LIGHT` instead of
 `HDY_COLOR_SCHEME_FORCE_LIGHT`, following the system dark style preference by
 default. Make sure your application works with it, or otherwise set the
-`ADW_COLOR_SCHEME_FORCE_LIGHT` color scheme manually.
+`ADAP_COLOR_SCHEME_FORCE_LIGHT` color scheme manually.
 
 ## Adapt to [class@SwipeTracker] API Changes
 
@@ -381,7 +381,7 @@ new properties also handle keyboard and mouse shortcuts in addition to swipes.
 ## Adapt to Miscellaneous Changes
 
 The `hdy_ease_out_cubic()` function has been removed. Instead,
-[func@Easing.ease] can be used with the `ADW_EASE_OUT_CUBIC` parameter.
+[func@Easing.ease] can be used with the `ADAP_EASE_OUT_CUBIC` parameter.
 
 ## Adapt to Stylesheet Changes
 
@@ -504,7 +504,7 @@ can be changed into:
 ```xml
 <object class="GtkButton">
   <property name="child">
-    <object class="AdwButtonContent">
+    <object class="AdapButtonContent">
       <property name="icon-name">document-open-symbolic</property>
       <property name="label" translatable="yes">_Open</property>
       <property name="use-underline">True</property>
@@ -523,7 +523,7 @@ If you had split buttons implemented via a [class@Gtk.Box] with the
 packed inside, use [class@SplitButton] as follows:
 
 ```xml
-<object class="AdwSplitButton">
+<object class="AdapSplitButton">
   <property name="menu-model">some_menu</property>
   <property name="icon-name">view-list-symbolic</property>
 </object>

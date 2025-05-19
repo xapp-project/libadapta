@@ -8,29 +8,29 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
 typedef enum {
-  ADW_LENGTH_UNIT_PX,
-  ADW_LENGTH_UNIT_PT,
-  ADW_LENGTH_UNIT_SP,
-} AdwLengthUnit;
+  ADAP_LENGTH_UNIT_PX,
+  ADAP_LENGTH_UNIT_PT,
+  ADAP_LENGTH_UNIT_SP,
+} AdapLengthUnit;
 
-ADW_AVAILABLE_IN_1_4
-double adw_length_unit_to_px (AdwLengthUnit  unit,
+ADAP_AVAILABLE_IN_1_4
+double adap_length_unit_to_px (AdapLengthUnit  unit,
                               double         value,
                               GtkSettings   *settings);
 
-ADW_AVAILABLE_IN_1_4
-double adw_length_unit_from_px (AdwLengthUnit  unit,
+ADAP_AVAILABLE_IN_1_4
+double adap_length_unit_from_px (AdapLengthUnit  unit,
                                 double         value,
                                 GtkSettings   *settings);
 G_END_DECLS

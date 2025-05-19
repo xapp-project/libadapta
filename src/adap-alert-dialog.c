@@ -9,16 +9,16 @@
 
 #include "config.h"
 
-#include "adw-alert-dialog.h"
+#include "adap-alert-dialog.h"
 
-#include "adw-dialog-private.h"
-#include "adw-gizmo-private.h"
-#include "adw-gtkbuilder-utils-private.h"
-#include "adw-marshalers.h"
-#include "adw-widget-utils-private.h"
+#include "adap-dialog-private.h"
+#include "adap-gizmo-private.h"
+#include "adap-gtkbuilder-utils-private.h"
+#include "adap-marshalers.h"
+#include "adap-widget-utils-private.h"
 
 /**
- * AdwAlertDialog:
+ * AdapAlertDialog:
  *
  * A dialog presenting a message or a question.
  *
@@ -44,49 +44,49 @@
  * Response buttons can be presented horizontally or vertically depending on
  * available space.
  *
- * When a response is activated, `AdwAlertDialog` is closed automatically.
+ * When a response is activated, `AdapAlertDialog` is closed automatically.
  *
  * An example of using an alert dialog:
  *
  * ```c
- * AdwDialog *dialog;
+ * AdapDialog *dialog;
  *
- * dialog = adw_alert_dialog_new (_("Replace File?"), NULL);
+ * dialog = adap_alert_dialog_new (_("Replace File?"), NULL);
  *
- * adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog),
+ * adap_alert_dialog_format_body (ADAP_ALERT_DIALOG (dialog),
  *                               _("A file named “%s” already exists. Do you want to replace it?"),
  *                               filename);
  *
- * adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+ * adap_alert_dialog_add_responses (ADAP_ALERT_DIALOG (dialog),
  *                                 "cancel",  _("_Cancel"),
  *                                 "replace", _("_Replace"),
  *                                 NULL);
  *
- * adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+ * adap_alert_dialog_set_response_appearance (ADAP_ALERT_DIALOG (dialog),
  *                                           "replace",
- *                                           ADW_RESPONSE_DESTRUCTIVE);
+ *                                           ADAP_RESPONSE_DESTRUCTIVE);
  *
- * adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "cancel");
- * adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
+ * adap_alert_dialog_set_default_response (ADAP_ALERT_DIALOG (dialog), "cancel");
+ * adap_alert_dialog_set_close_response (ADAP_ALERT_DIALOG (dialog), "cancel");
  *
  * g_signal_connect (dialog, "response", G_CALLBACK (response_cb), self);
  *
- * adw_dialog_present (dialog, parent);
+ * adap_dialog_present (dialog, parent);
  * ```
  *
  * ## Async API
  *
- * `AdwAlertDialog` can also be used via the [method@AlertDialog.choose] method.
+ * `AdapAlertDialog` can also be used via the [method@AlertDialog.choose] method.
  * This API follows the GIO async pattern, and the result can be obtained by
  * calling [method@AlertDialog.choose_finish], for example:
  *
  * ```c
  * static void
- * dialog_cb (AdwAlertDialog *dialog,
+ * dialog_cb (AdapAlertDialog *dialog,
  *            GAsyncResult   *result,
  *            MyWindow       *self)
  * {
- *   const char *response = adw_alert_dialog_choose_finish (dialog, result);
+ *   const char *response = adap_alert_dialog_choose_finish (dialog, result);
  *
  *   // ...
  * }
@@ -94,34 +94,34 @@
  * static void
  * show_dialog (MyWindow *self)
  * {
- *   AdwDialog *dialog;
+ *   AdapDialog *dialog;
  *
- *   dialog = adw_alert_dialog_new (_("Replace File?"), NULL);
+ *   dialog = adap_alert_dialog_new (_("Replace File?"), NULL);
  *
- *   adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog),
+ *   adap_alert_dialog_format_body (ADAP_ALERT_DIALOG (dialog),
  *                                 _("A file named “%s” already exists. Do you want to replace it?"),
  *                                 filename);
  *
- *   adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+ *   adap_alert_dialog_add_responses (ADAP_ALERT_DIALOG (dialog),
  *                                   "cancel",  _("_Cancel"),
  *                                   "replace", _("_Replace"),
  *                                   NULL);
  *
- *   adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+ *   adap_alert_dialog_set_response_appearance (ADAP_ALERT_DIALOG (dialog),
  *                                             "replace",
- *                                             ADW_RESPONSE_DESTRUCTIVE);
+ *                                             ADAP_RESPONSE_DESTRUCTIVE);
  *
- *   adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "cancel");
- *   adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
+ *   adap_alert_dialog_set_default_response (ADAP_ALERT_DIALOG (dialog), "cancel");
+ *   adap_alert_dialog_set_close_response (ADAP_ALERT_DIALOG (dialog), "cancel");
  *
- *   adw_alert_dialog_choose (ADW_ALERT_DIALOG (dialog), GTK_WIDGET (self),
+ *   adap_alert_dialog_choose (ADAP_ALERT_DIALOG (dialog), GTK_WIDGET (self),
  *                            NULL, (GAsyncReadyCallback) dialog_cb, self);
  * }
  * ```
  *
- * ## AdwAlertDialog as GtkBuildable
+ * ## AdapAlertDialog as GtkBuildable
  *
- * `AdwAlertDialog` supports adding responses in UI definitions by via the
+ * `AdapAlertDialog` supports adding responses in UI definitions by via the
  * `<responses>` element that may contain multiple `<response>` elements, each
  * respresenting a response.
  *
@@ -135,10 +135,10 @@
  * attributes. See [method@AlertDialog.set_response_enabled] and
  * [method@AlertDialog.set_response_appearance] for details.
  *
- * Example of an `AdwAlertDialog` UI definition:
+ * Example of an `AdapAlertDialog` UI definition:
  *
  * ```xml
- * <object class="AdwAlertDialog" id="dialog">
+ * <object class="AdapAlertDialog" id="dialog">
  *   <property name="heading" translatable="yes">Save Changes?</property>
  *   <property name="body" translatable="yes">Open documents contain unsaved changes. Changes which are not saved will be permanently lost.</property>
  *   <property name="default-response">save</property>
@@ -156,11 +156,11 @@
  */
 
 /**
- * AdwResponseAppearance:
- * @ADW_RESPONSE_DEFAULT: the default appearance.
- * @ADW_RESPONSE_SUGGESTED: used to denote important responses such as the
+ * AdapResponseAppearance:
+ * @ADAP_RESPONSE_DEFAULT: the default appearance.
+ * @ADAP_RESPONSE_SUGGESTED: used to denote important responses such as the
  *     affirmative action.
- * @ADW_RESPONSE_DESTRUCTIVE: used to draw attention to the potentially damaging
+ * @ADAP_RESPONSE_DESTRUCTIVE: used to draw attention to the potentially damaging
  *     consequences of using the response. This appearance acts as a warning to
  *     the user.
  *
@@ -175,10 +175,10 @@
 #define DIALOG_MIN_WIDTH 300
 
 typedef struct {
-  AdwAlertDialog *dialog;
+  AdapAlertDialog *dialog;
   GQuark id;
   char *label;
-  AdwResponseAppearance appearance;
+  AdapResponseAppearance appearance;
   gboolean enabled;
 
   GtkWidget *button;
@@ -207,13 +207,13 @@ typedef struct
   GQuark close_response;
 
   gboolean block_close_response;
-} AdwAlertDialogPrivate;
+} AdapAlertDialogPrivate;
 
-static void adw_alert_dialog_buildable_init (GtkBuildableIface *iface);
+static void adap_alert_dialog_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (AdwAlertDialog, adw_alert_dialog, ADW_TYPE_DIALOG,
-                         G_ADD_PRIVATE (AdwAlertDialog)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_alert_dialog_buildable_init))
+G_DEFINE_TYPE_WITH_CODE (AdapAlertDialog, adap_alert_dialog, ADAP_TYPE_DIALOG,
+                         G_ADD_PRIVATE (AdapAlertDialog)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_alert_dialog_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -245,10 +245,10 @@ response_info_free (ResponseInfo *info)
 }
 
 static inline ResponseInfo *
-find_response (AdwAlertDialog *self,
+find_response (AdapAlertDialog *self,
                const char     *id)
 {
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
 
   return g_hash_table_lookup (priv->id_to_response, id);
 }
@@ -256,13 +256,13 @@ find_response (AdwAlertDialog *self,
 static void
 button_clicked_cb (ResponseInfo *info)
 {
-  AdwAlertDialog *self = info->dialog;
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialog *self = info->dialog;
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
 
   g_object_ref (self);
   priv->block_close_response = TRUE;
 
-  adw_dialog_close (ADW_DIALOG (self));
+  adap_dialog_close (ADAP_DIALOG (self));
   g_signal_emit (self, signals[SIGNAL_RESPONSE], info->id, g_quark_to_string (info->id));
 
   priv->block_close_response = FALSE;
@@ -270,7 +270,7 @@ button_clicked_cb (ResponseInfo *info)
 }
 
 static GtkWidget *
-create_response_button (AdwAlertDialog *self,
+create_response_button (AdapAlertDialog *self,
                         ResponseInfo   *info)
 {
   GtkWidget *button = gtk_button_new_with_mnemonic (info->label);
@@ -279,13 +279,13 @@ create_response_button (AdwAlertDialog *self,
   gtk_button_set_can_shrink (GTK_BUTTON (button), TRUE);
 
   switch (info->appearance) {
-  case ADW_RESPONSE_SUGGESTED:
+  case ADAP_RESPONSE_SUGGESTED:
     gtk_widget_add_css_class (button, "suggested");
     break;
-  case ADW_RESPONSE_DESTRUCTIVE:
+  case ADAP_RESPONSE_DESTRUCTIVE:
     gtk_widget_add_css_class (button, "destructive");
     break;
-  case ADW_RESPONSE_DEFAULT:
+  case ADAP_RESPONSE_DEFAULT:
   default:
     break;
   }
@@ -298,9 +298,9 @@ create_response_button (AdwAlertDialog *self,
 }
 
 static void
-update_window_title (AdwAlertDialog *self)
+update_window_title (AdapAlertDialog *self)
 {
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
 
   if (priv->heading_use_markup) {
     char *heading = NULL;
@@ -315,19 +315,19 @@ update_window_title (AdwAlertDialog *self)
       heading = g_strdup (priv->heading);
     }
 
-    adw_dialog_set_title (ADW_DIALOG (self), heading);
+    adap_dialog_set_title (ADAP_DIALOG (self), heading);
 
     g_free (heading);
   } else {
-    adw_dialog_set_title (ADW_DIALOG (self), priv->heading);
+    adap_dialog_set_title (ADAP_DIALOG (self), priv->heading);
   }
 }
 
 static void
-adw_alert_dialog_closed (AdwDialog *dialog)
+adap_alert_dialog_closed (AdapDialog *dialog)
 {
-  AdwAlertDialog *self = ADW_ALERT_DIALOG (dialog);
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialog *self = ADAP_ALERT_DIALOG (dialog);
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
 
   if (priv->block_close_response)
     return;
@@ -338,27 +338,27 @@ adw_alert_dialog_closed (AdwDialog *dialog)
 }
 
 static void
-adw_alert_dialog_map (GtkWidget *widget)
+adap_alert_dialog_map (GtkWidget *widget)
 {
-  AdwAlertDialog *self = ADW_ALERT_DIALOG (widget);
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialog *self = ADAP_ALERT_DIALOG (widget);
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
   GtkWidget *focus;
   GtkWidget *window;
 
-  GTK_WIDGET_CLASS (adw_alert_dialog_parent_class)->map (widget);
+  GTK_WIDGET_CLASS (adap_alert_dialog_parent_class)->map (widget);
 
-  window = adw_dialog_get_window (ADW_DIALOG (self));
+  window = adap_dialog_get_window (ADAP_DIALOG (self));
 
   if (window)
     gtk_widget_add_css_class (window, "alert");
 
-  focus = adw_dialog_get_focus (ADW_DIALOG (self));
+  focus = adap_dialog_get_focus (ADAP_DIALOG (self));
   if (!focus) {
     GtkWidget *default_widget;
     GList *l;
 
-    if (adw_widget_grab_focus_child (priv->scrolled_window)) {
-      focus = adw_dialog_get_focus (ADW_DIALOG (self));
+    if (adap_widget_grab_focus_child (priv->scrolled_window)) {
+      focus = adap_dialog_get_focus (ADAP_DIALOG (self));
 
       if (GTK_IS_LABEL (focus) && !gtk_label_get_current_uri (GTK_LABEL (focus)))
         gtk_label_select_region (GTK_LABEL (focus), 0, 0);
@@ -366,7 +366,7 @@ adw_alert_dialog_map (GtkWidget *widget)
       return;
     }
 
-    default_widget = adw_dialog_get_default_widget (ADW_DIALOG (self));
+    default_widget = adap_dialog_get_default_widget (ADAP_DIALOG (self));
     if (default_widget) {
       gtk_widget_grab_focus (default_widget);
       return;
@@ -385,13 +385,13 @@ adw_alert_dialog_map (GtkWidget *widget)
 }
 
 static void
-measure_responses_do (AdwAlertDialog *self,
+measure_responses_do (AdapAlertDialog *self,
                       gboolean        compact,
                       GtkOrientation  orientation,
                       int            *minimum,
                       int            *natural)
 {
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
   GList *l;
   int min = 0, nat = 0;
   int button_min = 0, button_nat = 0;
@@ -457,7 +457,7 @@ measure_responses (GtkWidget      *widget,
                    int            *minimum_baseline,
                    int            *natural_baseline)
 {
-  AdwAlertDialog *self = ADW_ALERT_DIALOG (gtk_widget_get_ancestor (widget, ADW_TYPE_ALERT_DIALOG));
+  AdapAlertDialog *self = ADAP_ALERT_DIALOG (gtk_widget_get_ancestor (widget, ADAP_TYPE_ALERT_DIALOG));
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL) {
     measure_responses_do (self, TRUE, orientation, minimum, NULL);
@@ -484,8 +484,8 @@ allocate_responses (GtkWidget *widget,
                     int        height,
                     int        baseline)
 {
-  AdwAlertDialog *self = ADW_ALERT_DIALOG (gtk_widget_get_ancestor (widget, ADW_TYPE_ALERT_DIALOG));
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialog *self = ADAP_ALERT_DIALOG (gtk_widget_get_ancestor (widget, ADAP_TYPE_ALERT_DIALOG));
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
   gboolean compact;
   int wide_nat;
 
@@ -591,8 +591,8 @@ measure_child (GtkWidget      *widget,
                int            *min_baseline,
                int            *nat_baseline)
 {
-  AdwAlertDialog *self = ADW_ALERT_DIALOG (gtk_widget_get_ancestor (widget, ADW_TYPE_ALERT_DIALOG));
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialog *self = ADAP_ALERT_DIALOG (gtk_widget_get_ancestor (widget, ADAP_TYPE_ALERT_DIALOG));
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
   int max_size, min_size, base_nat;
 
   gtk_widget_measure (priv->window_handle, orientation, for_size,
@@ -633,41 +633,41 @@ allocate_child (GtkWidget *widget,
                 int        height,
                 int        baseline)
 {
-  AdwAlertDialog *self = ADW_ALERT_DIALOG (gtk_widget_get_ancestor (widget, ADW_TYPE_ALERT_DIALOG));
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialog *self = ADAP_ALERT_DIALOG (gtk_widget_get_ancestor (widget, ADAP_TYPE_ALERT_DIALOG));
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
 
   gtk_widget_allocate (priv->window_handle, width, height, baseline, NULL);
 }
 
 static void
-adw_alert_dialog_get_property (GObject    *object,
+adap_alert_dialog_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  AdwAlertDialog *self = ADW_ALERT_DIALOG (object);
+  AdapAlertDialog *self = ADAP_ALERT_DIALOG (object);
 
   switch (prop_id) {
   case PROP_HEADING:
-    g_value_set_string (value, adw_alert_dialog_get_heading (self));
+    g_value_set_string (value, adap_alert_dialog_get_heading (self));
     break;
   case PROP_HEADING_USE_MARKUP:
-    g_value_set_boolean (value, adw_alert_dialog_get_heading_use_markup (self));
+    g_value_set_boolean (value, adap_alert_dialog_get_heading_use_markup (self));
     break;
   case PROP_BODY:
-    g_value_set_string (value, adw_alert_dialog_get_body (self));
+    g_value_set_string (value, adap_alert_dialog_get_body (self));
     break;
   case PROP_BODY_USE_MARKUP:
-    g_value_set_boolean (value, adw_alert_dialog_get_body_use_markup (self));
+    g_value_set_boolean (value, adap_alert_dialog_get_body_use_markup (self));
     break;
   case PROP_EXTRA_CHILD:
-    g_value_set_object (value, adw_alert_dialog_get_extra_child (self));
+    g_value_set_object (value, adap_alert_dialog_get_extra_child (self));
     break;
   case PROP_DEFAULT_RESPONSE:
-    g_value_set_string (value, adw_alert_dialog_get_default_response (self));
+    g_value_set_string (value, adap_alert_dialog_get_default_response (self));
     break;
   case PROP_CLOSE_RESPONSE:
-    g_value_set_string (value, adw_alert_dialog_get_close_response (self));
+    g_value_set_string (value, adap_alert_dialog_get_close_response (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -675,34 +675,34 @@ adw_alert_dialog_get_property (GObject    *object,
 }
 
 static void
-adw_alert_dialog_set_property (GObject      *object,
+adap_alert_dialog_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
-  AdwAlertDialog *self = ADW_ALERT_DIALOG (object);
+  AdapAlertDialog *self = ADAP_ALERT_DIALOG (object);
 
   switch (prop_id) {
   case PROP_HEADING:
-    adw_alert_dialog_set_heading (self, g_value_get_string (value));
+    adap_alert_dialog_set_heading (self, g_value_get_string (value));
     break;
   case PROP_HEADING_USE_MARKUP:
-    adw_alert_dialog_set_heading_use_markup (self, g_value_get_boolean (value));
+    adap_alert_dialog_set_heading_use_markup (self, g_value_get_boolean (value));
     break;
   case PROP_BODY:
-    adw_alert_dialog_set_body (self, g_value_get_string (value));
+    adap_alert_dialog_set_body (self, g_value_get_string (value));
     break;
   case PROP_BODY_USE_MARKUP:
-    adw_alert_dialog_set_body_use_markup (self, g_value_get_boolean (value));
+    adap_alert_dialog_set_body_use_markup (self, g_value_get_boolean (value));
     break;
   case PROP_EXTRA_CHILD:
-    adw_alert_dialog_set_extra_child (self, g_value_get_object (value));
+    adap_alert_dialog_set_extra_child (self, g_value_get_object (value));
     break;
   case PROP_DEFAULT_RESPONSE:
-    adw_alert_dialog_set_default_response (self, g_value_get_string (value));
+    adap_alert_dialog_set_default_response (self, g_value_get_string (value));
     break;
   case PROP_CLOSE_RESPONSE:
-    adw_alert_dialog_set_close_response (self, g_value_get_string (value));
+    adap_alert_dialog_set_close_response (self, g_value_get_string (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -710,10 +710,10 @@ adw_alert_dialog_set_property (GObject      *object,
 }
 
 static void
-adw_alert_dialog_dispose (GObject *object)
+adap_alert_dialog_dispose (GObject *object)
 {
-  AdwAlertDialog *self = ADW_ALERT_DIALOG (object);
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialog *self = ADAP_ALERT_DIALOG (object);
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
 
   priv->child = NULL;
 
@@ -724,39 +724,39 @@ adw_alert_dialog_dispose (GObject *object)
 
   g_clear_pointer (&priv->id_to_response, g_hash_table_unref);
 
-  G_OBJECT_CLASS (adw_alert_dialog_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_alert_dialog_parent_class)->dispose (object);
 }
 
 static void
-adw_alert_dialog_finalize (GObject *object)
+adap_alert_dialog_finalize (GObject *object)
 {
-  AdwAlertDialog *self = ADW_ALERT_DIALOG (object);
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialog *self = ADAP_ALERT_DIALOG (object);
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
 
   g_clear_pointer (&priv->heading, g_free);
   g_clear_pointer (&priv->body, g_free);
 
-  G_OBJECT_CLASS (adw_alert_dialog_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_alert_dialog_parent_class)->finalize (object);
 }
 
 static void
-adw_alert_dialog_class_init (AdwAlertDialogClass *klass)
+adap_alert_dialog_class_init (AdapAlertDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  AdwDialogClass *dialog_class = ADW_DIALOG_CLASS (klass);
+  AdapDialogClass *dialog_class = ADAP_DIALOG_CLASS (klass);
 
-  object_class->get_property = adw_alert_dialog_get_property;
-  object_class->set_property = adw_alert_dialog_set_property;
-  object_class->dispose = adw_alert_dialog_dispose;
-  object_class->finalize = adw_alert_dialog_finalize;
+  object_class->get_property = adap_alert_dialog_get_property;
+  object_class->set_property = adap_alert_dialog_set_property;
+  object_class->dispose = adap_alert_dialog_dispose;
+  object_class->finalize = adap_alert_dialog_finalize;
 
-  widget_class->map = adw_alert_dialog_map;
+  widget_class->map = adap_alert_dialog_map;
 
-  dialog_class->closed = adw_alert_dialog_closed;
+  dialog_class->closed = adap_alert_dialog_closed;
 
   /**
-   * AdwAlertDialog:heading: (attributes org.gtk.Property.get=adw_alert_dialog_get_heading org.gtk.Property.set=adw_alert_dialog_set_heading)
+   * AdapAlertDialog:heading: (attributes org.gtk.Property.get=adap_alert_dialog_get_heading org.gtk.Property.set=adap_alert_dialog_set_heading)
    *
    * The heading of the dialog.
    *
@@ -768,7 +768,7 @@ adw_alert_dialog_class_init (AdwAlertDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAlertDialog:heading-use-markup: (attributes org.gtk.Property.get=adw_alert_dialog_get_heading_use_markup org.gtk.Property.set=adw_alert_dialog_set_heading_use_markup)
+   * AdapAlertDialog:heading-use-markup: (attributes org.gtk.Property.get=adap_alert_dialog_get_heading_use_markup org.gtk.Property.set=adap_alert_dialog_set_heading_use_markup)
    *
    * Whether the heading includes Pango markup.
    *
@@ -782,7 +782,7 @@ adw_alert_dialog_class_init (AdwAlertDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAlertDialog:body: (attributes org.gtk.Property.get=adw_alert_dialog_get_body org.gtk.Property.set=adw_alert_dialog_set_body)
+   * AdapAlertDialog:body: (attributes org.gtk.Property.get=adap_alert_dialog_get_body org.gtk.Property.set=adap_alert_dialog_set_body)
    *
    * The body text of the dialog.
    *
@@ -794,7 +794,7 @@ adw_alert_dialog_class_init (AdwAlertDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAlertDialog:body-use-markup: (attributes org.gtk.Property.get=adw_alert_dialog_get_body_use_markup org.gtk.Property.set=adw_alert_dialog_set_body_use_markup)
+   * AdapAlertDialog:body-use-markup: (attributes org.gtk.Property.get=adap_alert_dialog_get_body_use_markup org.gtk.Property.set=adap_alert_dialog_set_body_use_markup)
    *
    * Whether the body text includes Pango markup.
    *
@@ -808,7 +808,7 @@ adw_alert_dialog_class_init (AdwAlertDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAlertDialog:extra-child: (attributes org.gtk.Property.get=adw_alert_dialog_get_extra_child org.gtk.Property.set=adw_alert_dialog_set_extra_child)
+   * AdapAlertDialog:extra-child: (attributes org.gtk.Property.get=adap_alert_dialog_get_extra_child org.gtk.Property.set=adap_alert_dialog_set_extra_child)
    *
    * The child widget.
    *
@@ -822,7 +822,7 @@ adw_alert_dialog_class_init (AdwAlertDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAlertDialog:default-response: (attributes org.gtk.Property.get=adw_alert_dialog_get_default_response org.gtk.Property.set=adw_alert_dialog_set_default_response)
+   * AdapAlertDialog:default-response: (attributes org.gtk.Property.get=adap_alert_dialog_get_default_response org.gtk.Property.set=adap_alert_dialog_set_default_response)
    *
    * The response ID of the default response.
    *
@@ -839,7 +839,7 @@ adw_alert_dialog_class_init (AdwAlertDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAlertDialog:close-response: (attributes org.gtk.Property.get=adw_alert_dialog_get_close_response org.gtk.Property.set=adw_alert_dialog_set_close_response)
+   * AdapAlertDialog:close-response: (attributes org.gtk.Property.get=adap_alert_dialog_get_close_response org.gtk.Property.set=adap_alert_dialog_set_close_response)
    *
    * The ID of the close response.
    *
@@ -860,7 +860,7 @@ adw_alert_dialog_class_init (AdwAlertDialogClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
-   * AdwAlertDialog::response:
+   * AdapAlertDialog::response:
    * @self: an alert dialog
    * @response: the response ID
    *
@@ -879,36 +879,36 @@ adw_alert_dialog_class_init (AdwAlertDialogClass *klass)
     g_signal_new ("response",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
-                  G_STRUCT_OFFSET (AdwAlertDialogClass, response),
+                  G_STRUCT_OFFSET (AdapAlertDialogClass, response),
                   NULL, NULL,
-                  adw_marshal_VOID__STRING,
+                  adap_marshal_VOID__STRING,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRING);
   g_signal_set_va_marshaller (signals[SIGNAL_RESPONSE],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__STRINGv);
+                              adap_marshal_VOID__STRINGv);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-alert-dialog.ui");
+                                               "/org/gnome/Adapta/ui/adap-alert-dialog.ui");
 
-  gtk_widget_class_bind_template_child_private (widget_class, AdwAlertDialog, contents);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwAlertDialog, window_handle);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwAlertDialog, scrolled_window);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwAlertDialog, heading_label);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwAlertDialog, body_label);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwAlertDialog, message_area);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwAlertDialog, response_area);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapAlertDialog, contents);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapAlertDialog, window_handle);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapAlertDialog, scrolled_window);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapAlertDialog, heading_label);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapAlertDialog, body_label);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapAlertDialog, message_area);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapAlertDialog, response_area);
 
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_ALERT_DIALOG);
 
-  g_type_ensure (ADW_TYPE_GIZMO);
+  g_type_ensure (ADAP_TYPE_GIZMO);
 }
 
 static void
-adw_alert_dialog_init (AdwAlertDialog *self)
+adap_alert_dialog_init (AdapAlertDialog *self)
 {
-  AdwAlertDialogPrivate *priv = adw_alert_dialog_get_instance_private (self);
+  AdapAlertDialogPrivate *priv = adap_alert_dialog_get_instance_private (self);
 
   priv->close_response = g_quark_from_string ("close");
 
@@ -919,7 +919,7 @@ adw_alert_dialog_init (AdwAlertDialog *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gtk_widget_set_layout_manager (priv->contents,
-                                 gtk_custom_layout_new (adw_widget_get_request_mode,
+                                 gtk_custom_layout_new (adap_widget_get_request_mode,
                                                         measure_child,
                                                         allocate_child));
 
@@ -928,15 +928,15 @@ adw_alert_dialog_init (AdwAlertDialog *self)
                                                         measure_responses,
                                                         allocate_responses));
 
-  adw_gizmo_set_focus_func (ADW_GIZMO (priv->contents),
-                            (AdwGizmoFocusFunc) adw_widget_focus_child);
-  adw_gizmo_set_grab_focus_func (ADW_GIZMO (priv->contents),
-                            (AdwGizmoGrabFocusFunc) adw_widget_grab_focus_child);
+  adap_gizmo_set_focus_func (ADAP_GIZMO (priv->contents),
+                            (AdapGizmoFocusFunc) adap_widget_focus_child);
+  adap_gizmo_set_grab_focus_func (ADAP_GIZMO (priv->contents),
+                            (AdapGizmoGrabFocusFunc) adap_widget_grab_focus_child);
 
-  adw_gizmo_set_focus_func (ADW_GIZMO (priv->response_area),
-                            (AdwGizmoFocusFunc) adw_widget_focus_child);
-  adw_gizmo_set_grab_focus_func (ADW_GIZMO (priv->response_area),
-                            (AdwGizmoGrabFocusFunc) adw_widget_grab_focus_child);
+  adap_gizmo_set_focus_func (ADAP_GIZMO (priv->response_area),
+                            (AdapGizmoFocusFunc) adap_widget_focus_child);
+  adap_gizmo_set_grab_focus_func (ADAP_GIZMO (priv->response_area),
+                            (AdapGizmoGrabFocusFunc) adap_widget_grab_focus_child);
 }
 
 /* Custom tag handling was copied and modified
@@ -955,7 +955,7 @@ typedef struct {
   char *context;
   gboolean translatable;
 
-  AdwResponseAppearance appearance;
+  AdapResponseAppearance appearance;
   gboolean enabled;
 
   int line;
@@ -988,7 +988,7 @@ response_start_element (GtkBuildableParseContext  *context,
     const char *msg_context = NULL;
     gboolean translatable = FALSE;
     const char *appearance_str = NULL;
-    AdwResponseAppearance appearance = ADW_RESPONSE_DEFAULT;
+    AdapResponseAppearance appearance = ADAP_RESPONSE_DEFAULT;
     gboolean enabled = TRUE;
     ResponseData *response;
 
@@ -1010,7 +1010,7 @@ response_start_element (GtkBuildableParseContext  *context,
     if (appearance_str) {
       GValue gvalue = G_VALUE_INIT;
 
-      if (!gtk_builder_value_from_string_type (data->builder, ADW_TYPE_RESPONSE_APPEARANCE, appearance_str, &gvalue, error)) {
+      if (!gtk_builder_value_from_string_type (data->builder, ADAP_TYPE_RESPONSE_APPEARANCE, appearance_str, &gvalue, error)) {
         _gtk_builder_prefix_error (data->builder, context, error);
         return;
       }
@@ -1041,7 +1041,7 @@ response_start_element (GtkBuildableParseContext  *context,
       _gtk_builder_prefix_error (data->builder, context, error);
   } else {
     _gtk_builder_error_unhandled_tag (data->builder, context,
-                                      "AdwAlertDialog", element_name,
+                                      "AdapAlertDialog", element_name,
                                       error);
   }
 }
@@ -1070,7 +1070,7 @@ static const GtkBuildableParser response_parser = {
 };
 
 static gboolean
-adw_alert_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
+adap_alert_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
                                              GtkBuilder         *builder,
                                              GObject            *child,
                                              const char         *tagname,
@@ -1099,7 +1099,7 @@ adw_alert_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
 }
 
 static void
-adw_alert_dialog_buildable_custom_finished (GtkBuildable *buildable,
+adap_alert_dialog_buildable_custom_finished (GtkBuildable *buildable,
                                             GtkBuilder   *builder,
                                             GObject      *child,
                                             const char   *tagname,
@@ -1128,15 +1128,15 @@ adw_alert_dialog_buildable_custom_finished (GtkBuildable *buildable,
     else
       label = response->label->str;
 
-    adw_alert_dialog_add_response (ADW_ALERT_DIALOG (data->object),
+    adap_alert_dialog_add_response (ADAP_ALERT_DIALOG (data->object),
                                    response->id, label);
 
-    if (response->appearance != ADW_RESPONSE_DEFAULT)
-      adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (data->object),
+    if (response->appearance != ADAP_RESPONSE_DEFAULT)
+      adap_alert_dialog_set_response_appearance (ADAP_ALERT_DIALOG (data->object),
                                                 response->id, response->appearance);
 
     if (!response->enabled)
-      adw_alert_dialog_set_response_enabled (ADW_ALERT_DIALOG (data->object),
+      adap_alert_dialog_set_response_enabled (ADAP_ALERT_DIALOG (data->object),
                                              response->id, FALSE);
   }
 
@@ -1145,72 +1145,72 @@ adw_alert_dialog_buildable_custom_finished (GtkBuildable *buildable,
 }
 
 static void
-adw_alert_dialog_buildable_add_child (GtkBuildable *buildable,
+adap_alert_dialog_buildable_add_child (GtkBuildable *buildable,
                                       GtkBuilder   *builder,
                                       GObject      *child,
                                       const char   *type)
 {
-  AdwAlertDialog *self = ADW_ALERT_DIALOG (buildable);
+  AdapAlertDialog *self = ADAP_ALERT_DIALOG (buildable);
 
   if (GTK_IS_WIDGET (child))
-    adw_alert_dialog_set_extra_child (self, GTK_WIDGET (child));
+    adap_alert_dialog_set_extra_child (self, GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_alert_dialog_buildable_init (GtkBuildableIface *iface)
+adap_alert_dialog_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_alert_dialog_buildable_add_child;
-  iface->custom_tag_start = adw_alert_dialog_buildable_custom_tag_start;
-  iface->custom_finished = adw_alert_dialog_buildable_custom_finished;
+  iface->add_child = adap_alert_dialog_buildable_add_child;
+  iface->custom_tag_start = adap_alert_dialog_buildable_custom_tag_start;
+  iface->custom_finished = adap_alert_dialog_buildable_custom_finished;
 }
 
 /**
- * adw_alert_dialog_new:
+ * adap_alert_dialog_new:
  * @heading: (nullable): the heading
  * @body: (nullable): the body text
  *
- * Creates a new `AdwAlertDialog`.
+ * Creates a new `AdapAlertDialog`.
  *
  * @heading and @body can be set to `NULL`. This can be useful if they need to
  * be formatted or use markup. In that case, set them to `NULL` and call
  * [method@AlertDialog.format_body] or similar methods afterwards:
  *
  * ```c
- * AdwDialog *dialog;
+ * AdapDialog *dialog;
  *
- * dialog = adw_alert_dialog_new (_("Replace File?"), NULL);
- * adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog),
+ * dialog = adap_alert_dialog_new (_("Replace File?"), NULL);
+ * adap_alert_dialog_format_body (ADAP_ALERT_DIALOG (dialog),
  *                               _("A file named “%s” already exists.  Do you want to replace it?"),
  *                               filename);
  * ```
  *
- * Returns: the newly created `AdwAlertDialog`
+ * Returns: the newly created `AdapAlertDialog`
  *
  * Since: 1.5
  */
-AdwDialog *
-adw_alert_dialog_new (const char *heading,
+AdapDialog *
+adap_alert_dialog_new (const char *heading,
                       const char *body)
 {
-  AdwDialog *dialog;
+  AdapDialog *dialog;
 
-  dialog = g_object_new (ADW_TYPE_ALERT_DIALOG, NULL);
+  dialog = g_object_new (ADAP_TYPE_ALERT_DIALOG, NULL);
 
   if (heading)
-    adw_alert_dialog_set_heading (ADW_ALERT_DIALOG (dialog), heading);
+    adap_alert_dialog_set_heading (ADAP_ALERT_DIALOG (dialog), heading);
 
   if (body)
-    adw_alert_dialog_set_body (ADW_ALERT_DIALOG (dialog), body);
+    adap_alert_dialog_set_body (ADAP_ALERT_DIALOG (dialog), body);
 
   return dialog;
 }
 
 /**
- * adw_alert_dialog_get_heading: (attributes org.gtk.Method.get_property=heading)
+ * adap_alert_dialog_get_heading: (attributes org.gtk.Method.get_property=heading)
  * @self: an alert dialog
  *
  * Gets the heading of @self.
@@ -1220,19 +1220,19 @@ adw_alert_dialog_new (const char *heading,
  * Since: 1.5
  */
 const char *
-adw_alert_dialog_get_heading (AdwAlertDialog *self)
+adap_alert_dialog_get_heading (AdapAlertDialog *self)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), NULL);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   return priv->heading;
 }
 
 /**
- * adw_alert_dialog_set_heading: (attributes org.gtk.Method.set_property=heading)
+ * adap_alert_dialog_set_heading: (attributes org.gtk.Method.set_property=heading)
  * @self: an alert dialog
  * @heading: (nullable): the heading of @self
  *
@@ -1241,15 +1241,15 @@ adw_alert_dialog_get_heading (AdwAlertDialog *self)
  * Since: 1.5
  */
 void
-adw_alert_dialog_set_heading (AdwAlertDialog *self,
+adap_alert_dialog_set_heading (AdapAlertDialog *self,
                               const char     *heading)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (heading != NULL);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   if (!g_set_str (&priv->heading, heading))
     return;
@@ -1268,7 +1268,7 @@ adw_alert_dialog_set_heading (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_get_heading_use_markup: (attributes org.gtk.Method.get_property=heading-use-markup)
+ * adap_alert_dialog_get_heading_use_markup: (attributes org.gtk.Method.get_property=heading-use-markup)
  * @self: an alert dialog
  *
  * Gets whether the heading of @self includes Pango markup.
@@ -1278,19 +1278,19 @@ adw_alert_dialog_set_heading (AdwAlertDialog *self,
  * Since: 1.5
  */
 gboolean
-adw_alert_dialog_get_heading_use_markup (AdwAlertDialog *self)
+adap_alert_dialog_get_heading_use_markup (AdapAlertDialog *self)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), FALSE);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   return priv->heading_use_markup;
 }
 
 /**
- * adw_alert_dialog_set_heading_use_markup: (attributes org.gtk.Method.set_property=heading-use-markup)
+ * adap_alert_dialog_set_heading_use_markup: (attributes org.gtk.Method.set_property=heading-use-markup)
  * @self: an alert dialog
  * @use_markup: whether to use markup for heading
  *
@@ -1301,14 +1301,14 @@ adw_alert_dialog_get_heading_use_markup (AdwAlertDialog *self)
  * Since: 1.5
  */
 void
-adw_alert_dialog_set_heading_use_markup (AdwAlertDialog *self,
+adap_alert_dialog_set_heading_use_markup (AdapAlertDialog *self,
                                          gboolean        use_markup)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   use_markup = !!use_markup;
 
@@ -1326,7 +1326,7 @@ adw_alert_dialog_set_heading_use_markup (AdwAlertDialog *self,
 
 
 /**
- * adw_alert_dialog_format_heading:
+ * adap_alert_dialog_format_heading:
  * @self: an alert dialog
  * @format: the formatted string for the heading
  * @...: the parameters to insert into @format
@@ -1338,18 +1338,18 @@ adw_alert_dialog_set_heading_use_markup (AdwAlertDialog *self,
  * Since: 1.5
  */
 void
-adw_alert_dialog_format_heading (AdwAlertDialog *self,
+adap_alert_dialog_format_heading (AdapAlertDialog *self,
                                  const char     *format,
                                  ...)
 {
   va_list args;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (format != NULL);
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  adw_alert_dialog_set_heading_use_markup (self, FALSE);
+  adap_alert_dialog_set_heading_use_markup (self, FALSE);
 
   if (format) {
     char *heading;
@@ -1358,18 +1358,18 @@ adw_alert_dialog_format_heading (AdwAlertDialog *self,
     heading = g_strdup_vprintf (format, args);
     va_end (args);
 
-    adw_alert_dialog_set_heading (self, heading);
+    adap_alert_dialog_set_heading (self, heading);
 
     g_free (heading);
   } else {
-    adw_alert_dialog_set_heading (self, NULL);
+    adap_alert_dialog_set_heading (self, NULL);
   }
 
   g_object_thaw_notify (G_OBJECT (self));
 }
 
 /**
- * adw_alert_dialog_format_heading_markup:
+ * adap_alert_dialog_format_heading_markup:
  * @self: an alert dialog
  * @format: the formatted string for the heading with Pango markup
  * @...: the parameters to insert into @format
@@ -1387,18 +1387,18 @@ adw_alert_dialog_format_heading (AdwAlertDialog *self,
  * Since: 1.5
  */
 void
-adw_alert_dialog_format_heading_markup (AdwAlertDialog *self,
+adap_alert_dialog_format_heading_markup (AdapAlertDialog *self,
                                         const char     *format,
                                         ...)
 {
   va_list args;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (format != NULL);
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  adw_alert_dialog_set_heading_use_markup (self, TRUE);
+  adap_alert_dialog_set_heading_use_markup (self, TRUE);
 
   if (format) {
     char *heading;
@@ -1407,18 +1407,18 @@ adw_alert_dialog_format_heading_markup (AdwAlertDialog *self,
     heading = g_markup_vprintf_escaped (format, args);
     va_end (args);
 
-    adw_alert_dialog_set_heading (self, heading);
+    adap_alert_dialog_set_heading (self, heading);
 
     g_free (heading);
   } else {
-    adw_alert_dialog_set_heading (self, "");
+    adap_alert_dialog_set_heading (self, "");
   }
 
   g_object_thaw_notify (G_OBJECT (self));
 }
 
 /**
- * adw_alert_dialog_get_body: (attributes org.gtk.Method.get_property=body)
+ * adap_alert_dialog_get_body: (attributes org.gtk.Method.get_property=body)
  * @self: an alert dialog
  *
  * Gets the body text of @self.
@@ -1428,19 +1428,19 @@ adw_alert_dialog_format_heading_markup (AdwAlertDialog *self,
  * Since: 1.5
  */
 const char *
-adw_alert_dialog_get_body (AdwAlertDialog *self)
+adap_alert_dialog_get_body (AdapAlertDialog *self)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), NULL);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   return priv->body;
 }
 
 /**
- * adw_alert_dialog_set_body: (attributes org.gtk.Method.set_property=body)
+ * adap_alert_dialog_set_body: (attributes org.gtk.Method.set_property=body)
  * @self: an alert dialog
  * @body: the body of @self
  *
@@ -1449,15 +1449,15 @@ adw_alert_dialog_get_body (AdwAlertDialog *self)
  * Since: 1.5
  */
 void
-adw_alert_dialog_set_body (AdwAlertDialog *self,
+adap_alert_dialog_set_body (AdapAlertDialog *self,
                            const char     *body)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (body != NULL);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   if (!g_set_str (&priv->body, body))
     return;
@@ -1474,7 +1474,7 @@ adw_alert_dialog_set_body (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_get_body_use_markup: (attributes org.gtk.Method.get_property=body-use-markup)
+ * adap_alert_dialog_get_body_use_markup: (attributes org.gtk.Method.get_property=body-use-markup)
  * @self: an alert dialog
  *
  * Gets whether the body text of @self includes Pango markup.
@@ -1484,19 +1484,19 @@ adw_alert_dialog_set_body (AdwAlertDialog *self,
  * Since: 1.5
  */
 gboolean
-adw_alert_dialog_get_body_use_markup (AdwAlertDialog *self)
+adap_alert_dialog_get_body_use_markup (AdapAlertDialog *self)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), FALSE);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   return priv->body_use_markup;
 }
 
 /**
- * adw_alert_dialog_set_body_use_markup: (attributes org.gtk.Method.set_property=body-use-markup)
+ * adap_alert_dialog_set_body_use_markup: (attributes org.gtk.Method.set_property=body-use-markup)
  * @self: an alert dialog
  * @use_markup: whether to use markup for body text
  *
@@ -1507,14 +1507,14 @@ adw_alert_dialog_get_body_use_markup (AdwAlertDialog *self)
  * Since: 1.5
  */
 void
-adw_alert_dialog_set_body_use_markup (AdwAlertDialog *self,
+adap_alert_dialog_set_body_use_markup (AdapAlertDialog *self,
                                       gboolean        use_markup)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   use_markup = !!use_markup;
 
@@ -1529,7 +1529,7 @@ adw_alert_dialog_set_body_use_markup (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_format_body:
+ * adap_alert_dialog_format_body:
  * @self: an alert dialog
  * @format: the formatted string for the body text
  * @...: the parameters to insert into @format
@@ -1541,18 +1541,18 @@ adw_alert_dialog_set_body_use_markup (AdwAlertDialog *self,
  * Since: 1.5
  */
 void
-adw_alert_dialog_format_body (AdwAlertDialog *self,
+adap_alert_dialog_format_body (AdapAlertDialog *self,
                               const char     *format,
                               ...)
 {
   va_list args;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (format != NULL);
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  adw_alert_dialog_set_body_use_markup (self, FALSE);
+  adap_alert_dialog_set_body_use_markup (self, FALSE);
 
   if (format) {
     char *body;
@@ -1561,18 +1561,18 @@ adw_alert_dialog_format_body (AdwAlertDialog *self,
     body = g_strdup_vprintf (format, args);
     va_end (args);
 
-    adw_alert_dialog_set_body (self, body);
+    adap_alert_dialog_set_body (self, body);
 
     g_free (body);
   } else {
-    adw_alert_dialog_set_body (self, "");
+    adap_alert_dialog_set_body (self, "");
   }
 
   g_object_thaw_notify (G_OBJECT (self));
 }
 
 /**
- * adw_alert_dialog_format_body_markup:
+ * adap_alert_dialog_format_body_markup:
  * @self: an alert dialog
  * @format: the formatted string for the body text with Pango markup
  * @...: the parameters to insert into @format
@@ -1590,18 +1590,18 @@ adw_alert_dialog_format_body (AdwAlertDialog *self,
  * Since: 1.5
  */
 void
-adw_alert_dialog_format_body_markup (AdwAlertDialog *self,
+adap_alert_dialog_format_body_markup (AdapAlertDialog *self,
                                      const char     *format,
                                      ...)
 {
   va_list args;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (format != NULL);
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  adw_alert_dialog_set_body_use_markup (self, TRUE);
+  adap_alert_dialog_set_body_use_markup (self, TRUE);
 
   if (format) {
     char *body;
@@ -1610,18 +1610,18 @@ adw_alert_dialog_format_body_markup (AdwAlertDialog *self,
     body = g_markup_vprintf_escaped (format, args);
     va_end (args);
 
-    adw_alert_dialog_set_body (self, body);
+    adap_alert_dialog_set_body (self, body);
 
     g_free (body);
   } else {
-    adw_alert_dialog_set_body (self, NULL);
+    adap_alert_dialog_set_body (self, NULL);
   }
 
   g_object_thaw_notify (G_OBJECT (self));
 }
 
 /**
- * adw_alert_dialog_get_extra_child: (attributes org.gtk.Method.get_property=extra-child)
+ * adap_alert_dialog_get_extra_child: (attributes org.gtk.Method.get_property=extra-child)
  * @self: an alert dialog
  *
  * Gets the child widget of @self.
@@ -1631,19 +1631,19 @@ adw_alert_dialog_format_body_markup (AdwAlertDialog *self,
  * Since: 1.5
  */
 GtkWidget *
-adw_alert_dialog_get_extra_child (AdwAlertDialog *self)
+adap_alert_dialog_get_extra_child (AdapAlertDialog *self)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), NULL);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   return priv->child;
 }
 
 /**
- * adw_alert_dialog_set_extra_child: (attributes org.gtk.Method.set_property=extra-child)
+ * adap_alert_dialog_set_extra_child: (attributes org.gtk.Method.set_property=extra-child)
  * @self: an alert dialog
  * @child: (nullable): the child widget
  *
@@ -1654,18 +1654,18 @@ adw_alert_dialog_get_extra_child (AdwAlertDialog *self)
  * Since: 1.5
  */
 void
-adw_alert_dialog_set_extra_child (AdwAlertDialog *self,
+adap_alert_dialog_set_extra_child (AdapAlertDialog *self,
                                   GtkWidget      *child)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
   if (child)
     g_return_if_fail (gtk_widget_get_parent (child) == NULL);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   if (child == priv->child)
     return;
@@ -1682,7 +1682,7 @@ adw_alert_dialog_set_extra_child (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_add_response:
+ * adap_alert_dialog_add_response:
  * @self: an alert dialog
  * @id: the response ID
  * @label: the response label
@@ -1707,22 +1707,22 @@ adw_alert_dialog_set_extra_child (AdwAlertDialog *self,
  * Since: 1.5
  */
 void
-adw_alert_dialog_add_response (AdwAlertDialog *self,
+adap_alert_dialog_add_response (AdapAlertDialog *self,
                                const char     *id,
                                const char     *label)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (id != NULL);
   g_return_if_fail (label != NULL);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   if (find_response (self, id)) {
     g_critical ("Trying to add a response with id '%s' to an "
-                "AdwAlertDialog, but such a response already exists", id);
+                "AdapAlertDialog, but such a response already exists", id);
     return;
   }
 
@@ -1731,7 +1731,7 @@ adw_alert_dialog_add_response (AdwAlertDialog *self,
   info->dialog = self;
   info->id = g_quark_from_string (id);
   info->label = g_strdup (label);
-  info->appearance = ADW_RESPONSE_DEFAULT;
+  info->appearance = ADAP_RESPONSE_DEFAULT;
   info->enabled = TRUE;
 
   if (priv->responses) {
@@ -1746,11 +1746,11 @@ adw_alert_dialog_add_response (AdwAlertDialog *self,
   g_hash_table_insert (priv->id_to_response, g_strdup (id), info);
 
   if (priv->default_response == info->id)
-    adw_dialog_set_default_widget (ADW_DIALOG (self), info->button);
+    adap_dialog_set_default_widget (ADAP_DIALOG (self), info->button);
 }
 
 /**
- * adw_alert_dialog_add_responses: (skip)
+ * adap_alert_dialog_add_responses: (skip)
  * @self: an alert dialog
  * @first_id: response id
  * @...: label for first response, then more id-label pairs
@@ -1764,7 +1764,7 @@ adw_alert_dialog_add_response (AdwAlertDialog *self,
  * Example:
  *
  * ```c
- * adw_alert_dialog_add_responses (dialog,
+ * adap_alert_dialog_add_responses (dialog,
  *                                 "cancel",  _("_Cancel"),
  *                                 "discard", _("_Discard"),
  *                                 "save",    _("_Save"),
@@ -1774,14 +1774,14 @@ adw_alert_dialog_add_response (AdwAlertDialog *self,
  * Since: 1.5
  */
 void
-adw_alert_dialog_add_responses (AdwAlertDialog *self,
+adap_alert_dialog_add_responses (AdapAlertDialog *self,
                                 const char     *first_id,
                                 ...)
 {
   va_list args;
   const char *id, *label;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
 
   if (!first_id)
     return;
@@ -1792,7 +1792,7 @@ adw_alert_dialog_add_responses (AdwAlertDialog *self,
   label = va_arg (args, const char *);
 
   while (id) {
-    adw_alert_dialog_add_response (self, id, label);
+    adap_alert_dialog_add_response (self, id, label);
 
     id = va_arg (args, const char *);
     if (!id)
@@ -1805,7 +1805,7 @@ adw_alert_dialog_add_responses (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_remove_response:
+ * adap_alert_dialog_remove_response:
  * @self: an alert dialog
  * @id: the response ID
  *
@@ -1814,27 +1814,27 @@ adw_alert_dialog_add_responses (AdwAlertDialog *self,
  * Since: 1.5
  */
 void
-adw_alert_dialog_remove_response (AdwAlertDialog *self,
+adap_alert_dialog_remove_response (AdapAlertDialog *self,
                                   const char     *id)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (id != NULL);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
   info = find_response (self, id);
 
   if (!info) {
     g_critical ("Trying to remove a response with id '%s' from an "
-                "AdwAlertDialog, but such a response does not exist",
+                "AdapAlertDialog, but such a response does not exist",
                 id);
     return;
   }
 
   if (priv->default_response == info->id)
-    adw_dialog_set_default_widget (ADW_DIALOG (self), NULL);
+    adap_dialog_set_default_widget (ADAP_DIALOG (self), NULL);
 
   gtk_widget_unparent (info->button);
 
@@ -1852,7 +1852,7 @@ adw_alert_dialog_remove_response (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_get_response_label:
+ * adap_alert_dialog_get_response_label:
  * @self: an alert dialog
  * @response: a response ID
  *
@@ -1865,14 +1865,14 @@ adw_alert_dialog_remove_response (AdwAlertDialog *self,
  * Since: 1.5
  */
 const char *
-adw_alert_dialog_get_response_label (AdwAlertDialog *self,
+adap_alert_dialog_get_response_label (AdapAlertDialog *self,
                                      const char     *response)
 {
   ResponseInfo *info;
 
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), NULL);
   g_return_val_if_fail (response != NULL, NULL);
-  g_return_val_if_fail (adw_alert_dialog_has_response (self, response), NULL);
+  g_return_val_if_fail (adap_alert_dialog_has_response (self, response), NULL);
 
   info = find_response (self, response);
 
@@ -1880,7 +1880,7 @@ adw_alert_dialog_get_response_label (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_set_response_label:
+ * adap_alert_dialog_set_response_label:
  * @self: an alert dialog
  * @response: a response ID
  * @label: the label of @response
@@ -1893,16 +1893,16 @@ adw_alert_dialog_get_response_label (AdwAlertDialog *self,
  * Since: 1.5
  */
 void
-adw_alert_dialog_set_response_label (AdwAlertDialog *self,
+adap_alert_dialog_set_response_label (AdapAlertDialog *self,
                                      const char     *response,
                                      const char     *label)
 {
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (response != NULL);
   g_return_if_fail (label != NULL);
-  g_return_if_fail (adw_alert_dialog_has_response (self, response));
+  g_return_if_fail (adap_alert_dialog_has_response (self, response));
 
   info = find_response (self, response);
 
@@ -1912,7 +1912,7 @@ adw_alert_dialog_set_response_label (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_get_response_appearance:
+ * adap_alert_dialog_get_response_appearance:
  * @self: an alert dialog
  * @response: a response ID
  *
@@ -1924,15 +1924,15 @@ adw_alert_dialog_set_response_label (AdwAlertDialog *self,
  *
  * Since: 1.5
  */
-AdwResponseAppearance
-adw_alert_dialog_get_response_appearance (AdwAlertDialog *self,
+AdapResponseAppearance
+adap_alert_dialog_get_response_appearance (AdapAlertDialog *self,
                                           const char     *response)
 {
   ResponseInfo *info;
 
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), FALSE);
   g_return_val_if_fail (response != NULL, FALSE);
-  g_return_val_if_fail (adw_alert_dialog_has_response (self, response), FALSE);
+  g_return_val_if_fail (adap_alert_dialog_has_response (self, response), FALSE);
 
   info = find_response (self, response);
 
@@ -1940,7 +1940,7 @@ adw_alert_dialog_get_response_appearance (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_set_response_appearance:
+ * adap_alert_dialog_set_response_appearance:
  * @self: an alert dialog
  * @response: a response ID
  * @appearance: appearance for @response
@@ -1952,31 +1952,31 @@ adw_alert_dialog_get_response_appearance (AdwAlertDialog *self,
  *   <img src="alert-dialog-appearance.png" alt="alert-dialog-appearance">
  * </picture>
  *
- * Use `ADW_RESPONSE_SUGGESTED` to mark important responses such as the
+ * Use `ADAP_RESPONSE_SUGGESTED` to mark important responses such as the
  * affirmative action, like the Save button in the example.
  *
- * Use `ADW_RESPONSE_DESTRUCTIVE` to draw attention to the potentially damaging
+ * Use `ADAP_RESPONSE_DESTRUCTIVE` to draw attention to the potentially damaging
  * consequences of using @response. This appearance acts as a warning to the
  * user. The Discard button in the example is using this appearance.
  *
- * The default appearance is `ADW_RESPONSE_DEFAULT`.
+ * The default appearance is `ADAP_RESPONSE_DEFAULT`.
  *
  * Negative responses like Cancel or Close should use the default appearance.
  *
  * Since: 1.5
  */
 void
-adw_alert_dialog_set_response_appearance (AdwAlertDialog        *self,
+adap_alert_dialog_set_response_appearance (AdapAlertDialog        *self,
                                           const char            *response,
-                                          AdwResponseAppearance  appearance)
+                                          AdapResponseAppearance  appearance)
 {
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (response != NULL);
-  g_return_if_fail (appearance >= ADW_RESPONSE_DEFAULT &&
-                    appearance <= ADW_RESPONSE_DESTRUCTIVE);
-  g_return_if_fail (adw_alert_dialog_has_response (self, response));
+  g_return_if_fail (appearance >= ADAP_RESPONSE_DEFAULT &&
+                    appearance <= ADAP_RESPONSE_DESTRUCTIVE);
+  g_return_if_fail (adap_alert_dialog_has_response (self, response));
 
   info = find_response (self, response);
 
@@ -1985,19 +1985,19 @@ adw_alert_dialog_set_response_appearance (AdwAlertDialog        *self,
 
   info->appearance = appearance;
 
-  if (info->appearance == ADW_RESPONSE_SUGGESTED)
+  if (info->appearance == ADAP_RESPONSE_SUGGESTED)
     gtk_widget_add_css_class (info->button, "suggested");
   else
     gtk_widget_remove_css_class (info->button, "suggested");
 
-  if (info->appearance == ADW_RESPONSE_DESTRUCTIVE)
+  if (info->appearance == ADAP_RESPONSE_DESTRUCTIVE)
     gtk_widget_add_css_class (info->button, "destructive");
   else
     gtk_widget_remove_css_class (info->button, "destructive");
 }
 
 /**
- * adw_alert_dialog_get_response_enabled:
+ * adap_alert_dialog_get_response_enabled:
  * @self: an alert dialog
  * @response: a response ID
  *
@@ -2010,14 +2010,14 @@ adw_alert_dialog_set_response_appearance (AdwAlertDialog        *self,
  * Since: 1.5
  */
 gboolean
-adw_alert_dialog_get_response_enabled (AdwAlertDialog *self,
+adap_alert_dialog_get_response_enabled (AdapAlertDialog *self,
                                        const char     *response)
 {
   ResponseInfo *info;
 
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), FALSE);
   g_return_val_if_fail (response != NULL, FALSE);
-  g_return_val_if_fail (adw_alert_dialog_has_response (self, response), FALSE);
+  g_return_val_if_fail (adap_alert_dialog_has_response (self, response), FALSE);
 
   info = find_response (self, response);
 
@@ -2025,7 +2025,7 @@ adw_alert_dialog_get_response_enabled (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_set_response_enabled:
+ * adap_alert_dialog_set_response_enabled:
  * @self: an alert dialog
  * @response: a response ID
  * @enabled: whether to enable @response
@@ -2044,15 +2044,15 @@ adw_alert_dialog_get_response_enabled (AdwAlertDialog *self,
  * Since: 1.5
  */
 void
-adw_alert_dialog_set_response_enabled (AdwAlertDialog *self,
+adap_alert_dialog_set_response_enabled (AdapAlertDialog *self,
                                        const char     *response,
                                        gboolean        enabled)
 {
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (response != NULL);
-  g_return_if_fail (adw_alert_dialog_has_response (self, response));
+  g_return_if_fail (adap_alert_dialog_has_response (self, response));
 
   info = find_response (self, response);
 
@@ -2067,7 +2067,7 @@ adw_alert_dialog_set_response_enabled (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_get_default_response: (attributes org.gtk.Method.get_property=default-response)
+ * adap_alert_dialog_get_default_response: (attributes org.gtk.Method.get_property=default-response)
  * @self: an alert dialog
  *
  * Gets the ID of the default response of @self.
@@ -2077,13 +2077,13 @@ adw_alert_dialog_set_response_enabled (AdwAlertDialog *self,
  * Since: 1.5
  */
 const char *
-adw_alert_dialog_get_default_response (AdwAlertDialog *self)
+adap_alert_dialog_get_default_response (AdapAlertDialog *self)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), NULL);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   if (!priv->default_response)
     return NULL;
@@ -2092,7 +2092,7 @@ adw_alert_dialog_get_default_response (AdwAlertDialog *self)
 }
 
 /**
- * adw_alert_dialog_set_default_response: (attributes org.gtk.Method.set_property=default-response)
+ * adap_alert_dialog_set_default_response: (attributes org.gtk.Method.set_property=default-response)
  * @self: an alert dialog
  * @response: (nullable): the default response ID
  *
@@ -2106,16 +2106,16 @@ adw_alert_dialog_get_default_response (AdwAlertDialog *self)
  * Since: 1.5
  */
 void
-adw_alert_dialog_set_default_response (AdwAlertDialog *self,
+adap_alert_dialog_set_default_response (AdapAlertDialog *self,
                                        const char     *response)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
   GQuark quark;
   ResponseInfo *info;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
   quark = g_quark_from_string (response);
 
   if (quark == priv->default_response)
@@ -2126,13 +2126,13 @@ adw_alert_dialog_set_default_response (AdwAlertDialog *self,
   info = find_response (self, response);
 
   if (info)
-    adw_dialog_set_default_widget (ADW_DIALOG (self), info->button);
+    adap_dialog_set_default_widget (ADAP_DIALOG (self), info->button);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_DEFAULT_RESPONSE]);
 }
 
 /**
- * adw_alert_dialog_get_close_response: (attributes org.gtk.Method.get_property=close-response)
+ * adap_alert_dialog_get_close_response: (attributes org.gtk.Method.get_property=close-response)
  * @self: an alert dialog
  *
  * Gets the ID of the close response of @self.
@@ -2142,19 +2142,19 @@ adw_alert_dialog_set_default_response (AdwAlertDialog *self,
  * Since: 1.5
  */
 const char *
-adw_alert_dialog_get_close_response (AdwAlertDialog *self)
+adap_alert_dialog_get_close_response (AdapAlertDialog *self)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), NULL);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
 
   return g_quark_to_string (priv->close_response);
 }
 
 /**
- * adw_alert_dialog_set_close_response: (attributes org.gtk.Method.set_property=close-response)
+ * adap_alert_dialog_set_close_response: (attributes org.gtk.Method.set_property=close-response)
  * @self: an alert dialog
  * @response: the close response ID
  *
@@ -2170,16 +2170,16 @@ adw_alert_dialog_get_close_response (AdwAlertDialog *self)
  * Since: 1.5
  */
 void
-adw_alert_dialog_set_close_response (AdwAlertDialog *self,
+adap_alert_dialog_set_close_response (AdapAlertDialog *self,
                                      const char     *response)
 {
-  AdwAlertDialogPrivate *priv;
+  AdapAlertDialogPrivate *priv;
   GQuark quark;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (response != NULL);
 
-  priv = adw_alert_dialog_get_instance_private (self);
+  priv = adap_alert_dialog_get_instance_private (self);
   quark = g_quark_from_string (response);
 
   if (quark == priv->close_response)
@@ -2191,7 +2191,7 @@ adw_alert_dialog_set_close_response (AdwAlertDialog *self,
 }
 
 /**
- * adw_alert_dialog_has_response:
+ * adap_alert_dialog_has_response:
  * @self: an alert dialog
  * @response: response ID
  *
@@ -2202,10 +2202,10 @@ adw_alert_dialog_set_close_response (AdwAlertDialog *self,
  * Since: 1.5
  */
 gboolean
-adw_alert_dialog_has_response (AdwAlertDialog *self,
+adap_alert_dialog_has_response (AdapAlertDialog *self,
                                const char     *response)
 {
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), FALSE);
   g_return_val_if_fail (response != NULL, FALSE);
 
   return find_response (self, response) != NULL;
@@ -2215,7 +2215,7 @@ static void choose_cancelled_cb (GCancellable *cancellable,
                                  GTask        *task);
 
 static void
-choose_response_cb (AdwAlertDialog *dialog,
+choose_response_cb (AdapAlertDialog *dialog,
                     const char     *response,
                     GTask          *task)
 {
@@ -2235,13 +2235,13 @@ static void
 choose_cancelled_cb (GCancellable *cancellable,
                      GTask        *task)
 {
-  AdwAlertDialog *self = g_task_get_source_object (task);
+  AdapAlertDialog *self = g_task_get_source_object (task);
 
-  choose_response_cb (self, adw_alert_dialog_get_close_response (self), task);
+  choose_response_cb (self, adap_alert_dialog_get_close_response (self), task);
 }
 
 /**
- * adw_alert_dialog_choose:
+ * adap_alert_dialog_choose:
  * @self: an alert dialog
  * @parent: (nullable): the parent widget
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
@@ -2259,7 +2259,7 @@ choose_cancelled_cb (GCancellable *cancellable,
  * Since: 1.5
  */
 void
-adw_alert_dialog_choose (AdwAlertDialog      *self,
+adap_alert_dialog_choose (AdapAlertDialog      *self,
                          GtkWidget           *parent,
                          GCancellable        *cancellable,
                          GAsyncReadyCallback  callback,
@@ -2267,22 +2267,22 @@ adw_alert_dialog_choose (AdwAlertDialog      *self,
 {
   GTask *task;
 
-  g_return_if_fail (ADW_IS_ALERT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ALERT_DIALOG (self));
   g_return_if_fail (parent == NULL || GTK_IS_WIDGET (parent));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, adw_alert_dialog_choose);
+  g_task_set_source_tag (task, adap_alert_dialog_choose);
 
   if (cancellable)
     g_signal_connect (cancellable, "cancelled", G_CALLBACK (choose_cancelled_cb), task);
 
   g_signal_connect (self, "response", G_CALLBACK (choose_response_cb), task);
 
-  adw_dialog_present (ADW_DIALOG (self), parent);
+  adap_dialog_present (ADAP_DIALOG (self), parent);
 }
 
 /**
- * adw_alert_dialog_choose_finish:
+ * adap_alert_dialog_choose_finish:
  * @self: an alert dialog
  * @result: a `GAsyncResult`
  *
@@ -2294,13 +2294,13 @@ adw_alert_dialog_choose (AdwAlertDialog      *self,
  * Since: 1.5
  */
 const char *
-adw_alert_dialog_choose_finish (AdwAlertDialog *self,
+adap_alert_dialog_choose_finish (AdapAlertDialog *self,
                                 GAsyncResult   *result)
 {
   GQuark id;
-  g_return_val_if_fail (ADW_IS_ALERT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ALERT_DIALOG (self), NULL);
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == adw_alert_dialog_choose, NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == adap_alert_dialog_choose, NULL);
 
   id = g_task_propagate_int (G_TASK (result), NULL);
 

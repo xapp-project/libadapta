@@ -7,13 +7,13 @@
 #include "config.h"
 #include <glib/gi18n.h>
 
-#include "adw-split-button.h"
+#include "adap-split-button.h"
 
-#include "adw-marshalers.h"
-#include "adw-widget-utils-private.h"
+#include "adap-marshalers.h"
+#include "adap-widget-utils-private.h"
 
 /**
- * AdwSplitButton:
+ * AdapSplitButton:
  *
  * A combined button and dropdown widget.
  *
@@ -22,7 +22,7 @@
  *   <img src="split-button.png" alt="split-button">
  * </picture>
  *
- * `AdwSplitButton` is typically used to present a set of actions in a menu,
+ * `AdapSplitButton` is typically used to present a set of actions in a menu,
  * but allow access to one of them with a single click.
  *
  * The API is very similar to [class@Gtk.Button] and [class@Gtk.MenuButton], see
@@ -40,7 +40,7 @@
  *         ╰── arrow
  * ```
  *
- * `AdwSplitButton`'s CSS node is called `splitbutton`. It contains the css
+ * `AdapSplitButton`'s CSS node is called `splitbutton`. It contains the css
  * nodes: `button`, `separator`, `menubutton`. See [class@Gtk.MenuButton]
  * documentation for the `menubutton` contents.
  *
@@ -50,7 +50,7 @@
  *
  * ## Accessibility
  *
- * `AdwSplitButton` uses the `GTK_ACCESSIBLE_ROLE_GROUP` role.
+ * `AdapSplitButton` uses the `GTK_ACCESSIBLE_ROLE_GROUP` role.
  */
 
 enum {
@@ -81,7 +81,7 @@ enum {
 
 static guint signals[SIGNAL_LAST_SIGNAL];
 
-struct _AdwSplitButton
+struct _AdapSplitButton
 {
   GtkWidget parent_instance;
 
@@ -94,17 +94,17 @@ struct _AdwSplitButton
   guint has_dropdown_tooltip : 1;
 };
 
-static void adw_split_button_actionable_init (GtkActionableInterface *iface);
-static void adw_split_button_buildable_init (GtkBuildableIface *iface);
+static void adap_split_button_actionable_init (GtkActionableInterface *iface);
+static void adap_split_button_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwSplitButton, adw_split_button, GTK_TYPE_WIDGET,
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, adw_split_button_actionable_init)
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_split_button_buildable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapSplitButton, adap_split_button, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, adap_split_button_actionable_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_split_button_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
 static void
-update_state (AdwSplitButton *self)
+update_state (AdapSplitButton *self)
 {
   GtkStateFlags flags;
   gboolean keyboard_activating;
@@ -131,7 +131,7 @@ update_state (AdwSplitButton *self)
 }
 
 static void
-update_style_classes (AdwSplitButton *self)
+update_style_classes (AdapSplitButton *self)
 {
   const char *label = gtk_button_get_label (GTK_BUTTON (self->button));
   const char *icon_name = gtk_button_get_icon_name (GTK_BUTTON (self->button));
@@ -153,52 +153,52 @@ update_style_classes (AdwSplitButton *self)
 }
 
 static void
-clicked_cb (AdwSplitButton *self)
+clicked_cb (AdapSplitButton *self)
 {
   g_signal_emit (self, signals[SIGNAL_CLICKED], 0);
 }
 
 static void
-activate_cb (AdwSplitButton *self)
+activate_cb (AdapSplitButton *self)
 {
   g_signal_emit_by_name (self->button, "activate");
 }
 
 static void
-adw_split_button_get_property (GObject    *object,
+adap_split_button_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  AdwSplitButton *self = ADW_SPLIT_BUTTON (object);
+  AdapSplitButton *self = ADAP_SPLIT_BUTTON (object);
 
   switch (prop_id) {
   case PROP_LABEL:
-    g_value_set_string (value, adw_split_button_get_label (self));
+    g_value_set_string (value, adap_split_button_get_label (self));
     break;
   case PROP_USE_UNDERLINE:
-    g_value_set_boolean (value, adw_split_button_get_use_underline (self));
+    g_value_set_boolean (value, adap_split_button_get_use_underline (self));
     break;
   case PROP_ICON_NAME:
-    g_value_set_string (value, adw_split_button_get_icon_name (self));
+    g_value_set_string (value, adap_split_button_get_icon_name (self));
     break;
   case PROP_CHILD:
-    g_value_set_object (value, adw_split_button_get_child (self));
+    g_value_set_object (value, adap_split_button_get_child (self));
     break;
   case PROP_CAN_SHRINK:
-    g_value_set_boolean (value, adw_split_button_get_can_shrink (self));
+    g_value_set_boolean (value, adap_split_button_get_can_shrink (self));
     break;
   case PROP_MENU_MODEL:
-    g_value_set_object (value, adw_split_button_get_menu_model (self));
+    g_value_set_object (value, adap_split_button_get_menu_model (self));
     break;
   case PROP_POPOVER:
-    g_value_set_object (value, adw_split_button_get_popover (self));
+    g_value_set_object (value, adap_split_button_get_popover (self));
     break;
   case PROP_DIRECTION:
-    g_value_set_enum (value, adw_split_button_get_direction (self));
+    g_value_set_enum (value, adap_split_button_get_direction (self));
     break;
   case PROP_DROPDOWN_TOOLTIP:
-    g_value_set_string (value, adw_split_button_get_dropdown_tooltip (self));
+    g_value_set_string (value, adap_split_button_get_dropdown_tooltip (self));
     break;
   case PROP_ACTION_NAME:
     g_value_set_string (value, gtk_actionable_get_action_name (GTK_ACTIONABLE (self)));
@@ -213,40 +213,40 @@ adw_split_button_get_property (GObject    *object,
 }
 
 static void
-adw_split_button_set_property (GObject      *object,
+adap_split_button_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
-  AdwSplitButton *self = ADW_SPLIT_BUTTON (object);
+  AdapSplitButton *self = ADAP_SPLIT_BUTTON (object);
 
   switch (prop_id) {
   case PROP_LABEL:
-    adw_split_button_set_label (self, g_value_get_string (value));
+    adap_split_button_set_label (self, g_value_get_string (value));
     break;
   case PROP_USE_UNDERLINE:
-    adw_split_button_set_use_underline (self, g_value_get_boolean (value));
+    adap_split_button_set_use_underline (self, g_value_get_boolean (value));
     break;
   case PROP_ICON_NAME:
-    adw_split_button_set_icon_name (self, g_value_get_string (value));
+    adap_split_button_set_icon_name (self, g_value_get_string (value));
     break;
   case PROP_CHILD:
-    adw_split_button_set_child (self, g_value_get_object (value));
+    adap_split_button_set_child (self, g_value_get_object (value));
     break;
   case PROP_CAN_SHRINK:
-    adw_split_button_set_can_shrink (self, g_value_get_boolean (value));
+    adap_split_button_set_can_shrink (self, g_value_get_boolean (value));
     break;
   case PROP_MENU_MODEL:
-    adw_split_button_set_menu_model (self, g_value_get_object (value));
+    adap_split_button_set_menu_model (self, g_value_get_object (value));
     break;
   case PROP_POPOVER:
-    adw_split_button_set_popover (self, g_value_get_object (value));
+    adap_split_button_set_popover (self, g_value_get_object (value));
     break;
   case PROP_DIRECTION:
-    adw_split_button_set_direction (self, g_value_get_enum (value));
+    adap_split_button_set_direction (self, g_value_get_enum (value));
     break;
   case PROP_DROPDOWN_TOOLTIP:
-    adw_split_button_set_dropdown_tooltip (self, g_value_get_string (value));
+    adap_split_button_set_dropdown_tooltip (self, g_value_get_string (value));
     break;
   case PROP_ACTION_NAME:
     gtk_actionable_set_action_name (GTK_ACTIONABLE (self), g_value_get_string (value));
@@ -261,9 +261,9 @@ adw_split_button_set_property (GObject      *object,
 }
 
 static void
-adw_split_button_dispose (GObject *object)
+adap_split_button_dispose (GObject *object)
 {
-  AdwSplitButton *self = ADW_SPLIT_BUTTON (object);
+  AdapSplitButton *self = ADAP_SPLIT_BUTTON (object);
 
   self->disposed = TRUE;
 
@@ -271,25 +271,25 @@ adw_split_button_dispose (GObject *object)
   g_clear_pointer (&self->menu_button, gtk_widget_unparent);
   g_clear_pointer (&self->separator, gtk_widget_unparent);
 
-  G_OBJECT_CLASS (adw_split_button_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_split_button_parent_class)->dispose (object);
 }
 
 static void
-adw_split_button_class_init (AdwSplitButtonClass *klass)
+adap_split_button_class_init (AdapSplitButtonClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_split_button_get_property;
-  object_class->set_property = adw_split_button_set_property;
-  object_class->dispose = adw_split_button_dispose;
+  object_class->get_property = adap_split_button_get_property;
+  object_class->set_property = adap_split_button_set_property;
+  object_class->dispose = adap_split_button_dispose;
 
-  widget_class->focus = adw_widget_focus_child;
-  widget_class->grab_focus = adw_widget_grab_focus_child;
-  widget_class->compute_expand = adw_widget_compute_expand;
+  widget_class->focus = adap_widget_focus_child;
+  widget_class->grab_focus = adap_widget_grab_focus_child;
+  widget_class->compute_expand = adap_widget_compute_expand;
 
   /**
-   * AdwSplitButton:label: (attributes org.gtk.Property.get=adw_split_button_get_label org.gtk.Property.set=adw_split_button_set_label)
+   * AdapSplitButton:label: (attributes org.gtk.Property.get=adap_split_button_get_label org.gtk.Property.set=adap_split_button_set_label)
    *
    * The label for the button.
    *
@@ -302,7 +302,7 @@ adw_split_button_class_init (AdwSplitButtonClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSplitButton:use-underline: (attributes org.gtk.Property.get=adw_split_button_get_use_underline org.gtk.Property.set=adw_split_button_set_use_underline)
+   * AdapSplitButton:use-underline: (attributes org.gtk.Property.get=adap_split_button_get_use_underline org.gtk.Property.set=adap_split_button_set_use_underline)
    *
    * Whether an underline in the text indicates a mnemonic.
    *
@@ -314,7 +314,7 @@ adw_split_button_class_init (AdwSplitButtonClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSplitButton:icon-name: (attributes org.gtk.Property.get=adw_split_button_get_icon_name org.gtk.Property.set=adw_split_button_set_icon_name)
+   * AdapSplitButton:icon-name: (attributes org.gtk.Property.get=adap_split_button_get_icon_name org.gtk.Property.set=adap_split_button_set_icon_name)
    *
    * The name of the icon used to automatically populate the button.
    *
@@ -327,7 +327,7 @@ adw_split_button_class_init (AdwSplitButtonClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSplitButton:child: (attributes org.gtk.Property.get=adw_split_button_get_child org.gtk.Property.set=adw_split_button_set_child)
+   * AdapSplitButton:child: (attributes org.gtk.Property.get=adap_split_button_get_child org.gtk.Property.set=adap_split_button_set_child)
    *
    * The child widget.
    *
@@ -340,7 +340,7 @@ adw_split_button_class_init (AdwSplitButtonClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSplitButton:can-shrink: (attributes org.gtk.Property.get=adw_split_button_get_can_shrink org.gtk.Property.set=adw_split_button_set_can_shrink)
+   * AdapSplitButton:can-shrink: (attributes org.gtk.Property.get=adap_split_button_get_can_shrink org.gtk.Property.set=adap_split_button_set_can_shrink)
    *
    * Whether the button can be smaller than the natural size of its contents.
    *
@@ -357,7 +357,7 @@ adw_split_button_class_init (AdwSplitButtonClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSplitButton:menu-model: (attributes org.gtk.Property.get=adw_split_button_get_menu_model org.gtk.Property.set=adw_split_button_set_menu_model)
+   * AdapSplitButton:menu-model: (attributes org.gtk.Property.get=adap_split_button_get_menu_model org.gtk.Property.set=adap_split_button_set_menu_model)
    *
    * The `GMenuModel` from which the popup will be created.
    *
@@ -376,7 +376,7 @@ adw_split_button_class_init (AdwSplitButtonClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSplitButton:popover: (attributes org.gtk.Property.get=adw_split_button_get_popover org.gtk.Property.set=adw_split_button_set_popover)
+   * AdapSplitButton:popover: (attributes org.gtk.Property.get=adap_split_button_get_popover org.gtk.Property.set=adap_split_button_set_popover)
    *
    * The `GtkPopover` that will be popped up when the dropdown is clicked.
    *
@@ -391,7 +391,7 @@ adw_split_button_class_init (AdwSplitButtonClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSplitButton:direction: (attributes org.gtk.Property.get=adw_split_button_get_direction org.gtk.Property.set=adw_split_button_set_direction)
+   * AdapSplitButton:direction: (attributes org.gtk.Property.get=adap_split_button_get_direction org.gtk.Property.set=adap_split_button_set_direction)
    *
    * The direction in which the popup will be popped up.
    *
@@ -409,7 +409,7 @@ adw_split_button_class_init (AdwSplitButtonClass *klass)
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSplitButton:dropdown-tooltip: (attributes org.gtk.Property.get=adw_split_button_get_dropdown_tooltip org.gtk.Property.set=adw_split_button_set_dropdown_tooltip)
+   * AdapSplitButton:dropdown-tooltip: (attributes org.gtk.Property.get=adap_split_button_get_dropdown_tooltip org.gtk.Property.set=adap_split_button_set_dropdown_tooltip)
    *
    * The tooltip of the dropdown button.
    *
@@ -428,7 +428,7 @@ adw_split_button_class_init (AdwSplitButtonClass *klass)
   g_object_class_override_property (object_class, PROP_ACTION_TARGET, "action-target");
 
   /**
-   * AdwSplitButton::clicked:
+   * AdapSplitButton::clicked:
    *
    * Emitted when the button has been activated (pressed and released).
    */
@@ -438,14 +438,14 @@ adw_split_button_class_init (AdwSplitButtonClass *klass)
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   g_signal_set_va_marshaller (signals[SIGNAL_CLICKED],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   /**
-   * AdwSplitButton::activate:
+   * AdapSplitButton::activate:
    *
    * Emitted to animate press then release.
    *
@@ -458,11 +458,11 @@ adw_split_button_class_init (AdwSplitButtonClass *klass)
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   g_signal_set_va_marshaller (signals[SIGNAL_ACTIVATE],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   gtk_widget_class_set_activate_signal (widget_class, signals[SIGNAL_ACTIVATE]);
 
@@ -499,7 +499,7 @@ notify_action_target_cb (GObject *object)
 }
 
 static void
-adw_split_button_init (AdwSplitButton *self)
+adap_split_button_init (AdapSplitButton *self)
 {
   gtk_widget_set_hexpand (GTK_WIDGET (self), FALSE);
 
@@ -539,85 +539,85 @@ adw_split_button_init (AdwSplitButton *self)
 }
 
 static const char *
-adw_split_button_get_action_name (GtkActionable *actionable)
+adap_split_button_get_action_name (GtkActionable *actionable)
 {
-  AdwSplitButton *self = ADW_SPLIT_BUTTON (actionable);
+  AdapSplitButton *self = ADAP_SPLIT_BUTTON (actionable);
 
   return gtk_actionable_get_action_name (GTK_ACTIONABLE (self->button));
 }
 
 static void
-adw_split_button_set_action_name (GtkActionable *actionable,
+adap_split_button_set_action_name (GtkActionable *actionable,
                                   const char    *action_name)
 {
-  AdwSplitButton *self = ADW_SPLIT_BUTTON (actionable);
+  AdapSplitButton *self = ADAP_SPLIT_BUTTON (actionable);
 
   gtk_actionable_set_action_name (GTK_ACTIONABLE (self->button), action_name);
 }
 
 static GVariant *
-adw_split_button_get_action_target_value (GtkActionable *actionable)
+adap_split_button_get_action_target_value (GtkActionable *actionable)
 {
-  AdwSplitButton *self = ADW_SPLIT_BUTTON (actionable);
+  AdapSplitButton *self = ADAP_SPLIT_BUTTON (actionable);
 
   return gtk_actionable_get_action_target_value (GTK_ACTIONABLE (self->button));
 }
 
 static void
-adw_split_button_set_action_target_value (GtkActionable *actionable,
+adap_split_button_set_action_target_value (GtkActionable *actionable,
                                           GVariant      *action_target)
 {
-  AdwSplitButton *self = ADW_SPLIT_BUTTON (actionable);
+  AdapSplitButton *self = ADAP_SPLIT_BUTTON (actionable);
 
   gtk_actionable_set_action_target_value (GTK_ACTIONABLE (self->button), action_target);
 }
 
 static void
-adw_split_button_actionable_init (GtkActionableInterface *iface)
+adap_split_button_actionable_init (GtkActionableInterface *iface)
 {
-  iface->get_action_name = adw_split_button_get_action_name;
-  iface->set_action_name = adw_split_button_set_action_name;
-  iface->get_action_target_value = adw_split_button_get_action_target_value;
-  iface->set_action_target_value = adw_split_button_set_action_target_value;
+  iface->get_action_name = adap_split_button_get_action_name;
+  iface->set_action_name = adap_split_button_set_action_name;
+  iface->get_action_target_value = adap_split_button_get_action_target_value;
+  iface->set_action_target_value = adap_split_button_set_action_target_value;
 }
 
 static void
-adw_split_button_buildable_add_child (GtkBuildable *buildable,
+adap_split_button_buildable_add_child (GtkBuildable *buildable,
                                       GtkBuilder   *builder,
                                       GObject      *child,
                                       const char   *type)
 {
   if (GTK_IS_POPOVER (child))
-    adw_split_button_set_popover (ADW_SPLIT_BUTTON (buildable), GTK_POPOVER (child));
+    adap_split_button_set_popover (ADAP_SPLIT_BUTTON (buildable), GTK_POPOVER (child));
   else if (GTK_IS_WIDGET (child))
-    adw_split_button_set_child (ADW_SPLIT_BUTTON (buildable), GTK_WIDGET (child));
+    adap_split_button_set_child (ADAP_SPLIT_BUTTON (buildable), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_split_button_buildable_init (GtkBuildableIface *iface)
+adap_split_button_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->add_child = adw_split_button_buildable_add_child;
+  iface->add_child = adap_split_button_buildable_add_child;
 }
 
 /**
- * adw_split_button_new:
+ * adap_split_button_new:
  *
- * Creates a new `AdwSplitButton`.
+ * Creates a new `AdapSplitButton`.
  *
- * Returns: the newly created `AdwSplitButton`
+ * Returns: the newly created `AdapSplitButton`
  */
 GtkWidget *
-adw_split_button_new (void)
+adap_split_button_new (void)
 {
-  return g_object_new (ADW_TYPE_SPLIT_BUTTON, NULL);
+  return g_object_new (ADAP_TYPE_SPLIT_BUTTON, NULL);
 }
 
 /**
- * adw_split_button_get_label: (attributes org.gtk.Method.get_property=label)
+ * adap_split_button_get_label: (attributes org.gtk.Method.get_property=label)
  * @self: a split button
  *
  * Gets the label for @self.
@@ -625,15 +625,15 @@ adw_split_button_new (void)
  * Returns: (nullable): the label for @self
  */
 const char *
-adw_split_button_get_label (AdwSplitButton *self)
+adap_split_button_get_label (AdapSplitButton *self)
 {
-  g_return_val_if_fail (ADW_IS_SPLIT_BUTTON (self), NULL);
+  g_return_val_if_fail (ADAP_IS_SPLIT_BUTTON (self), NULL);
 
   return gtk_button_get_label (GTK_BUTTON (self->button));
 }
 
 /**
- * adw_split_button_set_label: (attributes org.gtk.Method.set_property=label)
+ * adap_split_button_set_label: (attributes org.gtk.Method.set_property=label)
  * @self: a split button
  * @label: the label to set
  *
@@ -643,19 +643,19 @@ adw_split_button_get_label (AdwSplitButton *self)
  * [property@SplitButton:child] to `NULL`.
  */
 void
-adw_split_button_set_label (AdwSplitButton *self,
+adap_split_button_set_label (AdapSplitButton *self,
                             const char     *label)
 {
-  g_return_if_fail (ADW_IS_SPLIT_BUTTON (self));
+  g_return_if_fail (ADAP_IS_SPLIT_BUTTON (self));
   g_return_if_fail (label != NULL);
 
-  if (!g_strcmp0 (label, adw_split_button_get_label (self)))
+  if (!g_strcmp0 (label, adap_split_button_get_label (self)))
     return;
 
   g_object_freeze_notify (G_OBJECT (self));
-  if (adw_split_button_get_icon_name (self))
+  if (adap_split_button_get_icon_name (self))
     g_object_notify_by_pspec (G_OBJECT (self), props[PROP_ICON_NAME]);
-  if (adw_split_button_get_child (self))
+  if (adap_split_button_get_child (self))
     g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CHILD]);
 
   gtk_button_set_label (GTK_BUTTON (self->button), label);
@@ -666,7 +666,7 @@ adw_split_button_set_label (AdwSplitButton *self,
 }
 
 /**
- * adw_split_button_get_use_underline: (attributes org.gtk.Method.get_property=use-underline)
+ * adap_split_button_get_use_underline: (attributes org.gtk.Method.get_property=use-underline)
  * @self: a split button
  *
  * Gets whether an underline in the text indicates a mnemonic.
@@ -674,15 +674,15 @@ adw_split_button_set_label (AdwSplitButton *self,
  * Returns: whether an underline in the text indicates a mnemonic
  */
 gboolean
-adw_split_button_get_use_underline (AdwSplitButton *self)
+adap_split_button_get_use_underline (AdapSplitButton *self)
 {
-  g_return_val_if_fail (ADW_IS_SPLIT_BUTTON (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SPLIT_BUTTON (self), FALSE);
 
   return gtk_button_get_use_underline (GTK_BUTTON (self->button));
 }
 
 /**
- * adw_split_button_set_use_underline: (attributes org.gtk.Method.set_property=use-underline)
+ * adap_split_button_set_use_underline: (attributes org.gtk.Method.set_property=use-underline)
  * @self: a split button
  * @use_underline: whether an underline in the text indicates a mnemonic
  *
@@ -691,21 +691,21 @@ adw_split_button_get_use_underline (AdwSplitButton *self)
  * See [property@SplitButton:label].
  */
 void
-adw_split_button_set_use_underline (AdwSplitButton *self,
+adap_split_button_set_use_underline (AdapSplitButton *self,
                                     gboolean        use_underline)
 {
-  g_return_if_fail (ADW_IS_SPLIT_BUTTON (self));
+  g_return_if_fail (ADAP_IS_SPLIT_BUTTON (self));
 
   use_underline = !!use_underline;
 
-  if (use_underline == adw_split_button_get_use_underline (self))
+  if (use_underline == adap_split_button_get_use_underline (self))
     return;
 
   gtk_button_set_use_underline (GTK_BUTTON (self->button), use_underline);
 }
 
 /**
- * adw_split_button_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
+ * adap_split_button_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
  * @self: a split button
  *
  * Gets the name of the icon used to automatically populate the button.
@@ -713,15 +713,15 @@ adw_split_button_set_use_underline (AdwSplitButton *self,
  * Returns: (nullable): the icon name
  */
 const char *
-adw_split_button_get_icon_name (AdwSplitButton *self)
+adap_split_button_get_icon_name (AdapSplitButton *self)
 {
-  g_return_val_if_fail (ADW_IS_SPLIT_BUTTON (self), NULL);
+  g_return_val_if_fail (ADAP_IS_SPLIT_BUTTON (self), NULL);
 
   return gtk_button_get_icon_name (GTK_BUTTON (self->button));
 }
 
 /**
- * adw_split_button_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
+ * adap_split_button_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
  * @self: a split button
  * @icon_name: the icon name to set
  *
@@ -731,19 +731,19 @@ adw_split_button_get_icon_name (AdwSplitButton *self)
  * [property@SplitButton:child] to `NULL`.
  */
 void
-adw_split_button_set_icon_name (AdwSplitButton *self,
+adap_split_button_set_icon_name (AdapSplitButton *self,
                                 const char     *icon_name)
 {
-  g_return_if_fail (ADW_IS_SPLIT_BUTTON (self));
+  g_return_if_fail (ADAP_IS_SPLIT_BUTTON (self));
   g_return_if_fail (icon_name != NULL);
 
-  if (!g_strcmp0 (icon_name, adw_split_button_get_icon_name (self)))
+  if (!g_strcmp0 (icon_name, adap_split_button_get_icon_name (self)))
     return;
 
   g_object_freeze_notify (G_OBJECT (self));
-  if (adw_split_button_get_label (self))
+  if (adap_split_button_get_label (self))
     g_object_notify_by_pspec (G_OBJECT (self), props[PROP_LABEL]);
-  if (adw_split_button_get_child (self))
+  if (adap_split_button_get_child (self))
     g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CHILD]);
 
   gtk_button_set_icon_name (GTK_BUTTON (self->button), icon_name);
@@ -755,7 +755,7 @@ adw_split_button_set_icon_name (AdwSplitButton *self,
 }
 
 /**
- * adw_split_button_get_child: (attributes org.gtk.Method.get_property=child)
+ * adap_split_button_get_child: (attributes org.gtk.Method.get_property=child)
  * @self: a split button
  *
  * Gets the child widget.
@@ -763,15 +763,15 @@ adw_split_button_set_icon_name (AdwSplitButton *self,
  * Returns: (transfer none) (nullable): the child widget
  */
 GtkWidget *
-adw_split_button_get_child (AdwSplitButton *self)
+adap_split_button_get_child (AdapSplitButton *self)
 {
-  g_return_val_if_fail (ADW_IS_SPLIT_BUTTON (self), NULL);
+  g_return_val_if_fail (ADAP_IS_SPLIT_BUTTON (self), NULL);
 
   return gtk_button_get_child (GTK_BUTTON (self->button));
 }
 
 /**
- * adw_split_button_set_child: (attributes org.gtk.Method.set_property=child)
+ * adap_split_button_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a split button
  * @child: (nullable): the new child widget
  *
@@ -781,22 +781,22 @@ adw_split_button_get_child (AdwSplitButton *self)
  * [property@SplitButton:icon-name] to `NULL`.
  */
 void
-adw_split_button_set_child (AdwSplitButton *self,
+adap_split_button_set_child (AdapSplitButton *self,
                             GtkWidget      *child)
 {
-  g_return_if_fail (ADW_IS_SPLIT_BUTTON (self));
+  g_return_if_fail (ADAP_IS_SPLIT_BUTTON (self));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
   if (child)
     g_return_if_fail (gtk_widget_get_parent (child) == NULL);
 
-  if (child == adw_split_button_get_child (self))
+  if (child == adap_split_button_get_child (self))
     return;
 
   g_object_freeze_notify (G_OBJECT (self));
-  if (adw_split_button_get_label (self))
+  if (adap_split_button_get_label (self))
     g_object_notify_by_pspec (G_OBJECT (self), props[PROP_LABEL]);
-  if (adw_split_button_get_icon_name (self))
+  if (adap_split_button_get_icon_name (self))
     g_object_notify_by_pspec (G_OBJECT (self), props[PROP_ICON_NAME]);
 
   gtk_button_set_child (GTK_BUTTON (self->button), child);
@@ -808,7 +808,7 @@ adw_split_button_set_child (AdwSplitButton *self,
 }
 
 /**
- * adw_split_button_get_can_shrink: (attributes org.gtk.Method.get_property=can-shrink)
+ * adap_split_button_get_can_shrink: (attributes org.gtk.Method.get_property=can-shrink)
  * @self: a split button
  *
  * gets whether the button can be smaller than the natural size of its contents.
@@ -818,15 +818,15 @@ adw_split_button_set_child (AdwSplitButton *self,
  * Since: 1.4
  */
 gboolean
-adw_split_button_get_can_shrink (AdwSplitButton *self)
+adap_split_button_get_can_shrink (AdapSplitButton *self)
 {
-  g_return_val_if_fail (ADW_IS_SPLIT_BUTTON (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SPLIT_BUTTON (self), FALSE);
 
   return gtk_button_get_can_shrink (GTK_BUTTON (self->button));
 }
 
 /**
- * adw_split_button_set_can_shrink: (attributes org.gtk.Method.set_property=can-shrink)
+ * adap_split_button_set_can_shrink: (attributes org.gtk.Method.set_property=can-shrink)
  * @self: a split button
  * @can_shrink: whether the button can shrink
  *
@@ -840,14 +840,14 @@ adw_split_button_get_can_shrink (AdwSplitButton *self)
  * Since: 1.4
  */
 void
-adw_split_button_set_can_shrink (AdwSplitButton *self,
+adap_split_button_set_can_shrink (AdapSplitButton *self,
                                  gboolean        can_shrink)
 {
-  g_return_if_fail (ADW_IS_SPLIT_BUTTON (self));
+  g_return_if_fail (ADAP_IS_SPLIT_BUTTON (self));
 
   can_shrink = !!can_shrink;
 
-  if (can_shrink == adw_split_button_get_can_shrink (self))
+  if (can_shrink == adap_split_button_get_can_shrink (self))
     return;
 
   gtk_button_set_can_shrink (GTK_BUTTON (self->button), can_shrink);
@@ -856,7 +856,7 @@ adw_split_button_set_can_shrink (AdwSplitButton *self,
 }
 
 /**
- * adw_split_button_get_menu_model: (attributes org.gtk.Method.get_property=menu-model)
+ * adap_split_button_get_menu_model: (attributes org.gtk.Method.get_property=menu-model)
  * @self: a split button
  *
  * Gets the menu model from which the popup will be created.
@@ -864,15 +864,15 @@ adw_split_button_set_can_shrink (AdwSplitButton *self,
  * Returns: (transfer none) (nullable): the menu model
  */
 GMenuModel *
-adw_split_button_get_menu_model (AdwSplitButton *self)
+adap_split_button_get_menu_model (AdapSplitButton *self)
 {
-  g_return_val_if_fail (ADW_IS_SPLIT_BUTTON (self), NULL);
+  g_return_val_if_fail (ADAP_IS_SPLIT_BUTTON (self), NULL);
 
   return gtk_menu_button_get_menu_model (GTK_MENU_BUTTON (self->menu_button));
 }
 
 /**
- * adw_split_button_set_menu_model: (attributes org.gtk.Method.set_property=menu-model)
+ * adap_split_button_set_menu_model: (attributes org.gtk.Method.set_property=menu-model)
  * @self: a split button
  * @menu_model: (nullable): the menu model
  *
@@ -888,19 +888,19 @@ adw_split_button_get_menu_model (AdwSplitButton *self)
  * the button, and the property is set to `NULL`.
  */
 void
-adw_split_button_set_menu_model (AdwSplitButton *self,
+adap_split_button_set_menu_model (AdapSplitButton *self,
                                  GMenuModel     *menu_model)
 {
-  g_return_if_fail (ADW_IS_SPLIT_BUTTON (self));
+  g_return_if_fail (ADAP_IS_SPLIT_BUTTON (self));
 
-  if (menu_model == adw_split_button_get_menu_model (self))
+  if (menu_model == adap_split_button_get_menu_model (self))
     return;
 
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (self->menu_button), menu_model);
 }
 
 /**
- * adw_split_button_get_popover: (attributes org.gtk.Method.get_property=popover)
+ * adap_split_button_get_popover: (attributes org.gtk.Method.get_property=popover)
  * @self: a split button
  *
  * Gets the popover that will be popped up when the dropdown is clicked.
@@ -908,15 +908,15 @@ adw_split_button_set_menu_model (AdwSplitButton *self,
  * Returns: (transfer none) (nullable): the popover
  */
 GtkPopover *
-adw_split_button_get_popover (AdwSplitButton *self)
+adap_split_button_get_popover (AdapSplitButton *self)
 {
-  g_return_val_if_fail (ADW_IS_SPLIT_BUTTON (self), NULL);
+  g_return_val_if_fail (ADAP_IS_SPLIT_BUTTON (self), NULL);
 
   return gtk_menu_button_get_popover (GTK_MENU_BUTTON (self->menu_button));
 }
 
 /**
- * adw_split_button_set_popover: (attributes org.gtk.Method.set_property=popover)
+ * adap_split_button_set_popover: (attributes org.gtk.Method.set_property=popover)
  * @self: a split button
  * @popover: (nullable): the popover
  *
@@ -928,19 +928,19 @@ adw_split_button_get_popover (AdwSplitButton *self)
  * from the button, and the property is set to `NULL`.
  */
 void
-adw_split_button_set_popover (AdwSplitButton *self,
+adap_split_button_set_popover (AdapSplitButton *self,
                               GtkPopover     *popover)
 {
-  g_return_if_fail (ADW_IS_SPLIT_BUTTON (self));
+  g_return_if_fail (ADAP_IS_SPLIT_BUTTON (self));
 
-  if (popover == adw_split_button_get_popover (self))
+  if (popover == adap_split_button_get_popover (self))
     return;
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (self->menu_button), GTK_WIDGET (popover));
 }
 
 /**
- * adw_split_button_get_direction: (attributes org.gtk.Method.get_property=direction)
+ * adap_split_button_get_direction: (attributes org.gtk.Method.get_property=direction)
  * @self: a split button
  *
  * Gets the direction in which the popup will be popped up.
@@ -948,15 +948,15 @@ adw_split_button_set_popover (AdwSplitButton *self,
  * Returns: the direction
  */
 GtkArrowType
-adw_split_button_get_direction (AdwSplitButton *self)
+adap_split_button_get_direction (AdapSplitButton *self)
 {
-  g_return_val_if_fail (ADW_IS_SPLIT_BUTTON (self), GTK_ARROW_DOWN);
+  g_return_val_if_fail (ADAP_IS_SPLIT_BUTTON (self), GTK_ARROW_DOWN);
 
   return gtk_menu_button_get_direction (GTK_MENU_BUTTON (self->menu_button));
 }
 
 /**
- * adw_split_button_set_direction: (attributes org.gtk.Method.set_property=direction)
+ * adap_split_button_set_direction: (attributes org.gtk.Method.set_property=direction)
  * @self: a split button
  * @direction: the direction
  *
@@ -970,12 +970,12 @@ adw_split_button_get_direction (AdwSplitButton *self)
  * If you pass `GTK_ARROW_NONE`, it's equivalent to `GTK_ARROW_DOWN`.
  */
 void
-adw_split_button_set_direction (AdwSplitButton *self,
+adap_split_button_set_direction (AdapSplitButton *self,
                                 GtkArrowType    direction)
 {
-  g_return_if_fail (ADW_IS_SPLIT_BUTTON (self));
+  g_return_if_fail (ADAP_IS_SPLIT_BUTTON (self));
 
-  if (direction == adw_split_button_get_direction (self))
+  if (direction == adap_split_button_get_direction (self))
     return;
 
   gtk_menu_button_set_direction (GTK_MENU_BUTTON (self->menu_button), direction);
@@ -984,7 +984,7 @@ adw_split_button_set_direction (AdwSplitButton *self,
 }
 
 /**
- * adw_split_button_get_dropdown_tooltip: (attributes org.gtk.Method.get_property=dropdown-tooltip)
+ * adap_split_button_get_dropdown_tooltip: (attributes org.gtk.Method.get_property=dropdown-tooltip)
  * @self: a split button
  *
  * Gets the tooltip of the dropdown button of @self.
@@ -994,9 +994,9 @@ adw_split_button_set_direction (AdwSplitButton *self,
  * Since: 1.2
  */
 const char *
-adw_split_button_get_dropdown_tooltip (AdwSplitButton *self)
+adap_split_button_get_dropdown_tooltip (AdapSplitButton *self)
 {
-  g_return_val_if_fail (ADW_IS_SPLIT_BUTTON (self), NULL);
+  g_return_val_if_fail (ADAP_IS_SPLIT_BUTTON (self), NULL);
 
   if (!self->has_dropdown_tooltip)
     return "";
@@ -1005,7 +1005,7 @@ adw_split_button_get_dropdown_tooltip (AdwSplitButton *self)
 }
 
 /**
- * adw_split_button_set_dropdown_tooltip: (attributes org.gtk.Method.set_property=dropdown-tooltip)
+ * adap_split_button_set_dropdown_tooltip: (attributes org.gtk.Method.set_property=dropdown-tooltip)
  * @self: a split button
  * @tooltip: the dropdown tooltip of @self
  *
@@ -1016,13 +1016,13 @@ adw_split_button_get_dropdown_tooltip (AdwSplitButton *self)
  * Since: 1.2
  */
 void
-adw_split_button_set_dropdown_tooltip (AdwSplitButton *self,
+adap_split_button_set_dropdown_tooltip (AdapSplitButton *self,
                                        const char     *tooltip)
 {
-  g_return_if_fail (ADW_IS_SPLIT_BUTTON (self));
+  g_return_if_fail (ADAP_IS_SPLIT_BUTTON (self));
   g_return_if_fail (tooltip != NULL);
 
-  if (!g_strcmp0 (tooltip, adw_split_button_get_dropdown_tooltip (self)))
+  if (!g_strcmp0 (tooltip, adap_split_button_get_dropdown_tooltip (self)))
     return;
 
   self->has_dropdown_tooltip = tooltip && *tooltip;
@@ -1036,29 +1036,29 @@ adw_split_button_set_dropdown_tooltip (AdwSplitButton *self,
 }
 
 /**
- * adw_split_button_popup:
+ * adap_split_button_popup:
  * @self: a split button
  *
  * Pops up the menu.
  */
 void
-adw_split_button_popup (AdwSplitButton *self)
+adap_split_button_popup (AdapSplitButton *self)
 {
-  g_return_if_fail (ADW_IS_SPLIT_BUTTON (self));
+  g_return_if_fail (ADAP_IS_SPLIT_BUTTON (self));
 
   gtk_menu_button_popup (GTK_MENU_BUTTON (self->menu_button));
 }
 
 /**
- * adw_split_button_popdown:
+ * adap_split_button_popdown:
  * @self: a split button
  *
  * Dismisses the menu.
  */
 void
-adw_split_button_popdown (AdwSplitButton *self)
+adap_split_button_popdown (AdapSplitButton *self)
 {
-  g_return_if_fail (ADW_IS_SPLIT_BUTTON (self));
+  g_return_if_fail (ADAP_IS_SPLIT_BUTTON (self));
 
   gtk_menu_button_popdown (GTK_MENU_BUTTON (self->menu_button));
 }

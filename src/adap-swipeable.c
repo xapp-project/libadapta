@@ -6,23 +6,23 @@
 
 #include "config.h"
 
-#include "adw-swipeable.h"
+#include "adap-swipeable.h"
 
 /**
- * AdwSwipeable:
+ * AdapSwipeable:
  *
  * An interface for swipeable widgets.
  *
- * The `AdwSwipeable` interface is implemented by all swipeable widgets.
+ * The `AdapSwipeable` interface is implemented by all swipeable widgets.
  *
  * See [class@SwipeTracker] for details about implementing it.
  */
 
-G_DEFINE_INTERFACE (AdwSwipeable, adw_swipeable, GTK_TYPE_WIDGET)
+G_DEFINE_INTERFACE (AdapSwipeable, adap_swipeable, GTK_TYPE_WIDGET)
 
 static void
-adw_swipeable_default_get_swipe_area (AdwSwipeable           *self,
-                                      AdwNavigationDirection  navigation_direction,
+adap_swipeable_default_get_swipe_area (AdapSwipeable           *self,
+                                      AdapNavigationDirection  navigation_direction,
                                       gboolean                is_drag,
                                       GdkRectangle           *rect)
 {
@@ -33,13 +33,13 @@ adw_swipeable_default_get_swipe_area (AdwSwipeable           *self,
 }
 
 static void
-adw_swipeable_default_init (AdwSwipeableInterface *iface)
+adap_swipeable_default_init (AdapSwipeableInterface *iface)
 {
-  iface->get_swipe_area = adw_swipeable_default_get_swipe_area;
+  iface->get_swipe_area = adap_swipeable_default_get_swipe_area;
 }
 
 /**
- * adw_swipeable_get_distance:
+ * adap_swipeable_get_distance:
  * @self: a swipeable
  *
  * Gets the swipe distance of @self.
@@ -49,20 +49,20 @@ adw_swipeable_default_init (AdwSwipeableInterface *iface)
  * Returns: the swipe distance in pixels
  */
 double
-adw_swipeable_get_distance (AdwSwipeable *self)
+adap_swipeable_get_distance (AdapSwipeable *self)
 {
-  AdwSwipeableInterface *iface;
+  AdapSwipeableInterface *iface;
 
-  g_return_val_if_fail (ADW_IS_SWIPEABLE (self), 0);
+  g_return_val_if_fail (ADAP_IS_SWIPEABLE (self), 0);
 
-  iface = ADW_SWIPEABLE_GET_IFACE (self);
+  iface = ADAP_SWIPEABLE_GET_IFACE (self);
   g_return_val_if_fail (iface->get_distance != NULL, 0);
 
   return iface->get_distance (self);
 }
 
 /**
- * adw_swipeable_get_snap_points: (virtual get_snap_points)
+ * adap_swipeable_get_snap_points: (virtual get_snap_points)
  * @self: a swipeable
  * @n_snap_points: (out): location to return the number of the snap points
  *
@@ -74,21 +74,21 @@ adw_swipeable_get_distance (AdwSwipeable *self)
  * Returns: (array length=n_snap_points) (transfer full): the snap points
  */
 double *
-adw_swipeable_get_snap_points (AdwSwipeable *self,
+adap_swipeable_get_snap_points (AdapSwipeable *self,
                                int          *n_snap_points)
 {
-  AdwSwipeableInterface *iface;
+  AdapSwipeableInterface *iface;
 
-  g_return_val_if_fail (ADW_IS_SWIPEABLE (self), NULL);
+  g_return_val_if_fail (ADAP_IS_SWIPEABLE (self), NULL);
 
-  iface = ADW_SWIPEABLE_GET_IFACE (self);
+  iface = ADAP_SWIPEABLE_GET_IFACE (self);
   g_return_val_if_fail (iface->get_snap_points != NULL, NULL);
 
   return iface->get_snap_points (self, n_snap_points);
 }
 
 /**
- * adw_swipeable_get_progress:
+ * adap_swipeable_get_progress:
  * @self: a swipeable
  *
  * Gets the current progress of @self.
@@ -96,20 +96,20 @@ adw_swipeable_get_snap_points (AdwSwipeable *self,
  * Returns: the current progress, unitless
  */
 double
-adw_swipeable_get_progress (AdwSwipeable *self)
+adap_swipeable_get_progress (AdapSwipeable *self)
 {
-  AdwSwipeableInterface *iface;
+  AdapSwipeableInterface *iface;
 
-  g_return_val_if_fail (ADW_IS_SWIPEABLE (self), 0);
+  g_return_val_if_fail (ADAP_IS_SWIPEABLE (self), 0);
 
-  iface = ADW_SWIPEABLE_GET_IFACE (self);
+  iface = ADAP_SWIPEABLE_GET_IFACE (self);
   g_return_val_if_fail (iface->get_progress != NULL, 0);
 
   return iface->get_progress (self);
 }
 
 /**
- * adw_swipeable_get_cancel_progress:
+ * adap_swipeable_get_cancel_progress:
  * @self: a swipeable
  *
  * Gets the progress @self will snap back to after the gesture is canceled.
@@ -117,20 +117,20 @@ adw_swipeable_get_progress (AdwSwipeable *self)
  * Returns: the cancel progress, unitless
  */
 double
-adw_swipeable_get_cancel_progress (AdwSwipeable *self)
+adap_swipeable_get_cancel_progress (AdapSwipeable *self)
 {
-  AdwSwipeableInterface *iface;
+  AdapSwipeableInterface *iface;
 
-  g_return_val_if_fail (ADW_IS_SWIPEABLE (self), 0);
+  g_return_val_if_fail (ADAP_IS_SWIPEABLE (self), 0);
 
-  iface = ADW_SWIPEABLE_GET_IFACE (self);
+  iface = ADAP_SWIPEABLE_GET_IFACE (self);
   g_return_val_if_fail (iface->get_cancel_progress != NULL, 0);
 
   return iface->get_cancel_progress (self);
 }
 
 /**
- * adw_swipeable_get_swipe_area:
+ * adap_swipeable_get_swipe_area:
  * @self: a swipeable
  * @navigation_direction: the direction of the swipe
  * @is_drag: whether the swipe is caused by a dragging gesture
@@ -147,17 +147,17 @@ adw_swipeable_get_cancel_progress (AdwSwipeable *self)
  * @self, allowing swipes from anywhere.
  */
 void
-adw_swipeable_get_swipe_area (AdwSwipeable           *self,
-                              AdwNavigationDirection  navigation_direction,
+adap_swipeable_get_swipe_area (AdapSwipeable           *self,
+                              AdapNavigationDirection  navigation_direction,
                               gboolean                is_drag,
                               GdkRectangle           *rect)
 {
-  AdwSwipeableInterface *iface;
+  AdapSwipeableInterface *iface;
 
-  g_return_if_fail (ADW_IS_SWIPEABLE (self));
+  g_return_if_fail (ADAP_IS_SWIPEABLE (self));
   g_return_if_fail (rect != NULL);
 
-  iface = ADW_SWIPEABLE_GET_IFACE (self);
+  iface = ADAP_SWIPEABLE_GET_IFACE (self);
 
   iface->get_swipe_area (self, navigation_direction, is_drag, rect);
 }

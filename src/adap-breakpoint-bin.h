@@ -8,24 +8,24 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-breakpoint.h"
+#include "adap-breakpoint.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_BREAKPOINT_BIN (adw_breakpoint_bin_get_type())
+#define ADAP_TYPE_BREAKPOINT_BIN (adap_breakpoint_bin_get_type())
 
-ADW_AVAILABLE_IN_1_4
-G_DECLARE_DERIVABLE_TYPE (AdwBreakpointBin, adw_breakpoint_bin, ADW, BREAKPOINT_BIN, GtkWidget)
+ADAP_AVAILABLE_IN_1_4
+G_DECLARE_DERIVABLE_TYPE (AdapBreakpointBin, adap_breakpoint_bin, ADAP, BREAKPOINT_BIN, GtkWidget)
 
-struct _AdwBreakpointBinClass
+struct _AdapBreakpointBinClass
 {
   GtkWidgetClass parent_class;
 
@@ -33,24 +33,24 @@ struct _AdwBreakpointBinClass
   gpointer padding[4];
 };
 
-ADW_AVAILABLE_IN_1_4
-GtkWidget *adw_breakpoint_bin_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_1_4
+GtkWidget *adap_breakpoint_bin_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-GtkWidget *adw_breakpoint_bin_get_child (AdwBreakpointBin *self);
-ADW_AVAILABLE_IN_1_4
-void       adw_breakpoint_bin_set_child (AdwBreakpointBin *self,
+ADAP_AVAILABLE_IN_1_4
+GtkWidget *adap_breakpoint_bin_get_child (AdapBreakpointBin *self);
+ADAP_AVAILABLE_IN_1_4
+void       adap_breakpoint_bin_set_child (AdapBreakpointBin *self,
                                          GtkWidget        *child);
 
-ADW_AVAILABLE_IN_1_4
-void adw_breakpoint_bin_add_breakpoint (AdwBreakpointBin *self,
-                                        AdwBreakpoint    *breakpoint);
+ADAP_AVAILABLE_IN_1_4
+void adap_breakpoint_bin_add_breakpoint (AdapBreakpointBin *self,
+                                        AdapBreakpoint    *breakpoint);
 
-ADW_AVAILABLE_IN_1_5
-void adw_breakpoint_bin_remove_breakpoint (AdwBreakpointBin *self,
-                                           AdwBreakpoint    *breakpoint);
+ADAP_AVAILABLE_IN_1_5
+void adap_breakpoint_bin_remove_breakpoint (AdapBreakpointBin *self,
+                                           AdapBreakpoint    *breakpoint);
 
-ADW_AVAILABLE_IN_1_4
-AdwBreakpoint *adw_breakpoint_bin_get_current_breakpoint (AdwBreakpointBin *self);
+ADAP_AVAILABLE_IN_1_4
+AdapBreakpoint *adap_breakpoint_bin_get_current_breakpoint (AdapBreakpointBin *self);
 
 G_END_DECLS

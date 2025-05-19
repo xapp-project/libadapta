@@ -6,78 +6,78 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-animation.h"
-#include "adw-spring-params.h"
+#include "adap-animation.h"
+#include "adap-spring-params.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_SPRING_ANIMATION (adw_spring_animation_get_type())
+#define ADAP_TYPE_SPRING_ANIMATION (adap_spring_animation_get_type())
 
-ADW_AVAILABLE_IN_ALL
-GDK_DECLARE_INTERNAL_TYPE (AdwSpringAnimation, adw_spring_animation, ADW, SPRING_ANIMATION, AdwAnimation)
+ADAP_AVAILABLE_IN_ALL
+GDK_DECLARE_INTERNAL_TYPE (AdapSpringAnimation, adap_spring_animation, ADAP, SPRING_ANIMATION, AdapAnimation)
 
-ADW_AVAILABLE_IN_ALL
-AdwAnimation *adw_spring_animation_new (GtkWidget          *widget,
+ADAP_AVAILABLE_IN_ALL
+AdapAnimation *adap_spring_animation_new (GtkWidget          *widget,
                                         double              from,
                                         double              to,
-                                        AdwSpringParams    *spring_params,
-                                        AdwAnimationTarget *target) G_GNUC_WARN_UNUSED_RESULT;
+                                        AdapSpringParams    *spring_params,
+                                        AdapAnimationTarget *target) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-double adw_spring_animation_get_value_from (AdwSpringAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void   adw_spring_animation_set_value_from (AdwSpringAnimation *self,
+ADAP_AVAILABLE_IN_ALL
+double adap_spring_animation_get_value_from (AdapSpringAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void   adap_spring_animation_set_value_from (AdapSpringAnimation *self,
                                             double             value);
 
-ADW_AVAILABLE_IN_ALL
-double adw_spring_animation_get_value_to (AdwSpringAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void   adw_spring_animation_set_value_to (AdwSpringAnimation *self,
+ADAP_AVAILABLE_IN_ALL
+double adap_spring_animation_get_value_to (AdapSpringAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void   adap_spring_animation_set_value_to (AdapSpringAnimation *self,
                                           double             value);
 
-ADW_AVAILABLE_IN_ALL
-AdwSpringParams *adw_spring_animation_get_spring_params (AdwSpringAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void             adw_spring_animation_set_spring_params (AdwSpringAnimation *self,
-                                                         AdwSpringParams    *spring_params);
+ADAP_AVAILABLE_IN_ALL
+AdapSpringParams *adap_spring_animation_get_spring_params (AdapSpringAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void             adap_spring_animation_set_spring_params (AdapSpringAnimation *self,
+                                                         AdapSpringParams    *spring_params);
 
-ADW_AVAILABLE_IN_ALL
-double adw_spring_animation_get_initial_velocity (AdwSpringAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void   adw_spring_animation_set_initial_velocity (AdwSpringAnimation *self,
+ADAP_AVAILABLE_IN_ALL
+double adap_spring_animation_get_initial_velocity (AdapSpringAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void   adap_spring_animation_set_initial_velocity (AdapSpringAnimation *self,
                                                   double              velocity);
 
-ADW_AVAILABLE_IN_ALL
-double adw_spring_animation_get_epsilon (AdwSpringAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void   adw_spring_animation_set_epsilon (AdwSpringAnimation *self,
+ADAP_AVAILABLE_IN_ALL
+double adap_spring_animation_get_epsilon (AdapSpringAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void   adap_spring_animation_set_epsilon (AdapSpringAnimation *self,
                                          double              epsilon);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_spring_animation_get_clamp (AdwSpringAnimation *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_spring_animation_set_clamp (AdwSpringAnimation *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_spring_animation_get_clamp (AdapSpringAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_spring_animation_set_clamp (AdapSpringAnimation *self,
                                          gboolean            clamp);
 
-ADW_AVAILABLE_IN_ALL
-guint adw_spring_animation_get_estimated_duration (AdwSpringAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+guint adap_spring_animation_get_estimated_duration (AdapSpringAnimation *self);
 
-ADW_AVAILABLE_IN_ALL
-double adw_spring_animation_get_velocity (AdwSpringAnimation *self);
+ADAP_AVAILABLE_IN_ALL
+double adap_spring_animation_get_velocity (AdapSpringAnimation *self);
 
-ADW_AVAILABLE_IN_1_3
-double adw_spring_animation_calculate_value    (AdwSpringAnimation *self,
+ADAP_AVAILABLE_IN_1_3
+double adap_spring_animation_calculate_value    (AdapSpringAnimation *self,
                                                 guint              time);
-ADW_AVAILABLE_IN_1_3
-double adw_spring_animation_calculate_velocity (AdwSpringAnimation *self,
+ADAP_AVAILABLE_IN_1_3
+double adap_spring_animation_calculate_velocity (AdapSpringAnimation *self,
                                                 guint              time);
 
 G_END_DECLS

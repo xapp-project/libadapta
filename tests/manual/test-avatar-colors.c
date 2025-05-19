@@ -1,4 +1,4 @@
-#include <adwaita.h>
+#include <adapta.h>
 
 static const char *names[] = {
   "Aaron",
@@ -33,7 +33,7 @@ create_content (void)
   gtk_widget_set_margin_end (box, 12);
 
   for (i = 0; i < G_N_ELEMENTS (names); i++) {
-    GtkWidget *avatar = adw_avatar_new (64, names[i], TRUE);
+    GtkWidget *avatar = adap_avatar_new (64, names[i], TRUE);
 
     gtk_box_append (GTK_BOX (box), avatar);
   }
@@ -54,7 +54,7 @@ main (int   argc,
   GtkWidget *window;
   gboolean done = FALSE;
 
-  adw_init ();
+  adap_init ();
 
   window = gtk_window_new ();
   g_signal_connect_swapped (window, "destroy", G_CALLBACK (close_cb), &done);

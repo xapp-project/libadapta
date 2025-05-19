@@ -3,7 +3,7 @@ Slug: adaptive-layouts
 
 # Adaptive Layouts
 
-Libadwaita provides a number of widgets that change their layout based on the
+Libadapta provides a number of widgets that change their layout based on the
 available space. This can be used to make applications adapt their UI between
 desktop and mobile devices.
 
@@ -25,7 +25,7 @@ This is commonly used for patterns such as [boxed lists](boxed-lists.html):
 </picture>
 
 ```xml
-<object class="AdwClamp">
+<object class="AdapClamp">
   <property name="child">
     <object class="GtkBox">
       <property name="orientation">vertical</property>
@@ -66,7 +66,7 @@ window.
   <img src="dialog-bottom.png" alt="dialog-bottom">
 </picture>
 
-To use `AdwDialog`, your window must be [class@Window] or
+To use `AdapDialog`, your window must be [class@Window] or
 [class@ApplicationWindow].
 
 # Breakpoints
@@ -102,22 +102,22 @@ switch between them depending on available width.
 </picture>
 
 ```xml
-<object class="AdwWindow">
+<object class="AdapWindow">
   <property name="width-request">360</property>
   <property name="height-request">200</property>
   <child>
-    <object class="AdwBreakpoint">
+    <object class="AdapBreakpoint">
       <condition>max-width: 550sp</condition>
       <setter object="switcher_bar" property="reveal">True</setter>
       <setter object="header_bar" property="title-widget"/>
     </object>
   </child>
   <property name="content">
-    <object class="AdwToolbarView">
+    <object class="AdapToolbarView">
       <child type="top">
-        <object class="AdwHeaderBar" id="header_bar">
+        <object class="AdapHeaderBar" id="header_bar">
           <property name="title-widget">
-            <object class="AdwViewSwitcher">
+            <object class="AdapViewSwitcher">
               <property name="stack">stack</property>
               <property name="policy">wide</property>
             </object>
@@ -125,10 +125,10 @@ switch between them depending on available width.
         </object>
       </child>
       <property name="content">
-        <object class="AdwViewStack" id="stack"/>
+        <object class="AdapViewStack" id="stack"/>
       </property>
       <child type="bottom">
-        <object class="AdwViewSwitcherBar" id="switcher_bar">
+        <object class="AdapViewSwitcherBar" id="switcher_bar">
           <property name="stack">stack</property>
         </object>
       </child>
@@ -142,7 +142,7 @@ pages in your application, as well as their titles.
 
 # Split Views
 
-Libadwaita provides two containers for creating multi-pane layouts that can
+Libadapta provides two containers for creating multi-pane layouts that can
 collapse on small widths: [class@NavigationSplitView] and
 [class@OverlaySplitView].
 
@@ -152,7 +152,7 @@ narrow widths.
 
 ## Navigation Split View
 
-`AdwNavigationSplitView` turns into an [class@NavigationView] when collapsed,
+`AdapNavigationSplitView` turns into an [class@NavigationView] when collapsed,
 containing the sidebar as the root page and content as its subpage. Only
 [class@NavigationPage] can be used for both the sidebar and content.
 
@@ -170,25 +170,25 @@ containing the sidebar as the root page and content as its subpage. Only
 </picture>
 
 ```xml
-<object class="AdwWindow">
+<object class="AdapWindow">
   <property name="width-request">360</property>
   <property name="height-request">200</property>
   <child>
-    <object class="AdwBreakpoint">
+    <object class="AdapBreakpoint">
       <condition>max-width: 400sp</condition>
       <setter object="split_view" property="collapsed">True</setter>
     </object>
   </child>
   <property name="content">
-    <object class="AdwNavigationSplitView" id="split_view">
+    <object class="AdapNavigationSplitView" id="split_view">
       <property name="sidebar">
-        <object class="AdwNavigationPage">
+        <object class="AdapNavigationPage">
           <property name="title" translatable="yes">Sidebar</property>
           <property name="tag">sidebar</property>
           <property name="child">
-            <object class="AdwToolbarView">
+            <object class="AdapToolbarView">
               <child type="top">
-                <object class="AdwHeaderBar"/>
+                <object class="AdapHeaderBar"/>
               </child>
               <property name="content">
                 <!-- sidebar -->
@@ -198,13 +198,13 @@ containing the sidebar as the root page and content as its subpage. Only
         </object>
       </property>
       <property name="content">
-        <object class="AdwNavigationPage">
+        <object class="AdapNavigationPage">
           <property name="title" translatable="yes">Content</property>
           <property name="tag">content</property>
           <property name="child">
-            <object class="AdwToolbarView">
+            <object class="AdapToolbarView">
               <child type="top">
-                <object class="AdwHeaderBar"/>
+                <object class="AdapHeaderBar"/>
               </child>
               <property name="content">
                 <!-- content -->
@@ -218,12 +218,12 @@ containing the sidebar as the root page and content as its subpage. Only
 </object>
 ```
 
-`AdwHeaderBar` will automatically provide a back button, manage window controls
-and display the title from its `AdwNavigationPage`.
+`AdapHeaderBar` will automatically provide a back button, manage window controls
+and display the title from its `AdapNavigationPage`.
 
 ## Overlay Split View
 
-`AdwOverlaySplitView` shows the sidebar as an overlay above the content when
+`AdapOverlaySplitView` shows the sidebar as an overlay above the content when
 collapsed. It's commonly used to implement
 [utility panes](https://developer.gnome.org/hig/patterns/containers/utility-panes.html),
 but can be used with split header bars as well.
@@ -238,20 +238,20 @@ but can be used with split header bars as well.
 </picture>
 
 ```xml
-<object class="AdwWindow">
+<object class="AdapWindow">
   <property name="width-request">360</property>
   <property name="height-request">200</property>
   <child>
-    <object class="AdwBreakpoint">
+    <object class="AdapBreakpoint">
       <condition>max-width: 400sp</condition>
       <setter object="split_view" property="collapsed">True</setter>
     </object>
   </child>
   <property name="content">
-    <object class="AdwToolbarView">
+    <object class="AdapToolbarView">
       <property name="top-bar-style">raised</property>
       <child type="top">
-        <object class="AdwHeaderBar">
+        <object class="AdapHeaderBar">
           <child type="start">
             <object class="GtkToggleButton" id="show_sidebar_button">
               <property name="icon-name">sidebar-show-symbolic</property>
@@ -261,7 +261,7 @@ but can be used with split header bars as well.
         </object>
       </child>
       <property name="content">
-        <object class="AdwOverlaySplitView" id="split_view">
+        <object class="AdapOverlaySplitView" id="split_view">
           <property name="show-sidebar"
                     bind-source="show_sidebar_button"
                     bind-property="active"
@@ -284,7 +284,7 @@ and hide it on mobile, you can toggle the button's visibility with your
 breakpoint:
 
 ```xml
-<object class="AdwBreakpoint">
+<object class="AdapBreakpoint">
   <condition>max-width: 400sp</condition>
   <setter object="split_view" property="collapsed">True</setter>
   <setter object="toggle_pane_button" property="visible">True</setter>
@@ -303,22 +303,22 @@ Both split views can be used for creating triple pane layouts, via nesting two
 of the views within one another. The inner view can be placed as the sidebar or
 content widget in the outer view, depending on how you want to handle collapsing.
 
-An example of a triple-pane layout with the an `AdwNavigationSplitView` nested
-within another `AdwNavigationSplitView`'s sidebar:
+An example of a triple-pane layout with the an `AdapNavigationSplitView` nested
+within another `AdapNavigationSplitView`'s sidebar:
 
 ```xml
-<object class="AdwWindow">
+<object class="AdapWindow">
   <property name="width-request">360</property>
   <property name="height-request">200</property>
   <child>
-    <object class="AdwBreakpoint">
+    <object class="AdapBreakpoint">
       <condition>max-width: 860sp</condition>
       <setter object="outer_view" property="collapsed">True</setter>
       <setter object="inner_view" property="sidebar-width-fraction">0.33</setter>
     </object>
   </child>
   <child>
-    <object class="AdwBreakpoint">
+    <object class="AdapBreakpoint">
       <condition>max-width: 500sp</condition>
       <setter object="outer_view" property="collapsed">True</setter>
       <setter object="inner_view" property="sidebar-width-fraction">0.33</setter>
@@ -326,14 +326,14 @@ within another `AdwNavigationSplitView`'s sidebar:
     </object>
   </child>
   <property name="content">
-    <object class="AdwNavigationSplitView" id="outer_view">
+    <object class="AdapNavigationSplitView" id="outer_view">
       <property name="min-sidebar-width">470</property>
       <property name="max-sidebar-width">780</property>
       <property name="sidebar-width-fraction">0.47</property>
       <property name="sidebar">
-        <object class="AdwNavigationPage">
+        <object class="AdapNavigationPage">
           <property name="child">
-            <object class="AdwNavigationSplitView" id="inner_view">
+            <object class="AdapNavigationSplitView" id="inner_view">
               <property name="max-sidebar-width">260</property>
               <property name="sidebar-width-fraction">0.38</property>
               <property name="sidebar">
@@ -379,35 +379,35 @@ When only the outer split view is collapsed, either the content is visible or
 the sidebar and middle pane are visible. When both split views are collapsed,
 only one pane is visible at a time.
 
-An example of a triple-pane layout with the an `AdwNavigationSplitView` nested
-within an `AdwOverlaySplitView`'s content:
+An example of a triple-pane layout with the an `AdapNavigationSplitView` nested
+within an `AdapOverlaySplitView`'s content:
 
 ```xml
-<object class="AdwWindow">
+<object class="AdapWindow">
   <property name="width-request">360</property>
   <property name="height-request">200</property>
   <child>
-    <object class="AdwBreakpoint">
+    <object class="AdapBreakpoint">
       <condition>max-width: 860sp</condition>
       <setter object="outer_view" property="collapsed">True</setter>
     </object>
   </child>
   <child>
-    <object class="AdwBreakpoint">
+    <object class="AdapBreakpoint">
       <condition>max-width: 500sp</condition>
       <setter object="outer_view" property="collapsed">True</setter>
       <setter object="inner_view" property="collapsed">True</setter>
     </object>
   </child>
   <property name="content">
-    <object class="AdwOverlaySplitView" id="outer_view">
+    <object class="AdapOverlaySplitView" id="outer_view">
       <property name="max-sidebar-width">260</property>
       <property name="sidebar-width-fraction">0.179</property>
       <property name="sidebar">
         <!-- sidebar -->
       </property>
       <property name="content">
-        <object class="AdwNavigationSplitView" id="inner_view">
+        <object class="AdapNavigationSplitView" id="inner_view">
           <property name="min-sidebar-width">290</property>
           <property name="max-sidebar-width">520</property>
           <property name="sidebar-width-fraction">0.355</property>
@@ -435,11 +435,11 @@ switcher on its own, leaving that to [class@TabBar], [class@TabButton] and
 provide an adaptive tabbed interface.
 
 ```xml
-<object class="AdwWindow">
+<object class="AdapWindow">
   <property name="width-request">360</property>
   <property name="height-request">200</property>
   <child>
-    <object class="AdwBreakpoint">
+    <object class="AdapBreakpoint">
       <condition>max-width: 500px</condition>
       <setter object="overview_btn" property="visible">True</setter>
       <setter object="new_tab_btn" property="visible">False</setter>
@@ -447,16 +447,16 @@ provide an adaptive tabbed interface.
     </object>
   </child>
   <property name="content">
-    <object class="AdwTabOverview">
+    <object class="AdapTabOverview">
       <property name="view">view</property>
       <property name="enable-new-tab">True</property>
       <property name="child">
-        <object class="AdwToolbarView">
+        <object class="AdapToolbarView">
           <property name="top-bar-style">raised</property>
           <child type="top">
-            <object class="AdwHeaderBar">
+            <object class="AdapHeaderBar">
               <child type="end">
-                <object class="AdwTabButton" id="overview_btn">
+                <object class="AdapTabButton" id="overview_btn">
                   <property name="visible">False</property>
                   <property name="view">view</property>
                   <property name="action-name">overview.open</property>
@@ -470,12 +470,12 @@ provide an adaptive tabbed interface.
             </object>
           </child>
           <child type="top">
-            <object class="AdwTabBar" id="tab_bar">
+            <object class="AdapTabBar" id="tab_bar">
               <property name="view">view</property>
             </object>
           </child>
           <property name="content">
-            <object class="AdwTabView" id="view"/>
+            <object class="AdapTabView" id="view"/>
           </property>
         </object>
       </property>

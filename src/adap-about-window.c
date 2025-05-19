@@ -8,18 +8,18 @@
 #include <glib/gi18n-lib.h>
 #include <appstream.h>
 
-#include "adw-about-window.h"
+#include "adap-about-window.h"
 
-#include "adw-action-row.h"
-#include "adw-header-bar.h"
-#include "adw-marshalers.h"
-#include "adw-message-dialog.h"
-#include "adw-navigation-view.h"
-#include "adw-preferences-group.h"
-#include "adw-toast-overlay.h"
+#include "adap-action-row.h"
+#include "adap-header-bar.h"
+#include "adap-marshalers.h"
+#include "adap-message-dialog.h"
+#include "adap-navigation-view.h"
+#include "adap-preferences-group.h"
+#include "adap-toast-overlay.h"
 
 /**
- * AdwAboutWindow:
+ * AdapAboutWindow:
  *
  * A window showing information about the application.
  *
@@ -33,7 +33,7 @@
  *
  * ## Main page
  *
- * `AdwAboutWindow` prominently displays the application's icon, name, developer
+ * `AdapAboutWindow` prominently displays the application's icon, name, developer
  * name and version. They can be set with the [property@AboutWindow:application-icon],
  * [property@AboutWindow:application-name],
  * [property@AboutWindow:developer-name] and [property@AboutWindow:version]
@@ -41,7 +41,7 @@
  *
  * ## What's New
  *
- * `AdwAboutWindow` provides a way for applications to display their release
+ * `AdapAboutWindow` provides a way for applications to display their release
  * notes, set with the [property@AboutWindow:release-notes] property.
  *
  * Release notes are formatted the same way as
@@ -81,7 +81,7 @@
  *
  * ## Troubleshooting
  *
- * `AdwAboutWindow` displays the following two links on the main page:
+ * `AdapAboutWindow` displays the following two links on the main page:
  *
  * * Support Questions, set with the [property@AboutWindow:support-url] property,
  * * Report an Issue, set with the [property@AboutWindow:issue-url] property.
@@ -93,7 +93,7 @@
  * It's intended to be attached to issue reports when reporting issues against
  * the application. As such, it cannot contain markup or links.
  *
- * `AdwAboutWindow` provides a quick way to save debug information to a file.
+ * `AdapAboutWindow` provides a quick way to save debug information to a file.
  * When saving, [property@AboutWindow:debug-info-filename] would be used as
  * the suggested filename.
  *
@@ -150,7 +150,7 @@
  *
  * ## Constructing
  *
- * To make constructing an `AdwAboutWindow` as convenient as possible, you can
+ * To make constructing an `AdapAboutWindow` as convenient as possible, you can
  * use the function [func@show_about_window] which constructs and shows a
  * window.
  *
@@ -168,7 +168,7 @@
  *     NULL
  *   };
  *
- *   adw_show_about_window (gtk_application_get_active_window (app),
+ *   adap_show_about_window (gtk_application_get_active_window (app),
  *                          "application-name", _("Example"),
  *                          "application-icon", "org.example.App",
  *                          "version", "1.2.3",
@@ -184,7 +184,7 @@
  *
  * ## CSS nodes
  *
- * `AdwAboutWindow` has a main CSS node with the name `window` and the
+ * `AdapAboutWindow` has a main CSS node with the name `window` and the
  * style class `.about`.
  *
  * Since: 1.2
@@ -249,8 +249,8 @@ typedef struct {
   GtkLicense license_type;
 } LegalSection;
 
-struct _AdwAboutWindow {
-  AdwWindow parent_instance;
+struct _AdapAboutWindow {
+  AdapWindow parent_instance;
 
   GtkWidget *navigation_view;
   GtkWidget *toast_overlay;
@@ -275,7 +275,7 @@ struct _AdwAboutWindow {
   GtkWidget *support_row;
   GtkWidget *issue_row;
   GtkWidget *troubleshooting_row;
-  AdwNavigationPage *debug_info_page;
+  AdapNavigationPage *debug_info_page;
 
   GtkWidget *credits_legal_group;
   GtkWidget *credits_box;
@@ -309,7 +309,7 @@ struct _AdwAboutWindow {
   guint legal_showing_idle_id;
 };
 
-G_DEFINE_FINAL_TYPE (AdwAboutWindow, adw_about_window, ADW_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (AdapAboutWindow, adap_about_window, ADAP_TYPE_WINDOW)
 
 enum {
   PROP_0,
@@ -362,18 +362,18 @@ free_legal_section (LegalSection *section)
 }
 
 static void
-update_headerbar_cb (AdwAboutWindow *self)
+update_headerbar_cb (AdapAboutWindow *self)
 {
   GtkAdjustment *adj;
 
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (self->main_scrolled_window));
 
-  adw_header_bar_set_show_title (ADW_HEADER_BAR (self->main_headerbar),
+  adap_header_bar_set_show_title (ADAP_HEADER_BAR (self->main_headerbar),
                                  gtk_adjustment_get_value (adj) > 0);
 }
 
 static inline void
-activate_link (AdwAboutWindow *self,
+activate_link (AdapAboutWindow *self,
                const char     *uri)
 {
   gboolean ret = FALSE;
@@ -381,7 +381,7 @@ activate_link (AdwAboutWindow *self,
 }
 
 static gboolean
-activate_link_cb (AdwAboutWindow *self,
+activate_link_cb (AdapAboutWindow *self,
                   const char     *uri)
 {
   activate_link (self, uri);
@@ -390,7 +390,7 @@ activate_link_cb (AdwAboutWindow *self,
 }
 
 static gboolean
-activate_link_default_cb (AdwAboutWindow *self,
+activate_link_default_cb (AdapAboutWindow *self,
                           const char     *uri)
 {
   GtkUriLauncher *launcher = gtk_uri_launcher_new (uri);
@@ -403,7 +403,7 @@ activate_link_default_cb (AdwAboutWindow *self,
 }
 
 static void
-legal_showing_idle_cb (AdwAboutWindow *self)
+legal_showing_idle_cb (AdapAboutWindow *self)
 {
   GtkWidget *focus = gtk_window_get_focus (GTK_WINDOW (self));
 
@@ -414,7 +414,7 @@ legal_showing_idle_cb (AdwAboutWindow *self)
 }
 
 static void
-legal_showing_cb (AdwAboutWindow *self)
+legal_showing_cb (AdapAboutWindow *self)
 {
   self->legal_showing_idle_id =
     g_idle_add_once ((GSourceOnceFunc) legal_showing_idle_cb, self);
@@ -428,7 +428,7 @@ get_release_for_version (AsRelease  *rel,
 }
 
 static void
-update_credits_legal_group (AdwAboutWindow *self)
+update_credits_legal_group (AdapAboutWindow *self)
 {
   gtk_widget_set_visible (self->credits_legal_group,
                           gtk_widget_get_visible (self->credits_box) ||
@@ -494,8 +494,8 @@ add_credits_section (GtkWidget   *box,
   if (!people || !*people)
     return;
 
-  group = adw_preferences_group_new ();
-  adw_preferences_group_set_title (ADW_PREFERENCES_GROUP (group), title);
+  group = adap_preferences_group_new ();
+  adap_preferences_group_set_title (ADAP_PREFERENCES_GROUP (group), title);
 
   for (person = people; *person; person++) {
     GtkWidget *row;
@@ -508,10 +508,10 @@ add_credits_section (GtkWidget   *box,
 
     parse_person (*person, &name, &link, &is_email);
 
-    row = adw_action_row_new ();
-    adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
-    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), name);
-    adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), row);
+    row = adap_action_row_new ();
+    adap_preferences_row_set_use_markup (ADAP_PREFERENCES_ROW (row), FALSE);
+    adap_preferences_row_set_title (ADAP_PREFERENCES_ROW (row), name);
+    adap_preferences_group_add (ADAP_PREFERENCES_GROUP (group), row);
 
     if (link) {
       GtkWidget *image = g_object_new (GTK_TYPE_IMAGE,
@@ -519,11 +519,11 @@ add_credits_section (GtkWidget   *box,
                                        NULL);
 
       if (is_email)
-        gtk_image_set_from_icon_name (GTK_IMAGE (image), "adw-mail-send-symbolic");
+        gtk_image_set_from_icon_name (GTK_IMAGE (image), "adap-mail-send-symbolic");
       else
-        gtk_image_set_from_icon_name (GTK_IMAGE (image), "adw-external-link-symbolic");
+        gtk_image_set_from_icon_name (GTK_IMAGE (image), "adap-external-link-symbolic");
 
-      adw_action_row_add_suffix (ADW_ACTION_ROW (row), image);
+      adap_action_row_add_suffix (ADAP_ACTION_ROW (row), image);
       gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
       gtk_actionable_set_action_name (GTK_ACTIONABLE (row), "about.show-url");
 
@@ -550,7 +550,7 @@ add_credits_section (GtkWidget   *box,
 }
 
 static void
-update_credits (AdwAboutWindow *self)
+update_credits (AdapAboutWindow *self)
 {
   GtkWidget *widget;
   char **translators;
@@ -605,7 +605,7 @@ get_license_text (GtkLicense  license_type,
 }
 
 static void
-append_legal_section (AdwAboutWindow *self,
+append_legal_section (AdapAboutWindow *self,
                       LegalSection   *section,
                       gboolean        force_title)
 {
@@ -666,7 +666,7 @@ append_legal_section (AdwAboutWindow *self,
 }
 
 static void
-update_legal (AdwAboutWindow *self)
+update_legal (AdapAboutWindow *self)
 {
   LegalSection default_section;
   GtkWidget *widget;
@@ -954,7 +954,7 @@ static const GMarkupParser markup_parser =
 };
 
 static void
-update_release_notes (AdwAboutWindow *self)
+update_release_notes (AdapAboutWindow *self)
 {
   GMarkupParseContext *context;
   ReleaseNotesParserData pdata;
@@ -1034,7 +1034,7 @@ update_release_notes (AdwAboutWindow *self)
 }
 
 static void
-update_details (AdwAboutWindow *self)
+update_details (AdapAboutWindow *self)
 {
   gboolean has_website = self->website && *self->website;
   gboolean has_comments = self->comments && *self->comments;
@@ -1053,7 +1053,7 @@ update_details (AdwAboutWindow *self)
 }
 
 static void
-update_support (AdwAboutWindow *self)
+update_support (AdapAboutWindow *self)
 {
   gboolean has_support_url = self->support_url && *self->support_url;
   gboolean has_issue_url = self->issue_url && *self->issue_url;
@@ -1067,73 +1067,73 @@ update_support (AdwAboutWindow *self)
 }
 
 static void
-adw_about_window_get_property (GObject    *object,
+adap_about_window_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  AdwAboutWindow *self = ADW_ABOUT_WINDOW (object);
+  AdapAboutWindow *self = ADAP_ABOUT_WINDOW (object);
 
   switch (prop_id) {
   case PROP_APPLICATION_ICON:
-    g_value_set_string (value, adw_about_window_get_application_icon (self));
+    g_value_set_string (value, adap_about_window_get_application_icon (self));
     break;
   case PROP_APPLICATION_NAME:
-    g_value_set_string (value, adw_about_window_get_application_name (self));
+    g_value_set_string (value, adap_about_window_get_application_name (self));
     break;
   case PROP_DEVELOPER_NAME:
-    g_value_set_string (value, adw_about_window_get_developer_name (self));
+    g_value_set_string (value, adap_about_window_get_developer_name (self));
     break;
   case PROP_VERSION:
-    g_value_set_string (value, adw_about_window_get_version (self));
+    g_value_set_string (value, adap_about_window_get_version (self));
     break;
   case PROP_RELEASE_NOTES_VERSION:
-    g_value_set_string (value, adw_about_window_get_release_notes_version (self));
+    g_value_set_string (value, adap_about_window_get_release_notes_version (self));
     break;
   case PROP_RELEASE_NOTES:
-    g_value_set_string (value, adw_about_window_get_release_notes (self));
+    g_value_set_string (value, adap_about_window_get_release_notes (self));
     break;
   case PROP_COMMENTS:
-    g_value_set_string (value, adw_about_window_get_comments (self));
+    g_value_set_string (value, adap_about_window_get_comments (self));
     break;
   case PROP_WEBSITE:
-    g_value_set_string (value, adw_about_window_get_website (self));
+    g_value_set_string (value, adap_about_window_get_website (self));
     break;
   case PROP_SUPPORT_URL:
-    g_value_set_string (value, adw_about_window_get_support_url (self));
+    g_value_set_string (value, adap_about_window_get_support_url (self));
     break;
   case PROP_ISSUE_URL:
-    g_value_set_string (value, adw_about_window_get_issue_url (self));
+    g_value_set_string (value, adap_about_window_get_issue_url (self));
     break;
   case PROP_DEBUG_INFO:
-    g_value_set_string (value, adw_about_window_get_debug_info (self));
+    g_value_set_string (value, adap_about_window_get_debug_info (self));
     break;
   case PROP_DEBUG_INFO_FILENAME:
-    g_value_set_string (value, adw_about_window_get_debug_info_filename (self));
+    g_value_set_string (value, adap_about_window_get_debug_info_filename (self));
     break;
   case PROP_DEVELOPERS:
-    g_value_set_boxed (value, adw_about_window_get_developers (self));
+    g_value_set_boxed (value, adap_about_window_get_developers (self));
     break;
   case PROP_DESIGNERS:
-    g_value_set_boxed (value, adw_about_window_get_designers (self));
+    g_value_set_boxed (value, adap_about_window_get_designers (self));
     break;
   case PROP_ARTISTS:
-    g_value_set_boxed (value, adw_about_window_get_artists (self));
+    g_value_set_boxed (value, adap_about_window_get_artists (self));
     break;
   case PROP_DOCUMENTERS:
-    g_value_set_boxed (value, adw_about_window_get_documenters (self));
+    g_value_set_boxed (value, adap_about_window_get_documenters (self));
     break;
   case PROP_TRANSLATOR_CREDITS:
-    g_value_set_string (value, adw_about_window_get_translator_credits (self));
+    g_value_set_string (value, adap_about_window_get_translator_credits (self));
     break;
   case PROP_COPYRIGHT:
-    g_value_set_string (value, adw_about_window_get_copyright (self));
+    g_value_set_string (value, adap_about_window_get_copyright (self));
     break;
   case PROP_LICENSE_TYPE:
-    g_value_set_enum (value, adw_about_window_get_license_type (self));
+    g_value_set_enum (value, adap_about_window_get_license_type (self));
     break;
   case PROP_LICENSE:
-    g_value_set_string (value, adw_about_window_get_license (self));
+    g_value_set_string (value, adap_about_window_get_license (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1141,73 +1141,73 @@ adw_about_window_get_property (GObject    *object,
 }
 
 static void
-adw_about_window_set_property (GObject      *object,
+adap_about_window_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
-  AdwAboutWindow *self = ADW_ABOUT_WINDOW (object);
+  AdapAboutWindow *self = ADAP_ABOUT_WINDOW (object);
 
   switch (prop_id) {
   case PROP_APPLICATION_ICON:
-    adw_about_window_set_application_icon (self, g_value_get_string (value));
+    adap_about_window_set_application_icon (self, g_value_get_string (value));
     break;
   case PROP_APPLICATION_NAME:
-    adw_about_window_set_application_name (self, g_value_get_string (value));
+    adap_about_window_set_application_name (self, g_value_get_string (value));
     break;
   case PROP_DEVELOPER_NAME:
-    adw_about_window_set_developer_name (self, g_value_get_string (value));
+    adap_about_window_set_developer_name (self, g_value_get_string (value));
     break;
   case PROP_VERSION:
-    adw_about_window_set_version (self, g_value_get_string (value));
+    adap_about_window_set_version (self, g_value_get_string (value));
     break;
   case PROP_RELEASE_NOTES_VERSION:
-    adw_about_window_set_release_notes_version (self, g_value_get_string (value));
+    adap_about_window_set_release_notes_version (self, g_value_get_string (value));
     break;
   case PROP_RELEASE_NOTES:
-    adw_about_window_set_release_notes (self, g_value_get_string (value));
+    adap_about_window_set_release_notes (self, g_value_get_string (value));
     break;
   case PROP_COMMENTS:
-    adw_about_window_set_comments (self, g_value_get_string (value));
+    adap_about_window_set_comments (self, g_value_get_string (value));
     break;
   case PROP_WEBSITE:
-    adw_about_window_set_website (self, g_value_get_string (value));
+    adap_about_window_set_website (self, g_value_get_string (value));
     break;
   case PROP_SUPPORT_URL:
-    adw_about_window_set_support_url (self, g_value_get_string (value));
+    adap_about_window_set_support_url (self, g_value_get_string (value));
     break;
   case PROP_ISSUE_URL:
-    adw_about_window_set_issue_url (self, g_value_get_string (value));
+    adap_about_window_set_issue_url (self, g_value_get_string (value));
     break;
   case PROP_DEBUG_INFO:
-    adw_about_window_set_debug_info (self, g_value_get_string (value));
+    adap_about_window_set_debug_info (self, g_value_get_string (value));
     break;
   case PROP_DEBUG_INFO_FILENAME:
-    adw_about_window_set_debug_info_filename (self, g_value_get_string (value));
+    adap_about_window_set_debug_info_filename (self, g_value_get_string (value));
     break;
   case PROP_DEVELOPERS:
-    adw_about_window_set_developers (self, g_value_get_boxed (value));
+    adap_about_window_set_developers (self, g_value_get_boxed (value));
     break;
   case PROP_DESIGNERS:
-    adw_about_window_set_designers (self, g_value_get_boxed (value));
+    adap_about_window_set_designers (self, g_value_get_boxed (value));
     break;
   case PROP_DOCUMENTERS:
-    adw_about_window_set_documenters (self, g_value_get_boxed (value));
+    adap_about_window_set_documenters (self, g_value_get_boxed (value));
     break;
   case PROP_ARTISTS:
-    adw_about_window_set_artists (self, g_value_get_boxed (value));
+    adap_about_window_set_artists (self, g_value_get_boxed (value));
     break;
   case PROP_TRANSLATOR_CREDITS:
-    adw_about_window_set_translator_credits (self, g_value_get_string (value));
+    adap_about_window_set_translator_credits (self, g_value_get_string (value));
     break;
   case PROP_COPYRIGHT:
-    adw_about_window_set_copyright (self, g_value_get_string (value));
+    adap_about_window_set_copyright (self, g_value_get_string (value));
     break;
   case PROP_LICENSE_TYPE:
-    adw_about_window_set_license_type (self, g_value_get_enum (value));
+    adap_about_window_set_license_type (self, g_value_get_enum (value));
     break;
   case PROP_LICENSE:
-    adw_about_window_set_license (self, g_value_get_string (value));
+    adap_about_window_set_license (self, g_value_get_string (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1215,19 +1215,19 @@ adw_about_window_set_property (GObject      *object,
 }
 
 static void
-adw_about_window_dispose (GObject *object)
+adap_about_window_dispose (GObject *object)
 {
-  AdwAboutWindow *self = ADW_ABOUT_WINDOW (object);
+  AdapAboutWindow *self = ADAP_ABOUT_WINDOW (object);
 
   g_clear_handle_id (&self->legal_showing_idle_id, g_source_remove);
 
-  G_OBJECT_CLASS (adw_about_window_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_about_window_parent_class)->dispose (object);
 }
 
 static void
-adw_about_window_finalize (GObject *object)
+adap_about_window_finalize (GObject *object)
 {
-  AdwAboutWindow *self = ADW_ABOUT_WINDOW (object);
+  AdapAboutWindow *self = ADAP_ABOUT_WINDOW (object);
 
   g_free (self->application_icon);
   g_free (self->application_name);
@@ -1253,11 +1253,11 @@ adw_about_window_finalize (GObject *object)
   g_free (self->license);
   g_slist_free_full (self->legal_sections, (GDestroyNotify) free_legal_section);
 
-  G_OBJECT_CLASS (adw_about_window_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_about_window_parent_class)->finalize (object);
 }
 
 static void
-show_url_cb (AdwAboutWindow *self,
+show_url_cb (AdapAboutWindow *self,
              const char     *action_name,
              GVariant       *params)
 {
@@ -1267,7 +1267,7 @@ show_url_cb (AdwAboutWindow *self,
 }
 
 static void
-show_url_property_cb (AdwAboutWindow *self,
+show_url_property_cb (AdapAboutWindow *self,
                       const char     *action_name,
                       GVariant       *params)
 {
@@ -1282,7 +1282,7 @@ show_url_property_cb (AdwAboutWindow *self,
 }
 
 static void
-copy_property_cb (AdwAboutWindow *self,
+copy_property_cb (AdapAboutWindow *self,
                   const char     *action_name,
                   GVariant       *params)
 {
@@ -1296,8 +1296,8 @@ copy_property_cb (AdwAboutWindow *self,
 
     gdk_clipboard_set_text (clipboard, value);
 
-    adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay),
-                                 adw_toast_new (_("Copied to clipboard")));
+    adap_toast_overlay_add_toast (ADAP_TOAST_OVERLAY (self->toast_overlay),
+                                 adap_toast_new (_("Copied to clipboard")));
   }
 
   g_free (value);
@@ -1306,7 +1306,7 @@ copy_property_cb (AdwAboutWindow *self,
 static void
 save_debug_info_dialog_cb (GtkFileDialog  *dialog,
                            GAsyncResult   *result,
-                           AdwAboutWindow *self)
+                           AdapAboutWindow *self)
 {
   GFile *file = gtk_file_dialog_save_finish (dialog, result, NULL);
 
@@ -1324,12 +1324,12 @@ save_debug_info_dialog_cb (GtkFileDialog  *dialog,
                              &error);
 
     if (error) {
-      GtkWidget *message = adw_message_dialog_new (GTK_WINDOW (self),
+      GtkWidget *message = adap_message_dialog_new (GTK_WINDOW (self),
                                                   _("Unable to save debugging information"),
                                                   NULL);
-      adw_message_dialog_format_body (ADW_MESSAGE_DIALOG (message),
+      adap_message_dialog_format_body (ADAP_MESSAGE_DIALOG (message),
                                       "%s", error->message);
-      adw_message_dialog_add_response (ADW_MESSAGE_DIALOG (message),
+      adap_message_dialog_add_response (ADAP_MESSAGE_DIALOG (message),
                                        "close", _("Close"));
 
       gtk_window_present (GTK_WINDOW (message));
@@ -1342,7 +1342,7 @@ save_debug_info_dialog_cb (GtkFileDialog  *dialog,
 }
 
 static void
-save_debug_info_cb (AdwAboutWindow *self)
+save_debug_info_cb (AdapAboutWindow *self)
 {
   GtkFileDialog *dialog = gtk_file_dialog_new ();
 
@@ -1361,9 +1361,9 @@ save_debug_info_shortcut_cb (GtkWidget *widget,
                              GVariant  *args,
                              gpointer   user_data)
 {
-  AdwAboutWindow *self = ADW_ABOUT_WINDOW (widget);
+  AdapAboutWindow *self = ADAP_ABOUT_WINDOW (widget);
 
-  if (adw_navigation_view_get_visible_page (ADW_NAVIGATION_VIEW (self->navigation_view)) != self->debug_info_page)
+  if (adap_navigation_view_get_visible_page (ADAP_NAVIGATION_VIEW (self->navigation_view)) != self->debug_info_page)
     return GDK_EVENT_PROPAGATE;
 
   save_debug_info_cb (self);
@@ -1372,18 +1372,18 @@ save_debug_info_shortcut_cb (GtkWidget *widget,
 }
 
 static void
-adw_about_window_class_init (AdwAboutWindowClass *klass)
+adap_about_window_class_init (AdapAboutWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_about_window_dispose;
-  object_class->finalize = adw_about_window_finalize;
-  object_class->get_property = adw_about_window_get_property;
-  object_class->set_property = adw_about_window_set_property;
+  object_class->dispose = adap_about_window_dispose;
+  object_class->finalize = adap_about_window_finalize;
+  object_class->get_property = adap_about_window_get_property;
+  object_class->set_property = adap_about_window_set_property;
 
   /**
-   * AdwAboutWindow:application-icon: (attributes org.gtk.Property.get=adw_about_window_get_application_icon org.gtk.Property.set=adw_about_window_set_application_icon)
+   * AdapAboutWindow:application-icon: (attributes org.gtk.Property.get=adap_about_window_get_application_icon org.gtk.Property.set=adap_about_window_set_application_icon)
    *
    * The name of the application icon.
    *
@@ -1397,7 +1397,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:application-name: (attributes org.gtk.Property.get=adw_about_window_get_application_name org.gtk.Property.set=adw_about_window_set_application_name)
+   * AdapAboutWindow:application-name: (attributes org.gtk.Property.get=adap_about_window_get_application_name org.gtk.Property.set=adap_about_window_set_application_name)
    *
    * The name of the application.
    *
@@ -1411,7 +1411,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:developer-name: (attributes org.gtk.Property.get=adw_about_window_get_developer_name org.gtk.Property.set=adw_about_window_set_developer_name)
+   * AdapAboutWindow:developer-name: (attributes org.gtk.Property.get=adap_about_window_get_developer_name org.gtk.Property.set=adap_about_window_set_developer_name)
    *
    * The developer name.
    *
@@ -1432,7 +1432,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:version: (attributes org.gtk.Property.get=adw_about_window_get_version org.gtk.Property.set=adw_about_window_set_version)
+   * AdapAboutWindow:version: (attributes org.gtk.Property.get=adap_about_window_get_version org.gtk.Property.set=adap_about_window_set_version)
    *
    * The version of the application.
    *
@@ -1449,7 +1449,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:release-notes-version: (attributes org.gtk.Property.get=adw_about_window_get_release_notes_version org.gtk.Property.set=adw_about_window_set_release_notes_version)
+   * AdapAboutWindow:release-notes-version: (attributes org.gtk.Property.get=adap_about_window_get_release_notes_version org.gtk.Property.set=adap_about_window_set_release_notes_version)
    *
    * The version described by the application's release notes.
    *
@@ -1472,7 +1472,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:release-notes: (attributes org.gtk.Property.get=adw_about_window_get_release_notes org.gtk.Property.set=adw_about_window_set_release_notes)
+   * AdapAboutWindow:release-notes: (attributes org.gtk.Property.get=adap_about_window_get_release_notes org.gtk.Property.set=adap_about_window_set_release_notes)
    *
    * The release notes of the application.
    *
@@ -1495,7 +1495,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
    *
    * Nested lists are not supported.
    *
-   * `AdwAboutWindow` displays the version above the release notes. If set, the
+   * `AdapAboutWindow` displays the version above the release notes. If set, the
    * [property@AboutWindow:release-notes-version] of the property will be used
    * as the version; otherwise, [property@AboutWindow:version] is used.
    *
@@ -1507,7 +1507,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:comments: (attributes org.gtk.Property.get=adw_about_window_get_comments org.gtk.Property.set=adw_about_window_set_comments)
+   * AdapAboutWindow:comments: (attributes org.gtk.Property.get=adap_about_window_get_comments org.gtk.Property.set=adap_about_window_set_comments)
    *
    * The comments about the application.
    *
@@ -1524,7 +1524,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:website: (attributes org.gtk.Property.get=adw_about_window_get_website org.gtk.Property.set=adw_about_window_set_website)
+   * AdapAboutWindow:website: (attributes org.gtk.Property.get=adap_about_window_get_website org.gtk.Property.set=adap_about_window_set_website)
    *
    * The URL of the application's website.
    *
@@ -1541,7 +1541,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:support-url: (attributes org.gtk.Property.get=adw_about_window_get_support_url org.gtk.Property.set=adw_about_window_set_support_url)
+   * AdapAboutWindow:support-url: (attributes org.gtk.Property.get=adap_about_window_get_support_url org.gtk.Property.set=adap_about_window_set_support_url)
    *
    * The URL of the application's support page.
    *
@@ -1555,7 +1555,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:issue-url: (attributes org.gtk.Property.get=adw_about_window_get_issue_url org.gtk.Property.set=adw_about_window_set_issue_url)
+   * AdapAboutWindow:issue-url: (attributes org.gtk.Property.get=adap_about_window_get_issue_url org.gtk.Property.set=adap_about_window_set_issue_url)
    *
    * The URL for the application's issue tracker.
    *
@@ -1569,7 +1569,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:debug-info: (attributes org.gtk.Property.get=adw_about_window_get_debug_info org.gtk.Property.set=adw_about_window_set_debug_info)
+   * AdapAboutWindow:debug-info: (attributes org.gtk.Property.get=adap_about_window_get_debug_info org.gtk.Property.set=adap_about_window_set_debug_info)
    *
    * The debug information.
    *
@@ -1577,7 +1577,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
    * to be attached to issue reports when reporting issues against the
    * application.
    *
-   * `AdwAboutWindow` provides a quick way to save debug information to a file.
+   * `AdapAboutWindow` provides a quick way to save debug information to a file.
    * When saving, [property@AboutWindow:debug-info-filename] would be used as
    * the suggested filename.
    *
@@ -1591,7 +1591,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:debug-info-filename: (attributes org.gtk.Property.get=adw_about_window_get_debug_info_filename org.gtk.Property.set=adw_about_window_set_debug_info_filename)
+   * AdapAboutWindow:debug-info-filename: (attributes org.gtk.Property.get=adap_about_window_get_debug_info_filename org.gtk.Property.set=adap_about_window_set_debug_info_filename)
    *
    * The debug information filename.
    *
@@ -1608,7 +1608,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:developers: (attributes org.gtk.Property.get=adw_about_window_get_developers org.gtk.Property.set=adw_about_window_set_developers)
+   * AdapAboutWindow:developers: (attributes org.gtk.Property.get=adap_about_window_get_developers org.gtk.Property.set=adap_about_window_set_developers)
    *
    * The list of developers of the application.
    *
@@ -1634,7 +1634,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:designers: (attributes org.gtk.Property.get=adw_about_window_get_designers org.gtk.Property.set=adw_about_window_set_designers)
+   * AdapAboutWindow:designers: (attributes org.gtk.Property.get=adap_about_window_get_designers org.gtk.Property.set=adap_about_window_set_designers)
    *
    * The list of designers of the application.
    *
@@ -1660,7 +1660,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:artists: (attributes org.gtk.Property.get=adw_about_window_get_artists org.gtk.Property.set=adw_about_window_set_artists)
+   * AdapAboutWindow:artists: (attributes org.gtk.Property.get=adap_about_window_get_artists org.gtk.Property.set=adap_about_window_set_artists)
    *
    * The list of artists of the application.
    *
@@ -1686,7 +1686,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:documenters: (attributes org.gtk.Property.get=adw_about_window_get_documenters org.gtk.Property.set=adw_about_window_set_documenters)
+   * AdapAboutWindow:documenters: (attributes org.gtk.Property.get=adap_about_window_get_documenters org.gtk.Property.set=adap_about_window_set_documenters)
    *
    * The list of documenters of the application.
    *
@@ -1712,7 +1712,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:translator-credits: (attributes org.gtk.Property.get=adw_about_window_get_translator_credits org.gtk.Property.set=adw_about_window_set_translator_credits)
+   * AdapAboutWindow:translator-credits: (attributes org.gtk.Property.get=adap_about_window_get_translator_credits org.gtk.Property.set=adap_about_window_set_translator_credits)
    *
    * The translator credits string.
    *
@@ -1741,7 +1741,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:copyright: (attributes org.gtk.Property.get=adw_about_window_get_copyright org.gtk.Property.set=adw_about_window_set_copyright)
+   * AdapAboutWindow:copyright: (attributes org.gtk.Property.get=adap_about_window_get_copyright org.gtk.Property.set=adap_about_window_set_copyright)
    *
    * The copyright information.
    *
@@ -1762,7 +1762,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:license-type: (attributes org.gtk.Property.get=adw_about_window_get_license_type org.gtk.Property.set=adw_about_window_set_license_type)
+   * AdapAboutWindow:license-type: (attributes org.gtk.Property.get=adap_about_window_get_license_type org.gtk.Property.set=adap_about_window_set_license_type)
    *
    * The license type.
    *
@@ -1792,7 +1792,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutWindow:license: (attributes org.gtk.Property.get=adw_about_window_get_license org.gtk.Property.set=adw_about_window_set_license)
+   * AdapAboutWindow:license: (attributes org.gtk.Property.get=adap_about_window_get_license org.gtk.Property.set=adap_about_window_set_license)
    *
    * The license text.
    *
@@ -1820,7 +1820,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
-   * AdwAboutWindow::activate-link:
+   * AdapAboutWindow::activate-link:
    * @self: an about window
    * @uri: the URI to activate
    *
@@ -1840,49 +1840,49 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
                   0,
                   g_signal_accumulator_true_handled,
                   NULL,
-                  adw_marshal_BOOLEAN__STRING,
+                  adap_marshal_BOOLEAN__STRING,
                   G_TYPE_BOOLEAN,
                   1,
                   G_TYPE_STRING);
   g_signal_set_va_marshaller (signals[SIGNAL_ACTIVATE_LINK],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_BOOLEAN__STRINGv);
+                              adap_marshal_BOOLEAN__STRINGv);
 
   g_signal_override_class_handler ("activate-link",
                                    G_TYPE_FROM_CLASS (klass),
                                    G_CALLBACK (activate_link_default_cb));
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-about-window.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, navigation_view);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, toast_overlay);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, main_scrolled_window);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, main_headerbar);
+                                               "/org/gnome/Adapta/ui/adap-about-window.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, navigation_view);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, toast_overlay);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, main_scrolled_window);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, main_headerbar);
 
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, app_icon_image);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, app_name_label);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, developer_name_label);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, version_button);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, app_icon_image);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, app_name_label);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, developer_name_label);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, version_button);
 
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, details_group);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, whats_new_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, comments_label);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, website_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, links_group);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, details_website_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, details_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, release_notes_buffer);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, details_group);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, whats_new_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, comments_label);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, website_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, links_group);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, details_website_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, details_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, release_notes_buffer);
 
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, support_group);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, support_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, issue_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, troubleshooting_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, debug_info_page);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, support_group);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, support_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, issue_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, troubleshooting_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, debug_info_page);
 
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, credits_legal_group);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, credits_box);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, legal_box);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutWindow, acknowledgements_box);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, credits_legal_group);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, credits_box);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, legal_box);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutWindow, acknowledgements_box);
 
   gtk_widget_class_bind_template_callback (widget_class, activate_link_cb);
   gtk_widget_class_bind_template_callback (widget_class, legal_showing_cb);
@@ -1902,7 +1902,7 @@ adw_about_window_class_init (AdwAboutWindowClass *klass)
 }
 
 static void
-adw_about_window_init (AdwAboutWindow *self)
+adap_about_window_init (AdapAboutWindow *self)
 {
   GtkAdjustment *adj;
   self->application_icon = g_strdup ("");
@@ -1949,26 +1949,26 @@ adw_about_window_init (AdwAboutWindow *self)
 }
 
 /**
- * adw_about_window_new:
+ * adap_about_window_new:
  *
- * Creates a new `AdwAboutWindow`.
+ * Creates a new `AdapAboutWindow`.
  *
- * Returns: the newly created `AdwAboutWindow`
+ * Returns: the newly created `AdapAboutWindow`
  *
  * Since: 1.2
  */
 GtkWidget *
-adw_about_window_new (void)
+adap_about_window_new (void)
 {
-  return g_object_new (ADW_TYPE_ABOUT_WINDOW, NULL);
+  return g_object_new (ADAP_TYPE_ABOUT_WINDOW, NULL);
 }
 
 /**
- * adw_about_window_new_from_appdata:
+ * adap_about_window_new_from_appdata:
  * @resource_path: The resource to use
  * @release_notes_version: (nullable): The version to retrieve release notes for
  *
- * Creates a new `AdwAboutWindow` using AppStream metadata.
+ * Creates a new `AdapAboutWindow` using AppStream metadata.
  *
  * This automatically sets the following properties with the following AppStream
  * values:
@@ -1990,15 +1990,15 @@ adw_about_window_new (void)
  * [property@AboutWindow:release-notes] is set from the AppStream release
  * description for that version.
  *
- * Returns: the newly created `AdwAboutWindow`
+ * Returns: the newly created `AdapAboutWindow`
  *
  * Since: 1.4
  */
 GtkWidget *
-adw_about_window_new_from_appdata (const char *resource_path,
+adap_about_window_new_from_appdata (const char *resource_path,
                                    const char *release_notes_version)
 {
-  AdwAboutWindow *self;
+  AdapAboutWindow *self;
   GFile *appdata_file;
   char *appdata_uri;
   AsMetadata *metadata;
@@ -2014,7 +2014,7 @@ adw_about_window_new_from_appdata (const char *resource_path,
   appdata_uri = g_strconcat ("resource://", resource_path, NULL);
   appdata_file = g_file_new_for_uri (appdata_uri);
 
-  self = ADW_ABOUT_WINDOW (adw_about_window_new ());
+  self = ADAP_ABOUT_WINDOW (adap_about_window_new ());
   metadata = as_metadata_new ();
 
   if (!as_metadata_parse_file (metadata, appdata_file, AS_FORMAT_KIND_UNKNOWN, &error)) {
@@ -2070,8 +2070,8 @@ adw_about_window_new_from_appdata (const char *resource_path,
       version = as_release_get_version (notes_release);
 
       if (release_notes && version) {
-        adw_about_window_set_release_notes (self, release_notes);
-        adw_about_window_set_release_notes_version (self, version);
+        adap_about_window_set_release_notes (self, release_notes);
+        adap_about_window_set_release_notes_version (self, version);
       }
     } else {
       g_critical ("No valid release found for version %s", release_notes_version);
@@ -2083,7 +2083,7 @@ adw_about_window_new_from_appdata (const char *resource_path,
     const char *version = as_release_get_version (latest_release);
 
     if (version)
-      adw_about_window_set_version (self, version);
+      adap_about_window_set_version (self, version);
   }
 
   name = as_component_get_name (component);
@@ -2098,20 +2098,20 @@ adw_about_window_new_from_appdata (const char *resource_path,
   developer_name = as_component_get_developer_name (component);
 #endif
 
-  adw_about_window_set_application_icon (self, application_id);
+  adap_about_window_set_application_icon (self, application_id);
 
   if (name)
-    adw_about_window_set_application_name (self, name);
+    adap_about_window_set_application_name (self, name);
 
   if (developer_name)
-    adw_about_window_set_developer_name (self, developer_name);
+    adap_about_window_set_developer_name (self, developer_name);
 
   if (project_license) {
     int i;
 
     for (i = 0; i < G_N_ELEMENTS (gtk_license_info); i++) {
       if (g_strcmp0 (gtk_license_info[i].spdx_id, project_license) == 0) {
-        adw_about_window_set_license_type (self, (GtkLicense) i);
+        adap_about_window_set_license_type (self, (GtkLicense) i);
         break;
       }
     }
@@ -2119,23 +2119,23 @@ adw_about_window_new_from_appdata (const char *resource_path,
     /* Handle deprecated SPDX IDs */
     for (i = 0; i < G_N_ELEMENTS (license_aliases); i++) {
       if (g_strcmp0 (license_aliases[i].spdx_id, project_license) == 0) {
-        adw_about_window_set_license_type (self, license_aliases[i].license);
+        adap_about_window_set_license_type (self, license_aliases[i].license);
         break;
       }
     }
 
-    if (adw_about_window_get_license_type (self) == GTK_LICENSE_UNKNOWN)
-      adw_about_window_set_license_type (self, GTK_LICENSE_CUSTOM);
+    if (adap_about_window_get_license_type (self) == GTK_LICENSE_UNKNOWN)
+      adap_about_window_set_license_type (self, GTK_LICENSE_CUSTOM);
   }
 
   if (issue_url)
-    adw_about_window_set_issue_url (self, issue_url);
+    adap_about_window_set_issue_url (self, issue_url);
 
   if (support_url)
-    adw_about_window_set_support_url (self, support_url);
+    adap_about_window_set_support_url (self, support_url);
 
   if (website_url)
-    adw_about_window_set_website (self, website_url);
+    adap_about_window_set_website (self, website_url);
 
   g_object_unref (appdata_file);
   g_object_unref (metadata);
@@ -2146,7 +2146,7 @@ adw_about_window_new_from_appdata (const char *resource_path,
 }
 
 /**
- * adw_about_window_get_application_icon: (attributes org.gtk.Method.get_property=application-icon)
+ * adap_about_window_get_application_icon: (attributes org.gtk.Method.get_property=application-icon)
  * @self: an about window
  *
  * Gets the name of the application icon for @self.
@@ -2156,15 +2156,15 @@ adw_about_window_new_from_appdata (const char *resource_path,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_application_icon (AdwAboutWindow *self)
+adap_about_window_get_application_icon (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->application_icon;
 }
 
 /**
- * adw_about_window_set_application_icon: (attributes org.gtk.Method.set_property=application-icon)
+ * adap_about_window_set_application_icon: (attributes org.gtk.Method.set_property=application-icon)
  * @self: an about window
  * @application_icon: the application icon name
  *
@@ -2175,10 +2175,10 @@ adw_about_window_get_application_icon (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_application_icon (AdwAboutWindow *self,
+adap_about_window_set_application_icon (AdapAboutWindow *self,
                                        const char     *application_icon)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (application_icon != NULL);
 
   if (!g_set_str (&self->application_icon, application_icon))
@@ -2191,7 +2191,7 @@ adw_about_window_set_application_icon (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_application_name: (attributes org.gtk.Method.get_property=application-name)
+ * adap_about_window_get_application_name: (attributes org.gtk.Method.get_property=application-name)
  * @self: an about window
  *
  * Gets the application name for @self.
@@ -2201,15 +2201,15 @@ adw_about_window_set_application_icon (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_application_name (AdwAboutWindow *self)
+adap_about_window_get_application_name (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->application_name;
 }
 
 /**
- * adw_about_window_set_application_name: (attributes org.gtk.Method.set_property=application-name)
+ * adap_about_window_set_application_name: (attributes org.gtk.Method.set_property=application-name)
  * @self: an about window
  * @application_name: the application name
  *
@@ -2220,10 +2220,10 @@ adw_about_window_get_application_name (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_application_name (AdwAboutWindow *self,
+adap_about_window_set_application_name (AdapAboutWindow *self,
                                        const char     *application_name)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (application_name != NULL);
 
   if (!g_set_str (&self->application_name, application_name))
@@ -2236,7 +2236,7 @@ adw_about_window_set_application_name (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_developer_name: (attributes org.gtk.Method.get_property=developer-name)
+ * adap_about_window_get_developer_name: (attributes org.gtk.Method.get_property=developer-name)
  * @self: an about window
  *
  * Gets the developer name for @self.
@@ -2246,15 +2246,15 @@ adw_about_window_set_application_name (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_developer_name (AdwAboutWindow *self)
+adap_about_window_get_developer_name (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->developer_name;
 }
 
 /**
- * adw_about_window_set_developer_name: (attributes org.gtk.Method.set_property=developer-name)
+ * adap_about_window_set_developer_name: (attributes org.gtk.Method.set_property=developer-name)
  * @self: an about window
  * @developer_name: the developer name
  *
@@ -2270,10 +2270,10 @@ adw_about_window_get_developer_name (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_developer_name (AdwAboutWindow *self,
+adap_about_window_set_developer_name (AdapAboutWindow *self,
                                      const char     *developer_name)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (developer_name != NULL);
 
   if (!g_set_str (&self->developer_name, developer_name))
@@ -2286,7 +2286,7 @@ adw_about_window_set_developer_name (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_version: (attributes org.gtk.Method.get_property=version)
+ * adap_about_window_get_version: (attributes org.gtk.Method.get_property=version)
  * @self: an about window
  *
  * Gets the version for @self.
@@ -2296,15 +2296,15 @@ adw_about_window_set_developer_name (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_version (AdwAboutWindow *self)
+adap_about_window_get_version (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->version;
 }
 
 /**
- * adw_about_window_set_version: (attributes org.gtk.Method.set_property=version)
+ * adap_about_window_set_version: (attributes org.gtk.Method.set_property=version)
  * @self: an about window
  * @version: the version
  *
@@ -2318,10 +2318,10 @@ adw_about_window_get_version (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_version (AdwAboutWindow *self,
+adap_about_window_set_version (AdapAboutWindow *self,
                               const char     *version)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (version != NULL);
 
   if (!g_set_str (&self->version, version))
@@ -2333,7 +2333,7 @@ adw_about_window_set_version (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_release_notes_version: (attributes org.gtk.Method.get_property=release-notes-version)
+ * adap_about_window_get_release_notes_version: (attributes org.gtk.Method.get_property=release-notes-version)
  * @self: an about window
  *
  * Gets the version described by the application's release notes.
@@ -2343,15 +2343,15 @@ adw_about_window_set_version (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_release_notes_version (AdwAboutWindow *self)
+adap_about_window_get_release_notes_version (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->release_notes_version;
 }
 
 /**
- * adw_about_window_set_release_notes_version: (attributes org.gtk.Method.set_property=release-notes-version)
+ * adap_about_window_set_release_notes_version: (attributes org.gtk.Method.set_property=release-notes-version)
  * @self: an about window
  * @version: the release notes version
  *
@@ -2371,10 +2371,10 @@ adw_about_window_get_release_notes_version (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_release_notes_version (AdwAboutWindow *self,
+adap_about_window_set_release_notes_version (AdapAboutWindow *self,
                                             const char     *version)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (version != NULL);
 
   if (!g_set_str (&self->release_notes_version, version))
@@ -2387,7 +2387,7 @@ adw_about_window_set_release_notes_version (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_release_notes: (attributes org.gtk.Method.get_property=release-notes)
+ * adap_about_window_get_release_notes: (attributes org.gtk.Method.get_property=release-notes)
  * @self: an about window
  *
  * Gets the release notes for @self.
@@ -2397,15 +2397,15 @@ adw_about_window_set_release_notes_version (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_release_notes (AdwAboutWindow *self)
+adap_about_window_get_release_notes (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->release_notes;
 }
 
 /**
- * adw_about_window_set_release_notes: (attributes org.gtk.Method.set_property=release-notes)
+ * adap_about_window_set_release_notes: (attributes org.gtk.Method.set_property=release-notes)
  * @self: an about window
  * @release_notes: the release notes
  *
@@ -2430,17 +2430,17 @@ adw_about_window_get_release_notes (AdwAboutWindow *self)
  *
  * Nested lists are not supported.
  *
- * `AdwAboutWindow` displays the version above the release notes. If set, the
+ * `AdapAboutWindow` displays the version above the release notes. If set, the
  * [property@AboutWindow:release-notes-version] of the property will be used
  * as the version; otherwise, [property@AboutWindow:version] is used.
  *
  * Since: 1.2
  */
 void
-adw_about_window_set_release_notes (AdwAboutWindow *self,
+adap_about_window_set_release_notes (AdapAboutWindow *self,
                                     const char     *release_notes)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (release_notes != NULL);
 
   if (!g_set_str (&self->release_notes, release_notes))
@@ -2453,7 +2453,7 @@ adw_about_window_set_release_notes (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_comments: (attributes org.gtk.Method.get_property=comments)
+ * adap_about_window_get_comments: (attributes org.gtk.Method.get_property=comments)
  * @self: an about window
  *
  * Gets the comments about the application.
@@ -2463,15 +2463,15 @@ adw_about_window_set_release_notes (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_comments (AdwAboutWindow *self)
+adap_about_window_get_comments (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->comments;
 }
 
 /**
- * adw_about_window_set_comments: (attributes org.gtk.Method.set_property=comments)
+ * adap_about_window_set_comments: (attributes org.gtk.Method.set_property=comments)
  * @self: an about window
  * @comments: the comments
  *
@@ -2485,10 +2485,10 @@ adw_about_window_get_comments (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_comments (AdwAboutWindow *self,
+adap_about_window_set_comments (AdapAboutWindow *self,
                                const char     *comments)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (comments != NULL);
 
   if (!g_set_str (&self->comments, comments))
@@ -2500,7 +2500,7 @@ adw_about_window_set_comments (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_website: (attributes org.gtk.Method.get_property=website)
+ * adap_about_window_get_website: (attributes org.gtk.Method.get_property=website)
  * @self: an about window
  *
  * Gets the application website URL for @self.
@@ -2510,15 +2510,15 @@ adw_about_window_set_comments (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_website (AdwAboutWindow *self)
+adap_about_window_get_website (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->website;
 }
 
 /**
- * adw_about_window_set_website: (attributes org.gtk.Method.set_property=website)
+ * adap_about_window_set_website: (attributes org.gtk.Method.set_property=website)
  * @self: an about window
  * @website: the website URL
  *
@@ -2532,10 +2532,10 @@ adw_about_window_get_website (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_website (AdwAboutWindow *self,
+adap_about_window_set_website (AdapAboutWindow *self,
                               const char     *website)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (website != NULL);
 
   if (!g_set_str (&self->website, website))
@@ -2547,7 +2547,7 @@ adw_about_window_set_website (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_support_url: (attributes org.gtk.Method.get_property=support-url)
+ * adap_about_window_get_support_url: (attributes org.gtk.Method.get_property=support-url)
  * @self: an about window
  *
  * Gets the URL of the support page for @self.
@@ -2557,15 +2557,15 @@ adw_about_window_set_website (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_support_url (AdwAboutWindow *self)
+adap_about_window_get_support_url (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->support_url;
 }
 
 /**
- * adw_about_window_set_support_url: (attributes org.gtk.Method.set_property=support-url)
+ * adap_about_window_set_support_url: (attributes org.gtk.Method.set_property=support-url)
  * @self: an about window
  * @support_url: the support page URL
  *
@@ -2576,10 +2576,10 @@ adw_about_window_get_support_url (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_support_url (AdwAboutWindow *self,
+adap_about_window_set_support_url (AdapAboutWindow *self,
                                   const char     *support_url)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (support_url != NULL);
 
   if (!g_set_str (&self->support_url, support_url))
@@ -2591,7 +2591,7 @@ adw_about_window_set_support_url (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_issue_url: (attributes org.gtk.Method.get_property=issue-url)
+ * adap_about_window_get_issue_url: (attributes org.gtk.Method.get_property=issue-url)
  * @self: an about window
  *
  * Gets the issue tracker URL for @self.
@@ -2601,15 +2601,15 @@ adw_about_window_set_support_url (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_issue_url (AdwAboutWindow *self)
+adap_about_window_get_issue_url (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->issue_url;
 }
 
 /**
- * adw_about_window_set_issue_url: (attributes org.gtk.Method.set_property=issue-url)
+ * adap_about_window_set_issue_url: (attributes org.gtk.Method.set_property=issue-url)
  * @self: an about window
  * @issue_url: the issue tracker URL
  *
@@ -2620,10 +2620,10 @@ adw_about_window_get_issue_url (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_issue_url (AdwAboutWindow *self,
+adap_about_window_set_issue_url (AdapAboutWindow *self,
                                 const char     *issue_url)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (issue_url != NULL);
 
   if (!g_set_str (&self->issue_url, issue_url))
@@ -2635,7 +2635,7 @@ adw_about_window_set_issue_url (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_add_link:
+ * adap_about_window_add_link:
  * @self: an about window
  * @title: the link title
  * @url: the link URL
@@ -2651,26 +2651,26 @@ adw_about_window_set_issue_url (AdwAboutWindow *self,
  * Since: 1.2
  */
 void
-adw_about_window_add_link (AdwAboutWindow *self,
+adap_about_window_add_link (AdapAboutWindow *self,
                            const char     *title,
                            const char     *url)
 {
   GtkWidget *row;
   GtkWidget *image;
 
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (title != NULL);
   g_return_if_fail (url != NULL);
 
-  row = adw_action_row_new ();
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), title);
-  adw_preferences_row_set_use_underline (ADW_PREFERENCES_ROW (row), TRUE);
+  row = adap_action_row_new ();
+  adap_preferences_row_set_title (ADAP_PREFERENCES_ROW (row), title);
+  adap_preferences_row_set_use_underline (ADAP_PREFERENCES_ROW (row), TRUE);
 
   image = g_object_new (GTK_TYPE_IMAGE,
                         "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
-                        "icon-name", "adw-external-link-symbolic",
+                        "icon-name", "adap-external-link-symbolic",
                         NULL);
-  adw_action_row_add_suffix (ADW_ACTION_ROW (row), image);
+  adap_action_row_add_suffix (ADAP_ACTION_ROW (row), image);
 
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (row), "about.show-url");
@@ -2678,7 +2678,7 @@ adw_about_window_add_link (AdwAboutWindow *self,
 
   gtk_widget_set_tooltip_text (row, url);
 
-  adw_preferences_group_add (ADW_PREFERENCES_GROUP (self->links_group), row);
+  adap_preferences_group_add (ADAP_PREFERENCES_GROUP (self->links_group), row);
 
   self->has_custom_links = TRUE;
 
@@ -2686,7 +2686,7 @@ adw_about_window_add_link (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_debug_info: (attributes org.gtk.Method.get_property=debug-info)
+ * adap_about_window_get_debug_info: (attributes org.gtk.Method.get_property=debug-info)
  * @self: an about window
  *
  * Gets the debug information for @self.
@@ -2696,15 +2696,15 @@ adw_about_window_add_link (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_debug_info (AdwAboutWindow *self)
+adap_about_window_get_debug_info (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->debug_info;
 }
 
 /**
- * adw_about_window_set_debug_info: (attributes org.gtk.Method.set_property=debug-info)
+ * adap_about_window_set_debug_info: (attributes org.gtk.Method.set_property=debug-info)
  * @self: an about window
  * @debug_info: the debug information
  *
@@ -2714,7 +2714,7 @@ adw_about_window_get_debug_info (AdwAboutWindow *self)
  * to be attached to issue reports when reporting issues against the
  * application.
  *
- * `AdwAboutWindow` provides a quick way to save debug information to a file.
+ * `AdapAboutWindow` provides a quick way to save debug information to a file.
  * When saving, [property@AboutWindow:debug-info-filename] would be used as
  * the suggested filename.
  *
@@ -2723,10 +2723,10 @@ adw_about_window_get_debug_info (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_debug_info (AdwAboutWindow *self,
+adap_about_window_set_debug_info (AdapAboutWindow *self,
                                  const char     *debug_info)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (debug_info != NULL);
 
   if (!g_set_str (&self->debug_info, debug_info))
@@ -2738,7 +2738,7 @@ adw_about_window_set_debug_info (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_debug_info_filename: (attributes org.gtk.Method.get_property=debug-info-filename)
+ * adap_about_window_get_debug_info_filename: (attributes org.gtk.Method.get_property=debug-info-filename)
  * @self: an about window
  *
  * Gets the debug information filename for @self.
@@ -2748,15 +2748,15 @@ adw_about_window_set_debug_info (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_debug_info_filename (AdwAboutWindow *self)
+adap_about_window_get_debug_info_filename (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->debug_info_filename;
 }
 
 /**
- * adw_about_window_set_debug_info_filename: (attributes org.gtk.Method.set_property=debug-info)
+ * adap_about_window_set_debug_info_filename: (attributes org.gtk.Method.set_property=debug-info)
  * @self: an about window
  * @filename: the debug info filename
  *
@@ -2770,10 +2770,10 @@ adw_about_window_get_debug_info_filename (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_debug_info_filename (AdwAboutWindow *self,
+adap_about_window_set_debug_info_filename (AdapAboutWindow *self,
                                           const char     *filename)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (filename != NULL);
 
   if (!g_set_str (&self->debug_info_filename, filename))
@@ -2783,7 +2783,7 @@ adw_about_window_set_debug_info_filename (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_developers: (attributes org.gtk.Method.get_property=developers)
+ * adap_about_window_get_developers: (attributes org.gtk.Method.get_property=developers)
  * @self: an about window
  *
  * Gets the list of developers of the application.
@@ -2793,15 +2793,15 @@ adw_about_window_set_debug_info_filename (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char * const *
-adw_about_window_get_developers (AdwAboutWindow *self)
+adap_about_window_get_developers (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return (const char * const *) self->developers;
 }
 
 /**
- * adw_about_window_set_developers: (attributes org.gtk.Method.set_property=developers)
+ * adap_about_window_set_developers: (attributes org.gtk.Method.set_property=developers)
  * @self: an about window
  * @developers: (nullable) (transfer none) (array zero-terminated=1): the list of developers
  *
@@ -2824,10 +2824,10 @@ adw_about_window_get_developers (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_developers (AdwAboutWindow  *self,
+adap_about_window_set_developers (AdapAboutWindow  *self,
                                  const char     **developers)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
 
   if ((const char **) self->developers == developers)
     return;
@@ -2841,7 +2841,7 @@ adw_about_window_set_developers (AdwAboutWindow  *self,
 }
 
 /**
- * adw_about_window_get_designers: (attributes org.gtk.Method.get_property=designers)
+ * adap_about_window_get_designers: (attributes org.gtk.Method.get_property=designers)
  * @self: an about window
  *
  * Gets the list of designers of the application.
@@ -2851,15 +2851,15 @@ adw_about_window_set_developers (AdwAboutWindow  *self,
  * Since: 1.2
  */
 const char * const *
-adw_about_window_get_designers (AdwAboutWindow *self)
+adap_about_window_get_designers (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return (const char * const *) self->designers;
 }
 
 /**
- * adw_about_window_set_designers: (attributes org.gtk.Method.set_property=designers)
+ * adap_about_window_set_designers: (attributes org.gtk.Method.set_property=designers)
  * @self: an about window
  * @designers: (nullable) (transfer none) (array zero-terminated=1): the list of designers
  *
@@ -2882,10 +2882,10 @@ adw_about_window_get_designers (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_designers (AdwAboutWindow  *self,
+adap_about_window_set_designers (AdapAboutWindow  *self,
                                 const char     **designers)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
 
   if ((const char **) self->designers == designers)
     return;
@@ -2899,7 +2899,7 @@ adw_about_window_set_designers (AdwAboutWindow  *self,
 }
 
 /**
- * adw_about_window_get_artists: (attributes org.gtk.Method.get_property=artists)
+ * adap_about_window_get_artists: (attributes org.gtk.Method.get_property=artists)
  * @self: an about window
  *
  * Gets the list of artists of the application.
@@ -2909,15 +2909,15 @@ adw_about_window_set_designers (AdwAboutWindow  *self,
  * Since: 1.2
  */
 const char * const *
-adw_about_window_get_artists (AdwAboutWindow *self)
+adap_about_window_get_artists (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return (const char * const *) self->artists;
 }
 
 /**
- * adw_about_window_set_artists: (attributes org.gtk.Method.set_property=artists)
+ * adap_about_window_set_artists: (attributes org.gtk.Method.set_property=artists)
  * @self: an about window
  * @artists: (nullable) (transfer none) (array zero-terminated=1): the list of artists
  *
@@ -2940,10 +2940,10 @@ adw_about_window_get_artists (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_artists (AdwAboutWindow  *self,
+adap_about_window_set_artists (AdapAboutWindow  *self,
                               const char     **artists)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
 
   if ((const char **) self->artists == artists)
     return;
@@ -2957,7 +2957,7 @@ adw_about_window_set_artists (AdwAboutWindow  *self,
 }
 
 /**
- * adw_about_window_get_documenters: (attributes org.gtk.Method.get_property=documenters)
+ * adap_about_window_get_documenters: (attributes org.gtk.Method.get_property=documenters)
  * @self: an about window
  *
  * Gets the list of documenters of the application.
@@ -2967,15 +2967,15 @@ adw_about_window_set_artists (AdwAboutWindow  *self,
  * Since: 1.2
  */
 const char * const *
-adw_about_window_get_documenters (AdwAboutWindow *self)
+adap_about_window_get_documenters (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return (const char * const *) self->documenters;
 }
 
 /**
- * adw_about_window_set_documenters: (attributes org.gtk.Method.set_property=documenters)
+ * adap_about_window_set_documenters: (attributes org.gtk.Method.set_property=documenters)
  * @self: an about window
  * @documenters: (nullable) (transfer none) (array zero-terminated=1): the list of documenters
  *
@@ -2998,10 +2998,10 @@ adw_about_window_get_documenters (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_documenters (AdwAboutWindow  *self,
+adap_about_window_set_documenters (AdapAboutWindow  *self,
                                   const char     **documenters)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
 
   if ((const char **) self->documenters == documenters)
     return;
@@ -3015,7 +3015,7 @@ adw_about_window_set_documenters (AdwAboutWindow  *self,
 }
 
 /**
- * adw_about_window_get_translator_credits: (attributes org.gtk.Method.get_property=translator-credits)
+ * adap_about_window_get_translator_credits: (attributes org.gtk.Method.get_property=translator-credits)
  * @self: an about window
  *
  * Gets the translator credits string.
@@ -3025,15 +3025,15 @@ adw_about_window_set_documenters (AdwAboutWindow  *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_translator_credits (AdwAboutWindow *self)
+adap_about_window_get_translator_credits (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->translator_credits;
 }
 
 /**
- * adw_about_window_set_translator_credits: (attributes org.gtk.Method.set_property=translator-credits)
+ * adap_about_window_set_translator_credits: (attributes org.gtk.Method.set_property=translator-credits)
  * @self: an about window
  * @translator_credits: the translator credits
  *
@@ -3059,10 +3059,10 @@ adw_about_window_get_translator_credits (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_translator_credits (AdwAboutWindow *self,
+adap_about_window_set_translator_credits (AdapAboutWindow *self,
                                          const char     *translator_credits)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (translator_credits != NULL);
 
   if (!g_set_str (&self->translator_credits, translator_credits))
@@ -3074,7 +3074,7 @@ adw_about_window_set_translator_credits (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_add_credit_section:
+ * adap_about_window_add_credit_section:
  * @self: an about window
  * @name: (nullable): the section name
  * @people: (array zero-terminated=1): the list of names
@@ -3098,13 +3098,13 @@ adw_about_window_set_translator_credits (AdwAboutWindow *self,
  * Since: 1.2
  */
 void
-adw_about_window_add_credit_section (AdwAboutWindow  *self,
+adap_about_window_add_credit_section (AdapAboutWindow  *self,
                                      const char      *name,
                                      const char     **people)
 {
   CreditsSection *section;
 
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (people != NULL);
 
   section = g_new0 (CreditsSection, 1);
@@ -3117,7 +3117,7 @@ adw_about_window_add_credit_section (AdwAboutWindow  *self,
 }
 
 /**
- * adw_about_window_add_acknowledgement_section:
+ * adap_about_window_add_acknowledgement_section:
  * @self: an about window
  * @name: (nullable): the section name
  * @people: (array zero-terminated=1): the list of names
@@ -3143,11 +3143,11 @@ adw_about_window_add_credit_section (AdwAboutWindow  *self,
  * Since: 1.2
  */
 void
-adw_about_window_add_acknowledgement_section (AdwAboutWindow  *self,
+adap_about_window_add_acknowledgement_section (AdapAboutWindow  *self,
                                               const char      *name,
                                               const char     **people)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (people != NULL);
 
   add_credits_section (self->acknowledgements_box, name, (char **) people);
@@ -3158,7 +3158,7 @@ adw_about_window_add_acknowledgement_section (AdwAboutWindow  *self,
 }
 
 /**
- * adw_about_window_get_copyright: (attributes org.gtk.Method.get_property=copyright)
+ * adap_about_window_get_copyright: (attributes org.gtk.Method.get_property=copyright)
  * @self: an about window
  *
  * Gets the copyright information for @self.
@@ -3168,15 +3168,15 @@ adw_about_window_add_acknowledgement_section (AdwAboutWindow  *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_copyright (AdwAboutWindow *self)
+adap_about_window_get_copyright (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->copyright;
 }
 
 /**
- * adw_about_window_set_copyright: (attributes org.gtk.Method.set_property=copyright)
+ * adap_about_window_set_copyright: (attributes org.gtk.Method.set_property=copyright)
  * @self: an about window
  * @copyright: the copyright information
  *
@@ -3194,10 +3194,10 @@ adw_about_window_get_copyright (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_copyright (AdwAboutWindow *self,
+adap_about_window_set_copyright (AdapAboutWindow *self,
                                 const char     *copyright)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (copyright != NULL);
 
   if (!g_set_str (&self->copyright, copyright))
@@ -3209,7 +3209,7 @@ adw_about_window_set_copyright (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_license_type: (attributes org.gtk.Method.get_property=license-type)
+ * adap_about_window_get_license_type: (attributes org.gtk.Method.get_property=license-type)
  * @self: an about window
  *
  * Gets the license type for @self.
@@ -3219,15 +3219,15 @@ adw_about_window_set_copyright (AdwAboutWindow *self,
  * Since: 1.2
  */
 GtkLicense
-adw_about_window_get_license_type (AdwAboutWindow *self)
+adap_about_window_get_license_type (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), GTK_LICENSE_UNKNOWN);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), GTK_LICENSE_UNKNOWN);
 
   return self->license_type;
 }
 
 /**
- * adw_about_window_set_license_type: (attributes org.gtk.Method.set_property=license-type)
+ * adap_about_window_set_license_type: (attributes org.gtk.Method.set_property=license-type)
  * @self: an about window
  * @license_type: the license type
  *
@@ -3251,10 +3251,10 @@ adw_about_window_get_license_type (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_license_type (AdwAboutWindow *self,
+adap_about_window_set_license_type (AdapAboutWindow *self,
                                    GtkLicense      license_type)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (license_type >= GTK_LICENSE_UNKNOWN &&
                     license_type < G_N_ELEMENTS (gtk_license_info));
 
@@ -3273,7 +3273,7 @@ adw_about_window_set_license_type (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_get_license: (attributes org.gtk.Method.get_property=license)
+ * adap_about_window_get_license: (attributes org.gtk.Method.get_property=license)
  * @self: an about window
  *
  * Gets the license for @self.
@@ -3283,15 +3283,15 @@ adw_about_window_set_license_type (AdwAboutWindow *self,
  * Since: 1.2
  */
 const char *
-adw_about_window_get_license (AdwAboutWindow *self)
+adap_about_window_get_license (AdapAboutWindow *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_WINDOW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_WINDOW (self), NULL);
 
   return self->license;
 }
 
 /**
- * adw_about_window_set_license: (attributes org.gtk.Method.set_property=license)
+ * adap_about_window_set_license: (attributes org.gtk.Method.set_property=license)
  * @self: an about window
  * @license: the license
  *
@@ -3314,10 +3314,10 @@ adw_about_window_get_license (AdwAboutWindow *self)
  * Since: 1.2
  */
 void
-adw_about_window_set_license (AdwAboutWindow *self,
+adap_about_window_set_license (AdapAboutWindow *self,
                               const char     *license)
 {
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (license != NULL);
 
   if (g_strcmp0 (self->license, license) == 0)
@@ -3337,7 +3337,7 @@ adw_about_window_set_license (AdwAboutWindow *self,
 }
 
 /**
- * adw_about_window_add_legal_section:
+ * adap_about_window_add_legal_section:
  * @self: an about window
  * @title: the name of the section
  * @copyright: (nullable): a copyright string
@@ -3360,25 +3360,25 @@ adw_about_window_set_license (AdwAboutWindow *self,
  * Examples:
  *
  * ```c
- * adw_about_window_add_legal_section (ADW_ABOUT_WINDOW (about),
+ * adap_about_window_add_legal_section (ADAP_ABOUT_WINDOW (about),
  *                                     _("Copyright and a known license"),
  *                                     "© 2022 Example",
  *                                     GTK_LICENSE_LGPL_2_1,
  *                                     NULL);
  *
- * adw_about_window_add_legal_section (ADW_ABOUT_WINDOW (about),
+ * adap_about_window_add_legal_section (ADAP_ABOUT_WINDOW (about),
  *                                     _("Copyright and custom license"),
  *                                     "© 2022 Example",
  *                                     GTK_LICENSE_CUSTOM,
  *                                     "Custom license text");
  *
- * adw_about_window_add_legal_section (ADW_ABOUT_WINDOW (about),
+ * adap_about_window_add_legal_section (ADAP_ABOUT_WINDOW (about),
  *                                     _("Copyright only"),
  *                                     "© 2022 Example",
  *                                     GTK_LICENSE_UNKNOWN,
  *                                     NULL);
  *
- * adw_about_window_add_legal_section (ADW_ABOUT_WINDOW (about),
+ * adap_about_window_add_legal_section (ADAP_ABOUT_WINDOW (about),
  *                                     _("Custom license only"),
  *                                     NULL,
  *                                     GTK_LICENSE_CUSTOM,
@@ -3388,7 +3388,7 @@ adw_about_window_set_license (AdwAboutWindow *self,
  * Since: 1.2
  */
 void
-adw_about_window_add_legal_section (AdwAboutWindow *self,
+adap_about_window_add_legal_section (AdapAboutWindow *self,
                                     const char     *title,
                                     const char     *copyright,
                                     GtkLicense      license_type,
@@ -3396,7 +3396,7 @@ adw_about_window_add_legal_section (AdwAboutWindow *self,
 {
   LegalSection *section;
 
-  g_return_if_fail (ADW_IS_ABOUT_WINDOW (self));
+  g_return_if_fail (ADAP_IS_ABOUT_WINDOW (self));
   g_return_if_fail (title != NULL);
   g_return_if_fail (license_type >= GTK_LICENSE_UNKNOWN &&
                     license_type < G_N_ELEMENTS (gtk_license_info));
@@ -3413,7 +3413,7 @@ adw_about_window_add_legal_section (AdwAboutWindow *self,
 }
 
 /**
- * adw_show_about_window: (skip)
+ * adap_show_about_window: (skip)
  * @parent: (nullable): the parent top-level window
  * @first_property_name: the name of the first property
  * @...: value of first property, followed by more pairs of property name and
@@ -3424,14 +3424,14 @@ adw_about_window_add_legal_section (AdwAboutWindow *self,
  * Since: 1.2
  */
 void
-adw_show_about_window (GtkWindow  *parent,
+adap_show_about_window (GtkWindow  *parent,
                        const char *first_property_name,
                        ...)
 {
   GtkWidget *window;
   va_list var_args;
 
-  window = adw_about_window_new ();
+  window = adap_about_window_new ();
 
   va_start (var_args, first_property_name);
   g_object_set_valist (G_OBJECT (window), first_property_name, var_args);
@@ -3444,7 +3444,7 @@ adw_show_about_window (GtkWindow  *parent,
 }
 
 /**
- * adw_show_about_window_from_appdata: (skip)
+ * adap_show_about_window_from_appdata: (skip)
  * @parent: (nullable): the parent top-level window
  * @resource_path: The resource to use
  * @release_notes_version: (nullable): The version to retrieve release notes for
@@ -3460,7 +3460,7 @@ adw_show_about_window (GtkWindow  *parent,
  * Since: 1.4
  */
 void
-adw_show_about_window_from_appdata (GtkWindow  *parent,
+adap_show_about_window_from_appdata (GtkWindow  *parent,
                                     const char *resource_path,
                                     const char *release_notes_version,
                                     const char *first_property_name,
@@ -3469,7 +3469,7 @@ adw_show_about_window_from_appdata (GtkWindow  *parent,
   GtkWidget *window;
   va_list var_args;
 
-  window = adw_about_window_new_from_appdata (resource_path,
+  window = adap_about_window_new_from_appdata (resource_path,
                                               release_notes_version);
 
   va_start (var_args, first_property_name);

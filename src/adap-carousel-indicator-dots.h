@@ -6,29 +6,29 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
-#include "adw-carousel.h"
+#include "adap-carousel.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_CAROUSEL_INDICATOR_DOTS (adw_carousel_indicator_dots_get_type())
+#define ADAP_TYPE_CAROUSEL_INDICATOR_DOTS (adap_carousel_indicator_dots_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwCarouselIndicatorDots, adw_carousel_indicator_dots, ADW, CAROUSEL_INDICATOR_DOTS, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapCarouselIndicatorDots, adap_carousel_indicator_dots, ADAP, CAROUSEL_INDICATOR_DOTS, GtkWidget)
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_carousel_indicator_dots_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_carousel_indicator_dots_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-AdwCarousel *adw_carousel_indicator_dots_get_carousel (AdwCarouselIndicatorDots *self);
-ADW_AVAILABLE_IN_ALL
-void         adw_carousel_indicator_dots_set_carousel (AdwCarouselIndicatorDots *self,
-                                                       AdwCarousel              *carousel);
+ADAP_AVAILABLE_IN_ALL
+AdapCarousel *adap_carousel_indicator_dots_get_carousel (AdapCarouselIndicatorDots *self);
+ADAP_AVAILABLE_IN_ALL
+void         adap_carousel_indicator_dots_set_carousel (AdapCarouselIndicatorDots *self,
+                                                       AdapCarousel              *carousel);
 
 G_END_DECLS

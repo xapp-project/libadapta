@@ -8,23 +8,23 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
-#include "adw-preferences-dialog.h"
+#include "adap-preferences-dialog.h"
 
-#include "adw-animation-util.h"
-#include "adw-action-row.h"
-#include "adw-breakpoint-bin.h"
-#include "adw-navigation-view.h"
-#include "adw-preferences-group-private.h"
-#include "adw-preferences-page-private.h"
-#include "adw-toast-overlay.h"
-#include "adw-view-stack.h"
-#include "adw-widget-utils-private.h"
+#include "adap-animation-util.h"
+#include "adap-action-row.h"
+#include "adap-breakpoint-bin.h"
+#include "adap-navigation-view.h"
+#include "adap-preferences-group-private.h"
+#include "adap-preferences-page-private.h"
+#include "adap-toast-overlay.h"
+#include "adap-view-stack.h"
+#include "adap-widget-utils-private.h"
 
 #define VIEW_SWITCHER_PAGE_THRESHOLD 110
 #define VIEW_SWITCHER_FALLBACK_THRESHOLD 400
 
 /**
- * AdwPreferencesDialog:
+ * AdapPreferencesDialog:
  *
  * A dialog showing application's preferences.
  *
@@ -33,18 +33,18 @@
  *   <img src="preferences-dialog.png" alt="preferences-dialog">
  * </picture>
  *
- * The `AdwPreferencesDialog` widget presents an application's preferences
+ * The `AdapPreferencesDialog` widget presents an application's preferences
  * gathered into pages and groups. The preferences are searchable by the user.
  *
  * ## Actions
  *
- * `AdwPrefencesDialog` defines the `navigation.pop` action, it doesn't take any
+ * `AdapPrefencesDialog` defines the `navigation.pop` action, it doesn't take any
  * parameters and pops the current subpage from the navigation stack, equivalent
  * to calling [method@PreferencesDialog.pop_subpage].
  *
  * ## CSS nodes
  *
- * `AdwPreferencesDialog` has a main CSS node with the name `dialog` and the
+ * `AdapPreferencesDialog` has a main CSS node with the name `dialog` and the
  * style class `.preferences`.
  *
  * Since: 1.5
@@ -52,11 +52,11 @@
 
 typedef struct
 {
-  AdwToastOverlay *toast_overlay;
-  AdwNavigationView *subpages_nav_view;
+  AdapToastOverlay *toast_overlay;
+  AdapNavigationView *subpages_nav_view;
   GtkWidget *breakpoint_bin;
   GtkStack *content_stack;
-  AdwViewStack *pages_stack;
+  AdapViewStack *pages_stack;
   GtkToggleButton *search_button;
   GtkSearchEntry *search_entry;
   GtkListBox *search_results;
@@ -65,7 +65,7 @@ typedef struct
   GtkWidget *view_switcher_stack;
   GtkWidget *view_switcher;
   GtkWidget *title;
-  AdwBreakpoint *breakpoint;
+  AdapBreakpoint *breakpoint;
 
   gboolean search_enabled;
 
@@ -73,14 +73,14 @@ typedef struct
   GtkFilterListModel *filter_model;
 
   int n_pages;
-} AdwPreferencesDialogPrivate;
+} AdapPreferencesDialogPrivate;
 
-static void adw_preferences_dialog_buildable_init (GtkBuildableIface *iface);
+static void adap_preferences_dialog_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (AdwPreferencesDialog, adw_preferences_dialog, ADW_TYPE_DIALOG,
-                         G_ADD_PRIVATE (AdwPreferencesDialog)
+G_DEFINE_TYPE_WITH_CODE (AdapPreferencesDialog, adap_preferences_dialog, ADAP_TYPE_DIALOG,
+                         G_ADD_PRIVATE (AdapPreferencesDialog)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                         adw_preferences_dialog_buildable_init))
+                         adap_preferences_dialog_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -140,13 +140,13 @@ strip_mnemonic (const char *src)
 
 static char *
 make_comparable (const char        *src,
-                 AdwPreferencesRow *row,
+                 AdapPreferencesRow *row,
                  gboolean           allow_underline)
 {
   char *plaintext = g_utf8_casefold (src, -1);
   GError *error = NULL;
 
-  if (adw_preferences_row_get_use_markup (row)) {
+  if (adap_preferences_row_get_use_markup (row)) {
     char *parsed = NULL;
 
     if (pango_parse_markup (plaintext, -1, 0, NULL, &parsed, NULL, &error)) {
@@ -158,7 +158,7 @@ make_comparable (const char        *src,
     }
   }
 
-  if (allow_underline && adw_preferences_row_get_use_underline (row)) {
+  if (allow_underline && adap_preferences_row_get_use_underline (row)) {
     char *comparable = strip_mnemonic (plaintext);
     g_free (plaintext);
     return comparable;
@@ -168,22 +168,22 @@ make_comparable (const char        *src,
 }
 
 static gboolean
-filter_search_results (AdwPreferencesRow    *row,
-                       AdwPreferencesDialog *self)
+filter_search_results (AdapPreferencesRow    *row,
+                       AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
   char *terms, *title;
   gboolean result = FALSE;
 
-  g_assert (ADW_IS_PREFERENCES_ROW (row));
+  g_assert (ADAP_IS_PREFERENCES_ROW (row));
 
   terms = g_utf8_casefold (gtk_editable_get_text (GTK_EDITABLE (priv->search_entry)), -1);
-  title = make_comparable (adw_preferences_row_get_title (row), row, TRUE);
+  title = make_comparable (adap_preferences_row_get_title (row), row, TRUE);
 
   if (!!strstr (title, terms)) {
     result = TRUE;
-  } else if (ADW_IS_ACTION_ROW (row)) {
-    char *subtitle = make_comparable (adw_action_row_get_subtitle (ADW_ACTION_ROW(row)), row, FALSE);
+  } else if (ADAP_IS_ACTION_ROW (row)) {
+    char *subtitle = make_comparable (adap_action_row_get_subtitle (ADAP_ACTION_ROW(row)), row, FALSE);
 
     if (!!strstr (subtitle, terms))
       result = TRUE;
@@ -198,18 +198,18 @@ filter_search_results (AdwPreferencesRow    *row,
 }
 
 static int
-get_n_pages (AdwPreferencesDialog *self)
+get_n_pages (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
   int count = 0;
   GtkWidget *child;
 
   for (child = gtk_widget_get_first_child (GTK_WIDGET (priv->pages_stack));
        child;
        child = gtk_widget_get_next_sibling (child)) {
-    AdwViewStackPage *page = adw_view_stack_get_page (priv->pages_stack, child);
+    AdapViewStackPage *page = adap_view_stack_get_page (priv->pages_stack, child);
 
-    if (adw_view_stack_page_get_visible (page))
+    if (adap_view_stack_page_get_visible (page))
       count++;
   }
 
@@ -217,33 +217,33 @@ get_n_pages (AdwPreferencesDialog *self)
 }
 
 static char *
-create_search_row_subtitle (AdwPreferencesDialog *self,
-                            AdwPreferencesRow    *row)
+create_search_row_subtitle (AdapPreferencesDialog *self,
+                            AdapPreferencesRow    *row)
 {
   GtkWidget *group, *page;
   const char *group_title = NULL;
   char *page_title = NULL;
 
-  group = gtk_widget_get_ancestor (GTK_WIDGET (row), ADW_TYPE_PREFERENCES_GROUP);
+  group = gtk_widget_get_ancestor (GTK_WIDGET (row), ADAP_TYPE_PREFERENCES_GROUP);
 
   if (group) {
-    group_title = adw_preferences_group_get_title (ADW_PREFERENCES_GROUP (group));
+    group_title = adap_preferences_group_get_title (ADAP_PREFERENCES_GROUP (group));
 
     if (g_strcmp0 (group_title, "") == 0)
       group_title = NULL;
   }
 
-  page = gtk_widget_get_ancestor (group, ADW_TYPE_PREFERENCES_PAGE);
+  page = gtk_widget_get_ancestor (group, ADAP_TYPE_PREFERENCES_PAGE);
 
   if (page) {
-    const char *title = adw_preferences_page_get_title (ADW_PREFERENCES_PAGE (page));
+    const char *title = adap_preferences_page_get_title (ADAP_PREFERENCES_PAGE (page));
 
-    if (adw_preferences_page_get_use_underline (ADW_PREFERENCES_PAGE (page)))
+    if (adap_preferences_page_get_use_underline (ADAP_PREFERENCES_PAGE (page)))
       page_title = strip_mnemonic (title);
     else
       page_title = g_strdup (title);
 
-    if (adw_preferences_row_get_use_markup (row)) {
+    if (adap_preferences_row_get_use_markup (row)) {
       char *tmp = page_title;
 
       page_title = g_markup_escape_text (page_title, -1);
@@ -272,27 +272,27 @@ create_search_row_subtitle (AdwPreferencesDialog *self,
 }
 
 static GtkWidget *
-new_search_row_for_preference (AdwPreferencesRow    *row,
-                               AdwPreferencesDialog *self)
+new_search_row_for_preference (AdapPreferencesRow    *row,
+                               AdapPreferencesDialog *self)
 {
-  AdwActionRow *widget;
+  AdapActionRow *widget;
   GtkWidget *page;
   char *subtitle;
 
-  g_assert (ADW_IS_PREFERENCES_ROW (row));
+  g_assert (ADAP_IS_PREFERENCES_ROW (row));
 
   subtitle = create_search_row_subtitle (self, row);
-  page = gtk_widget_get_ancestor (GTK_WIDGET (row), ADW_TYPE_PREFERENCES_PAGE);
+  page = gtk_widget_get_ancestor (GTK_WIDGET (row), ADAP_TYPE_PREFERENCES_PAGE);
 
-  widget = ADW_ACTION_ROW (adw_action_row_new ());
+  widget = ADAP_ACTION_ROW (adap_action_row_new ());
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (widget), TRUE);
-  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (widget),
-                                      adw_preferences_row_get_use_markup (row));
-  adw_preferences_row_set_use_underline (ADW_PREFERENCES_ROW (widget),
-                                         adw_preferences_row_get_use_underline (row));
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (widget),
-                                 adw_preferences_row_get_title (row));
-  adw_action_row_set_subtitle (widget, subtitle);
+  adap_preferences_row_set_use_markup (ADAP_PREFERENCES_ROW (widget),
+                                      adap_preferences_row_get_use_markup (row));
+  adap_preferences_row_set_use_underline (ADAP_PREFERENCES_ROW (widget),
+                                         adap_preferences_row_get_use_underline (row));
+  adap_preferences_row_set_title (ADAP_PREFERENCES_ROW (widget),
+                                 adap_preferences_row_get_title (row));
+  adap_action_row_set_subtitle (widget, subtitle);
 
   g_object_set_data (G_OBJECT (widget), "page", page);
   g_object_set_data (G_OBJECT (widget), "row", row);
@@ -303,24 +303,24 @@ new_search_row_for_preference (AdwPreferencesRow    *row,
 }
 
 static void
-search_result_activated_cb (AdwPreferencesDialog *self,
-                            AdwActionRow         *widget)
+search_result_activated_cb (AdapPreferencesDialog *self,
+                            AdapActionRow         *widget)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
-  AdwPreferencesPage *page;
-  AdwPreferencesRow *row;
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
+  AdapPreferencesPage *page;
+  AdapPreferencesRow *row;
   GtkRoot *root;
 
   gtk_toggle_button_set_active (priv->search_button, FALSE);
-  page = ADW_PREFERENCES_PAGE (g_object_get_data (G_OBJECT (widget), "page"));
-  row = ADW_PREFERENCES_ROW (g_object_get_data (G_OBJECT (widget), "row"));
+  page = ADAP_PREFERENCES_PAGE (g_object_get_data (G_OBJECT (widget), "page"));
+  row = ADAP_PREFERENCES_ROW (g_object_get_data (G_OBJECT (widget), "row"));
 
   g_assert (page != NULL);
   g_assert (row != NULL);
 
   root = gtk_widget_get_root (GTK_WIDGET (self));
 
-  adw_view_stack_set_visible_child (priv->pages_stack, GTK_WIDGET (page));
+  adap_view_stack_set_visible_child (priv->pages_stack, GTK_WIDGET (page));
   gtk_widget_set_can_focus (GTK_WIDGET (row), TRUE);
   gtk_widget_grab_focus (GTK_WIDGET (row));
 
@@ -329,9 +329,9 @@ search_result_activated_cb (AdwPreferencesDialog *self,
 }
 
 static void
-search_results_map (AdwPreferencesDialog *self)
+search_results_map (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
 
   gtk_list_box_bind_model (priv->search_results,
                            G_LIST_MODEL (priv->filter_model),
@@ -341,47 +341,47 @@ search_results_map (AdwPreferencesDialog *self)
 }
 
 static void
-search_results_unmap (AdwPreferencesDialog *self)
+search_results_unmap (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
 
   gtk_list_box_bind_model (priv->search_results, NULL, NULL, NULL, NULL);
 }
 
 static void
-update_view_switcher (AdwPreferencesDialog *self)
+update_view_switcher (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
-  AdwBreakpoint *breakpoint;
-  AdwBreakpointCondition *main_condition, *fallback_condition, *condition;
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
+  AdapBreakpoint *breakpoint;
+  AdapBreakpointCondition *main_condition, *fallback_condition, *condition;
 
   main_condition =
-    adw_breakpoint_condition_new_length (ADW_BREAKPOINT_CONDITION_MAX_WIDTH,
+    adap_breakpoint_condition_new_length (ADAP_BREAKPOINT_CONDITION_MAX_WIDTH,
                                          VIEW_SWITCHER_PAGE_THRESHOLD * MAX (1, priv->n_pages),
-                                         ADW_LENGTH_UNIT_PT);
+                                         ADAP_LENGTH_UNIT_PT);
   fallback_condition =
-    adw_breakpoint_condition_new_length (ADW_BREAKPOINT_CONDITION_MAX_WIDTH,
+    adap_breakpoint_condition_new_length (ADAP_BREAKPOINT_CONDITION_MAX_WIDTH,
                                          VIEW_SWITCHER_FALLBACK_THRESHOLD,
-                                         ADW_LENGTH_UNIT_PX);
+                                         ADAP_LENGTH_UNIT_PX);
 
-  condition = adw_breakpoint_condition_new_or (main_condition, fallback_condition);
+  condition = adap_breakpoint_condition_new_or (main_condition, fallback_condition);
 
-  adw_breakpoint_set_condition (priv->breakpoint, condition);
+  adap_breakpoint_set_condition (priv->breakpoint, condition);
 
-  breakpoint = adw_breakpoint_bin_get_current_breakpoint (ADW_BREAKPOINT_BIN (priv->breakpoint_bin));
+  breakpoint = adap_breakpoint_bin_get_current_breakpoint (ADAP_BREAKPOINT_BIN (priv->breakpoint_bin));
 
   if (!breakpoint && priv->n_pages > 1)
     gtk_stack_set_visible_child (GTK_STACK (priv->view_switcher_stack), priv->view_switcher);
   else
     gtk_stack_set_visible_child (GTK_STACK (priv->view_switcher_stack), priv->title);
 
-  adw_breakpoint_condition_free (condition);
+  adap_breakpoint_condition_free (condition);
 }
 
 static void
-title_stack_notify_transition_running_cb (AdwPreferencesDialog *self)
+title_stack_notify_transition_running_cb (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
 
   if (gtk_stack_get_transition_running (priv->title_stack) ||
       gtk_stack_get_visible_child (priv->title_stack) != priv->view_switcher_stack)
@@ -391,11 +391,11 @@ title_stack_notify_transition_running_cb (AdwPreferencesDialog *self)
 }
 
 static void
-title_stack_notify_visible_child_cb (AdwPreferencesDialog *self)
+title_stack_notify_visible_child_cb (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
 
-  if (adw_get_enable_animations (GTK_WIDGET (priv->title_stack)) ||
+  if (adap_get_enable_animations (GTK_WIDGET (priv->title_stack)) ||
       gtk_stack_get_visible_child (priv->title_stack) != priv->view_switcher_stack)
     return;
 
@@ -403,21 +403,21 @@ title_stack_notify_visible_child_cb (AdwPreferencesDialog *self)
 }
 
 static void
-notify_visible_page_cb (AdwPreferencesDialog *self)
+notify_visible_page_cb (AdapPreferencesDialog *self)
 {
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_VISIBLE_PAGE]);
 }
 
 static void
-notify_visible_page_name_cb (AdwPreferencesDialog *self)
+notify_visible_page_name_cb (AdapPreferencesDialog *self)
 {
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_VISIBLE_PAGE_NAME]);
 }
 
 static void
-search_button_notify_active_cb (AdwPreferencesDialog *self)
+search_button_notify_active_cb (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
 
   if (gtk_toggle_button_get_active (priv->search_button)) {
     gtk_stack_set_visible_child_name (priv->title_stack, "search");
@@ -434,17 +434,17 @@ search_button_notify_active_cb (AdwPreferencesDialog *self)
 }
 
 static void
-search_started_cb (AdwPreferencesDialog *self)
+search_started_cb (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
 
   gtk_toggle_button_set_active (priv->search_button, TRUE);
 }
 
 static void
-search_changed_cb (AdwPreferencesDialog *self)
+search_changed_cb (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
   guint n;
 
   gtk_filter_changed (priv->filter, GTK_FILTER_CHANGE_DIFFERENT);
@@ -455,30 +455,30 @@ search_changed_cb (AdwPreferencesDialog *self)
 }
 
 static void
-stop_search_cb (AdwPreferencesDialog *self)
+stop_search_cb (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
 
   gtk_toggle_button_set_active (priv->search_button, FALSE);
 }
 
 static void
-adw_preferences_dialog_get_property (GObject    *object,
+adap_preferences_dialog_get_property (GObject    *object,
                                      guint       prop_id,
                                      GValue     *value,
                                      GParamSpec *pspec)
 {
-  AdwPreferencesDialog *self = ADW_PREFERENCES_DIALOG (object);
+  AdapPreferencesDialog *self = ADAP_PREFERENCES_DIALOG (object);
 
   switch (prop_id) {
   case PROP_VISIBLE_PAGE:
-    g_value_set_object (value, adw_preferences_dialog_get_visible_page (self));
+    g_value_set_object (value, adap_preferences_dialog_get_visible_page (self));
     break;
   case PROP_VISIBLE_PAGE_NAME:
-    g_value_set_string (value, adw_preferences_dialog_get_visible_page_name (self));
+    g_value_set_string (value, adap_preferences_dialog_get_visible_page_name (self));
     break;
   case PROP_SEARCH_ENABLED:
-    g_value_set_boolean (value, adw_preferences_dialog_get_search_enabled (self));
+    g_value_set_boolean (value, adap_preferences_dialog_get_search_enabled (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -486,22 +486,22 @@ adw_preferences_dialog_get_property (GObject    *object,
 }
 
 static void
-adw_preferences_dialog_set_property (GObject      *object,
+adap_preferences_dialog_set_property (GObject      *object,
                                      guint         prop_id,
                                      const GValue *value,
                                      GParamSpec   *pspec)
 {
-  AdwPreferencesDialog *self = ADW_PREFERENCES_DIALOG (object);
+  AdapPreferencesDialog *self = ADAP_PREFERENCES_DIALOG (object);
 
   switch (prop_id) {
   case PROP_VISIBLE_PAGE:
-    adw_preferences_dialog_set_visible_page (self, g_value_get_object (value));
+    adap_preferences_dialog_set_visible_page (self, g_value_get_object (value));
     break;
   case PROP_VISIBLE_PAGE_NAME:
-    adw_preferences_dialog_set_visible_page_name (self, g_value_get_string (value));
+    adap_preferences_dialog_set_visible_page_name (self, g_value_get_string (value));
     break;
   case PROP_SEARCH_ENABLED:
-    adw_preferences_dialog_set_search_enabled (self, g_value_get_boolean (value));
+    adap_preferences_dialog_set_search_enabled (self, g_value_get_boolean (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -509,14 +509,14 @@ adw_preferences_dialog_set_property (GObject      *object,
 }
 
 static void
-adw_preferences_dialog_dispose (GObject *object)
+adap_preferences_dialog_dispose (GObject *object)
 {
-  AdwPreferencesDialog *self = ADW_PREFERENCES_DIALOG (object);
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialog *self = ADAP_PREFERENCES_DIALOG (object);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
 
   g_clear_object (&priv->filter_model);
 
-  G_OBJECT_CLASS (adw_preferences_dialog_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_preferences_dialog_parent_class)->dispose (object);
 }
 
 static gboolean
@@ -524,8 +524,8 @@ search_open_cb (GtkWidget *widget,
                 GVariant  *args,
                 gpointer   user_data)
 {
-  AdwPreferencesDialog *self = ADW_PREFERENCES_DIALOG (widget);
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialog *self = ADAP_PREFERENCES_DIALOG (widget);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
 
   if (!priv->search_enabled || gtk_toggle_button_get_active (priv->search_button))
     return GDK_EVENT_PROPAGATE;
@@ -536,17 +536,17 @@ search_open_cb (GtkWidget *widget,
 }
 
 static void
-adw_preferences_dialog_class_init (AdwPreferencesDialogClass *klass)
+adap_preferences_dialog_class_init (AdapPreferencesDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_preferences_dialog_get_property;
-  object_class->set_property = adw_preferences_dialog_set_property;
-  object_class->dispose = adw_preferences_dialog_dispose;
+  object_class->get_property = adap_preferences_dialog_get_property;
+  object_class->set_property = adap_preferences_dialog_set_property;
+  object_class->dispose = adap_preferences_dialog_dispose;
 
   /**
-   * AdwPreferencesDialog:visible-page: (attributes org.gtk.Property.get=adw_preferences_dialog_get_visible_page org.gtk.Property.set=adw_preferences_dialog_set_visible_page)
+   * AdapPreferencesDialog:visible-page: (attributes org.gtk.Property.get=adap_preferences_dialog_get_visible_page org.gtk.Property.set=adap_preferences_dialog_set_visible_page)
    *
    * The currently visible page.
    *
@@ -558,11 +558,11 @@ adw_preferences_dialog_class_init (AdwPreferencesDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwPreferencesDialog:visible-page-name: (attributes org.gtk.Property.get=adw_preferences_dialog_get_visible_page_name org.gtk.Property.set=adw_preferences_dialog_set_visible_page_name)
+   * AdapPreferencesDialog:visible-page-name: (attributes org.gtk.Property.get=adap_preferences_dialog_get_visible_page_name org.gtk.Property.set=adap_preferences_dialog_set_visible_page_name)
    *
    * The name of the currently visible page.
    *
-   * See [property@AdwPreferencesDialog:visible-page].
+   * See [property@AdapPreferencesDialog:visible-page].
    *
    * Since: 1.5
    */
@@ -572,7 +572,7 @@ adw_preferences_dialog_class_init (AdwPreferencesDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwPreferencesDialog:search-enabled: (attributes org.gtk.Property.get=adw_preferences_dialog_get_search_enabled org.gtk.Property.set=adw_preferences_dialog_set_search_enabled)
+   * AdapPreferencesDialog:search-enabled: (attributes org.gtk.Property.get=adap_preferences_dialog_get_search_enabled org.gtk.Property.set=adap_preferences_dialog_set_search_enabled)
    *
    * Whether search is enabled.
    *
@@ -588,21 +588,21 @@ adw_preferences_dialog_class_init (AdwPreferencesDialogClass *klass)
   gtk_widget_class_add_binding (widget_class, GDK_KEY_f, GDK_CONTROL_MASK, search_open_cb, NULL);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-preferences-dialog.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, toast_overlay);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, subpages_nav_view);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, breakpoint_bin);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, content_stack);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, pages_stack);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, search_button);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, search_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, search_results);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, search_stack);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, title_stack);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, view_switcher_stack);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, view_switcher);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, title);
-  gtk_widget_class_bind_template_child_private (widget_class, AdwPreferencesDialog, breakpoint);
+                                               "/org/gnome/Adapta/ui/adap-preferences-dialog.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, toast_overlay);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, subpages_nav_view);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, breakpoint_bin);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, content_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, pages_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, search_button);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, search_results);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, search_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, title_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, view_switcher_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, view_switcher);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, title);
+  gtk_widget_class_bind_template_child_private (widget_class, AdapPreferencesDialog, breakpoint);
   gtk_widget_class_bind_template_callback (widget_class, update_view_switcher);
   gtk_widget_class_bind_template_callback (widget_class, title_stack_notify_transition_running_cb);
   gtk_widget_class_bind_template_callback (widget_class, title_stack_notify_visible_child_cb);
@@ -618,19 +618,19 @@ adw_preferences_dialog_class_init (AdwPreferencesDialogClass *klass)
 }
 
 static GListModel *
-preferences_page_to_rows (AdwViewStackPage *page)
+preferences_page_to_rows (AdapViewStackPage *page)
 {
-  GtkWidget *child = adw_view_stack_page_get_child (page);
+  GtkWidget *child = adap_view_stack_page_get_child (page);
 
   g_object_unref (page);
 
-  return adw_preferences_page_get_rows (ADW_PREFERENCES_PAGE (child));
+  return adap_preferences_page_get_rows (ADAP_PREFERENCES_PAGE (child));
 }
 
 static void
-adw_preferences_dialog_init (AdwPreferencesDialog *self)
+adap_preferences_dialog_init (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
   GListModel *model;
   GtkExpression *expr;
 
@@ -639,9 +639,9 @@ adw_preferences_dialog_init (AdwPreferencesDialog *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   priv->filter = GTK_FILTER (gtk_custom_filter_new ((GtkCustomFilterFunc) filter_search_results, self, NULL));
-  expr = gtk_property_expression_new (ADW_TYPE_VIEW_STACK_PAGE, NULL, "visible");
+  expr = gtk_property_expression_new (ADAP_TYPE_VIEW_STACK_PAGE, NULL, "visible");
 
-  model = G_LIST_MODEL (adw_view_stack_get_pages (priv->pages_stack));
+  model = G_LIST_MODEL (adap_view_stack_get_pages (priv->pages_stack));
   model = G_LIST_MODEL (gtk_filter_list_model_new (model, GTK_FILTER (gtk_bool_filter_new (expr))));
   model = G_LIST_MODEL (gtk_map_list_model_new (model,
                                                 (GtkMapListModelMapFunc) preferences_page_to_rows,
@@ -654,46 +654,46 @@ adw_preferences_dialog_init (AdwPreferencesDialog *self)
 }
 
 static void
-adw_preferences_dialog_buildable_add_child (GtkBuildable *buildable,
+adap_preferences_dialog_buildable_add_child (GtkBuildable *buildable,
                                             GtkBuilder   *builder,
                                             GObject      *child,
                                             const char   *type)
 {
-  AdwPreferencesDialog *self = ADW_PREFERENCES_DIALOG (buildable);
-  AdwPreferencesDialogPrivate *priv = adw_preferences_dialog_get_instance_private (self);
+  AdapPreferencesDialog *self = ADAP_PREFERENCES_DIALOG (buildable);
+  AdapPreferencesDialogPrivate *priv = adap_preferences_dialog_get_instance_private (self);
 
-  if (priv->content_stack && ADW_IS_PREFERENCES_PAGE (child))
-    adw_preferences_dialog_add (self, ADW_PREFERENCES_PAGE (child));
-  else if (ADW_IS_TOAST (child))
-    adw_preferences_dialog_add_toast (self, g_object_ref (ADW_TOAST (child)));
+  if (priv->content_stack && ADAP_IS_PREFERENCES_PAGE (child))
+    adap_preferences_dialog_add (self, ADAP_PREFERENCES_PAGE (child));
+  else if (ADAP_IS_TOAST (child))
+    adap_preferences_dialog_add_toast (self, g_object_ref (ADAP_TOAST (child)));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-adw_preferences_dialog_buildable_init (GtkBuildableIface *iface)
+adap_preferences_dialog_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->add_child = adw_preferences_dialog_buildable_add_child;
+  iface->add_child = adap_preferences_dialog_buildable_add_child;
 }
 
 /**
- * adw_preferences_dialog_new:
+ * adap_preferences_dialog_new:
  *
- * Creates a new `AdwPreferencesDialog`.
+ * Creates a new `AdapPreferencesDialog`.
  *
- * Returns: the newly created `AdwPreferencesDialog`
+ * Returns: the newly created `AdapPreferencesDialog`
  *
  * Since: 1.5
  */
-AdwDialog *
-adw_preferences_dialog_new (void)
+AdapDialog *
+adap_preferences_dialog_new (void)
 {
-  return g_object_new (ADW_TYPE_PREFERENCES_DIALOG, NULL);
+  return g_object_new (ADAP_TYPE_PREFERENCES_DIALOG, NULL);
 }
 
 /**
- * adw_preferences_dialog_add:
+ * adap_preferences_dialog_add:
  * @self: a preferences dialog
  * @page: the page to add
  *
@@ -702,18 +702,18 @@ adw_preferences_dialog_new (void)
  * Since: 1.5
  */
 void
-adw_preferences_dialog_add (AdwPreferencesDialog *self,
-                            AdwPreferencesPage   *page)
+adap_preferences_dialog_add (AdapPreferencesDialog *self,
+                            AdapPreferencesPage   *page)
 {
-  AdwPreferencesDialogPrivate *priv;
-  AdwViewStackPage *stack_page;
+  AdapPreferencesDialogPrivate *priv;
+  AdapViewStackPage *stack_page;
 
-  g_return_if_fail (ADW_IS_PREFERENCES_DIALOG (self));
-  g_return_if_fail (ADW_IS_PREFERENCES_PAGE (page));
+  g_return_if_fail (ADAP_IS_PREFERENCES_DIALOG (self));
+  g_return_if_fail (ADAP_IS_PREFERENCES_PAGE (page));
 
-  priv = adw_preferences_dialog_get_instance_private (self);
+  priv = adap_preferences_dialog_get_instance_private (self);
 
-  stack_page = adw_view_stack_add_named (priv->pages_stack, GTK_WIDGET (page), adw_preferences_page_get_name (page));
+  stack_page = adap_view_stack_add_named (priv->pages_stack, GTK_WIDGET (page), adap_preferences_page_get_name (page));
 
   g_object_bind_property (page, "icon-name", stack_page, "icon-name", G_BINDING_SYNC_CREATE);
   g_object_bind_property (page, "title", stack_page, "title", G_BINDING_SYNC_CREATE);
@@ -725,7 +725,7 @@ adw_preferences_dialog_add (AdwPreferencesDialog *self,
 }
 
 /**
- * adw_preferences_dialog_remove:
+ * adap_preferences_dialog_remove:
  * @self: a preferences dialog
  * @page: the page to remove
  *
@@ -734,27 +734,27 @@ adw_preferences_dialog_add (AdwPreferencesDialog *self,
  * Since: 1.5
  */
 void
-adw_preferences_dialog_remove (AdwPreferencesDialog *self,
-                               AdwPreferencesPage   *page)
+adap_preferences_dialog_remove (AdapPreferencesDialog *self,
+                               AdapPreferencesPage   *page)
 {
-  AdwPreferencesDialogPrivate *priv;
+  AdapPreferencesDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_PREFERENCES_DIALOG (self));
-  g_return_if_fail (ADW_IS_PREFERENCES_PAGE (page));
+  g_return_if_fail (ADAP_IS_PREFERENCES_DIALOG (self));
+  g_return_if_fail (ADAP_IS_PREFERENCES_PAGE (page));
 
-  priv = adw_preferences_dialog_get_instance_private (self);
+  priv = adap_preferences_dialog_get_instance_private (self);
 
   if (gtk_widget_get_parent (GTK_WIDGET (page)) == GTK_WIDGET (priv->pages_stack))
-    adw_view_stack_remove (priv->pages_stack, GTK_WIDGET (page));
+    adap_view_stack_remove (priv->pages_stack, GTK_WIDGET (page));
   else
-    ADW_CRITICAL_CANNOT_REMOVE_CHILD (self, page);
+    ADAP_CRITICAL_CANNOT_REMOVE_CHILD (self, page);
 
   priv->n_pages--;
   update_view_switcher (self);
 }
 
 /**
- * adw_preferences_dialog_get_visible_page:
+ * adap_preferences_dialog_get_visible_page:
  * @self: a preferences dialog
  *
  * Gets the currently visible page of @self.
@@ -763,20 +763,20 @@ adw_preferences_dialog_remove (AdwPreferencesDialog *self,
  *
  * Since: 1.5
  */
-AdwPreferencesPage *
-adw_preferences_dialog_get_visible_page (AdwPreferencesDialog *self)
+AdapPreferencesPage *
+adap_preferences_dialog_get_visible_page (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv;
+  AdapPreferencesDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_PREFERENCES_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_PREFERENCES_DIALOG (self), NULL);
 
-  priv = adw_preferences_dialog_get_instance_private (self);
+  priv = adap_preferences_dialog_get_instance_private (self);
 
-  return ADW_PREFERENCES_PAGE (adw_view_stack_get_visible_child (priv->pages_stack));
+  return ADAP_PREFERENCES_PAGE (adap_view_stack_get_visible_child (priv->pages_stack));
 }
 
 /**
- * adw_preferences_dialog_set_visible_page:
+ * adap_preferences_dialog_set_visible_page:
  * @self: a preferences dialog
  * @page: a page of @self
  *
@@ -785,21 +785,21 @@ adw_preferences_dialog_get_visible_page (AdwPreferencesDialog *self)
  * Since: 1.5
  */
 void
-adw_preferences_dialog_set_visible_page (AdwPreferencesDialog *self,
-                                         AdwPreferencesPage   *page)
+adap_preferences_dialog_set_visible_page (AdapPreferencesDialog *self,
+                                         AdapPreferencesPage   *page)
 {
-  AdwPreferencesDialogPrivate *priv;
+  AdapPreferencesDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_PREFERENCES_DIALOG (self));
-  g_return_if_fail (ADW_IS_PREFERENCES_PAGE (page));
+  g_return_if_fail (ADAP_IS_PREFERENCES_DIALOG (self));
+  g_return_if_fail (ADAP_IS_PREFERENCES_PAGE (page));
 
-  priv = adw_preferences_dialog_get_instance_private (self);
+  priv = adap_preferences_dialog_get_instance_private (self);
 
-  adw_view_stack_set_visible_child (priv->pages_stack, GTK_WIDGET (page));
+  adap_view_stack_set_visible_child (priv->pages_stack, GTK_WIDGET (page));
 }
 
 /**
- * adw_preferences_dialog_get_visible_page_name:
+ * adap_preferences_dialog_get_visible_page_name:
  * @self: a preferences dialog
  *
  * Gets the name of currently visible page of @self.
@@ -809,19 +809,19 @@ adw_preferences_dialog_set_visible_page (AdwPreferencesDialog *self,
  * Since: 1.5
  */
 const char *
-adw_preferences_dialog_get_visible_page_name (AdwPreferencesDialog *self)
+adap_preferences_dialog_get_visible_page_name (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv;
+  AdapPreferencesDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_PREFERENCES_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_PREFERENCES_DIALOG (self), NULL);
 
-  priv = adw_preferences_dialog_get_instance_private (self);
+  priv = adap_preferences_dialog_get_instance_private (self);
 
-  return adw_view_stack_get_visible_child_name (priv->pages_stack);
+  return adap_view_stack_get_visible_child_name (priv->pages_stack);
 }
 
 /**
- * adw_preferences_dialog_set_visible_page_name:
+ * adap_preferences_dialog_set_visible_page_name:
  * @self: a preferences dialog
  * @name: the name of the page to make visible
  *
@@ -832,20 +832,20 @@ adw_preferences_dialog_get_visible_page_name (AdwPreferencesDialog *self)
  * Since: 1.5
  */
 void
-adw_preferences_dialog_set_visible_page_name (AdwPreferencesDialog *self,
+adap_preferences_dialog_set_visible_page_name (AdapPreferencesDialog *self,
                                               const char           *name)
 {
-  AdwPreferencesDialogPrivate *priv;
+  AdapPreferencesDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_PREFERENCES_DIALOG (self));
+  g_return_if_fail (ADAP_IS_PREFERENCES_DIALOG (self));
 
-  priv = adw_preferences_dialog_get_instance_private (self);
+  priv = adap_preferences_dialog_get_instance_private (self);
 
-  adw_view_stack_set_visible_child_name (priv->pages_stack, name);
+  adap_view_stack_set_visible_child_name (priv->pages_stack, name);
 }
 
 /**
- * adw_preferences_dialog_get_search_enabled: (attributes org.gtk.Method.get_property=search-enabled)
+ * adap_preferences_dialog_get_search_enabled: (attributes org.gtk.Method.get_property=search-enabled)
  * @self: a preferences dialog
  *
  * Gets whether search is enabled for @self.
@@ -855,19 +855,19 @@ adw_preferences_dialog_set_visible_page_name (AdwPreferencesDialog *self,
  * Since: 1.5
  */
 gboolean
-adw_preferences_dialog_get_search_enabled (AdwPreferencesDialog *self)
+adap_preferences_dialog_get_search_enabled (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv;
+  AdapPreferencesDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_PREFERENCES_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_PREFERENCES_DIALOG (self), FALSE);
 
-  priv = adw_preferences_dialog_get_instance_private (self);
+  priv = adap_preferences_dialog_get_instance_private (self);
 
   return priv->search_enabled;
 }
 
 /**
- * adw_preferences_dialog_set_search_enabled: (attributes org.gtk.Method.set_property=search-enabled)
+ * adap_preferences_dialog_set_search_enabled: (attributes org.gtk.Method.set_property=search-enabled)
  * @self: a preferences dialog
  * @search_enabled: whether search is enabled
  *
@@ -876,14 +876,14 @@ adw_preferences_dialog_get_search_enabled (AdwPreferencesDialog *self)
  * Since: 1.5
  */
 void
-adw_preferences_dialog_set_search_enabled (AdwPreferencesDialog *self,
+adap_preferences_dialog_set_search_enabled (AdapPreferencesDialog *self,
                                            gboolean              search_enabled)
 {
-  AdwPreferencesDialogPrivate *priv;
+  AdapPreferencesDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_PREFERENCES_DIALOG (self));
+  g_return_if_fail (ADAP_IS_PREFERENCES_DIALOG (self));
 
-  priv = adw_preferences_dialog_get_instance_private (self);
+  priv = adap_preferences_dialog_get_instance_private (self);
 
   search_enabled = !!search_enabled;
 
@@ -903,7 +903,7 @@ adw_preferences_dialog_set_search_enabled (AdwPreferencesDialog *self,
 }
 
 /**
- * adw_preferences_dialog_push_subpage:
+ * adap_preferences_dialog_push_subpage:
  * @self: a preferences dialog
  * @page: the subpage
  *
@@ -914,21 +914,21 @@ adw_preferences_dialog_set_search_enabled (AdwPreferencesDialog *self,
  * Since: 1.5
  */
 void
-adw_preferences_dialog_push_subpage (AdwPreferencesDialog *self,
-                                     AdwNavigationPage    *page)
+adap_preferences_dialog_push_subpage (AdapPreferencesDialog *self,
+                                     AdapNavigationPage    *page)
 {
-  AdwPreferencesDialogPrivate *priv;
+  AdapPreferencesDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_PREFERENCES_DIALOG (self));
-  g_return_if_fail (ADW_IS_NAVIGATION_PAGE (page));
+  g_return_if_fail (ADAP_IS_PREFERENCES_DIALOG (self));
+  g_return_if_fail (ADAP_IS_NAVIGATION_PAGE (page));
 
-  priv = adw_preferences_dialog_get_instance_private (self);
+  priv = adap_preferences_dialog_get_instance_private (self);
 
-  adw_navigation_view_push (priv->subpages_nav_view, page);
+  adap_navigation_view_push (priv->subpages_nav_view, page);
 }
 
 /**
- * adw_preferences_dialog_pop_subpage:
+ * adap_preferences_dialog_pop_subpage:
  * @self: a preferences dialog
  *
  * Pop the visible page from the subpage stack of @self.
@@ -938,19 +938,19 @@ adw_preferences_dialog_push_subpage (AdwPreferencesDialog *self,
  * Since: 1.5
  */
 gboolean
-adw_preferences_dialog_pop_subpage (AdwPreferencesDialog *self)
+adap_preferences_dialog_pop_subpage (AdapPreferencesDialog *self)
 {
-  AdwPreferencesDialogPrivate *priv;
+  AdapPreferencesDialogPrivate *priv;
 
-  g_return_val_if_fail (ADW_IS_PREFERENCES_DIALOG (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_PREFERENCES_DIALOG (self), FALSE);
 
-  priv = adw_preferences_dialog_get_instance_private (self);
+  priv = adap_preferences_dialog_get_instance_private (self);
 
-  return adw_navigation_view_pop (priv->subpages_nav_view);
+  return adap_navigation_view_pop (priv->subpages_nav_view);
 }
 
 /**
- * adw_preferences_dialog_add_toast:
+ * adap_preferences_dialog_add_toast:
  * @self: a preferences dialog
  * @toast: (transfer full): a toast
  *
@@ -961,14 +961,14 @@ adw_preferences_dialog_pop_subpage (AdwPreferencesDialog *self)
  * Since: 1.5
  */
 void
-adw_preferences_dialog_add_toast (AdwPreferencesDialog *self,
-                                  AdwToast             *toast)
+adap_preferences_dialog_add_toast (AdapPreferencesDialog *self,
+                                  AdapToast             *toast)
 {
-  AdwPreferencesDialogPrivate *priv;
+  AdapPreferencesDialogPrivate *priv;
 
-  g_return_if_fail (ADW_IS_PREFERENCES_DIALOG (self));
+  g_return_if_fail (ADAP_IS_PREFERENCES_DIALOG (self));
 
-  priv = adw_preferences_dialog_get_instance_private (self);
+  priv = adap_preferences_dialog_get_instance_private (self);
 
-  adw_toast_overlay_add_toast (priv->toast_overlay, toast);
+  adap_toast_overlay_add_toast (priv->toast_overlay, toast);
 }

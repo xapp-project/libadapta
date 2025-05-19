@@ -7,36 +7,36 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-view-switcher.h"
+#include "adap-view-switcher.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_VIEW_SWITCHER_BAR (adw_view_switcher_bar_get_type())
+#define ADAP_TYPE_VIEW_SWITCHER_BAR (adap_view_switcher_bar_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwViewSwitcherBar, adw_view_switcher_bar, ADW, VIEW_SWITCHER_BAR, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapViewSwitcherBar, adap_view_switcher_bar, ADAP, VIEW_SWITCHER_BAR, GtkWidget)
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_view_switcher_bar_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_view_switcher_bar_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-AdwViewStack *adw_view_switcher_bar_get_stack (AdwViewSwitcherBar *self);
-ADW_AVAILABLE_IN_ALL
-void          adw_view_switcher_bar_set_stack (AdwViewSwitcherBar *self,
-                                               AdwViewStack       *stack);
+ADAP_AVAILABLE_IN_ALL
+AdapViewStack *adap_view_switcher_bar_get_stack (AdapViewSwitcherBar *self);
+ADAP_AVAILABLE_IN_ALL
+void          adap_view_switcher_bar_set_stack (AdapViewSwitcherBar *self,
+                                               AdapViewStack       *stack);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_view_switcher_bar_get_reveal (AdwViewSwitcherBar *self);
-ADW_AVAILABLE_IN_ALL
-void     adw_view_switcher_bar_set_reveal (AdwViewSwitcherBar *self,
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_view_switcher_bar_get_reveal (AdapViewSwitcherBar *self);
+ADAP_AVAILABLE_IN_ALL
+void     adap_view_switcher_bar_set_reveal (AdapViewSwitcherBar *self,
                                            gboolean            reveal);
 
 G_END_DECLS

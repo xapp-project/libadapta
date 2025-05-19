@@ -5,14 +5,14 @@
  */
 
 #include "config.h"
-#include "adw-fold-threshold-policy.h"
+#include "adap-fold-threshold-policy.h"
 
 /**
- * AdwFoldThresholdPolicy:
- * @ADW_FOLD_THRESHOLD_POLICY_MINIMUM: Folding is based on the minimum size
- * @ADW_FOLD_THRESHOLD_POLICY_NATURAL: Folding is based on the natural size
+ * AdapFoldThresholdPolicy:
+ * @ADAP_FOLD_THRESHOLD_POLICY_MINIMUM: Folding is based on the minimum size
+ * @ADAP_FOLD_THRESHOLD_POLICY_NATURAL: Folding is based on the natural size
  *
  * Determines when [class@Flap] and [class@Leaflet] will fold.
  *
- * Deprecated: 1.4: Stop using `AdwLeaflet` and `AdwFlap`
+ * Deprecated: 1.4: Stop using `AdapLeaflet` and `AdapFlap`
  */

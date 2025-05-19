@@ -8,36 +8,36 @@
 
 #include "config.h"
 
-#include "adw-style-manager-private.h"
+#include "adap-style-manager-private.h"
 
-#include "adw-main-private.h"
-#include "adw-settings-private.h"
+#include "adap-main-private.h"
+#include "adap-settings-private.h"
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
 #define SWITCH_DURATION 250
 
 /**
- * AdwColorScheme:
- * @ADW_COLOR_SCHEME_DEFAULT: Inherit the parent color-scheme. When set on the
- *   `AdwStyleManager` returned by [func@StyleManager.get_default], it's
- *   equivalent to `ADW_COLOR_SCHEME_PREFER_LIGHT`.
- * @ADW_COLOR_SCHEME_FORCE_LIGHT: Always use light appearance.
- * @ADW_COLOR_SCHEME_PREFER_LIGHT: Use light appearance unless the system
+ * AdapColorScheme:
+ * @ADAP_COLOR_SCHEME_DEFAULT: Inherit the parent color-scheme. When set on the
+ *   `AdapStyleManager` returned by [func@StyleManager.get_default], it's
+ *   equivalent to `ADAP_COLOR_SCHEME_PREFER_LIGHT`.
+ * @ADAP_COLOR_SCHEME_FORCE_LIGHT: Always use light appearance.
+ * @ADAP_COLOR_SCHEME_PREFER_LIGHT: Use light appearance unless the system
  *   prefers dark colors.
- * @ADW_COLOR_SCHEME_PREFER_DARK: Use dark appearance unless the system prefers
+ * @ADAP_COLOR_SCHEME_PREFER_DARK: Use dark appearance unless the system prefers
  *   prefers light colors.
- * @ADW_COLOR_SCHEME_FORCE_DARK: Always use dark appearance.
+ * @ADAP_COLOR_SCHEME_FORCE_DARK: Always use dark appearance.
  *
  * Application color schemes for [property@StyleManager:color-scheme].
  */
 
 /**
- * AdwStyleManager:
+ * AdapStyleManager:
  *
  * A class for managing application-wide styling.
  *
- * `AdwStyleManager` provides a way to query and influence the application
+ * `AdapStyleManager` provides a way to query and influence the application
  * styles, such as whether to use dark or high contrast appearance.
  *
  * It allows to set the color scheme via the
@@ -45,16 +45,16 @@
  * appearance, as well as whether a system-wide color scheme preference exists.
  */
 
-struct _AdwStyleManager
+struct _AdapStyleManager
 {
   GObject parent_instance;
 
   GdkDisplay *display;
-  AdwSettings *settings;
+  AdapSettings *settings;
   GtkCssProvider *provider;
   GtkCssProvider *colors_provider;
 
-  AdwColorScheme color_scheme;
+  AdapColorScheme color_scheme;
   gboolean dark;
   gboolean setting_dark;
 
@@ -62,7 +62,7 @@ struct _AdwStyleManager
   guint animation_timeout_id;
 };
 
-G_DEFINE_FINAL_TYPE (AdwStyleManager, adw_style_manager, G_TYPE_OBJECT);
+G_DEFINE_FINAL_TYPE (AdapStyleManager, adap_style_manager, G_TYPE_OBJECT);
 
 enum {
   PROP_0,
@@ -77,7 +77,7 @@ enum {
 static GParamSpec *props[LAST_PROP];
 
 static GHashTable *display_style_managers = NULL;
-static AdwStyleManager *default_instance = NULL;
+static AdapStyleManager *default_instance = NULL;
 
 static void
 debug_theme_valist (const gchar *format,
@@ -88,7 +88,7 @@ debug_theme_valist (const gchar *format,
 
   if (g_once_init_enter (&init))
     {
-      debug = !!g_getenv ("ADW_DEBUG_THEMES");
+      debug = !!g_getenv ("ADAP_DEBUG_THEMES");
       g_once_init_leave (&init, 1);
     }
 
@@ -107,14 +107,14 @@ debug_theme (const gchar *format,
 }
 
 static void
-warn_prefer_dark_theme (AdwStyleManager *self)
+warn_prefer_dark_theme (AdapStyleManager *self)
 {
   if (self->setting_dark)
     return;
 
   g_warning ("Using GtkSettings:gtk-application-prefer-dark-theme with "
-             "libadwaita is unsupported. Please use "
-             "AdwStyleManager:color-scheme instead.");
+             "libadapta is unsupported. Please use "
+             "AdapStyleManager:color-scheme instead.");
 }
 
 static void
@@ -129,9 +129,9 @@ static void
 register_display (GdkDisplayManager *display_manager,
                   GdkDisplay        *display)
 {
-  AdwStyleManager *style_manager;
+  AdapStyleManager *style_manager;
 
-  style_manager = g_object_new (ADW_TYPE_STYLE_MANAGER,
+  style_manager = g_object_new (ADAP_TYPE_STYLE_MANAGER,
                                 "display", display,
                                 NULL);
 
@@ -146,7 +146,7 @@ register_display (GdkDisplayManager *display_manager,
 }
 
 static void
-enable_animations_cb (AdwStyleManager *self)
+enable_animations_cb (AdapStyleManager *self)
 {
   gtk_style_context_remove_provider_for_display (self->display,
                                                  GTK_STYLE_PROVIDER (self->animations_provider));
@@ -199,7 +199,7 @@ find_theme_dir_each (const gchar  *dir,
 
   debug_theme ("Found theme directory '%s'.", parent_dir);
 
-  version_dir = g_strdup_printf ("libadwaita-%d.%d", ADW_MAJOR_VERSION, ADW_MINOR_VERSION);
+  version_dir = g_strdup_printf ("libadapta-%d.%d", ADAP_MAJOR_VERSION, ADAP_MINOR_VERSION);
   base_path = g_build_filename (parent_dir, version_dir, base_file, NULL);
   colors_path = g_build_filename (parent_dir, version_dir, color_file, NULL);
 
@@ -272,7 +272,7 @@ find_theme_dir (const gchar  *name,
 }
 
 static void
-update_stylesheet (AdwStyleManager *self)
+update_stylesheet (AdapStyleManager *self)
 {
   GtkSettings *gtk_settings;
 
@@ -300,14 +300,14 @@ update_stylesheet (AdwStyleManager *self)
   gchar *found_base_path = NULL;
   gchar *found_colors_path = NULL;
 
-  if (find_theme_dir (adw_settings_get_theme_name (self->settings),
-                      adw_settings_get_high_contrast (self->settings),
+  if (find_theme_dir (adap_settings_get_theme_name (self->settings),
+                      adap_settings_get_high_contrast (self->settings),
                       self->dark,
                       &found_theme_path,
                       &found_base_path,
                       &found_colors_path))
     {
-      debug_theme ("Using theme '%s' found in %s.", adw_settings_get_theme_name (self->settings), found_theme_path);
+      debug_theme ("Using theme '%s' found in %s.", adap_settings_get_theme_name (self->settings), found_theme_path);
 
       if (self->provider)
         gtk_css_provider_load_from_path (self->provider, found_base_path);
@@ -320,23 +320,23 @@ update_stylesheet (AdwStyleManager *self)
     }
   else
     {
-      debug_theme ("No libadwaita support in system theme, using default style.");
+      debug_theme ("No libadapta support in system theme, using default style.");
       if (self->provider) {
-        if (adw_settings_get_high_contrast (self->settings))
+        if (adap_settings_get_high_contrast (self->settings))
           gtk_css_provider_load_from_resource (self->provider,
-                                               "/org/gnome/Adwaita/styles/base-hc.css");
+                                               "/org/gnome/Adapta/styles/base-hc.css");
         else
           gtk_css_provider_load_from_resource (self->provider,
-                                               "/org/gnome/Adwaita/styles/base.css");
+                                               "/org/gnome/Adapta/styles/base.css");
       }
 
       if (self->colors_provider) {
         if (self->dark)
           gtk_css_provider_load_from_resource (self->colors_provider,
-                                               "/org/gnome/Adwaita/styles/defaults-dark.css");
+                                               "/org/gnome/Adapta/styles/defaults-dark.css");
         else
           gtk_css_provider_load_from_resource (self->colors_provider,
-                                               "/org/gnome/Adwaita/styles/defaults-light.css");
+                                               "/org/gnome/Adapta/styles/defaults-light.css");
       }
     }
 
@@ -347,22 +347,22 @@ update_stylesheet (AdwStyleManager *self)
 }
 
 static gboolean
-get_is_dark (AdwStyleManager *self)
+get_is_dark (AdapStyleManager *self)
 {
-  AdwSystemColorScheme system_scheme = adw_settings_get_color_scheme (self->settings);
+  AdapSystemColorScheme system_scheme = adap_settings_get_color_scheme (self->settings);
 
   switch (self->color_scheme) {
-  case ADW_COLOR_SCHEME_DEFAULT:
+  case ADAP_COLOR_SCHEME_DEFAULT:
     if (self->display)
       return get_is_dark (default_instance);
-    return (system_scheme == ADW_SYSTEM_COLOR_SCHEME_PREFER_DARK);
-  case ADW_COLOR_SCHEME_FORCE_LIGHT:
+    return (system_scheme == ADAP_SYSTEM_COLOR_SCHEME_PREFER_DARK);
+  case ADAP_COLOR_SCHEME_FORCE_LIGHT:
     return FALSE;
-  case ADW_COLOR_SCHEME_PREFER_LIGHT:
-    return system_scheme == ADW_SYSTEM_COLOR_SCHEME_PREFER_DARK;
-  case ADW_COLOR_SCHEME_PREFER_DARK:
-    return system_scheme != ADW_SYSTEM_COLOR_SCHEME_PREFER_LIGHT;
-  case ADW_COLOR_SCHEME_FORCE_DARK:
+  case ADAP_COLOR_SCHEME_PREFER_LIGHT:
+    return system_scheme == ADAP_SYSTEM_COLOR_SCHEME_PREFER_DARK;
+  case ADAP_COLOR_SCHEME_PREFER_DARK:
+    return system_scheme != ADAP_SYSTEM_COLOR_SCHEME_PREFER_LIGHT;
+  case ADAP_COLOR_SCHEME_FORCE_DARK:
     return TRUE;
   default:
     g_assert_not_reached ();
@@ -370,7 +370,7 @@ get_is_dark (AdwStyleManager *self)
 }
 
 static void
-update_dark (AdwStyleManager *self)
+update_dark (AdapStyleManager *self)
 {
   gboolean dark = get_is_dark (self);
 
@@ -385,13 +385,13 @@ update_dark (AdwStyleManager *self)
 }
 
 static void
-notify_system_supports_color_schemes_cb (AdwStyleManager *self)
+notify_system_supports_color_schemes_cb (AdapStyleManager *self)
 {
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_SYSTEM_SUPPORTS_COLOR_SCHEMES]);
 }
 
 static void
-notify_high_contrast_cb (AdwStyleManager *self)
+notify_high_contrast_cb (AdapStyleManager *self)
 {
   update_stylesheet (self);
 
@@ -399,17 +399,17 @@ notify_high_contrast_cb (AdwStyleManager *self)
 }
 
 static void
-notify_theme_name_cb (AdwStyleManager *self)
+notify_theme_name_cb (AdapStyleManager *self)
 {
   update_stylesheet (self);
 }
 
 static void
-adw_style_manager_constructed (GObject *object)
+adap_style_manager_constructed (GObject *object)
 {
-  AdwStyleManager *self = ADW_STYLE_MANAGER (object);
+  AdapStyleManager *self = ADAP_STYLE_MANAGER (object);
 
-  G_OBJECT_CLASS (adw_style_manager_parent_class)->constructed (object);
+  G_OBJECT_CLASS (adap_style_manager_parent_class)->constructed (object);
 
   if (self->display) {
     GtkSettings *settings = gtk_settings_get_for_display (self->display);
@@ -428,9 +428,9 @@ adw_style_manager_constructed (GObject *object)
                              self,
                              G_CONNECT_SWAPPED);
 
-    if (!adw_is_granite_present () && !g_getenv ("GTK_THEME")) {
+    if (!adap_is_granite_present () && !g_getenv ("GTK_THEME")) {
       g_object_set (gtk_settings_get_for_display (self->display),
-                    "gtk-theme-name", "Adwaita-empty",
+                    "gtk-theme-name", "Adapta-empty",
                     NULL);
 
       self->provider = gtk_css_provider_new ();
@@ -449,7 +449,7 @@ adw_style_manager_constructed (GObject *object)
                                        "* { transition: none; }");
   }
 
-  self->settings = adw_settings_get_default ();
+  self->settings = adap_settings_get_default ();
 
   g_signal_connect_object (self->settings,
                            "notify::theme-name",
@@ -477,45 +477,45 @@ adw_style_manager_constructed (GObject *object)
 }
 
 static void
-adw_style_manager_dispose (GObject *object)
+adap_style_manager_dispose (GObject *object)
 {
-  AdwStyleManager *self = ADW_STYLE_MANAGER (object);
+  AdapStyleManager *self = ADAP_STYLE_MANAGER (object);
 
   g_clear_handle_id (&self->animation_timeout_id, g_source_remove);
   g_clear_object (&self->provider);
   g_clear_object (&self->colors_provider);
   g_clear_object (&self->animations_provider);
 
-  G_OBJECT_CLASS (adw_style_manager_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_style_manager_parent_class)->dispose (object);
 }
 
 static void
-adw_style_manager_get_property (GObject    *object,
+adap_style_manager_get_property (GObject    *object,
                                 guint       prop_id,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-  AdwStyleManager *self = ADW_STYLE_MANAGER (object);
+  AdapStyleManager *self = ADAP_STYLE_MANAGER (object);
 
   switch (prop_id) {
   case PROP_DISPLAY:
-    g_value_set_object (value, adw_style_manager_get_display (self));
+    g_value_set_object (value, adap_style_manager_get_display (self));
     break;
 
   case PROP_COLOR_SCHEME:
-    g_value_set_enum (value, adw_style_manager_get_color_scheme (self));
+    g_value_set_enum (value, adap_style_manager_get_color_scheme (self));
     break;
 
   case PROP_SYSTEM_SUPPORTS_COLOR_SCHEMES:
-    g_value_set_boolean (value, adw_style_manager_get_system_supports_color_schemes (self));
+    g_value_set_boolean (value, adap_style_manager_get_system_supports_color_schemes (self));
     break;
 
   case PROP_DARK:
-    g_value_set_boolean (value, adw_style_manager_get_dark (self));
+    g_value_set_boolean (value, adap_style_manager_get_dark (self));
     break;
 
   case PROP_HIGH_CONTRAST:
-    g_value_set_boolean (value, adw_style_manager_get_high_contrast (self));
+    g_value_set_boolean (value, adap_style_manager_get_high_contrast (self));
     break;
 
   default:
@@ -524,12 +524,12 @@ adw_style_manager_get_property (GObject    *object,
 }
 
 static void
-adw_style_manager_set_property (GObject      *object,
+adap_style_manager_set_property (GObject      *object,
                                 guint         prop_id,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-  AdwStyleManager *self = ADW_STYLE_MANAGER (object);
+  AdapStyleManager *self = ADAP_STYLE_MANAGER (object);
 
   switch (prop_id) {
   case PROP_DISPLAY:
@@ -537,7 +537,7 @@ adw_style_manager_set_property (GObject      *object,
     break;
 
   case PROP_COLOR_SCHEME:
-    adw_style_manager_set_color_scheme (self, g_value_get_enum (value));
+    adap_style_manager_set_color_scheme (self, g_value_get_enum (value));
     break;
 
   default:
@@ -546,17 +546,17 @@ adw_style_manager_set_property (GObject      *object,
 }
 
 static void
-adw_style_manager_class_init (AdwStyleManagerClass *klass)
+adap_style_manager_class_init (AdapStyleManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = adw_style_manager_constructed;
-  object_class->dispose = adw_style_manager_dispose;
-  object_class->get_property = adw_style_manager_get_property;
-  object_class->set_property = adw_style_manager_set_property;
+  object_class->constructed = adap_style_manager_constructed;
+  object_class->dispose = adap_style_manager_dispose;
+  object_class->get_property = adap_style_manager_get_property;
+  object_class->set_property = adap_style_manager_set_property;
 
   /**
-   * AdwStyleManager:display: (attributes org.gtk.Property.get=adw_style_manager_get_display)
+   * AdapStyleManager:display: (attributes org.gtk.Property.get=adap_style_manager_get_display)
    *
    * The display the style manager is associated with.
    *
@@ -569,7 +569,7 @@ adw_style_manager_class_init (AdwStyleManagerClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwStyleManager:color-scheme: (attributes org.gtk.Property.get=adw_style_manager_get_color_scheme org.gtk.Property.set=adw_style_manager_set_color_scheme)
+   * AdapStyleManager:color-scheme: (attributes org.gtk.Property.get=adap_style_manager_get_color_scheme org.gtk.Property.set=adap_style_manager_set_color_scheme)
    *
    * The requested application color scheme.
    *
@@ -578,26 +578,26 @@ adw_style_manager_class_init (AdwStyleManagerClass *klass)
    * [property@StyleManager:dark] property can be used to query the current
    * effective appearance.
    *
-   * The `ADW_COLOR_SCHEME_PREFER_LIGHT` color scheme results in the application
+   * The `ADAP_COLOR_SCHEME_PREFER_LIGHT` color scheme results in the application
    * using light appearance unless the system prefers dark colors. This is the
    * default value.
    *
-   * The `ADW_COLOR_SCHEME_PREFER_DARK` color scheme results in the application
+   * The `ADAP_COLOR_SCHEME_PREFER_DARK` color scheme results in the application
    * using dark appearance, but can still switch to the light appearance if the
    * system can prefers it, for example, when the high contrast preference is
    * enabled.
    *
-   * The `ADW_COLOR_SCHEME_FORCE_LIGHT` and `ADW_COLOR_SCHEME_FORCE_DARK` values
+   * The `ADAP_COLOR_SCHEME_FORCE_LIGHT` and `ADAP_COLOR_SCHEME_FORCE_DARK` values
    * ignore the system preference entirely. They are useful if the application
    * wants to match its UI to its content or to provide a separate color scheme
    * switcher.
    *
    * If a per-[class@Gdk.Display] style manager has its color scheme set to
-   * `ADW_COLOR_SCHEME_DEFAULT`, it will inherit the color scheme from the
+   * `ADAP_COLOR_SCHEME_DEFAULT`, it will inherit the color scheme from the
    * default style manager.
    *
-   * For the default style manager, `ADW_COLOR_SCHEME_DEFAULT` is equivalent to
-   * `ADW_COLOR_SCHEME_PREFER_LIGHT`.
+   * For the default style manager, `ADAP_COLOR_SCHEME_DEFAULT` is equivalent to
+   * `ADAP_COLOR_SCHEME_PREFER_LIGHT`.
    *
    * The [property@StyleManager:system-supports-color-schemes] property can be
    * used to check if the current environment provides a color scheme
@@ -605,12 +605,12 @@ adw_style_manager_class_init (AdwStyleManagerClass *klass)
    */
   props[PROP_COLOR_SCHEME] =
     g_param_spec_enum ("color-scheme", NULL, NULL,
-                       ADW_TYPE_COLOR_SCHEME,
-                       ADW_COLOR_SCHEME_DEFAULT,
+                       ADAP_TYPE_COLOR_SCHEME,
+                       ADAP_COLOR_SCHEME_DEFAULT,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwStyleManager:system-supports-color-schemes: (attributes org.gtk.Property.get=adw_style_manager_get_system_supports_color_schemes)
+   * AdapStyleManager:system-supports-color-schemes: (attributes org.gtk.Property.get=adap_style_manager_get_system_supports_color_schemes)
    *
    * Whether the system supports color schemes.
    *
@@ -626,7 +626,7 @@ adw_style_manager_class_init (AdwStyleManagerClass *klass)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwStyleManager:dark: (attributes org.gtk.Property.get=adw_style_manager_get_dark)
+   * AdapStyleManager:dark: (attributes org.gtk.Property.get=adap_style_manager_get_dark)
    *
    * Whether the application is using dark appearance.
    *
@@ -639,7 +639,7 @@ adw_style_manager_class_init (AdwStyleManagerClass *klass)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * AdwStyleManager:high-contrast: (attributes org.gtk.Property.get=adw_style_manager_get_high_contrast)
+   * AdapStyleManager:high-contrast: (attributes org.gtk.Property.get=adap_style_manager_get_high_contrast)
    *
    * Whether the application is using high contrast appearance.
    *
@@ -654,13 +654,13 @@ adw_style_manager_class_init (AdwStyleManagerClass *klass)
 }
 
 static void
-adw_style_manager_init (AdwStyleManager *self)
+adap_style_manager_init (AdapStyleManager *self)
 {
-  self->color_scheme = ADW_COLOR_SCHEME_DEFAULT;
+  self->color_scheme = ADAP_COLOR_SCHEME_DEFAULT;
 }
 
 void
-adw_style_manager_ensure (void)
+adap_style_manager_ensure (void)
 {
   GdkDisplayManager *display_manager = gdk_display_manager_get ();
   GSList *displays;
@@ -669,7 +669,7 @@ adw_style_manager_ensure (void)
   if (display_style_managers)
     return;
 
-  default_instance = g_object_new (ADW_TYPE_STYLE_MANAGER, NULL);
+  default_instance = g_object_new (ADAP_TYPE_STYLE_MANAGER, NULL);
   display_style_managers = g_hash_table_new_full (g_direct_hash,
                                                   g_direct_equal,
                                                   NULL,
@@ -689,9 +689,9 @@ adw_style_manager_ensure (void)
 }
 
 /**
- * adw_style_manager_get_default:
+ * adap_style_manager_get_default:
  *
- * Gets the default `AdwStyleManager` instance.
+ * Gets the default `AdapStyleManager` instance.
  *
  * It manages all [class@Gdk.Display] instances unless the style manager for
  * that display has an override.
@@ -700,20 +700,20 @@ adw_style_manager_ensure (void)
  *
  * Returns: (transfer none): the default style manager
  */
-AdwStyleManager *
-adw_style_manager_get_default (void)
+AdapStyleManager *
+adap_style_manager_get_default (void)
 {
   if (!default_instance)
-    adw_style_manager_ensure ();
+    adap_style_manager_ensure ();
 
   return default_instance;
 }
 
 /**
- * adw_style_manager_get_for_display:
+ * adap_style_manager_get_for_display:
  * @display: a `GdkDisplay`
  *
- * Gets the `AdwStyleManager` instance managing @display.
+ * Gets the `AdapStyleManager` instance managing @display.
  *
  * It can be used to override styles for that specific display instead of the
  * whole application.
@@ -722,13 +722,13 @@ adw_style_manager_get_default (void)
  *
  * Returns: (transfer none): the style manager for @display
  */
-AdwStyleManager *
-adw_style_manager_get_for_display (GdkDisplay *display)
+AdapStyleManager *
+adap_style_manager_get_for_display (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   if (!display_style_managers)
-    adw_style_manager_ensure ();
+    adap_style_manager_ensure ();
 
   g_return_val_if_fail (g_hash_table_contains (display_style_managers, display), NULL);
 
@@ -736,7 +736,7 @@ adw_style_manager_get_for_display (GdkDisplay *display)
 }
 
 /**
- * adw_style_manager_get_display: (attributes org.gtk.Method.get_property=display)
+ * adap_style_manager_get_display: (attributes org.gtk.Method.get_property=display)
  * @self: a style manager
  *
  * Gets the display the style manager is associated with.
@@ -747,31 +747,31 @@ adw_style_manager_get_for_display (GdkDisplay *display)
  * Returns: (transfer none) (nullable): the display
  */
 GdkDisplay *
-adw_style_manager_get_display (AdwStyleManager *self)
+adap_style_manager_get_display (AdapStyleManager *self)
 {
-  g_return_val_if_fail (ADW_IS_STYLE_MANAGER (self), NULL);
+  g_return_val_if_fail (ADAP_IS_STYLE_MANAGER (self), NULL);
 
   return self->display;
 }
 
 /**
- * adw_style_manager_get_color_scheme: (attributes org.gtk.Method.get_property=color-scheme)
+ * adap_style_manager_get_color_scheme: (attributes org.gtk.Method.get_property=color-scheme)
  * @self: a style manager
  *
  * Gets the requested application color scheme.
  *
  * Returns: the color scheme
  */
-AdwColorScheme
-adw_style_manager_get_color_scheme (AdwStyleManager *self)
+AdapColorScheme
+adap_style_manager_get_color_scheme (AdapStyleManager *self)
 {
-  g_return_val_if_fail (ADW_IS_STYLE_MANAGER (self), ADW_COLOR_SCHEME_DEFAULT);
+  g_return_val_if_fail (ADAP_IS_STYLE_MANAGER (self), ADAP_COLOR_SCHEME_DEFAULT);
 
   return self->color_scheme;
 }
 
 /**
- * adw_style_manager_set_color_scheme: (attributes org.gtk.Method.set_property=color-scheme)
+ * adap_style_manager_set_color_scheme: (attributes org.gtk.Method.set_property=color-scheme)
  * @self: a style manager
  * @color_scheme: the color scheme
  *
@@ -782,36 +782,36 @@ adw_style_manager_get_color_scheme (AdwStyleManager *self)
  * [property@StyleManager:dark] property can be used to query the current
  * effective appearance.
  *
- * The `ADW_COLOR_SCHEME_PREFER_LIGHT` color scheme results in the application
+ * The `ADAP_COLOR_SCHEME_PREFER_LIGHT` color scheme results in the application
  * using light appearance unless the system prefers dark colors. This is the
  * default value.
  *
- * The `ADW_COLOR_SCHEME_PREFER_DARK` color scheme results in the application
+ * The `ADAP_COLOR_SCHEME_PREFER_DARK` color scheme results in the application
  * using dark appearance, but can still switch to the light appearance if the
  * system can prefers it, for example, when the high contrast preference is
  * enabled.
  *
- * The `ADW_COLOR_SCHEME_FORCE_LIGHT` and `ADW_COLOR_SCHEME_FORCE_DARK` values
+ * The `ADAP_COLOR_SCHEME_FORCE_LIGHT` and `ADAP_COLOR_SCHEME_FORCE_DARK` values
  * ignore the system preference entirely. They are useful if the application
  * wants to match its UI to its content or to provide a separate color scheme
  * switcher.
  *
  * If a per-[class@Gdk.Display] style manager has its color scheme set to
- * `ADW_COLOR_SCHEME_DEFAULT`, it will inherit the color scheme from the
+ * `ADAP_COLOR_SCHEME_DEFAULT`, it will inherit the color scheme from the
  * default style manager.
  *
- * For the default style manager, `ADW_COLOR_SCHEME_DEFAULT` is equivalent to
- * `ADW_COLOR_SCHEME_PREFER_LIGHT`.
+ * For the default style manager, `ADAP_COLOR_SCHEME_DEFAULT` is equivalent to
+ * `ADAP_COLOR_SCHEME_PREFER_LIGHT`.
  *
  * The [property@StyleManager:system-supports-color-schemes] property can be
  * used to check if the current environment provides a color scheme
  * preference.
  */
 void
-adw_style_manager_set_color_scheme (AdwStyleManager *self,
-                                    AdwColorScheme   color_scheme)
+adap_style_manager_set_color_scheme (AdapStyleManager *self,
+                                    AdapColorScheme   color_scheme)
 {
-  g_return_if_fail (ADW_IS_STYLE_MANAGER (self));
+  g_return_if_fail (ADAP_IS_STYLE_MANAGER (self));
 
   if (color_scheme == self->color_scheme)
     return;
@@ -828,18 +828,18 @@ adw_style_manager_set_color_scheme (AdwStyleManager *self,
 
   if (!self->display) {
     GHashTableIter iter;
-    AdwStyleManager *manager;
+    AdapStyleManager *manager;
 
     g_hash_table_iter_init (&iter, display_style_managers);
 
     while (g_hash_table_iter_next (&iter, NULL, (gpointer) &manager))
-      if (manager->color_scheme == ADW_COLOR_SCHEME_DEFAULT)
+      if (manager->color_scheme == ADAP_COLOR_SCHEME_DEFAULT)
         update_dark (manager);
   }
 }
 
 /**
- * adw_style_manager_get_system_supports_color_schemes: (attributes org.gtk.Method.get_property=system-supports-color-schemes)
+ * adap_style_manager_get_system_supports_color_schemes: (attributes org.gtk.Method.get_property=system-supports-color-schemes)
  * @self: a style manager
  *
  * Gets whether the system supports color schemes.
@@ -851,15 +851,15 @@ adw_style_manager_set_color_scheme (AdwStyleManager *self,
  * Returns: whether the system supports color schemes
  */
 gboolean
-adw_style_manager_get_system_supports_color_schemes (AdwStyleManager *self)
+adap_style_manager_get_system_supports_color_schemes (AdapStyleManager *self)
 {
-  g_return_val_if_fail (ADW_IS_STYLE_MANAGER (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_STYLE_MANAGER (self), FALSE);
 
-  return adw_settings_get_system_supports_color_schemes (self->settings);
+  return adap_settings_get_system_supports_color_schemes (self->settings);
 }
 
 /**
- * adw_style_manager_get_dark: (attributes org.gtk.Method.get_property=dark)
+ * adap_style_manager_get_dark: (attributes org.gtk.Method.get_property=dark)
  * @self: a style manager
  *
  * Gets whether the application is using dark appearance.
@@ -870,15 +870,15 @@ adw_style_manager_get_system_supports_color_schemes (AdwStyleManager *self)
  * Returns: whether the application is using dark appearance
  */
 gboolean
-adw_style_manager_get_dark (AdwStyleManager *self)
+adap_style_manager_get_dark (AdapStyleManager *self)
 {
-  g_return_val_if_fail (ADW_IS_STYLE_MANAGER (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_STYLE_MANAGER (self), FALSE);
 
   return self->dark;
 }
 
 /**
- * adw_style_manager_get_high_contrast: (attributes org.gtk.Method.get_property=high-contrast)
+ * adap_style_manager_get_high_contrast: (attributes org.gtk.Method.get_property=high-contrast)
  * @self: a style manager
  *
  * Gets whether the application is using high contrast appearance.
@@ -888,9 +888,9 @@ adw_style_manager_get_dark (AdwStyleManager *self)
  * Returns: whether the application is using high contrast appearance
  */
 gboolean
-adw_style_manager_get_high_contrast (AdwStyleManager *self)
+adap_style_manager_get_high_contrast (AdapStyleManager *self)
 {
-  g_return_val_if_fail (ADW_IS_STYLE_MANAGER (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_STYLE_MANAGER (self), FALSE);
 
-  return adw_settings_get_high_contrast (self->settings);
+  return adap_settings_get_high_contrast (self->settings);
 }

@@ -7,10 +7,10 @@
 
 #include "config.h"
 
-#include "adw-animation-util.h"
+#include "adap-animation-util.h"
 
 /**
- * adw_lerp:
+ * adap_lerp:
  * @a: the start
  * @b: the end
  * @t: the interpolation rate
@@ -20,13 +20,13 @@
  * Returns: the computed value
  */
 double
-adw_lerp (double a, double b, double t)
+adap_lerp (double a, double b, double t)
 {
   return a * (1.0 - t) + b * t;
 }
 
 /**
- * adw_get_enable_animations:
+ * adap_get_enable_animations:
  * @widget: a `GtkWidget`
  *
  * Checks whether animations are enabled for @widget.
@@ -37,7 +37,7 @@ adw_lerp (double a, double b, double t)
  * Returns: whether animations are enabled for @widget
  */
 gboolean
-adw_get_enable_animations (GtkWidget *widget)
+adap_get_enable_animations (GtkWidget *widget)
 {
   gboolean enable_animations = TRUE;
 

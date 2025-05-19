@@ -9,18 +9,18 @@
 #include <glib/gi18n-lib.h>
 #include <appstream.h>
 
-#include "adw-about-dialog.h"
+#include "adap-about-dialog.h"
 
-#include "adw-action-row.h"
-#include "adw-header-bar.h"
-#include "adw-marshalers.h"
-#include "adw-alert-dialog.h"
-#include "adw-navigation-view.h"
-#include "adw-preferences-group.h"
-#include "adw-toast-overlay.h"
+#include "adap-action-row.h"
+#include "adap-header-bar.h"
+#include "adap-marshalers.h"
+#include "adap-alert-dialog.h"
+#include "adap-navigation-view.h"
+#include "adap-preferences-group.h"
+#include "adap-toast-overlay.h"
 
 /**
- * AdwAboutDialog:
+ * AdapAboutDialog:
  *
  * A dialog showing information about the application.
  *
@@ -34,7 +34,7 @@
  *
  * ## Main page
  *
- * `AdwAboutDialog` prominently displays the application's icon, name, developer
+ * `AdapAboutDialog` prominently displays the application's icon, name, developer
  * name and version. They can be set with the [property@AboutDialog:application-icon],
  * [property@AboutDialog:application-name],
  * [property@AboutDialog:developer-name] and [property@AboutDialog:version]
@@ -42,7 +42,7 @@
  *
  * ## What's New
  *
- * `AdwAboutDialog` provides a way for applications to display their release
+ * `AdapAboutDialog` provides a way for applications to display their release
  * notes, set with the [property@AboutDialog:release-notes] property.
  *
  * Release notes are formatted the same way as
@@ -82,7 +82,7 @@
  *
  * ## Troubleshooting
  *
- * `AdwAboutDialog` displays the following two links on the main page:
+ * `AdapAboutDialog` displays the following two links on the main page:
  *
  * * Support Questions, set with the [property@AboutDialog:support-url] property,
  * * Report an Issue, set with the [property@AboutDialog:issue-url] property.
@@ -94,7 +94,7 @@
  * It's intended to be attached to issue reports when reporting issues against
  * the application. As such, it cannot contain markup or links.
  *
- * `AdwAboutDialog` provides a quick way to save debug information to a file.
+ * `AdapAboutDialog` provides a quick way to save debug information to a file.
  * When saving, [property@AboutDialog:debug-info-filename] would be used as
  * the suggested filename.
  *
@@ -151,7 +151,7 @@
  *
  * ## Constructing
  *
- * To make constructing an `AdwAboutDialog` as convenient as possible, you can
+ * To make constructing an `AdapAboutDialog` as convenient as possible, you can
  * use the function [func@show_about_dialog] which constructs and shows a
  * dialog.
  *
@@ -169,7 +169,7 @@
  *     NULL
  *   };
  *
- *   adw_show_about_dialog (GTK_WIDGET (gtk_application_get_active_window (app)),
+ *   adap_show_about_dialog (GTK_WIDGET (gtk_application_get_active_window (app)),
  *                          "application-name", _("Example"),
  *                          "application-icon", "org.example.App",
  *                          "version", "1.2.3",
@@ -185,7 +185,7 @@
  *
  * ## CSS nodes
  *
- * `AdwAboutDialog` has a main CSS node with the name `dialog` and the
+ * `AdapAboutDialog` has a main CSS node with the name `dialog` and the
  * style class `.about`.
  *
  * Since: 1.5
@@ -250,8 +250,8 @@ typedef struct {
   GtkLicense license_type;
 } LegalSection;
 
-struct _AdwAboutDialog {
-  AdwDialog parent_instance;
+struct _AdapAboutDialog {
+  AdapDialog parent_instance;
 
   GtkWidget *navigation_view;
   GtkWidget *toast_overlay;
@@ -276,7 +276,7 @@ struct _AdwAboutDialog {
   GtkWidget *support_row;
   GtkWidget *issue_row;
   GtkWidget *troubleshooting_row;
-  AdwNavigationPage *debug_info_page;
+  AdapNavigationPage *debug_info_page;
 
   GtkWidget *credits_legal_group;
   GtkWidget *credits_box;
@@ -310,7 +310,7 @@ struct _AdwAboutDialog {
   guint legal_showing_idle_id;
 };
 
-G_DEFINE_FINAL_TYPE (AdwAboutDialog, adw_about_dialog, ADW_TYPE_DIALOG)
+G_DEFINE_FINAL_TYPE (AdapAboutDialog, adap_about_dialog, ADAP_TYPE_DIALOG)
 
 enum {
   PROP_0,
@@ -363,18 +363,18 @@ free_legal_section (LegalSection *section)
 }
 
 static void
-update_headerbar_cb (AdwAboutDialog *self)
+update_headerbar_cb (AdapAboutDialog *self)
 {
   GtkAdjustment *adj;
 
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (self->main_scrolled_window));
 
-  adw_header_bar_set_show_title (ADW_HEADER_BAR (self->main_headerbar),
+  adap_header_bar_set_show_title (ADAP_HEADER_BAR (self->main_headerbar),
                                  gtk_adjustment_get_value (adj) > 0);
 }
 
 static inline void
-activate_link (AdwAboutDialog *self,
+activate_link (AdapAboutDialog *self,
                const char     *uri)
 {
   gboolean ret = FALSE;
@@ -382,7 +382,7 @@ activate_link (AdwAboutDialog *self,
 }
 
 static gboolean
-activate_link_cb (AdwAboutDialog *self,
+activate_link_cb (AdapAboutDialog *self,
                   const char     *uri)
 {
   activate_link (self, uri);
@@ -391,7 +391,7 @@ activate_link_cb (AdwAboutDialog *self,
 }
 
 static gboolean
-activate_link_default_cb (AdwAboutDialog *self,
+activate_link_default_cb (AdapAboutDialog *self,
                           const char     *uri)
 {
   GtkUriLauncher *launcher = gtk_uri_launcher_new (uri);
@@ -405,16 +405,16 @@ activate_link_default_cb (AdwAboutDialog *self,
 }
 
 static void
-legal_showing_idle_cb (AdwAboutDialog *self)
+legal_showing_idle_cb (AdapAboutDialog *self)
 {
-  GtkWidget *focus = adw_dialog_get_focus (ADW_DIALOG (self));
+  GtkWidget *focus = adap_dialog_get_focus (ADAP_DIALOG (self));
 
   if (GTK_IS_LABEL (focus) && !gtk_label_get_current_uri (GTK_LABEL (focus)))
     gtk_label_select_region (GTK_LABEL (focus), 0, 0);
 }
 
 static void
-legal_showing_cb (AdwAboutDialog *self)
+legal_showing_cb (AdapAboutDialog *self)
 {
   self->legal_showing_idle_id =
     g_idle_add_once ((GSourceOnceFunc) legal_showing_idle_cb, self);
@@ -430,7 +430,7 @@ get_release_for_version (AsRelease  *rel,
 }
 
 static void
-update_credits_legal_group (AdwAboutDialog *self)
+update_credits_legal_group (AdapAboutDialog *self)
 {
   gtk_widget_set_visible (self->credits_legal_group,
                           gtk_widget_get_visible (self->credits_box) ||
@@ -496,8 +496,8 @@ add_credits_section (GtkWidget   *box,
   if (!people || !*people)
     return;
 
-  group = adw_preferences_group_new ();
-  adw_preferences_group_set_title (ADW_PREFERENCES_GROUP (group), title);
+  group = adap_preferences_group_new ();
+  adap_preferences_group_set_title (ADAP_PREFERENCES_GROUP (group), title);
 
   for (person = people; *person; person++) {
     GtkWidget *row;
@@ -510,10 +510,10 @@ add_credits_section (GtkWidget   *box,
 
     parse_person (*person, &name, &link, &is_email);
 
-    row = adw_action_row_new ();
-    adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
-    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), name);
-    adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), row);
+    row = adap_action_row_new ();
+    adap_preferences_row_set_use_markup (ADAP_PREFERENCES_ROW (row), FALSE);
+    adap_preferences_row_set_title (ADAP_PREFERENCES_ROW (row), name);
+    adap_preferences_group_add (ADAP_PREFERENCES_GROUP (group), row);
 
     if (link) {
       GtkWidget *image = g_object_new (GTK_TYPE_IMAGE,
@@ -521,11 +521,11 @@ add_credits_section (GtkWidget   *box,
                                        NULL);
 
       if (is_email)
-        gtk_image_set_from_icon_name (GTK_IMAGE (image), "adw-mail-send-symbolic");
+        gtk_image_set_from_icon_name (GTK_IMAGE (image), "adap-mail-send-symbolic");
       else
-        gtk_image_set_from_icon_name (GTK_IMAGE (image), "adw-external-link-symbolic");
+        gtk_image_set_from_icon_name (GTK_IMAGE (image), "adap-external-link-symbolic");
 
-      adw_action_row_add_suffix (ADW_ACTION_ROW (row), image);
+      adap_action_row_add_suffix (ADAP_ACTION_ROW (row), image);
       gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
       gtk_actionable_set_action_name (GTK_ACTIONABLE (row), "about.show-url");
 
@@ -552,7 +552,7 @@ add_credits_section (GtkWidget   *box,
 }
 
 static void
-update_credits (AdwAboutDialog *self)
+update_credits (AdapAboutDialog *self)
 {
   GtkWidget *widget;
   char **translators;
@@ -607,7 +607,7 @@ get_license_text (GtkLicense  license_type,
 }
 
 static void
-append_legal_section (AdwAboutDialog *self,
+append_legal_section (AdapAboutDialog *self,
                       LegalSection   *section,
                       gboolean        force_title)
 {
@@ -668,7 +668,7 @@ append_legal_section (AdwAboutDialog *self,
 }
 
 static void
-update_legal (AdwAboutDialog *self)
+update_legal (AdapAboutDialog *self)
 {
   LegalSection default_section;
   GtkWidget *widget;
@@ -956,7 +956,7 @@ static const GMarkupParser markup_parser =
 };
 
 static void
-update_release_notes (AdwAboutDialog *self)
+update_release_notes (AdapAboutDialog *self)
 {
   GMarkupParseContext *context;
   ReleaseNotesParserData pdata;
@@ -1036,7 +1036,7 @@ update_release_notes (AdwAboutDialog *self)
 }
 
 static void
-update_details (AdwAboutDialog *self)
+update_details (AdapAboutDialog *self)
 {
   gboolean has_website = self->website && *self->website;
   gboolean has_comments = self->comments && *self->comments;
@@ -1055,7 +1055,7 @@ update_details (AdwAboutDialog *self)
 }
 
 static void
-update_support (AdwAboutDialog *self)
+update_support (AdapAboutDialog *self)
 {
   gboolean has_support_url = self->support_url && *self->support_url;
   gboolean has_issue_url = self->issue_url && *self->issue_url;
@@ -1069,73 +1069,73 @@ update_support (AdwAboutDialog *self)
 }
 
 static void
-adw_about_dialog_get_property (GObject    *object,
+adap_about_dialog_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  AdwAboutDialog *self = ADW_ABOUT_DIALOG (object);
+  AdapAboutDialog *self = ADAP_ABOUT_DIALOG (object);
 
   switch (prop_id) {
   case PROP_APPLICATION_ICON:
-    g_value_set_string (value, adw_about_dialog_get_application_icon (self));
+    g_value_set_string (value, adap_about_dialog_get_application_icon (self));
     break;
   case PROP_APPLICATION_NAME:
-    g_value_set_string (value, adw_about_dialog_get_application_name (self));
+    g_value_set_string (value, adap_about_dialog_get_application_name (self));
     break;
   case PROP_DEVELOPER_NAME:
-    g_value_set_string (value, adw_about_dialog_get_developer_name (self));
+    g_value_set_string (value, adap_about_dialog_get_developer_name (self));
     break;
   case PROP_VERSION:
-    g_value_set_string (value, adw_about_dialog_get_version (self));
+    g_value_set_string (value, adap_about_dialog_get_version (self));
     break;
   case PROP_RELEASE_NOTES_VERSION:
-    g_value_set_string (value, adw_about_dialog_get_release_notes_version (self));
+    g_value_set_string (value, adap_about_dialog_get_release_notes_version (self));
     break;
   case PROP_RELEASE_NOTES:
-    g_value_set_string (value, adw_about_dialog_get_release_notes (self));
+    g_value_set_string (value, adap_about_dialog_get_release_notes (self));
     break;
   case PROP_COMMENTS:
-    g_value_set_string (value, adw_about_dialog_get_comments (self));
+    g_value_set_string (value, adap_about_dialog_get_comments (self));
     break;
   case PROP_WEBSITE:
-    g_value_set_string (value, adw_about_dialog_get_website (self));
+    g_value_set_string (value, adap_about_dialog_get_website (self));
     break;
   case PROP_SUPPORT_URL:
-    g_value_set_string (value, adw_about_dialog_get_support_url (self));
+    g_value_set_string (value, adap_about_dialog_get_support_url (self));
     break;
   case PROP_ISSUE_URL:
-    g_value_set_string (value, adw_about_dialog_get_issue_url (self));
+    g_value_set_string (value, adap_about_dialog_get_issue_url (self));
     break;
   case PROP_DEBUG_INFO:
-    g_value_set_string (value, adw_about_dialog_get_debug_info (self));
+    g_value_set_string (value, adap_about_dialog_get_debug_info (self));
     break;
   case PROP_DEBUG_INFO_FILENAME:
-    g_value_set_string (value, adw_about_dialog_get_debug_info_filename (self));
+    g_value_set_string (value, adap_about_dialog_get_debug_info_filename (self));
     break;
   case PROP_DEVELOPERS:
-    g_value_set_boxed (value, adw_about_dialog_get_developers (self));
+    g_value_set_boxed (value, adap_about_dialog_get_developers (self));
     break;
   case PROP_DESIGNERS:
-    g_value_set_boxed (value, adw_about_dialog_get_designers (self));
+    g_value_set_boxed (value, adap_about_dialog_get_designers (self));
     break;
   case PROP_ARTISTS:
-    g_value_set_boxed (value, adw_about_dialog_get_artists (self));
+    g_value_set_boxed (value, adap_about_dialog_get_artists (self));
     break;
   case PROP_DOCUMENTERS:
-    g_value_set_boxed (value, adw_about_dialog_get_documenters (self));
+    g_value_set_boxed (value, adap_about_dialog_get_documenters (self));
     break;
   case PROP_TRANSLATOR_CREDITS:
-    g_value_set_string (value, adw_about_dialog_get_translator_credits (self));
+    g_value_set_string (value, adap_about_dialog_get_translator_credits (self));
     break;
   case PROP_COPYRIGHT:
-    g_value_set_string (value, adw_about_dialog_get_copyright (self));
+    g_value_set_string (value, adap_about_dialog_get_copyright (self));
     break;
   case PROP_LICENSE_TYPE:
-    g_value_set_enum (value, adw_about_dialog_get_license_type (self));
+    g_value_set_enum (value, adap_about_dialog_get_license_type (self));
     break;
   case PROP_LICENSE:
-    g_value_set_string (value, adw_about_dialog_get_license (self));
+    g_value_set_string (value, adap_about_dialog_get_license (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1143,73 +1143,73 @@ adw_about_dialog_get_property (GObject    *object,
 }
 
 static void
-adw_about_dialog_set_property (GObject      *object,
+adap_about_dialog_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
-  AdwAboutDialog *self = ADW_ABOUT_DIALOG (object);
+  AdapAboutDialog *self = ADAP_ABOUT_DIALOG (object);
 
   switch (prop_id) {
   case PROP_APPLICATION_ICON:
-    adw_about_dialog_set_application_icon (self, g_value_get_string (value));
+    adap_about_dialog_set_application_icon (self, g_value_get_string (value));
     break;
   case PROP_APPLICATION_NAME:
-    adw_about_dialog_set_application_name (self, g_value_get_string (value));
+    adap_about_dialog_set_application_name (self, g_value_get_string (value));
     break;
   case PROP_DEVELOPER_NAME:
-    adw_about_dialog_set_developer_name (self, g_value_get_string (value));
+    adap_about_dialog_set_developer_name (self, g_value_get_string (value));
     break;
   case PROP_VERSION:
-    adw_about_dialog_set_version (self, g_value_get_string (value));
+    adap_about_dialog_set_version (self, g_value_get_string (value));
     break;
   case PROP_RELEASE_NOTES_VERSION:
-    adw_about_dialog_set_release_notes_version (self, g_value_get_string (value));
+    adap_about_dialog_set_release_notes_version (self, g_value_get_string (value));
     break;
   case PROP_RELEASE_NOTES:
-    adw_about_dialog_set_release_notes (self, g_value_get_string (value));
+    adap_about_dialog_set_release_notes (self, g_value_get_string (value));
     break;
   case PROP_COMMENTS:
-    adw_about_dialog_set_comments (self, g_value_get_string (value));
+    adap_about_dialog_set_comments (self, g_value_get_string (value));
     break;
   case PROP_WEBSITE:
-    adw_about_dialog_set_website (self, g_value_get_string (value));
+    adap_about_dialog_set_website (self, g_value_get_string (value));
     break;
   case PROP_SUPPORT_URL:
-    adw_about_dialog_set_support_url (self, g_value_get_string (value));
+    adap_about_dialog_set_support_url (self, g_value_get_string (value));
     break;
   case PROP_ISSUE_URL:
-    adw_about_dialog_set_issue_url (self, g_value_get_string (value));
+    adap_about_dialog_set_issue_url (self, g_value_get_string (value));
     break;
   case PROP_DEBUG_INFO:
-    adw_about_dialog_set_debug_info (self, g_value_get_string (value));
+    adap_about_dialog_set_debug_info (self, g_value_get_string (value));
     break;
   case PROP_DEBUG_INFO_FILENAME:
-    adw_about_dialog_set_debug_info_filename (self, g_value_get_string (value));
+    adap_about_dialog_set_debug_info_filename (self, g_value_get_string (value));
     break;
   case PROP_DEVELOPERS:
-    adw_about_dialog_set_developers (self, g_value_get_boxed (value));
+    adap_about_dialog_set_developers (self, g_value_get_boxed (value));
     break;
   case PROP_DESIGNERS:
-    adw_about_dialog_set_designers (self, g_value_get_boxed (value));
+    adap_about_dialog_set_designers (self, g_value_get_boxed (value));
     break;
   case PROP_DOCUMENTERS:
-    adw_about_dialog_set_documenters (self, g_value_get_boxed (value));
+    adap_about_dialog_set_documenters (self, g_value_get_boxed (value));
     break;
   case PROP_ARTISTS:
-    adw_about_dialog_set_artists (self, g_value_get_boxed (value));
+    adap_about_dialog_set_artists (self, g_value_get_boxed (value));
     break;
   case PROP_TRANSLATOR_CREDITS:
-    adw_about_dialog_set_translator_credits (self, g_value_get_string (value));
+    adap_about_dialog_set_translator_credits (self, g_value_get_string (value));
     break;
   case PROP_COPYRIGHT:
-    adw_about_dialog_set_copyright (self, g_value_get_string (value));
+    adap_about_dialog_set_copyright (self, g_value_get_string (value));
     break;
   case PROP_LICENSE_TYPE:
-    adw_about_dialog_set_license_type (self, g_value_get_enum (value));
+    adap_about_dialog_set_license_type (self, g_value_get_enum (value));
     break;
   case PROP_LICENSE:
-    adw_about_dialog_set_license (self, g_value_get_string (value));
+    adap_about_dialog_set_license (self, g_value_get_string (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1217,19 +1217,19 @@ adw_about_dialog_set_property (GObject      *object,
 }
 
 static void
-adw_about_dialog_dispose (GObject *object)
+adap_about_dialog_dispose (GObject *object)
 {
-  AdwAboutDialog *self = ADW_ABOUT_DIALOG (object);
+  AdapAboutDialog *self = ADAP_ABOUT_DIALOG (object);
 
   g_clear_handle_id (&self->legal_showing_idle_id, g_source_remove);
 
-  G_OBJECT_CLASS (adw_about_dialog_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_about_dialog_parent_class)->dispose (object);
 }
 
 static void
-adw_about_dialog_finalize (GObject *object)
+adap_about_dialog_finalize (GObject *object)
 {
-  AdwAboutDialog *self = ADW_ABOUT_DIALOG (object);
+  AdapAboutDialog *self = ADAP_ABOUT_DIALOG (object);
 
   g_free (self->application_icon);
   g_free (self->application_name);
@@ -1255,11 +1255,11 @@ adw_about_dialog_finalize (GObject *object)
   g_free (self->license);
   g_slist_free_full (self->legal_sections, (GDestroyNotify) free_legal_section);
 
-  G_OBJECT_CLASS (adw_about_dialog_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_about_dialog_parent_class)->finalize (object);
 }
 
 static void
-show_url_cb (AdwAboutDialog *self,
+show_url_cb (AdapAboutDialog *self,
              const char     *action_name,
              GVariant       *params)
 {
@@ -1269,7 +1269,7 @@ show_url_cb (AdwAboutDialog *self,
 }
 
 static void
-show_url_property_cb (AdwAboutDialog *self,
+show_url_property_cb (AdapAboutDialog *self,
                       const char     *action_name,
                       GVariant       *params)
 {
@@ -1284,7 +1284,7 @@ show_url_property_cb (AdwAboutDialog *self,
 }
 
 static void
-copy_property_cb (AdwAboutDialog *self,
+copy_property_cb (AdapAboutDialog *self,
                   const char     *action_name,
                   GVariant       *params)
 {
@@ -1298,8 +1298,8 @@ copy_property_cb (AdwAboutDialog *self,
 
     gdk_clipboard_set_text (clipboard, value);
 
-    adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay),
-                                 adw_toast_new (_("Copied to clipboard")));
+    adap_toast_overlay_add_toast (ADAP_TOAST_OVERLAY (self->toast_overlay),
+                                 adap_toast_new (_("Copied to clipboard")));
   }
 
   g_free (value);
@@ -1308,7 +1308,7 @@ copy_property_cb (AdwAboutDialog *self,
 static void
 save_debug_info_dialog_cb (GtkFileDialog  *dialog,
                            GAsyncResult   *result,
-                           AdwAboutDialog *self)
+                           AdapAboutDialog *self)
 {
   GFile *file = gtk_file_dialog_save_finish (dialog, result, NULL);
 
@@ -1326,14 +1326,14 @@ save_debug_info_dialog_cb (GtkFileDialog  *dialog,
                              &error);
 
     if (error) {
-      AdwDialog *alert = adw_alert_dialog_new (_("Unable to save debugging information"),
+      AdapDialog *alert = adap_alert_dialog_new (_("Unable to save debugging information"),
                                                NULL);
-      adw_alert_dialog_format_body (ADW_ALERT_DIALOG (alert),
+      adap_alert_dialog_format_body (ADAP_ALERT_DIALOG (alert),
                                     "%s", error->message);
-      adw_alert_dialog_add_response (ADW_ALERT_DIALOG (alert),
+      adap_alert_dialog_add_response (ADAP_ALERT_DIALOG (alert),
                                      "close", _("Close"));
 
-      adw_dialog_present (alert, GTK_WIDGET (self));
+      adap_dialog_present (alert, GTK_WIDGET (self));
 
       g_error_free (error);
     }
@@ -1343,7 +1343,7 @@ save_debug_info_dialog_cb (GtkFileDialog  *dialog,
 }
 
 static void
-save_debug_info_cb (AdwAboutDialog *self)
+save_debug_info_cb (AdapAboutDialog *self)
 {
   GtkFileDialog *dialog = gtk_file_dialog_new ();
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
@@ -1363,9 +1363,9 @@ save_debug_info_shortcut_cb (GtkWidget *widget,
                              GVariant  *args,
                              gpointer   user_data)
 {
-  AdwAboutDialog *self = ADW_ABOUT_DIALOG (widget);
+  AdapAboutDialog *self = ADAP_ABOUT_DIALOG (widget);
 
-  if (adw_navigation_view_get_visible_page (ADW_NAVIGATION_VIEW (self->navigation_view)) != self->debug_info_page)
+  if (adap_navigation_view_get_visible_page (ADAP_NAVIGATION_VIEW (self->navigation_view)) != self->debug_info_page)
     return GDK_EVENT_PROPAGATE;
 
   save_debug_info_cb (self);
@@ -1374,18 +1374,18 @@ save_debug_info_shortcut_cb (GtkWidget *widget,
 }
 
 static void
-adw_about_dialog_class_init (AdwAboutDialogClass *klass)
+adap_about_dialog_class_init (AdapAboutDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = adw_about_dialog_dispose;
-  object_class->finalize = adw_about_dialog_finalize;
-  object_class->get_property = adw_about_dialog_get_property;
-  object_class->set_property = adw_about_dialog_set_property;
+  object_class->dispose = adap_about_dialog_dispose;
+  object_class->finalize = adap_about_dialog_finalize;
+  object_class->get_property = adap_about_dialog_get_property;
+  object_class->set_property = adap_about_dialog_set_property;
 
   /**
-   * AdwAboutDialog:application-icon: (attributes org.gtk.Property.get=adw_about_dialog_get_application_icon org.gtk.Property.set=adw_about_dialog_set_application_icon)
+   * AdapAboutDialog:application-icon: (attributes org.gtk.Property.get=adap_about_dialog_get_application_icon org.gtk.Property.set=adap_about_dialog_set_application_icon)
    *
    * The name of the application icon.
    *
@@ -1399,7 +1399,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:application-name: (attributes org.gtk.Property.get=adw_about_dialog_get_application_name org.gtk.Property.set=adw_about_dialog_set_application_name)
+   * AdapAboutDialog:application-name: (attributes org.gtk.Property.get=adap_about_dialog_get_application_name org.gtk.Property.set=adap_about_dialog_set_application_name)
    *
    * The name of the application.
    *
@@ -1413,7 +1413,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:developer-name: (attributes org.gtk.Property.get=adw_about_dialog_get_developer_name org.gtk.Property.set=adw_about_dialog_set_developer_name)
+   * AdapAboutDialog:developer-name: (attributes org.gtk.Property.get=adap_about_dialog_get_developer_name org.gtk.Property.set=adap_about_dialog_set_developer_name)
    *
    * The developer name.
    *
@@ -1434,7 +1434,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:version: (attributes org.gtk.Property.get=adw_about_dialog_get_version org.gtk.Property.set=adw_about_dialog_set_version)
+   * AdapAboutDialog:version: (attributes org.gtk.Property.get=adap_about_dialog_get_version org.gtk.Property.set=adap_about_dialog_set_version)
    *
    * The version of the application.
    *
@@ -1451,7 +1451,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:release-notes-version: (attributes org.gtk.Property.get=adw_about_dialog_get_release_notes_version org.gtk.Property.set=adw_about_dialog_set_release_notes_version)
+   * AdapAboutDialog:release-notes-version: (attributes org.gtk.Property.get=adap_about_dialog_get_release_notes_version org.gtk.Property.set=adap_about_dialog_set_release_notes_version)
    *
    * The version described by the application's release notes.
    *
@@ -1474,7 +1474,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:release-notes: (attributes org.gtk.Property.get=adw_about_dialog_get_release_notes org.gtk.Property.set=adw_about_dialog_set_release_notes)
+   * AdapAboutDialog:release-notes: (attributes org.gtk.Property.get=adap_about_dialog_get_release_notes org.gtk.Property.set=adap_about_dialog_set_release_notes)
    *
    * The release notes of the application.
    *
@@ -1497,7 +1497,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
    *
    * Nested lists are not supported.
    *
-   * `AdwAboutDialog` displays the version above the release notes. If set, the
+   * `AdapAboutDialog` displays the version above the release notes. If set, the
    * [property@AboutDialog:release-notes-version] of the property will be used
    * as the version; otherwise, [property@AboutDialog:version] is used.
    *
@@ -1509,7 +1509,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:comments: (attributes org.gtk.Property.get=adw_about_dialog_get_comments org.gtk.Property.set=adw_about_dialog_set_comments)
+   * AdapAboutDialog:comments: (attributes org.gtk.Property.get=adap_about_dialog_get_comments org.gtk.Property.set=adap_about_dialog_set_comments)
    *
    * The comments about the application.
    *
@@ -1526,7 +1526,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:website: (attributes org.gtk.Property.get=adw_about_dialog_get_website org.gtk.Property.set=adw_about_dialog_set_website)
+   * AdapAboutDialog:website: (attributes org.gtk.Property.get=adap_about_dialog_get_website org.gtk.Property.set=adap_about_dialog_set_website)
    *
    * The URL of the application's website.
    *
@@ -1543,7 +1543,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:support-url: (attributes org.gtk.Property.get=adw_about_dialog_get_support_url org.gtk.Property.set=adw_about_dialog_set_support_url)
+   * AdapAboutDialog:support-url: (attributes org.gtk.Property.get=adap_about_dialog_get_support_url org.gtk.Property.set=adap_about_dialog_set_support_url)
    *
    * The URL of the application's support page.
    *
@@ -1557,7 +1557,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:issue-url: (attributes org.gtk.Property.get=adw_about_dialog_get_issue_url org.gtk.Property.set=adw_about_dialog_set_issue_url)
+   * AdapAboutDialog:issue-url: (attributes org.gtk.Property.get=adap_about_dialog_get_issue_url org.gtk.Property.set=adap_about_dialog_set_issue_url)
    *
    * The URL for the application's issue tracker.
    *
@@ -1571,7 +1571,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:debug-info: (attributes org.gtk.Property.get=adw_about_dialog_get_debug_info org.gtk.Property.set=adw_about_dialog_set_debug_info)
+   * AdapAboutDialog:debug-info: (attributes org.gtk.Property.get=adap_about_dialog_get_debug_info org.gtk.Property.set=adap_about_dialog_set_debug_info)
    *
    * The debug information.
    *
@@ -1579,7 +1579,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
    * to be attached to issue reports when reporting issues against the
    * application.
    *
-   * `AdwAboutDialog` provides a quick way to save debug information to a file.
+   * `AdapAboutDialog` provides a quick way to save debug information to a file.
    * When saving, [property@AboutDialog:debug-info-filename] would be used as
    * the suggested filename.
    *
@@ -1593,7 +1593,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:debug-info-filename: (attributes org.gtk.Property.get=adw_about_dialog_get_debug_info_filename org.gtk.Property.set=adw_about_dialog_set_debug_info_filename)
+   * AdapAboutDialog:debug-info-filename: (attributes org.gtk.Property.get=adap_about_dialog_get_debug_info_filename org.gtk.Property.set=adap_about_dialog_set_debug_info_filename)
    *
    * The debug information filename.
    *
@@ -1610,7 +1610,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:developers: (attributes org.gtk.Property.get=adw_about_dialog_get_developers org.gtk.Property.set=adw_about_dialog_set_developers)
+   * AdapAboutDialog:developers: (attributes org.gtk.Property.get=adap_about_dialog_get_developers org.gtk.Property.set=adap_about_dialog_set_developers)
    *
    * The list of developers of the application.
    *
@@ -1636,7 +1636,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:designers: (attributes org.gtk.Property.get=adw_about_dialog_get_designers org.gtk.Property.set=adw_about_dialog_set_designers)
+   * AdapAboutDialog:designers: (attributes org.gtk.Property.get=adap_about_dialog_get_designers org.gtk.Property.set=adap_about_dialog_set_designers)
    *
    * The list of designers of the application.
    *
@@ -1662,7 +1662,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:artists: (attributes org.gtk.Property.get=adw_about_dialog_get_artists org.gtk.Property.set=adw_about_dialog_set_artists)
+   * AdapAboutDialog:artists: (attributes org.gtk.Property.get=adap_about_dialog_get_artists org.gtk.Property.set=adap_about_dialog_set_artists)
    *
    * The list of artists of the application.
    *
@@ -1688,7 +1688,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:documenters: (attributes org.gtk.Property.get=adw_about_dialog_get_documenters org.gtk.Property.set=adw_about_dialog_set_documenters)
+   * AdapAboutDialog:documenters: (attributes org.gtk.Property.get=adap_about_dialog_get_documenters org.gtk.Property.set=adap_about_dialog_set_documenters)
    *
    * The list of documenters of the application.
    *
@@ -1714,7 +1714,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:translator-credits: (attributes org.gtk.Property.get=adw_about_dialog_get_translator_credits org.gtk.Property.set=adw_about_dialog_set_translator_credits)
+   * AdapAboutDialog:translator-credits: (attributes org.gtk.Property.get=adap_about_dialog_get_translator_credits org.gtk.Property.set=adap_about_dialog_set_translator_credits)
    *
    * The translator credits string.
    *
@@ -1743,7 +1743,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:copyright: (attributes org.gtk.Property.get=adw_about_dialog_get_copyright org.gtk.Property.set=adw_about_dialog_set_copyright)
+   * AdapAboutDialog:copyright: (attributes org.gtk.Property.get=adap_about_dialog_get_copyright org.gtk.Property.set=adap_about_dialog_set_copyright)
    *
    * The copyright information.
    *
@@ -1764,7 +1764,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:license-type: (attributes org.gtk.Property.get=adw_about_dialog_get_license_type org.gtk.Property.set=adw_about_dialog_set_license_type)
+   * AdapAboutDialog:license-type: (attributes org.gtk.Property.get=adap_about_dialog_get_license_type org.gtk.Property.set=adap_about_dialog_set_license_type)
    *
    * The license type.
    *
@@ -1794,7 +1794,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwAboutDialog:license: (attributes org.gtk.Property.get=adw_about_dialog_get_license org.gtk.Property.set=adw_about_dialog_set_license)
+   * AdapAboutDialog:license: (attributes org.gtk.Property.get=adap_about_dialog_get_license org.gtk.Property.set=adap_about_dialog_set_license)
    *
    * The license text.
    *
@@ -1822,7 +1822,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
-   * AdwAboutDialog::activate-link:
+   * AdapAboutDialog::activate-link:
    * @self: an about dialog
    * @uri: the URI to activate
    *
@@ -1842,49 +1842,49 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
                   0,
                   g_signal_accumulator_true_handled,
                   NULL,
-                  adw_marshal_BOOLEAN__STRING,
+                  adap_marshal_BOOLEAN__STRING,
                   G_TYPE_BOOLEAN,
                   1,
                   G_TYPE_STRING);
   g_signal_set_va_marshaller (signals[SIGNAL_ACTIVATE_LINK],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_BOOLEAN__STRINGv);
+                              adap_marshal_BOOLEAN__STRINGv);
 
   g_signal_override_class_handler ("activate-link",
                                    G_TYPE_FROM_CLASS (klass),
                                    G_CALLBACK (activate_link_default_cb));
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-about-dialog.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, navigation_view);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, toast_overlay);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, main_scrolled_window);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, main_headerbar);
+                                               "/org/gnome/Adapta/ui/adap-about-dialog.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, navigation_view);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, toast_overlay);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, main_scrolled_window);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, main_headerbar);
 
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, app_icon_image);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, app_name_label);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, developer_name_label);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, version_button);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, app_icon_image);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, app_name_label);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, developer_name_label);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, version_button);
 
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, details_group);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, whats_new_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, comments_label);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, website_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, links_group);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, details_website_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, details_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, release_notes_buffer);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, details_group);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, whats_new_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, comments_label);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, website_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, links_group);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, details_website_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, details_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, release_notes_buffer);
 
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, support_group);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, support_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, issue_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, troubleshooting_row);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, debug_info_page);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, support_group);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, support_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, issue_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, troubleshooting_row);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, debug_info_page);
 
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, credits_legal_group);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, credits_box);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, legal_box);
-  gtk_widget_class_bind_template_child (widget_class, AdwAboutDialog, acknowledgements_box);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, credits_legal_group);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, credits_box);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, legal_box);
+  gtk_widget_class_bind_template_child (widget_class, AdapAboutDialog, acknowledgements_box);
 
   gtk_widget_class_bind_template_callback (widget_class, activate_link_cb);
   gtk_widget_class_bind_template_callback (widget_class, legal_showing_cb);
@@ -1903,7 +1903,7 @@ adw_about_dialog_class_init (AdwAboutDialogClass *klass)
 }
 
 static void
-adw_about_dialog_init (AdwAboutDialog *self)
+adap_about_dialog_init (AdapAboutDialog *self)
 {
   GtkAdjustment *adj;
   self->application_icon = g_strdup ("");
@@ -1950,26 +1950,26 @@ adw_about_dialog_init (AdwAboutDialog *self)
 }
 
 /**
- * adw_about_dialog_new:
+ * adap_about_dialog_new:
  *
- * Creates a new `AdwAboutDialog`.
+ * Creates a new `AdapAboutDialog`.
  *
- * Returns: the newly created `AdwAboutDialog`
+ * Returns: the newly created `AdapAboutDialog`
  *
  * Since: 1.5
  */
-AdwDialog *
-adw_about_dialog_new (void)
+AdapDialog *
+adap_about_dialog_new (void)
 {
-  return g_object_new (ADW_TYPE_ABOUT_DIALOG, NULL);
+  return g_object_new (ADAP_TYPE_ABOUT_DIALOG, NULL);
 }
 
 /**
- * adw_about_dialog_new_from_appdata:
+ * adap_about_dialog_new_from_appdata:
  * @resource_path: The resource to use
  * @release_notes_version: (nullable): The version to retrieve release notes for
  *
- * Creates a new `AdwAboutDialog` using AppStream metadata.
+ * Creates a new `AdapAboutDialog` using AppStream metadata.
  *
  * This automatically sets the following properties with the following AppStream
  * values:
@@ -1991,15 +1991,15 @@ adw_about_dialog_new (void)
  * [property@AboutDialog:release-notes] is set from the AppStream release
  * description for that version.
  *
- * Returns: the newly created `AdwAboutDialog`
+ * Returns: the newly created `AdapAboutDialog`
  *
  * Since: 1.5
  */
-AdwDialog *
-adw_about_dialog_new_from_appdata (const char *resource_path,
+AdapDialog *
+adap_about_dialog_new_from_appdata (const char *resource_path,
                                    const char *release_notes_version)
 {
-  AdwAboutDialog *self;
+  AdapAboutDialog *self;
   GFile *appdata_file;
   char *appdata_uri;
   AsMetadata *metadata;
@@ -2015,7 +2015,7 @@ adw_about_dialog_new_from_appdata (const char *resource_path,
   appdata_uri = g_strconcat ("resource://", resource_path, NULL);
   appdata_file = g_file_new_for_uri (appdata_uri);
 
-  self = ADW_ABOUT_DIALOG (adw_about_dialog_new ());
+  self = ADAP_ABOUT_DIALOG (adap_about_dialog_new ());
   metadata = as_metadata_new ();
 
   if (!as_metadata_parse_file (metadata, appdata_file, AS_FORMAT_KIND_UNKNOWN, &error)) {
@@ -2071,8 +2071,8 @@ adw_about_dialog_new_from_appdata (const char *resource_path,
       version = as_release_get_version (notes_release);
 
       if (release_notes && version) {
-        adw_about_dialog_set_release_notes (self, release_notes);
-        adw_about_dialog_set_release_notes_version (self, version);
+        adap_about_dialog_set_release_notes (self, release_notes);
+        adap_about_dialog_set_release_notes_version (self, version);
       }
     } else {
       g_critical ("No valid release found for version %s", release_notes_version);
@@ -2084,7 +2084,7 @@ adw_about_dialog_new_from_appdata (const char *resource_path,
     const char *version = as_release_get_version (latest_release);
 
     if (version)
-      adw_about_dialog_set_version (self, version);
+      adap_about_dialog_set_version (self, version);
   }
 
   name = as_component_get_name (component);
@@ -2099,20 +2099,20 @@ adw_about_dialog_new_from_appdata (const char *resource_path,
   developer_name = as_component_get_developer_name (component);
 #endif
 
-  adw_about_dialog_set_application_icon (self, application_id);
+  adap_about_dialog_set_application_icon (self, application_id);
 
   if (name)
-    adw_about_dialog_set_application_name (self, name);
+    adap_about_dialog_set_application_name (self, name);
 
   if (developer_name)
-    adw_about_dialog_set_developer_name (self, developer_name);
+    adap_about_dialog_set_developer_name (self, developer_name);
 
   if (project_license) {
     int i;
 
     for (i = 0; i < G_N_ELEMENTS (gtk_license_info); i++) {
       if (g_strcmp0 (gtk_license_info[i].spdx_id, project_license) == 0) {
-        adw_about_dialog_set_license_type (self, (GtkLicense) i);
+        adap_about_dialog_set_license_type (self, (GtkLicense) i);
         break;
       }
     }
@@ -2120,34 +2120,34 @@ adw_about_dialog_new_from_appdata (const char *resource_path,
     /* Handle deprecated SPDX IDs */
     for (i = 0; i < G_N_ELEMENTS (license_aliases); i++) {
       if (g_strcmp0 (license_aliases[i].spdx_id, project_license) == 0) {
-        adw_about_dialog_set_license_type (self, license_aliases[i].license);
+        adap_about_dialog_set_license_type (self, license_aliases[i].license);
         break;
       }
     }
 
-    if (adw_about_dialog_get_license_type (self) == GTK_LICENSE_UNKNOWN)
-      adw_about_dialog_set_license_type (self, GTK_LICENSE_CUSTOM);
+    if (adap_about_dialog_get_license_type (self) == GTK_LICENSE_UNKNOWN)
+      adap_about_dialog_set_license_type (self, GTK_LICENSE_CUSTOM);
   }
 
   if (issue_url)
-    adw_about_dialog_set_issue_url (self, issue_url);
+    adap_about_dialog_set_issue_url (self, issue_url);
 
   if (support_url)
-    adw_about_dialog_set_support_url (self, support_url);
+    adap_about_dialog_set_support_url (self, support_url);
 
   if (website_url)
-    adw_about_dialog_set_website (self, website_url);
+    adap_about_dialog_set_website (self, website_url);
 
   g_object_unref (appdata_file);
   g_object_unref (metadata);
   g_free (application_id);
   g_free (appdata_uri);
 
-  return ADW_DIALOG (self);
+  return ADAP_DIALOG (self);
 }
 
 /**
- * adw_about_dialog_get_application_icon: (attributes org.gtk.Method.get_property=application-icon)
+ * adap_about_dialog_get_application_icon: (attributes org.gtk.Method.get_property=application-icon)
  * @self: an about dialog
  *
  * Gets the name of the application icon for @self.
@@ -2157,15 +2157,15 @@ adw_about_dialog_new_from_appdata (const char *resource_path,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_application_icon (AdwAboutDialog *self)
+adap_about_dialog_get_application_icon (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->application_icon;
 }
 
 /**
- * adw_about_dialog_set_application_icon: (attributes org.gtk.Method.set_property=application-icon)
+ * adap_about_dialog_set_application_icon: (attributes org.gtk.Method.set_property=application-icon)
  * @self: an about dialog
  * @application_icon: the application icon name
  *
@@ -2176,10 +2176,10 @@ adw_about_dialog_get_application_icon (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_application_icon (AdwAboutDialog *self,
+adap_about_dialog_set_application_icon (AdapAboutDialog *self,
                                        const char     *application_icon)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (application_icon != NULL);
 
   if (!g_set_str (&self->application_icon, application_icon))
@@ -2192,7 +2192,7 @@ adw_about_dialog_set_application_icon (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_application_name: (attributes org.gtk.Method.get_property=application-name)
+ * adap_about_dialog_get_application_name: (attributes org.gtk.Method.get_property=application-name)
  * @self: an about dialog
  *
  * Gets the application name for @self.
@@ -2202,15 +2202,15 @@ adw_about_dialog_set_application_icon (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_application_name (AdwAboutDialog *self)
+adap_about_dialog_get_application_name (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->application_name;
 }
 
 /**
- * adw_about_dialog_set_application_name: (attributes org.gtk.Method.set_property=application-name)
+ * adap_about_dialog_set_application_name: (attributes org.gtk.Method.set_property=application-name)
  * @self: an about dialog
  * @application_name: the application name
  *
@@ -2221,10 +2221,10 @@ adw_about_dialog_get_application_name (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_application_name (AdwAboutDialog *self,
+adap_about_dialog_set_application_name (AdapAboutDialog *self,
                                        const char     *application_name)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (application_name != NULL);
 
   if (!g_set_str (&self->application_name, application_name))
@@ -2237,7 +2237,7 @@ adw_about_dialog_set_application_name (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_developer_name: (attributes org.gtk.Method.get_property=developer-name)
+ * adap_about_dialog_get_developer_name: (attributes org.gtk.Method.get_property=developer-name)
  * @self: an about dialog
  *
  * Gets the developer name for @self.
@@ -2247,15 +2247,15 @@ adw_about_dialog_set_application_name (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_developer_name (AdwAboutDialog *self)
+adap_about_dialog_get_developer_name (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->developer_name;
 }
 
 /**
- * adw_about_dialog_set_developer_name: (attributes org.gtk.Method.set_property=developer-name)
+ * adap_about_dialog_set_developer_name: (attributes org.gtk.Method.set_property=developer-name)
  * @self: an about dialog
  * @developer_name: the developer name
  *
@@ -2271,10 +2271,10 @@ adw_about_dialog_get_developer_name (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_developer_name (AdwAboutDialog *self,
+adap_about_dialog_set_developer_name (AdapAboutDialog *self,
                                      const char     *developer_name)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (developer_name != NULL);
 
   if (!g_set_str (&self->developer_name, developer_name))
@@ -2287,7 +2287,7 @@ adw_about_dialog_set_developer_name (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_version: (attributes org.gtk.Method.get_property=version)
+ * adap_about_dialog_get_version: (attributes org.gtk.Method.get_property=version)
  * @self: an about dialog
  *
  * Gets the version for @self.
@@ -2297,15 +2297,15 @@ adw_about_dialog_set_developer_name (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_version (AdwAboutDialog *self)
+adap_about_dialog_get_version (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->version;
 }
 
 /**
- * adw_about_dialog_set_version: (attributes org.gtk.Method.set_property=version)
+ * adap_about_dialog_set_version: (attributes org.gtk.Method.set_property=version)
  * @self: an about dialog
  * @version: the version
  *
@@ -2319,10 +2319,10 @@ adw_about_dialog_get_version (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_version (AdwAboutDialog *self,
+adap_about_dialog_set_version (AdapAboutDialog *self,
                               const char     *version)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (version != NULL);
 
   if (!g_set_str (&self->version, version))
@@ -2334,7 +2334,7 @@ adw_about_dialog_set_version (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_release_notes_version: (attributes org.gtk.Method.get_property=release-notes-version)
+ * adap_about_dialog_get_release_notes_version: (attributes org.gtk.Method.get_property=release-notes-version)
  * @self: an about dialog
  *
  * Gets the version described by the application's release notes.
@@ -2344,15 +2344,15 @@ adw_about_dialog_set_version (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_release_notes_version (AdwAboutDialog *self)
+adap_about_dialog_get_release_notes_version (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->release_notes_version;
 }
 
 /**
- * adw_about_dialog_set_release_notes_version: (attributes org.gtk.Method.set_property=release-notes-version)
+ * adap_about_dialog_set_release_notes_version: (attributes org.gtk.Method.set_property=release-notes-version)
  * @self: an about dialog
  * @version: the release notes version
  *
@@ -2372,10 +2372,10 @@ adw_about_dialog_get_release_notes_version (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_release_notes_version (AdwAboutDialog *self,
+adap_about_dialog_set_release_notes_version (AdapAboutDialog *self,
                                             const char     *version)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (version != NULL);
 
   if (!g_set_str (&self->release_notes_version, version))
@@ -2388,7 +2388,7 @@ adw_about_dialog_set_release_notes_version (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_release_notes: (attributes org.gtk.Method.get_property=release-notes)
+ * adap_about_dialog_get_release_notes: (attributes org.gtk.Method.get_property=release-notes)
  * @self: an about dialog
  *
  * Gets the release notes for @self.
@@ -2398,15 +2398,15 @@ adw_about_dialog_set_release_notes_version (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_release_notes (AdwAboutDialog *self)
+adap_about_dialog_get_release_notes (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->release_notes;
 }
 
 /**
- * adw_about_dialog_set_release_notes: (attributes org.gtk.Method.set_property=release-notes)
+ * adap_about_dialog_set_release_notes: (attributes org.gtk.Method.set_property=release-notes)
  * @self: an about dialog
  * @release_notes: the release notes
  *
@@ -2431,17 +2431,17 @@ adw_about_dialog_get_release_notes (AdwAboutDialog *self)
  *
  * Nested lists are not supported.
  *
- * `AdwAboutDialog` displays the version above the release notes. If set, the
+ * `AdapAboutDialog` displays the version above the release notes. If set, the
  * [property@AboutDialog:release-notes-version] of the property will be used
  * as the version; otherwise, [property@AboutDialog:version] is used.
  *
  * Since: 1.5
  */
 void
-adw_about_dialog_set_release_notes (AdwAboutDialog *self,
+adap_about_dialog_set_release_notes (AdapAboutDialog *self,
                                     const char     *release_notes)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (release_notes != NULL);
 
   if (!g_set_str (&self->release_notes, release_notes))
@@ -2454,7 +2454,7 @@ adw_about_dialog_set_release_notes (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_comments: (attributes org.gtk.Method.get_property=comments)
+ * adap_about_dialog_get_comments: (attributes org.gtk.Method.get_property=comments)
  * @self: an about dialog
  *
  * Gets the comments about the application.
@@ -2464,15 +2464,15 @@ adw_about_dialog_set_release_notes (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_comments (AdwAboutDialog *self)
+adap_about_dialog_get_comments (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->comments;
 }
 
 /**
- * adw_about_dialog_set_comments: (attributes org.gtk.Method.set_property=comments)
+ * adap_about_dialog_set_comments: (attributes org.gtk.Method.set_property=comments)
  * @self: an about dialog
  * @comments: the comments
  *
@@ -2486,10 +2486,10 @@ adw_about_dialog_get_comments (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_comments (AdwAboutDialog *self,
+adap_about_dialog_set_comments (AdapAboutDialog *self,
                                const char     *comments)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (comments != NULL);
 
   if (!g_set_str (&self->comments, comments))
@@ -2501,7 +2501,7 @@ adw_about_dialog_set_comments (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_website: (attributes org.gtk.Method.get_property=website)
+ * adap_about_dialog_get_website: (attributes org.gtk.Method.get_property=website)
  * @self: an about dialog
  *
  * Gets the application website URL for @self.
@@ -2511,15 +2511,15 @@ adw_about_dialog_set_comments (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_website (AdwAboutDialog *self)
+adap_about_dialog_get_website (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->website;
 }
 
 /**
- * adw_about_dialog_set_website: (attributes org.gtk.Method.set_property=website)
+ * adap_about_dialog_set_website: (attributes org.gtk.Method.set_property=website)
  * @self: an about dialog
  * @website: the website URL
  *
@@ -2533,10 +2533,10 @@ adw_about_dialog_get_website (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_website (AdwAboutDialog *self,
+adap_about_dialog_set_website (AdapAboutDialog *self,
                               const char     *website)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (website != NULL);
 
   if (!g_set_str (&self->website, website))
@@ -2548,7 +2548,7 @@ adw_about_dialog_set_website (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_support_url: (attributes org.gtk.Method.get_property=support-url)
+ * adap_about_dialog_get_support_url: (attributes org.gtk.Method.get_property=support-url)
  * @self: an about dialog
  *
  * Gets the URL of the support page for @self.
@@ -2558,15 +2558,15 @@ adw_about_dialog_set_website (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_support_url (AdwAboutDialog *self)
+adap_about_dialog_get_support_url (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->support_url;
 }
 
 /**
- * adw_about_dialog_set_support_url: (attributes org.gtk.Method.set_property=support-url)
+ * adap_about_dialog_set_support_url: (attributes org.gtk.Method.set_property=support-url)
  * @self: an about dialog
  * @support_url: the support page URL
  *
@@ -2577,10 +2577,10 @@ adw_about_dialog_get_support_url (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_support_url (AdwAboutDialog *self,
+adap_about_dialog_set_support_url (AdapAboutDialog *self,
                                   const char     *support_url)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (support_url != NULL);
 
   if (!g_set_str (&self->support_url, support_url))
@@ -2592,7 +2592,7 @@ adw_about_dialog_set_support_url (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_issue_url: (attributes org.gtk.Method.get_property=issue-url)
+ * adap_about_dialog_get_issue_url: (attributes org.gtk.Method.get_property=issue-url)
  * @self: an about dialog
  *
  * Gets the issue tracker URL for @self.
@@ -2602,15 +2602,15 @@ adw_about_dialog_set_support_url (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_issue_url (AdwAboutDialog *self)
+adap_about_dialog_get_issue_url (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->issue_url;
 }
 
 /**
- * adw_about_dialog_set_issue_url: (attributes org.gtk.Method.set_property=issue-url)
+ * adap_about_dialog_set_issue_url: (attributes org.gtk.Method.set_property=issue-url)
  * @self: an about dialog
  * @issue_url: the issue tracker URL
  *
@@ -2621,10 +2621,10 @@ adw_about_dialog_get_issue_url (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_issue_url (AdwAboutDialog *self,
+adap_about_dialog_set_issue_url (AdapAboutDialog *self,
                                 const char     *issue_url)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (issue_url != NULL);
 
   if (!g_set_str (&self->issue_url, issue_url))
@@ -2636,7 +2636,7 @@ adw_about_dialog_set_issue_url (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_add_link:
+ * adap_about_dialog_add_link:
  * @self: an about dialog
  * @title: the link title
  * @url: the link URL
@@ -2652,26 +2652,26 @@ adw_about_dialog_set_issue_url (AdwAboutDialog *self,
  * Since: 1.5
  */
 void
-adw_about_dialog_add_link (AdwAboutDialog *self,
+adap_about_dialog_add_link (AdapAboutDialog *self,
                            const char     *title,
                            const char     *url)
 {
   GtkWidget *row;
   GtkWidget *image;
 
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (title != NULL);
   g_return_if_fail (url != NULL);
 
-  row = adw_action_row_new ();
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), title);
-  adw_preferences_row_set_use_underline (ADW_PREFERENCES_ROW (row), TRUE);
+  row = adap_action_row_new ();
+  adap_preferences_row_set_title (ADAP_PREFERENCES_ROW (row), title);
+  adap_preferences_row_set_use_underline (ADAP_PREFERENCES_ROW (row), TRUE);
 
   image = g_object_new (GTK_TYPE_IMAGE,
                         "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
-                        "icon-name", "adw-external-link-symbolic",
+                        "icon-name", "adap-external-link-symbolic",
                         NULL);
-  adw_action_row_add_suffix (ADW_ACTION_ROW (row), image);
+  adap_action_row_add_suffix (ADAP_ACTION_ROW (row), image);
 
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (row), "about.show-url");
@@ -2679,7 +2679,7 @@ adw_about_dialog_add_link (AdwAboutDialog *self,
 
   gtk_widget_set_tooltip_text (row, url);
 
-  adw_preferences_group_add (ADW_PREFERENCES_GROUP (self->links_group), row);
+  adap_preferences_group_add (ADAP_PREFERENCES_GROUP (self->links_group), row);
 
   self->has_custom_links = TRUE;
 
@@ -2687,7 +2687,7 @@ adw_about_dialog_add_link (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_debug_info: (attributes org.gtk.Method.get_property=debug-info)
+ * adap_about_dialog_get_debug_info: (attributes org.gtk.Method.get_property=debug-info)
  * @self: an about dialog
  *
  * Gets the debug information for @self.
@@ -2697,15 +2697,15 @@ adw_about_dialog_add_link (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_debug_info (AdwAboutDialog *self)
+adap_about_dialog_get_debug_info (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->debug_info;
 }
 
 /**
- * adw_about_dialog_set_debug_info: (attributes org.gtk.Method.set_property=debug-info)
+ * adap_about_dialog_set_debug_info: (attributes org.gtk.Method.set_property=debug-info)
  * @self: an about dialog
  * @debug_info: the debug information
  *
@@ -2715,7 +2715,7 @@ adw_about_dialog_get_debug_info (AdwAboutDialog *self)
  * to be attached to issue reports when reporting issues against the
  * application.
  *
- * `AdwAboutDialog` provides a quick way to save debug information to a file.
+ * `AdapAboutDialog` provides a quick way to save debug information to a file.
  * When saving, [property@AboutDialog:debug-info-filename] would be used as
  * the suggested filename.
  *
@@ -2724,10 +2724,10 @@ adw_about_dialog_get_debug_info (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_debug_info (AdwAboutDialog *self,
+adap_about_dialog_set_debug_info (AdapAboutDialog *self,
                                  const char     *debug_info)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (debug_info != NULL);
 
   if (!g_set_str (&self->debug_info, debug_info))
@@ -2739,7 +2739,7 @@ adw_about_dialog_set_debug_info (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_debug_info_filename: (attributes org.gtk.Method.get_property=debug-info-filename)
+ * adap_about_dialog_get_debug_info_filename: (attributes org.gtk.Method.get_property=debug-info-filename)
  * @self: an about dialog
  *
  * Gets the debug information filename for @self.
@@ -2749,15 +2749,15 @@ adw_about_dialog_set_debug_info (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_debug_info_filename (AdwAboutDialog *self)
+adap_about_dialog_get_debug_info_filename (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->debug_info_filename;
 }
 
 /**
- * adw_about_dialog_set_debug_info_filename: (attributes org.gtk.Method.set_property=debug-info)
+ * adap_about_dialog_set_debug_info_filename: (attributes org.gtk.Method.set_property=debug-info)
  * @self: an about dialog
  * @filename: the debug info filename
  *
@@ -2771,10 +2771,10 @@ adw_about_dialog_get_debug_info_filename (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_debug_info_filename (AdwAboutDialog *self,
+adap_about_dialog_set_debug_info_filename (AdapAboutDialog *self,
                                           const char     *filename)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (filename != NULL);
 
   if (!g_set_str (&self->debug_info_filename, filename))
@@ -2784,7 +2784,7 @@ adw_about_dialog_set_debug_info_filename (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_developers: (attributes org.gtk.Method.get_property=developers)
+ * adap_about_dialog_get_developers: (attributes org.gtk.Method.get_property=developers)
  * @self: an about dialog
  *
  * Gets the list of developers of the application.
@@ -2794,15 +2794,15 @@ adw_about_dialog_set_debug_info_filename (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char * const *
-adw_about_dialog_get_developers (AdwAboutDialog *self)
+adap_about_dialog_get_developers (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return (const char * const *) self->developers;
 }
 
 /**
- * adw_about_dialog_set_developers: (attributes org.gtk.Method.set_property=developers)
+ * adap_about_dialog_set_developers: (attributes org.gtk.Method.set_property=developers)
  * @self: an about dialog
  * @developers: (nullable) (transfer none) (array zero-terminated=1): the list of developers
  *
@@ -2825,10 +2825,10 @@ adw_about_dialog_get_developers (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_developers (AdwAboutDialog  *self,
+adap_about_dialog_set_developers (AdapAboutDialog  *self,
                                  const char     **developers)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
 
   if ((const char **) self->developers == developers)
     return;
@@ -2842,7 +2842,7 @@ adw_about_dialog_set_developers (AdwAboutDialog  *self,
 }
 
 /**
- * adw_about_dialog_get_designers: (attributes org.gtk.Method.get_property=designers)
+ * adap_about_dialog_get_designers: (attributes org.gtk.Method.get_property=designers)
  * @self: an about dialog
  *
  * Gets the list of designers of the application.
@@ -2852,15 +2852,15 @@ adw_about_dialog_set_developers (AdwAboutDialog  *self,
  * Since: 1.5
  */
 const char * const *
-adw_about_dialog_get_designers (AdwAboutDialog *self)
+adap_about_dialog_get_designers (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return (const char * const *) self->designers;
 }
 
 /**
- * adw_about_dialog_set_designers: (attributes org.gtk.Method.set_property=designers)
+ * adap_about_dialog_set_designers: (attributes org.gtk.Method.set_property=designers)
  * @self: an about dialog
  * @designers: (nullable) (transfer none) (array zero-terminated=1): the list of designers
  *
@@ -2883,10 +2883,10 @@ adw_about_dialog_get_designers (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_designers (AdwAboutDialog  *self,
+adap_about_dialog_set_designers (AdapAboutDialog  *self,
                                 const char     **designers)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
 
   if ((const char **) self->designers == designers)
     return;
@@ -2900,7 +2900,7 @@ adw_about_dialog_set_designers (AdwAboutDialog  *self,
 }
 
 /**
- * adw_about_dialog_get_artists: (attributes org.gtk.Method.get_property=artists)
+ * adap_about_dialog_get_artists: (attributes org.gtk.Method.get_property=artists)
  * @self: an about dialog
  *
  * Gets the list of artists of the application.
@@ -2910,15 +2910,15 @@ adw_about_dialog_set_designers (AdwAboutDialog  *self,
  * Since: 1.5
  */
 const char * const *
-adw_about_dialog_get_artists (AdwAboutDialog *self)
+adap_about_dialog_get_artists (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return (const char * const *) self->artists;
 }
 
 /**
- * adw_about_dialog_set_artists: (attributes org.gtk.Method.set_property=artists)
+ * adap_about_dialog_set_artists: (attributes org.gtk.Method.set_property=artists)
  * @self: an about dialog
  * @artists: (nullable) (transfer none) (array zero-terminated=1): the list of artists
  *
@@ -2941,10 +2941,10 @@ adw_about_dialog_get_artists (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_artists (AdwAboutDialog  *self,
+adap_about_dialog_set_artists (AdapAboutDialog  *self,
                               const char     **artists)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
 
   if ((const char **) self->artists == artists)
     return;
@@ -2958,7 +2958,7 @@ adw_about_dialog_set_artists (AdwAboutDialog  *self,
 }
 
 /**
- * adw_about_dialog_get_documenters: (attributes org.gtk.Method.get_property=documenters)
+ * adap_about_dialog_get_documenters: (attributes org.gtk.Method.get_property=documenters)
  * @self: an about dialog
  *
  * Gets the list of documenters of the application.
@@ -2968,15 +2968,15 @@ adw_about_dialog_set_artists (AdwAboutDialog  *self,
  * Since: 1.5
  */
 const char * const *
-adw_about_dialog_get_documenters (AdwAboutDialog *self)
+adap_about_dialog_get_documenters (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return (const char * const *) self->documenters;
 }
 
 /**
- * adw_about_dialog_set_documenters: (attributes org.gtk.Method.set_property=documenters)
+ * adap_about_dialog_set_documenters: (attributes org.gtk.Method.set_property=documenters)
  * @self: an about dialog
  * @documenters: (nullable) (transfer none) (array zero-terminated=1): the list of documenters
  *
@@ -2999,10 +2999,10 @@ adw_about_dialog_get_documenters (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_documenters (AdwAboutDialog  *self,
+adap_about_dialog_set_documenters (AdapAboutDialog  *self,
                                   const char     **documenters)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
 
   if ((const char **) self->documenters == documenters)
     return;
@@ -3016,7 +3016,7 @@ adw_about_dialog_set_documenters (AdwAboutDialog  *self,
 }
 
 /**
- * adw_about_dialog_get_translator_credits: (attributes org.gtk.Method.get_property=translator-credits)
+ * adap_about_dialog_get_translator_credits: (attributes org.gtk.Method.get_property=translator-credits)
  * @self: an about dialog
  *
  * Gets the translator credits string.
@@ -3026,15 +3026,15 @@ adw_about_dialog_set_documenters (AdwAboutDialog  *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_translator_credits (AdwAboutDialog *self)
+adap_about_dialog_get_translator_credits (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->translator_credits;
 }
 
 /**
- * adw_about_dialog_set_translator_credits: (attributes org.gtk.Method.set_property=translator-credits)
+ * adap_about_dialog_set_translator_credits: (attributes org.gtk.Method.set_property=translator-credits)
  * @self: an about dialog
  * @translator_credits: the translator credits
  *
@@ -3060,10 +3060,10 @@ adw_about_dialog_get_translator_credits (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_translator_credits (AdwAboutDialog *self,
+adap_about_dialog_set_translator_credits (AdapAboutDialog *self,
                                          const char     *translator_credits)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (translator_credits != NULL);
 
   if (!g_set_str (&self->translator_credits, translator_credits))
@@ -3075,7 +3075,7 @@ adw_about_dialog_set_translator_credits (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_add_credit_section:
+ * adap_about_dialog_add_credit_section:
  * @self: an about dialog
  * @name: (nullable): the section name
  * @people: (array zero-terminated=1): the list of names
@@ -3099,13 +3099,13 @@ adw_about_dialog_set_translator_credits (AdwAboutDialog *self,
  * Since: 1.5
  */
 void
-adw_about_dialog_add_credit_section (AdwAboutDialog  *self,
+adap_about_dialog_add_credit_section (AdapAboutDialog  *self,
                                      const char      *name,
                                      const char     **people)
 {
   CreditsSection *section;
 
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (people != NULL);
 
   section = g_new0 (CreditsSection, 1);
@@ -3118,7 +3118,7 @@ adw_about_dialog_add_credit_section (AdwAboutDialog  *self,
 }
 
 /**
- * adw_about_dialog_add_acknowledgement_section:
+ * adap_about_dialog_add_acknowledgement_section:
  * @self: an about dialog
  * @name: (nullable): the section name
  * @people: (array zero-terminated=1): the list of names
@@ -3144,11 +3144,11 @@ adw_about_dialog_add_credit_section (AdwAboutDialog  *self,
  * Since: 1.5
  */
 void
-adw_about_dialog_add_acknowledgement_section (AdwAboutDialog  *self,
+adap_about_dialog_add_acknowledgement_section (AdapAboutDialog  *self,
                                               const char      *name,
                                               const char     **people)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (people != NULL);
 
   add_credits_section (self->acknowledgements_box, name, (char **) people);
@@ -3159,7 +3159,7 @@ adw_about_dialog_add_acknowledgement_section (AdwAboutDialog  *self,
 }
 
 /**
- * adw_about_dialog_get_copyright: (attributes org.gtk.Method.get_property=copyright)
+ * adap_about_dialog_get_copyright: (attributes org.gtk.Method.get_property=copyright)
  * @self: an about dialog
  *
  * Gets the copyright information for @self.
@@ -3169,15 +3169,15 @@ adw_about_dialog_add_acknowledgement_section (AdwAboutDialog  *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_copyright (AdwAboutDialog *self)
+adap_about_dialog_get_copyright (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->copyright;
 }
 
 /**
- * adw_about_dialog_set_copyright: (attributes org.gtk.Method.set_property=copyright)
+ * adap_about_dialog_set_copyright: (attributes org.gtk.Method.set_property=copyright)
  * @self: an about dialog
  * @copyright: the copyright information
  *
@@ -3195,10 +3195,10 @@ adw_about_dialog_get_copyright (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_copyright (AdwAboutDialog *self,
+adap_about_dialog_set_copyright (AdapAboutDialog *self,
                                 const char     *copyright)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (copyright != NULL);
 
   if (!g_set_str (&self->copyright, copyright))
@@ -3210,7 +3210,7 @@ adw_about_dialog_set_copyright (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_license_type: (attributes org.gtk.Method.get_property=license-type)
+ * adap_about_dialog_get_license_type: (attributes org.gtk.Method.get_property=license-type)
  * @self: an about dialog
  *
  * Gets the license type for @self.
@@ -3220,15 +3220,15 @@ adw_about_dialog_set_copyright (AdwAboutDialog *self,
  * Since: 1.5
  */
 GtkLicense
-adw_about_dialog_get_license_type (AdwAboutDialog *self)
+adap_about_dialog_get_license_type (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), GTK_LICENSE_UNKNOWN);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), GTK_LICENSE_UNKNOWN);
 
   return self->license_type;
 }
 
 /**
- * adw_about_dialog_set_license_type: (attributes org.gtk.Method.set_property=license-type)
+ * adap_about_dialog_set_license_type: (attributes org.gtk.Method.set_property=license-type)
  * @self: an about dialog
  * @license_type: the license type
  *
@@ -3252,10 +3252,10 @@ adw_about_dialog_get_license_type (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_license_type (AdwAboutDialog *self,
+adap_about_dialog_set_license_type (AdapAboutDialog *self,
                                    GtkLicense      license_type)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (license_type >= GTK_LICENSE_UNKNOWN &&
                     license_type < G_N_ELEMENTS (gtk_license_info));
 
@@ -3274,7 +3274,7 @@ adw_about_dialog_set_license_type (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_get_license: (attributes org.gtk.Method.get_property=license)
+ * adap_about_dialog_get_license: (attributes org.gtk.Method.get_property=license)
  * @self: an about dialog
  *
  * Gets the license for @self.
@@ -3284,15 +3284,15 @@ adw_about_dialog_set_license_type (AdwAboutDialog *self,
  * Since: 1.5
  */
 const char *
-adw_about_dialog_get_license (AdwAboutDialog *self)
+adap_about_dialog_get_license (AdapAboutDialog *self)
 {
-  g_return_val_if_fail (ADW_IS_ABOUT_DIALOG (self), NULL);
+  g_return_val_if_fail (ADAP_IS_ABOUT_DIALOG (self), NULL);
 
   return self->license;
 }
 
 /**
- * adw_about_dialog_set_license: (attributes org.gtk.Method.set_property=license)
+ * adap_about_dialog_set_license: (attributes org.gtk.Method.set_property=license)
  * @self: an about dialog
  * @license: the license
  *
@@ -3315,10 +3315,10 @@ adw_about_dialog_get_license (AdwAboutDialog *self)
  * Since: 1.5
  */
 void
-adw_about_dialog_set_license (AdwAboutDialog *self,
+adap_about_dialog_set_license (AdapAboutDialog *self,
                               const char     *license)
 {
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (license != NULL);
 
   if (g_strcmp0 (self->license, license) == 0)
@@ -3338,7 +3338,7 @@ adw_about_dialog_set_license (AdwAboutDialog *self,
 }
 
 /**
- * adw_about_dialog_add_legal_section:
+ * adap_about_dialog_add_legal_section:
  * @self: an about dialog
  * @title: the name of the section
  * @copyright: (nullable): a copyright string
@@ -3361,25 +3361,25 @@ adw_about_dialog_set_license (AdwAboutDialog *self,
  * Examples:
  *
  * ```c
- * adw_about_dialog_add_legal_section (ADW_ABOUT_DIALOG (about),
+ * adap_about_dialog_add_legal_section (ADAP_ABOUT_DIALOG (about),
  *                                     _("Copyright and a known license"),
  *                                     "© 2022 Example",
  *                                     GTK_LICENSE_LGPL_2_1,
  *                                     NULL);
  *
- * adw_about_dialog_add_legal_section (ADW_ABOUT_DIALOG (about),
+ * adap_about_dialog_add_legal_section (ADAP_ABOUT_DIALOG (about),
  *                                     _("Copyright and custom license"),
  *                                     "© 2022 Example",
  *                                     GTK_LICENSE_CUSTOM,
  *                                     "Custom license text");
  *
- * adw_about_dialog_add_legal_section (ADW_ABOUT_DIALOG (about),
+ * adap_about_dialog_add_legal_section (ADAP_ABOUT_DIALOG (about),
  *                                     _("Copyright only"),
  *                                     "© 2022 Example",
  *                                     GTK_LICENSE_UNKNOWN,
  *                                     NULL);
  *
- * adw_about_dialog_add_legal_section (ADW_ABOUT_DIALOG (about),
+ * adap_about_dialog_add_legal_section (ADAP_ABOUT_DIALOG (about),
  *                                     _("Custom license only"),
  *                                     NULL,
  *                                     GTK_LICENSE_CUSTOM,
@@ -3389,7 +3389,7 @@ adw_about_dialog_set_license (AdwAboutDialog *self,
  * Since: 1.5
  */
 void
-adw_about_dialog_add_legal_section (AdwAboutDialog *self,
+adap_about_dialog_add_legal_section (AdapAboutDialog *self,
                                     const char     *title,
                                     const char     *copyright,
                                     GtkLicense      license_type,
@@ -3397,7 +3397,7 @@ adw_about_dialog_add_legal_section (AdwAboutDialog *self,
 {
   LegalSection *section;
 
-  g_return_if_fail (ADW_IS_ABOUT_DIALOG (self));
+  g_return_if_fail (ADAP_IS_ABOUT_DIALOG (self));
   g_return_if_fail (title != NULL);
   g_return_if_fail (license_type >= GTK_LICENSE_UNKNOWN &&
                     license_type < G_N_ELEMENTS (gtk_license_info));
@@ -3414,7 +3414,7 @@ adw_about_dialog_add_legal_section (AdwAboutDialog *self,
 }
 
 /**
- * adw_show_about_dialog: (skip)
+ * adap_show_about_dialog: (skip)
  * @parent: the parent widget
  * @first_property_name: the name of the first property
  * @...: value of first property, followed by more pairs of property name and
@@ -3425,26 +3425,26 @@ adw_about_dialog_add_legal_section (AdwAboutDialog *self,
  * Since: 1.5
  */
 void
-adw_show_about_dialog (GtkWidget  *parent,
+adap_show_about_dialog (GtkWidget  *parent,
                        const char *first_property_name,
                        ...)
 {
-  AdwDialog *dialog;
+  AdapDialog *dialog;
   va_list var_args;
 
   g_return_if_fail (GTK_IS_WIDGET (parent));
 
-  dialog = adw_about_dialog_new ();
+  dialog = adap_about_dialog_new ();
 
   va_start (var_args, first_property_name);
   g_object_set_valist (G_OBJECT (dialog), first_property_name, var_args);
   va_end (var_args);
 
-  adw_dialog_present (dialog, parent);
+  adap_dialog_present (dialog, parent);
 }
 
 /**
- * adw_show_about_dialog_from_appdata: (skip)
+ * adap_show_about_dialog_from_appdata: (skip)
  * @parent: the parent widget
  * @resource_path: The resource to use
  * @release_notes_version: (nullable): The version to retrieve release notes for
@@ -3460,23 +3460,23 @@ adw_show_about_dialog (GtkWidget  *parent,
  * Since: 1.5
  */
 void
-adw_show_about_dialog_from_appdata (GtkWidget  *parent,
+adap_show_about_dialog_from_appdata (GtkWidget  *parent,
                                     const char *resource_path,
                                     const char *release_notes_version,
                                     const char *first_property_name,
                                     ...)
 {
-  AdwDialog *dialog;
+  AdapDialog *dialog;
   va_list var_args;
 
   g_return_if_fail (GTK_IS_WIDGET (parent));
 
-  dialog = adw_about_dialog_new_from_appdata (resource_path,
+  dialog = adap_about_dialog_new_from_appdata (resource_path,
                                               release_notes_version);
 
   va_start (var_args, first_property_name);
   g_object_set_valist (G_OBJECT (dialog), first_property_name, var_args);
   va_end (var_args);
 
-  adw_dialog_present (dialog, parent);
+  adap_dialog_present (dialog, parent);
 }

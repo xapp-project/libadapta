@@ -1,15 +1,15 @@
-#include "adw-demo-page-dialogs.h"
+#include "adap-demo-page-dialogs.h"
 
 #include <glib/gi18n.h>
 
-struct _AdwDemoPageDialogs
+struct _AdapDemoPageDialogs
 {
-  AdwBin parent_instance;
+  AdapBin parent_instance;
 
-  AdwToast *last_toast;
+  AdapToast *last_toast;
 };
 
-G_DEFINE_FINAL_TYPE (AdwDemoPageDialogs, adw_demo_page_dialogs, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (AdapDemoPageDialogs, adap_demo_page_dialogs, ADAP_TYPE_BIN)
 
 enum {
   SIGNAL_ADD_TOAST,
@@ -19,59 +19,59 @@ enum {
 static guint signals[SIGNAL_LAST_SIGNAL];
 
 static void
-toast_dismissed_cb (AdwToast           *toast,
-                    AdwDemoPageDialogs *self)
+toast_dismissed_cb (AdapToast           *toast,
+                    AdapDemoPageDialogs *self)
 {
   if (toast == self->last_toast)
     self->last_toast = NULL;
 }
 
 static void
-alert_cb (AdwAlertDialog     *dialog,
+alert_cb (AdapAlertDialog     *dialog,
           GAsyncResult       *result,
-          AdwDemoPageDialogs *self)
+          AdapDemoPageDialogs *self)
 {
-  const char *response = adw_alert_dialog_choose_finish (dialog, result);
-  AdwToast *toast = adw_toast_new_format (_("Dialog response: %s"), response);
+  const char *response = adap_alert_dialog_choose_finish (dialog, result);
+  AdapToast *toast = adap_toast_new_format (_("Dialog response: %s"), response);
   g_signal_connect_object (toast, "dismissed", G_CALLBACK (toast_dismissed_cb), self, 0);
 
   if (self->last_toast)
-    adw_toast_dismiss (self->last_toast);
+    adap_toast_dismiss (self->last_toast);
   self->last_toast = toast;
 
   g_signal_emit (self, signals[SIGNAL_ADD_TOAST], 0, toast);
 }
 
 static void
-demo_alert_dialog_cb (AdwDemoPageDialogs *self)
+demo_alert_dialog_cb (AdapDemoPageDialogs *self)
 {
-  AdwDialog *dialog;
+  AdapDialog *dialog;
 
-  dialog = adw_alert_dialog_new (_("Save Changes?"),
+  dialog = adap_alert_dialog_new (_("Save Changes?"),
                                  _("Open document contains unsaved changes. Changes which are not saved will be permanently lost."));
 
-  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_add_responses (ADAP_ALERT_DIALOG (dialog),
                                   "cancel",  _("_Cancel"),
                                   "discard", _("_Discard"),
                                   "save",    _("_Save"),
                                   NULL);
 
-  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+  adap_alert_dialog_set_response_appearance (ADAP_ALERT_DIALOG (dialog),
                                             "discard",
-                                            ADW_RESPONSE_DESTRUCTIVE);
-  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+                                            ADAP_RESPONSE_DESTRUCTIVE);
+  adap_alert_dialog_set_response_appearance (ADAP_ALERT_DIALOG (dialog),
                                             "save",
-                                            ADW_RESPONSE_SUGGESTED);
+                                            ADAP_RESPONSE_SUGGESTED);
 
-  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "save");
-  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
+  adap_alert_dialog_set_default_response (ADAP_ALERT_DIALOG (dialog), "save");
+  adap_alert_dialog_set_close_response (ADAP_ALERT_DIALOG (dialog), "cancel");
 
-  adw_alert_dialog_choose (ADW_ALERT_DIALOG (dialog), GTK_WIDGET (self), NULL,
+  adap_alert_dialog_choose (ADAP_ALERT_DIALOG (dialog), GTK_WIDGET (self), NULL,
                            (GAsyncReadyCallback) alert_cb, self);
 }
 
 static void
-adw_demo_page_dialogs_class_init (AdwDemoPageDialogsClass *klass)
+adap_demo_page_dialogs_class_init (AdapDemoPageDialogsClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
@@ -82,15 +82,15 @@ adw_demo_page_dialogs_class_init (AdwDemoPageDialogsClass *klass)
                   0,
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
-                  ADW_TYPE_TOAST);
+                  ADAP_TYPE_TOAST);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adwaita1/Demo/ui/pages/dialogs/adw-demo-page-dialogs.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adapta1/Demo/ui/pages/dialogs/adap-demo-page-dialogs.ui");
 
   gtk_widget_class_install_action (widget_class, "demo.alert-dialog", NULL, (GtkWidgetActionActivateFunc) demo_alert_dialog_cb);
 }
 
 static void
-adw_demo_page_dialogs_init (AdwDemoPageDialogs *self)
+adap_demo_page_dialogs_init (AdapDemoPageDialogs *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }

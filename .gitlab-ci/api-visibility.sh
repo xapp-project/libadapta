@@ -7,12 +7,12 @@ then
   exit 1
 fi
 
-# Check that adwaita.h contains all the public headers.
-for header in $(ls src | grep "\.h$" | grep -v "private.h" | grep -v adwaita.h);
+# Check that adapta.h contains all the public headers.
+for header in $(ls src | grep "\.h$" | grep -v "private.h" | grep -v adapta.h);
 do
-  if ! grep -q "$(basename $header)" src/adwaita.h;
+  if ! grep -q "$(basename $header)" src/adapta.h;
   then
-    echo "The public header" $(basename $header) "should be included in adwaita.h."
+    echo "The public header" $(basename $header) "should be included in adapta.h."
     exit 1
   fi
 done

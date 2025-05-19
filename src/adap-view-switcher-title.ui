@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="libadwaita">
+<interface domain="libadapta">
   <requires lib="gtk" version="4.0"/>
-  <template class="AdwViewSwitcherTitle" parent="GtkWidget">
+  <template class="AdapViewSwitcherTitle" parent="GtkWidget">
     <child>
-      <object class="AdwSqueezer" id="squeezer">
+      <object class="AdapSqueezer" id="squeezer">
         <property name="transition-type">crossfade</property>
         <property name="switch-threshold-policy">natural</property>
         <signal name="notify::visible-child" handler="notify_squeezer_visible_child_cb" swapped="yes"/>
         <child>
-          <object class="AdwViewSwitcher" id="wide_view_switcher">
+          <object class="AdapViewSwitcher" id="wide_view_switcher">
             <property name="policy">wide</property>
             <property name="halign">center</property>
           </object>
         </child>
         <child>
-          <object class="AdwViewSwitcher" id="narrow_view_switcher">
+          <object class="AdapViewSwitcher" id="narrow_view_switcher">
             <property name="policy">narrow</property>
             <property name="halign">center</property>
           </object>
         </child>
         <child>
-          <object class="AdwWindowTitle" id="title_widget"/>
+          <object class="AdapWindowTitle" id="title_widget"/>
         </child>
       </object>
     </child>

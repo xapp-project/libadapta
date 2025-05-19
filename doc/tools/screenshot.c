@@ -1,6 +1,6 @@
-#include <adwaita.h>
+#include <adapta.h>
 
-#define RESOURCE_PATH "/org/gnome/Adwaita/Screenshot/"
+#define RESOURCE_PATH "/org/gnome/Adapta/Screenshot/"
 
 static GMainLoop *loop;
 static char *option_image = NULL;
@@ -296,21 +296,21 @@ take_screenshot_cb (ScreenshotData *data)
   }
 
   if (data->nav_view_child_widget) {
-    AdwNavigationPage *visible_page;
+    AdapNavigationPage *visible_page;
     GtkWidget *view;
 
-    g_assert (ADW_IS_NAVIGATION_PAGE (data->nav_view_child_widget));
+    g_assert (ADAP_IS_NAVIGATION_PAGE (data->nav_view_child_widget));
 
     view = gtk_widget_get_parent (data->nav_view_child_widget);
 
-    g_assert (ADW_IS_NAVIGATION_VIEW (view));
+    g_assert (ADAP_IS_NAVIGATION_VIEW (view));
 
-    visible_page = adw_navigation_view_get_visible_page (ADW_NAVIGATION_VIEW (view));
+    visible_page = adap_navigation_view_get_visible_page (ADAP_NAVIGATION_VIEW (view));
 
-    adw_navigation_view_replace (ADW_NAVIGATION_VIEW (view),
-                                 (AdwNavigationPage *[2]) {
+    adap_navigation_view_replace (ADAP_NAVIGATION_VIEW (view),
+                                 (AdapNavigationPage *[2]) {
                                    visible_page,
-                                   ADW_NAVIGATION_PAGE (data->nav_view_child_widget)
+                                   ADAP_NAVIGATION_PAGE (data->nav_view_child_widget)
                                  }, 2);
   }
 
@@ -355,11 +355,11 @@ take_screenshot (const char *name,
   loop = g_main_loop_new (NULL, FALSE);
 
   if (dark)
-    adw_style_manager_set_color_scheme (adw_style_manager_get_default (),
-                                        ADW_COLOR_SCHEME_FORCE_DARK);
+    adap_style_manager_set_color_scheme (adap_style_manager_get_default (),
+                                        ADAP_COLOR_SCHEME_FORCE_DARK);
   else
-    adw_style_manager_set_color_scheme (adw_style_manager_get_default (),
-                                        ADW_COLOR_SCHEME_FORCE_LIGHT);
+    adap_style_manager_set_color_scheme (adap_style_manager_get_default (),
+                                        ADAP_COLOR_SCHEME_FORCE_LIGHT);
 
   builder = gtk_builder_new_from_file (input_path);
   widget = gtk_builder_get_object (builder, "widget");
@@ -387,9 +387,9 @@ take_screenshot (const char *name,
     gtk_window_set_child (GTK_WINDOW (window), button);
 
     wait = TRUE;
-  } else if (ADW_IS_DIALOG (widget)) {
+  } else if (ADAP_IS_DIALOG (widget)) {
     window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
-    adw_dialog_present (ADW_DIALOG (widget), window);
+    adap_dialog_present (ADAP_DIALOG (widget), window);
     widget = G_OBJECT (window);
   } else if (gtk_widget_get_root (GTK_WIDGET (widget))) {
     window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (widget)));
@@ -455,9 +455,9 @@ get_shortname (const char *basename)
 }
 
 static void
-init_libadwaita (void)
+init_libadapta (void)
 {
-  adw_init ();
+  adap_init ();
 
   gtk_icon_theme_add_resource_path (gtk_icon_theme_get_for_display (gdk_display_get_default ()),
                                     RESOURCE_PATH "icons/");
@@ -465,7 +465,7 @@ init_libadwaita (void)
   g_object_set (gtk_settings_get_default (),
                 "gtk-enable-animations", FALSE,
                 "gtk-font-name", "Cantarell 11",
-                "gtk-icon-theme-name", "Adwaita",
+                "gtk-icon-theme-name", "Adapta",
                 "gtk-decoration-layout", ":close",
                 "gtk-hint-font-metrics", TRUE,
                 NULL);
@@ -646,7 +646,7 @@ main (int    argc,
   }
 
   if (result) {
-    init_libadwaita ();
+    init_libadapta ();
     run_screenshot (input_dir, output_dir);
   }
 

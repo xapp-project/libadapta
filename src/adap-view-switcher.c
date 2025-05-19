@@ -10,12 +10,12 @@
 
 #include "config.h"
 
-#include "adw-enums.h"
-#include "adw-view-switcher.h"
-#include "adw-view-switcher-button-private.h"
+#include "adap-enums.h"
+#include "adap-view-switcher.h"
+#include "adap-view-switcher-button-private.h"
 
 /**
- * AdwViewSwitcher:
+ * AdapViewSwitcher:
  *
  * An adaptive view switcher.
  *
@@ -28,32 +28,32 @@
  * contained in a [class@ViewStack] in a similar fashion to
  * [class@Gtk.StackSwitcher].
  *
- * `AdwViewSwitcher` buttons always have an icon and a label. They can be
+ * `AdapViewSwitcher` buttons always have an icon and a label. They can be
  * displayed side by side, or icon on top of the label. This can be controlled
  * via the [property@ViewSwitcher:policy] property.
  *
- * `AdwViewSwitcher` is intended to be used in a header bar together with
+ * `AdapViewSwitcher` is intended to be used in a header bar together with
  * [class@ViewSwitcherBar] at the bottom of the window, and a [class@Breakpoint]
  * showing the view switcher bar on narrow sizes, while removing the view
  * switcher from the header bar, as follows:
  *
  * ```xml
- * <object class="AdwWindow">
+ * <object class="AdapWindow">
  *   <property name="width-request">360</property>
  *   <property name="height-request">200</property>
  *   <child>
- *     <object class="AdwBreakpoint">
+ *     <object class="AdapBreakpoint">
  *       <condition>max-width: 550sp</condition>
  *       <setter object="switcher_bar" property="reveal">True</setter>
  *       <setter object="header_bar" property="title-widget"/>
  *     </object>
  *   </child>
  *   <property name="content">
- *     <object class="AdwToolbarView">
+ *     <object class="AdapToolbarView">
  *       <child type="top">
- *         <object class="AdwHeaderBar" id="header_bar">
+ *         <object class="AdapHeaderBar" id="header_bar">
  *           <property name="title-widget">
- *             <object class="AdwViewSwitcher">
+ *             <object class="AdapViewSwitcher">
  *               <property name="stack">stack</property>
  *               <property name="policy">wide</property>
  *             </object>
@@ -61,10 +61,10 @@
  *         </object>
  *       </child>
  *       <property name="content">
- *         <object class="AdwViewStack" id="stack"/>
+ *         <object class="AdapViewStack" id="stack"/>
  *       </property>
  *       <child type="bottom">
- *         <object class="AdwViewSwitcherBar" id="switcher_bar">
+ *         <object class="AdapViewSwitcherBar" id="switcher_bar">
  *           <property name="stack">stack</property>
  *         </object>
  *       </child>
@@ -74,25 +74,25 @@
  * ```
  *
  * It's recommended to set [property@ViewSwitcher:policy] to
- * `ADW_VIEW_SWITCHER_POLICY_WIDE` in this case.
+ * `ADAP_VIEW_SWITCHER_POLICY_WIDE` in this case.
  *
  * You may have to adjust the breakpoint condition for your specific pages.
  *
  * ## CSS nodes
  *
- * `AdwViewSwitcher` has a single CSS node with name `viewswitcher`. It can have
+ * `AdapViewSwitcher` has a single CSS node with name `viewswitcher`. It can have
  * the style classes `.wide` and `.narrow`, matching its policy.
  *
  * ## Accessibility
  *
- * `AdwViewSwitcher` uses the `GTK_ACCESSIBLE_ROLE_TAB_LIST` role and uses the
+ * `AdapViewSwitcher` uses the `GTK_ACCESSIBLE_ROLE_TAB_LIST` role and uses the
  * `GTK_ACCESSIBLE_ROLE_TAB` for its buttons.
  */
 
 /**
- * AdwViewSwitcherPolicy:
- * @ADW_VIEW_SWITCHER_POLICY_NARROW: Force the narrow mode
- * @ADW_VIEW_SWITCHER_POLICY_WIDE: Force the wide mode
+ * AdapViewSwitcherPolicy:
+ * @ADAP_VIEW_SWITCHER_POLICY_NARROW: Force the narrow mode
+ * @ADAP_VIEW_SWITCHER_POLICY_WIDE: Force the wide mode
  *
  * Describes the adaptive modes of [class@ViewSwitcher].
  */
@@ -104,25 +104,25 @@ enum {
   LAST_PROP,
 };
 
-struct _AdwViewSwitcher
+struct _AdapViewSwitcher
 {
   GtkWidget parent_instance;
 
-  AdwViewStack *stack;
+  AdapViewStack *stack;
   GtkSelectionModel *pages;
   GHashTable *buttons;
 
-  AdwViewSwitcherPolicy policy;
+  AdapViewSwitcherPolicy policy;
 };
 
 static GParamSpec *props[LAST_PROP];
 
-G_DEFINE_FINAL_TYPE (AdwViewSwitcher, adw_view_switcher, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (AdapViewSwitcher, adap_view_switcher, GTK_TYPE_WIDGET)
 
 static void
 on_button_toggled (GtkWidget       *button,
                    GParamSpec      *pspec,
-                   AdwViewSwitcher *self)
+                   AdapViewSwitcher *self)
 {
   gboolean active;
   guint index;
@@ -139,8 +139,8 @@ on_button_toggled (GtkWidget       *button,
 }
 
 static void
-update_button (AdwViewSwitcher  *self,
-               AdwViewStackPage *page,
+update_button (AdapViewSwitcher  *self,
+               AdapViewStackPage *page,
                GtkWidget        *button)
 {
   char *title;
@@ -174,9 +174,9 @@ update_button (AdwViewSwitcher  *self,
 }
 
 static void
-on_page_updated (AdwViewStackPage *page,
+on_page_updated (AdapViewStackPage *page,
                  GParamSpec       *pspec,
-                 AdwViewSwitcher  *self)
+                 AdapViewSwitcher  *self)
 {
   GtkWidget *button;
 
@@ -185,11 +185,11 @@ on_page_updated (AdwViewStackPage *page,
 }
 
 static void
-add_child (AdwViewSwitcher *self,
+add_child (AdapViewSwitcher *self,
            guint            position)
 {
-  AdwViewSwitcherButton *button = ADW_VIEW_SWITCHER_BUTTON (adw_view_switcher_button_new ());
-  AdwViewStackPage *page;
+  AdapViewSwitcherButton *button = ADAP_VIEW_SWITCHER_BUTTON (adap_view_switcher_button_new ());
+  AdapViewStackPage *page;
   gboolean selected;
 
   page = g_list_model_get_item (G_LIST_MODEL (self->pages), position);
@@ -206,7 +206,7 @@ add_child (AdwViewSwitcher *self,
                                -1);
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (button),
-                                  self->policy == ADW_VIEW_SWITCHER_POLICY_WIDE ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL);
+                                  self->policy == ADAP_VIEW_SWITCHER_POLICY_WIDE ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL);
 
   g_signal_connect (button, "notify::active", G_CALLBACK (on_button_toggled), self);
   g_signal_connect (page, "notify", G_CALLBACK (on_page_updated), self);
@@ -217,7 +217,7 @@ add_child (AdwViewSwitcher *self,
 }
 
 static void
-populate_switcher (AdwViewSwitcher *self)
+populate_switcher (AdapViewSwitcher *self)
 {
   guint i, n;
 
@@ -227,7 +227,7 @@ populate_switcher (AdwViewSwitcher *self)
 }
 
 static void
-clear_switcher (AdwViewSwitcher *self)
+clear_switcher (AdapViewSwitcher *self)
 {
   GHashTableIter iter;
   GtkWidget *page;
@@ -243,21 +243,21 @@ clear_switcher (AdwViewSwitcher *self)
 
 
 static void
-items_changed_cb (AdwViewSwitcher *self)
+items_changed_cb (AdapViewSwitcher *self)
 {
   clear_switcher (self);
   populate_switcher (self);
 }
 
 static void
-selection_changed_cb (AdwViewSwitcher   *self,
+selection_changed_cb (AdapViewSwitcher   *self,
                       guint              position,
                       guint              n_items)
 {
   guint i;
 
   for (i = position; i < position + n_items; i++) {
-    AdwViewStackPage *page = NULL;
+    AdapViewStackPage *page = NULL;
     GtkWidget *button;
     gboolean selected;
 
@@ -278,34 +278,34 @@ selection_changed_cb (AdwViewSwitcher   *self,
 }
 
 static void
-disconnect_stack_signals (AdwViewSwitcher *self)
+disconnect_stack_signals (AdapViewSwitcher *self)
 {
   g_signal_handlers_disconnect_by_func (self->pages, items_changed_cb, self);
   g_signal_handlers_disconnect_by_func (self->pages, selection_changed_cb, self);
 }
 
 static void
-connect_stack_signals (AdwViewSwitcher *self)
+connect_stack_signals (AdapViewSwitcher *self)
 {
   g_signal_connect_swapped (self->pages, "items-changed", G_CALLBACK (items_changed_cb), self);
   g_signal_connect_swapped (self->pages, "selection-changed", G_CALLBACK (selection_changed_cb), self);
 }
 
 static void
-set_stack (AdwViewSwitcher *self,
-           AdwViewStack    *stack)
+set_stack (AdapViewSwitcher *self,
+           AdapViewStack    *stack)
 {
   if (!stack)
     return;
 
   self->stack = g_object_ref (stack);
-  self->pages = adw_view_stack_get_pages (stack);
+  self->pages = adap_view_stack_get_pages (stack);
   populate_switcher (self);
   connect_stack_signals (self);
 }
 
 static void
-unset_stack (AdwViewSwitcher *self)
+unset_stack (AdapViewSwitcher *self)
 {
   if (!self->stack)
     return;
@@ -317,19 +317,19 @@ unset_stack (AdwViewSwitcher *self)
 }
 
 static void
-adw_view_switcher_get_property (GObject    *object,
+adap_view_switcher_get_property (GObject    *object,
                                 guint       prop_id,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-  AdwViewSwitcher *self = ADW_VIEW_SWITCHER (object);
+  AdapViewSwitcher *self = ADAP_VIEW_SWITCHER (object);
 
   switch (prop_id) {
   case PROP_POLICY:
-    g_value_set_enum (value, adw_view_switcher_get_policy (self));
+    g_value_set_enum (value, adap_view_switcher_get_policy (self));
     break;
   case PROP_STACK:
-    g_value_set_object (value, adw_view_switcher_get_stack (self));
+    g_value_set_object (value, adap_view_switcher_get_stack (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -338,19 +338,19 @@ adw_view_switcher_get_property (GObject    *object,
 }
 
 static void
-adw_view_switcher_set_property (GObject      *object,
+adap_view_switcher_set_property (GObject      *object,
                                 guint         prop_id,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-  AdwViewSwitcher *self = ADW_VIEW_SWITCHER (object);
+  AdapViewSwitcher *self = ADAP_VIEW_SWITCHER (object);
 
   switch (prop_id) {
   case PROP_POLICY:
-    adw_view_switcher_set_policy (self, g_value_get_enum (value));
+    adap_view_switcher_set_policy (self, g_value_get_enum (value));
     break;
   case PROP_STACK:
-    adw_view_switcher_set_stack (self, g_value_get_object (value));
+    adap_view_switcher_set_stack (self, g_value_get_object (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -359,55 +359,55 @@ adw_view_switcher_set_property (GObject      *object,
 }
 
 static void
-adw_view_switcher_dispose (GObject *object)
+adap_view_switcher_dispose (GObject *object)
 {
-  AdwViewSwitcher *self = ADW_VIEW_SWITCHER (object);
+  AdapViewSwitcher *self = ADAP_VIEW_SWITCHER (object);
 
   unset_stack (self);
 
-  G_OBJECT_CLASS (adw_view_switcher_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_view_switcher_parent_class)->dispose (object);
 }
 
 static void
-adw_view_switcher_finalize (GObject *object)
+adap_view_switcher_finalize (GObject *object)
 {
-  AdwViewSwitcher *self = ADW_VIEW_SWITCHER (object);
+  AdapViewSwitcher *self = ADAP_VIEW_SWITCHER (object);
 
   g_hash_table_destroy (self->buttons);
 
-  G_OBJECT_CLASS (adw_view_switcher_parent_class)->finalize (object);
+  G_OBJECT_CLASS (adap_view_switcher_parent_class)->finalize (object);
 }
 
 static void
-adw_view_switcher_class_init (AdwViewSwitcherClass *klass)
+adap_view_switcher_class_init (AdapViewSwitcherClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = adw_view_switcher_get_property;
-  object_class->set_property = adw_view_switcher_set_property;
-  object_class->dispose = adw_view_switcher_dispose;
-  object_class->finalize = adw_view_switcher_finalize;
+  object_class->get_property = adap_view_switcher_get_property;
+  object_class->set_property = adap_view_switcher_set_property;
+  object_class->dispose = adap_view_switcher_dispose;
+  object_class->finalize = adap_view_switcher_finalize;
 
   /**
-   * AdwViewSwitcher:policy: (attributes org.gtk.Property.get=adw_view_switcher_get_policy org.gtk.Property.set=adw_view_switcher_set_policy)
+   * AdapViewSwitcher:policy: (attributes org.gtk.Property.get=adap_view_switcher_get_policy org.gtk.Property.set=adap_view_switcher_set_policy)
    *
    * The policy to determine which mode to use.
    */
   props[PROP_POLICY] =
     g_param_spec_enum ("policy", NULL, NULL,
-                       ADW_TYPE_VIEW_SWITCHER_POLICY,
-                       ADW_VIEW_SWITCHER_POLICY_NARROW,
+                       ADAP_TYPE_VIEW_SWITCHER_POLICY,
+                       ADAP_VIEW_SWITCHER_POLICY_NARROW,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwViewSwitcher:stack: (attributes org.gtk.Property.get=adw_view_switcher_get_stack org.gtk.Property.set=adw_view_switcher_set_stack)
+   * AdapViewSwitcher:stack: (attributes org.gtk.Property.get=adap_view_switcher_get_stack org.gtk.Property.set=adap_view_switcher_set_stack)
    *
    * The stack the view switcher controls.
    */
   props[PROP_STACK] =
     g_param_spec_object ("stack", NULL, NULL,
-                         ADW_TYPE_VIEW_STACK,
+                         ADAP_TYPE_VIEW_STACK,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
@@ -418,7 +418,7 @@ adw_view_switcher_class_init (AdwViewSwitcherClass *klass)
 }
 
 static void
-adw_view_switcher_init (AdwViewSwitcher *self)
+adap_view_switcher_init (AdapViewSwitcher *self)
 {
   GtkLayoutManager *layout = gtk_widget_get_layout_manager (GTK_WIDGET (self));
 
@@ -430,49 +430,49 @@ adw_view_switcher_init (AdwViewSwitcher *self)
 }
 
 /**
- * adw_view_switcher_new:
+ * adap_view_switcher_new:
  *
- * Creates a new `AdwViewSwitcher`.
+ * Creates a new `AdapViewSwitcher`.
  *
- * Returns: the newly created `AdwViewSwitcher`
+ * Returns: the newly created `AdapViewSwitcher`
  */
 GtkWidget *
-adw_view_switcher_new (void)
+adap_view_switcher_new (void)
 {
-  return g_object_new (ADW_TYPE_VIEW_SWITCHER, NULL);
+  return g_object_new (ADAP_TYPE_VIEW_SWITCHER, NULL);
 }
 
 /**
- * adw_view_switcher_get_policy: (attributes org.gtk.Method.get_property=policy)
+ * adap_view_switcher_get_policy: (attributes org.gtk.Method.get_property=policy)
  * @self: a view switcher
  *
  * Gets the policy of @self.
  *
  * Returns: the policy of @self
  */
-AdwViewSwitcherPolicy
-adw_view_switcher_get_policy (AdwViewSwitcher *self)
+AdapViewSwitcherPolicy
+adap_view_switcher_get_policy (AdapViewSwitcher *self)
 {
-  g_return_val_if_fail (ADW_IS_VIEW_SWITCHER (self), ADW_VIEW_SWITCHER_POLICY_NARROW);
+  g_return_val_if_fail (ADAP_IS_VIEW_SWITCHER (self), ADAP_VIEW_SWITCHER_POLICY_NARROW);
 
   return self->policy;
 }
 
 /**
- * adw_view_switcher_set_policy: (attributes org.gtk.Method.set_property=policy)
+ * adap_view_switcher_set_policy: (attributes org.gtk.Method.set_property=policy)
  * @self: a view switcher
  * @policy: the new policy
  *
  * Sets the policy of @self.
  */
 void
-adw_view_switcher_set_policy (AdwViewSwitcher       *self,
-                              AdwViewSwitcherPolicy  policy)
+adap_view_switcher_set_policy (AdapViewSwitcher       *self,
+                              AdapViewSwitcherPolicy  policy)
 {
   GHashTableIter iter;
   GtkWidget *button;
 
-  g_return_if_fail (ADW_IS_VIEW_SWITCHER (self));
+  g_return_if_fail (ADAP_IS_VIEW_SWITCHER (self));
 
   if (self->policy == policy)
     return;
@@ -482,11 +482,11 @@ adw_view_switcher_set_policy (AdwViewSwitcher       *self,
   g_hash_table_iter_init (&iter, self->buttons);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &button))
     gtk_orientable_set_orientation (GTK_ORIENTABLE (button),
-                                    self->policy == ADW_VIEW_SWITCHER_POLICY_WIDE ?
+                                    self->policy == ADAP_VIEW_SWITCHER_POLICY_WIDE ?
                                       GTK_ORIENTATION_HORIZONTAL :
                                       GTK_ORIENTATION_VERTICAL);
 
-  if (self->policy == ADW_VIEW_SWITCHER_POLICY_WIDE) {
+  if (self->policy == ADAP_VIEW_SWITCHER_POLICY_WIDE) {
     gtk_widget_add_css_class (GTK_WIDGET (self), "wide");
     gtk_widget_remove_css_class (GTK_WIDGET (self), "narrow");
   } else {
@@ -498,34 +498,34 @@ adw_view_switcher_set_policy (AdwViewSwitcher       *self,
 }
 
 /**
- * adw_view_switcher_get_stack: (attributes org.gtk.Method.get_property=stack)
+ * adap_view_switcher_get_stack: (attributes org.gtk.Method.get_property=stack)
  * @self: a view switcher
  *
  * Gets the stack controlled by @self.
  *
  * Returns: (nullable) (transfer none): the stack
  */
-AdwViewStack *
-adw_view_switcher_get_stack (AdwViewSwitcher *self)
+AdapViewStack *
+adap_view_switcher_get_stack (AdapViewSwitcher *self)
 {
-  g_return_val_if_fail (ADW_IS_VIEW_SWITCHER (self), NULL);
+  g_return_val_if_fail (ADAP_IS_VIEW_SWITCHER (self), NULL);
 
   return self->stack;
 }
 
 /**
- * adw_view_switcher_set_stack: (attributes org.gtk.Method.set_property=stack)
+ * adap_view_switcher_set_stack: (attributes org.gtk.Method.set_property=stack)
  * @self: a view switcher
  * @stack: (nullable): a stack
  *
  * Sets the stack controlled by @self.
  */
 void
-adw_view_switcher_set_stack (AdwViewSwitcher *self,
-                             AdwViewStack    *stack)
+adap_view_switcher_set_stack (AdapViewSwitcher *self,
+                             AdapViewStack    *stack)
 {
-  g_return_if_fail (ADW_IS_VIEW_SWITCHER (self));
-  g_return_if_fail (stack == NULL || ADW_IS_VIEW_STACK (stack));
+  g_return_if_fail (ADAP_IS_VIEW_SWITCHER (self));
+  g_return_if_fail (stack == NULL || ADAP_IS_VIEW_STACK (stack));
 
   if (self->stack == stack)
     return;

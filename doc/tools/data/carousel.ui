@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwCarousel" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapCarousel" id="widget">
     <property name="height-request">200</property>
     <property name="width-request">400</property>
     <property name="spacing">12</property>

@@ -1,18 +1,18 @@
 #pragma once
 
-#include <adwaita.h>
+#include <adapta.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_TAB_VIEW_DEMO_PAGE (adw_tab_view_demo_page_get_type())
+#define ADAP_TYPE_TAB_VIEW_DEMO_PAGE (adap_tab_view_demo_page_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwTabViewDemoPage, adw_tab_view_demo_page, ADW, TAB_VIEW_DEMO_PAGE, AdwBin)
+G_DECLARE_FINAL_TYPE (AdapTabViewDemoPage, adap_tab_view_demo_page, ADAP, TAB_VIEW_DEMO_PAGE, AdapBin)
 
-AdwTabViewDemoPage *adw_tab_view_demo_page_new           (const char         *title);
-AdwTabViewDemoPage *adw_tab_view_demo_page_new_duplicate (AdwTabViewDemoPage *self);
+AdapTabViewDemoPage *adap_tab_view_demo_page_new           (const char         *title);
+AdapTabViewDemoPage *adap_tab_view_demo_page_new_duplicate (AdapTabViewDemoPage *self);
 
-void adw_tab_view_demo_page_refresh_icon    (AdwTabViewDemoPage *self);
-void adw_tab_view_demo_page_set_enable_icon (AdwTabViewDemoPage *self,
+void adap_tab_view_demo_page_refresh_icon    (AdapTabViewDemoPage *self);
+void adap_tab_view_demo_page_set_enable_icon (AdapTabViewDemoPage *self,
                                              gboolean            enable_icon);
 
 G_END_DECLS

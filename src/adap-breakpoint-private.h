@@ -8,18 +8,18 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-breakpoint.h"
+#include "adap-breakpoint.h"
 
 G_BEGIN_DECLS
 
-void adw_breakpoint_transition (AdwBreakpoint *from,
-                                AdwBreakpoint *to);
+void adap_breakpoint_transition (AdapBreakpoint *from,
+                                AdapBreakpoint *to);
 
-gboolean adw_breakpoint_check_condition (AdwBreakpoint *self,
+gboolean adap_breakpoint_check_condition (AdapBreakpoint *self,
                                          GtkSettings   *settings,
                                          int            width,
                                          int            height);

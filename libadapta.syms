@@ -1,6 +1,6 @@
-LIBADWAITA_1_0 {
+LIBADAPTA_1_0 {
 	global:
-		adw_*;
+		adap_*;
 	local:
 		*;
 };

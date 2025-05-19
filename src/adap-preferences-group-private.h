@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include "adw-preferences-group.h"
+#include "adap-preferences-group.h"
 
 G_BEGIN_DECLS
 
-GListModel *adw_preferences_group_get_rows (AdwPreferencesGroup *self) G_GNUC_WARN_UNUSED_RESULT;
+GListModel *adap_preferences_group_get_rows (AdapPreferencesGroup *self) G_GNUC_WARN_UNUSED_RESULT;
 
 G_END_DECLS

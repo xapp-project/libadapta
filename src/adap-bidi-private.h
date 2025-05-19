@@ -6,8 +6,8 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
 #include <glib.h>
@@ -15,7 +15,7 @@
 
 G_BEGIN_DECLS
 
-PangoDirection adw_find_base_dir (const char *text,
+PangoDirection adap_find_base_dir (const char *text,
                                   int         length);
 
 G_END_DECLS

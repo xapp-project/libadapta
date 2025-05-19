@@ -1,67 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwWindow" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapWindow" id="widget">
     <property name="default-width">800</property>
     <property name="default-height">500</property>
     <property name="title">Boxed List</property>
     <property name="content">
-      <object class="AdwToolbarView">
+      <object class="AdapToolbarView">
         <child type="top">
           <object class="GtkHeaderBar"/>
         </child>
         <property name="content">
-          <object class="AdwPreferencesPage">
+          <object class="AdapPreferencesPage">
             <child>
-              <object class="AdwPreferencesGroup">
+              <object class="AdapPreferencesGroup">
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title">Row 1</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title">Row 2</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title">Row 3</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title">Row 4</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title">Row 5</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title">Row 6</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title">Row 7</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title">Row 8</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title">Row 9</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdapActionRow">
                     <property name="title">Row 10</property>
                   </object>
                 </child>

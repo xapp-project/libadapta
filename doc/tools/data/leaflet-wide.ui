@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwWindow" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapWindow" id="widget">
     <property name="default-width">420</property>
     <property name="default-height">150</property>
     <property name="content">
-      <object class="AdwLeaflet">
+      <object class="AdapLeaflet">
         <child>
           <object class="GtkLabel">
             <property name="label">Page 1</property>
@@ -17,7 +17,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwLeafletPage">
+          <object class="AdapLeafletPage">
             <property name="navigatable">False</property>
             <property name="child">
               <object class="GtkSeparator"/>

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <adwaita.h>
+#include <adapta.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_DEMO_PREFERENCES_WINDOW (adw_demo_preferences_window_get_type())
+#define ADAP_TYPE_DEMO_PREFERENCES_WINDOW (adap_demo_preferences_window_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwDemoPreferencesWindow, adw_demo_preferences_window, ADW, DEMO_PREFERENCES_WINDOW, AdwPreferencesDialog)
+G_DECLARE_FINAL_TYPE (AdapDemoPreferencesWindow, adap_demo_preferences_window, ADAP, DEMO_PREFERENCES_WINDOW, AdapPreferencesDialog)
 
-AdwDemoPreferencesWindow *adw_demo_preferences_window_new (void);
+AdapDemoPreferencesWindow *adap_demo_preferences_window_new (void);
 
 G_END_DECLS

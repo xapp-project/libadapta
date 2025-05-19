@@ -1,4 +1,4 @@
-#include <adwaita.h>
+#include <adapta.h>
 
 static void
 activate_cb (GtkApplication *app)
@@ -16,9 +16,9 @@ int
 main (int   argc,
       char *argv[])
 {
-  g_autoptr (AdwApplication) app = NULL;
+  g_autoptr (AdapApplication) app = NULL;
 
-  app = adw_application_new ("org.example.Hello", 0);
+  app = adap_application_new ("org.example.Hello", 0);
 
   g_signal_connect (app, "activate", G_CALLBACK (activate_cb), NULL);
 

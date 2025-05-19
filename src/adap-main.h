@@ -5,20 +5,20 @@
  */
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-ADW_AVAILABLE_IN_ALL
-void adw_init (void);
+ADAP_AVAILABLE_IN_ALL
+void adap_init (void);
 
-ADW_AVAILABLE_IN_ALL
-gboolean adw_is_initialized (void);
+ADAP_AVAILABLE_IN_ALL
+gboolean adap_is_initialized (void);
 
 G_END_DECLS

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <adwaita.h>
+#include <adapta.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_STYLE_DEMO_WINDOW (adw_style_demo_window_get_type())
+#define ADAP_TYPE_STYLE_DEMO_WINDOW (adap_style_demo_window_get_type())
 
-G_DECLARE_FINAL_TYPE (AdwStyleDemoWindow, adw_style_demo_window, ADW, STYLE_DEMO_WINDOW, AdwDialog)
+G_DECLARE_FINAL_TYPE (AdapStyleDemoWindow, adap_style_demo_window, ADAP, STYLE_DEMO_WINDOW, AdapDialog)
 
-AdwStyleDemoWindow *adw_style_demo_window_new (void);
+AdapStyleDemoWindow *adap_style_demo_window_new (void);
 
 G_END_DECLS

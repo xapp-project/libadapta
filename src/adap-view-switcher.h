@@ -7,41 +7,41 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
-#include "adw-view-stack.h"
+#include "adap-view-stack.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_VIEW_SWITCHER (adw_view_switcher_get_type())
+#define ADAP_TYPE_VIEW_SWITCHER (adap_view_switcher_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwViewSwitcher, adw_view_switcher, ADW, VIEW_SWITCHER, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapViewSwitcher, adap_view_switcher, ADAP, VIEW_SWITCHER, GtkWidget)
 
 typedef enum {
-  ADW_VIEW_SWITCHER_POLICY_NARROW,
-  ADW_VIEW_SWITCHER_POLICY_WIDE,
-} AdwViewSwitcherPolicy;
+  ADAP_VIEW_SWITCHER_POLICY_NARROW,
+  ADAP_VIEW_SWITCHER_POLICY_WIDE,
+} AdapViewSwitcherPolicy;
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_view_switcher_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_view_switcher_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-AdwViewSwitcherPolicy adw_view_switcher_get_policy (AdwViewSwitcher       *self);
-ADW_AVAILABLE_IN_ALL
-void                  adw_view_switcher_set_policy (AdwViewSwitcher       *self,
-                                                    AdwViewSwitcherPolicy  policy);
+ADAP_AVAILABLE_IN_ALL
+AdapViewSwitcherPolicy adap_view_switcher_get_policy (AdapViewSwitcher       *self);
+ADAP_AVAILABLE_IN_ALL
+void                  adap_view_switcher_set_policy (AdapViewSwitcher       *self,
+                                                    AdapViewSwitcherPolicy  policy);
 
-ADW_AVAILABLE_IN_ALL
-AdwViewStack *adw_view_switcher_get_stack (AdwViewSwitcher *self);
-ADW_AVAILABLE_IN_ALL
-void          adw_view_switcher_set_stack (AdwViewSwitcher *self,
-                                           AdwViewStack    *stack);
+ADAP_AVAILABLE_IN_ALL
+AdapViewStack *adap_view_switcher_get_stack (AdapViewSwitcher *self);
+ADAP_AVAILABLE_IN_ALL
+void          adap_view_switcher_set_stack (AdapViewSwitcher *self,
+                                           AdapViewStack    *stack);
 
 G_END_DECLS

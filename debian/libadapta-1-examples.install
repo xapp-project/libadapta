@@ -1,6 +1,6 @@
 usr/bin
-usr/share/applications/org.gnome.Adwaita1.Demo.desktop
-usr/share/icons/hicolor/*/apps/org.gnome.Adwaita1.Demo-symbolic.svg
-usr/share/icons/hicolor/*/apps/org.gnome.Adwaita1.Demo.svg
-usr/share/metainfo/org.gnome.Adwaita1.Demo.metainfo.xml
-usr/share/themes/LibAdwaita-Example
+usr/share/applications/org.gnome.Adapta1.Demo.desktop
+usr/share/icons/hicolor/*/apps/org.gnome.Adapta1.Demo-symbolic.svg
+usr/share/icons/hicolor/*/apps/org.gnome.Adapta1.Demo.svg
+usr/share/metainfo/org.gnome.Adapta1.Demo.metainfo.xml
+usr/share/themes/LibAdapta-Example

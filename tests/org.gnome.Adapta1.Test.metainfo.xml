@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>org.gnome.Adwaita1.Test</id>
+  <id>org.gnome.Adapta1.Test</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.1-or-later</project_license>
-  <launchable type="desktop-id">org.gnome.Adwaita1.Test.desktop</launchable>
+  <launchable type="desktop-id">org.gnome.Adapta1.Test.desktop</launchable>
   <developer_name>The GNOME Project</developer_name>
 
-  <name>Adwaita Test</name>
+  <name>Adapta Test</name>
 
   <releases>
     <release version="1.0">
@@ -23,7 +23,7 @@
 
   <project_group>GNOME</project_group>
 
-  <url type="homepage">https://gitlab.gnome.org/GNOME/libadwaita</url>
-  <url type="bugtracker">https://gitlab.gnome.org/GNOME/libadwaita/issues</url>
+  <url type="homepage">https://gitlab.gnome.org/GNOME/libadapta</url>
+  <url type="bugtracker">https://gitlab.gnome.org/GNOME/libadapta/issues</url>
   <url type="help">http://www.gnome.org/friends/</url>
 </component>

@@ -3,7 +3,7 @@ Slug: style-classes
 
 # Style Classes
 
-The Adwaita stylesheet provides a number of style classes. They can be applied
+The Adapta stylesheet provides a number of style classes. They can be applied
 to widgets to change their appearance.
 
 # Buttons
@@ -591,7 +591,7 @@ The `.property` style class can be used with [class@ActionRow] and
 instead, which is useful for displaying read-only properties, as follows:
 
 ```xml
-<object class="AdwActionRow">
+<object class="AdapActionRow">
   <property name="title" translatable="yes">Property Name</property>
   <property name="subtitle">Value</property>
   <property name="subtitle-selectable">True</property>

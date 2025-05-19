@@ -8,88 +8,88 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
-#include "adw-enums.h"
+#include "adap-enums.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_TOOLBAR_VIEW (adw_toolbar_view_get_type())
+#define ADAP_TYPE_TOOLBAR_VIEW (adap_toolbar_view_get_type())
 
 typedef enum {
-  ADW_TOOLBAR_FLAT,
-  ADW_TOOLBAR_RAISED,
-  ADW_TOOLBAR_RAISED_BORDER,
-} AdwToolbarStyle;
+  ADAP_TOOLBAR_FLAT,
+  ADAP_TOOLBAR_RAISED,
+  ADAP_TOOLBAR_RAISED_BORDER,
+} AdapToolbarStyle;
 
-ADW_AVAILABLE_IN_1_4
-G_DECLARE_FINAL_TYPE (AdwToolbarView, adw_toolbar_view, ADW, TOOLBAR_VIEW, GtkWidget)
+ADAP_AVAILABLE_IN_1_4
+G_DECLARE_FINAL_TYPE (AdapToolbarView, adap_toolbar_view, ADAP, TOOLBAR_VIEW, GtkWidget)
 
-ADW_AVAILABLE_IN_1_4
-GtkWidget *adw_toolbar_view_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_AVAILABLE_IN_1_4
+GtkWidget *adap_toolbar_view_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_1_4
-GtkWidget *adw_toolbar_view_get_content (AdwToolbarView *self);
-ADW_AVAILABLE_IN_1_4
-void       adw_toolbar_view_set_content (AdwToolbarView *self,
+ADAP_AVAILABLE_IN_1_4
+GtkWidget *adap_toolbar_view_get_content (AdapToolbarView *self);
+ADAP_AVAILABLE_IN_1_4
+void       adap_toolbar_view_set_content (AdapToolbarView *self,
                                          GtkWidget      *content);
 
-ADW_AVAILABLE_IN_1_4
-void adw_toolbar_view_add_top_bar (AdwToolbarView *self,
+ADAP_AVAILABLE_IN_1_4
+void adap_toolbar_view_add_top_bar (AdapToolbarView *self,
                                    GtkWidget      *widget);
 
-ADW_AVAILABLE_IN_1_4
-void adw_toolbar_view_add_bottom_bar (AdwToolbarView *self,
+ADAP_AVAILABLE_IN_1_4
+void adap_toolbar_view_add_bottom_bar (AdapToolbarView *self,
                                       GtkWidget      *widget);
 
-ADW_AVAILABLE_IN_1_4
-void adw_toolbar_view_remove (AdwToolbarView *self,
+ADAP_AVAILABLE_IN_1_4
+void adap_toolbar_view_remove (AdapToolbarView *self,
                               GtkWidget      *widget);
 
-ADW_AVAILABLE_IN_1_4
-AdwToolbarStyle adw_toolbar_view_get_top_bar_style (AdwToolbarView  *self);
-ADW_AVAILABLE_IN_1_4
-void            adw_toolbar_view_set_top_bar_style (AdwToolbarView  *self,
-                                                    AdwToolbarStyle  style);
+ADAP_AVAILABLE_IN_1_4
+AdapToolbarStyle adap_toolbar_view_get_top_bar_style (AdapToolbarView  *self);
+ADAP_AVAILABLE_IN_1_4
+void            adap_toolbar_view_set_top_bar_style (AdapToolbarView  *self,
+                                                    AdapToolbarStyle  style);
 
-ADW_AVAILABLE_IN_1_4
-AdwToolbarStyle adw_toolbar_view_get_bottom_bar_style (AdwToolbarView  *self);
-ADW_AVAILABLE_IN_1_4
-void            adw_toolbar_view_set_bottom_bar_style (AdwToolbarView  *self,
-                                                       AdwToolbarStyle  style);
+ADAP_AVAILABLE_IN_1_4
+AdapToolbarStyle adap_toolbar_view_get_bottom_bar_style (AdapToolbarView  *self);
+ADAP_AVAILABLE_IN_1_4
+void            adap_toolbar_view_set_bottom_bar_style (AdapToolbarView  *self,
+                                                       AdapToolbarStyle  style);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_toolbar_view_get_reveal_top_bars (AdwToolbarView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_toolbar_view_set_reveal_top_bars (AdwToolbarView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_toolbar_view_get_reveal_top_bars (AdapToolbarView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_toolbar_view_set_reveal_top_bars (AdapToolbarView *self,
                                                gboolean        reveal);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_toolbar_view_get_reveal_bottom_bars (AdwToolbarView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_toolbar_view_set_reveal_bottom_bars (AdwToolbarView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_toolbar_view_get_reveal_bottom_bars (AdapToolbarView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_toolbar_view_set_reveal_bottom_bars (AdapToolbarView *self,
                                                   gboolean        reveal);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_toolbar_view_get_extend_content_to_top_edge (AdwToolbarView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_toolbar_view_set_extend_content_to_top_edge (AdwToolbarView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_toolbar_view_get_extend_content_to_top_edge (AdapToolbarView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_toolbar_view_set_extend_content_to_top_edge (AdapToolbarView *self,
                                                           gboolean        extend);
 
-ADW_AVAILABLE_IN_1_4
-gboolean adw_toolbar_view_get_extend_content_to_bottom_edge (AdwToolbarView *self);
-ADW_AVAILABLE_IN_1_4
-void     adw_toolbar_view_set_extend_content_to_bottom_edge (AdwToolbarView *self,
+ADAP_AVAILABLE_IN_1_4
+gboolean adap_toolbar_view_get_extend_content_to_bottom_edge (AdapToolbarView *self);
+ADAP_AVAILABLE_IN_1_4
+void     adap_toolbar_view_set_extend_content_to_bottom_edge (AdapToolbarView *self,
                                                              gboolean        extend);
 
-ADW_AVAILABLE_IN_1_4
-int adw_toolbar_view_get_top_bar_height    (AdwToolbarView *self);
-ADW_AVAILABLE_IN_1_4
-int adw_toolbar_view_get_bottom_bar_height (AdwToolbarView *self);
+ADAP_AVAILABLE_IN_1_4
+int adap_toolbar_view_get_top_bar_height    (AdapToolbarView *self);
+ADAP_AVAILABLE_IN_1_4
+int adap_toolbar_view_get_bottom_bar_height (AdapToolbarView *self);
 
 G_END_DECLS

@@ -2,25 +2,25 @@
 Version 1.5.8
 =============
 
-- AdwDialog
+- AdapDialog
   - Fix :current-breakpoint notifications
-- AdwPreferencesDialog/Window
+- AdapPreferencesDialog/Window
   - Fix the search filter expression
 
 =============
 Version 1.5.7
 =============
 
-- AdwBreakpoint
+- AdapBreakpoint
   - Fix to_string() with locales using comma as decimal separator
-- AdwComboRow
+- AdapComboRow
   - Fix very short strings not being displayed
-- AdwDialog
+- AdapDialog
   - Fix ::closed emission with window-backed dialogs
   - Fix a focus-related crash
-- AdwPreferencesDialog
+- AdapPreferencesDialog
   - Document navigation.pop action
-- AdwTabBox, AdwTabGrid
+- AdapTabBox, AdapTabGrid
   - Fix scrolling to newly appearing tabs
   - Fix a copy-paste error
 
@@ -30,17 +30,17 @@ Version 1.5.6
 
 - Build
   - Drop pre-built docs and styles
-- AdwActionRow
+- AdapActionRow
   - Set accessible role to presentation for the icon
-- AdwClampLayout
+- AdapClampLayout
   - Fix layout with multiple children
-- AdwComboRow
+- AdapComboRow
   - Fix a property noficiation
-- AdwDialog
+- AdapDialog
   - Fix accessible role critical when using window-backed dialogs
-- AdwHeaderBar
+- AdapHeaderBar
   - Fix a typo in docs
-- AdwLengthUnit
+- AdapLengthUnit
   - Fix pt and sp unit values when gtk-xft-dpi = -1
 
 =============
@@ -48,18 +48,18 @@ Version 1.5.5
 =============
 
 - Fix meson syntax in readme
-- AdwBreakpointBin
+- AdapBreakpointBin
   - Fix natural size
-- AdwClamp
+- AdapClamp
   - Fix get/set_unit() version
-- AdwExpanderRow
+- AdapExpanderRow
   - Make suffix spacing match action rows and entry rows
-- AdwTabBar
+- AdapTabBar
   - Don't select tabs when clicking close or indicator buttons
   - Only handle middle clicks started and ended on the same tab
-- AdwTabOverview
+- AdapTabOverview
   - Only handle middle clicks started and ended on the same thumbnail
-- AdwViewSwitcher
+- AdapViewSwitcher
   - Have a minimum height outside header bars
 - Docs
   - Update deprecated meson syntax
@@ -72,11 +72,11 @@ Version 1.5.5
 Version 1.5.4
 =============
 
-- AdwAboutDialog/Window
+- AdapAboutDialog/Window
   - Support non-deprecated GPL-2/3.0-only SPDX IDs
-- AdwHeaderBar
+- AdapHeaderBar
   - Fix back button menu picking up phantom pages in some situations
-- AdwTabBar/Overview
+- AdapTabBar/Overview
   - Fix 2 crashes with drag-n-drop
 - Stylesheet
   - Fix scroll undershoot in dropdowns and emoji picker
@@ -89,18 +89,18 @@ Version 1.5.4
 Version 1.5.3
 =============
 
-- AdwAlertDialog
+- AdapAlertDialog
   - Expose body text as a11y description
-- AdwDialog
+- AdapDialog
   - Fix a memory leak
   - Speed up switching presentation
-- AdwPreferencesPage
+- AdapPreferencesPage
   - Add an a11y relation to the description
-- AdwSpinRow
+- AdapSpinRow
   - Set accessible role to presentation
-- AdwSwitchRow
+- AdapSwitchRow
   - Set accessible role to switch
-- AdwTabBar/Overview
+- AdapTabBar/Overview
   - Fix a use after free when closing tabs
 - Stylesheet
   - Fix a specificity issue with scrolled windows in popovers
@@ -116,31 +116,31 @@ Version 1.5.3
 Version 1.5.2
 =============
 
-- AdwAlertDialog
+- AdapAlertDialog
   - Fix unmatched va_start()
   - Fix setting default widget when removing a response
-- AdwBreakpointCondition
+- AdapBreakpointCondition
   - Fix leaks when parsing
-- AdwBreakpointBin
+- AdapBreakpointBin
   - Fix a leak
-- AdwDialog
+- AdapDialog
   - Fix toggling presentation mode
   - Fix close button ignoring :can-close
   - Fix ::close-attempt not emitting in some cases
   - Fix swipe area for bottom sheets
   - Leak fixes
-- AdwHeaderBar
+- AdapHeaderBar
   - Fix initial focus for the back button
   - Fix split view links in docs
-- AdwMessageDialog
+- AdapMessageDialog
   - Fix unmatched va_start()
-- AdwSpinRow
+- AdapSpinRow
   - Fix ::input handling
-- AdwTabButton
+- AdapTabButton
   - Fix needs-attention badge on RTL
-- AdwTabView
+- AdapTabView
   - Accessibility fixes
-- AdwViewStack
+- AdapViewStack
   - Accessibility fixes
 - Translation updates
   - Nepali
@@ -149,43 +149,43 @@ Version 1.5.2
 Version 1.5.1
 =============
 
-- AdwAboutDialog/Window
+- AdapAboutDialog/Window
   - Fix an outdated appstream reference in docs
-- AdwActionRow
+- AdapActionRow
   - Mention .property in docs
-- AdwAlertDialog
+- AdapAlertDialog
   - Fix the accessible role
   - Fix initial focus
-- AdwAvatar
+- AdapAvatar
   - Fix portrait avatars on hidpi
-- AdwBin
+- AdapBin
   - Fix a potential focus issue
-- AdwBreakpoint
+- AdapBreakpoint
   - Fix add_setter() annotations
-- AdwCarousel
+- AdapCarousel
   - Fix a build warning
-- AdwComboRow
+- AdapComboRow
   - Fix initial checkmark
   - Handle model changes properly
-- AdwDialog
+- AdapDialog
   - Fix accessibility warnings
   - Make shortcuts work when there are no focusable widgets
   - Correctly restore focus when opening a dialog from a menu
   - Fix GtkWindow:deletable=false hiding close buttons in dialogs
-- AdwExpanderRow
+- AdapExpanderRow
   - Fix get_title_lines() and get_subtitle_lines() return types
   - Fix remove() docs
-- AdwOverlaySplitView
+- AdapOverlaySplitView
   - Unmap sidebar when it's hidden
-- AdwPreferencesGroup
+- AdapPreferencesGroup
   - Fix a potential focus issue
   - Fix :header-group annotations and notifications
-- AdwPreferencesPage
+- AdapPreferencesPage
   - Fix a potential focus issue
-- AdwTabView
+- AdapTabView
   - Document :close-page return value
   - Fix a leak when closing the last page
-- AdwViewStack
+- AdapViewStack
   - Fix a typo in docs
 - Docs
   - Update screenshots
@@ -203,7 +203,7 @@ Version 1.5.1
 Version 1.5.0
 =============
 
-- AdwDialog
+- AdapDialog
   - Fix widget selection in inspector when presented as a bottom sheet
   - Fix clicks on the dimming still working with can-closed=true
 - Demo
@@ -232,23 +232,23 @@ Version 1.5.rc
 
 - Depend on GTK 4.13.4
 - Fix layout with GtkSettings:gtk-xft-dpi == 0
-- AdwAboutDialog
+- AdapAboutDialog
   - Support zero-clause bsd license
   - Fix example
-- AdwAboutWindow
+- AdapAboutWindow
   - Support zero-clause bsd license
-- AdwDialog
+- AdapDialog
   - Allow bottom sheets to shrink beyond 360px width
   - Fix a crash when swiping on the dimming
   - Adjust dimming intensity
-- AdwNavigationView
+- AdapNavigationView
   - Fix signal mentions in push() docs
   - Disable missing title warning when containing a split view
-- AdwStatusPage
+- AdapStatusPage
   - Fix property notification in set_child()
-- AdwSwipeTracker
+- AdapSwipeTracker
   - Use a smaller threshold for window handles
-- AdwToolbarView
+- AdapToolbarView
   - Fix a typo in docs
 - Demo
   - Fix window.devel demo
@@ -291,50 +291,50 @@ Version 1.5.beta
 - Fix build with libappstream 1.0
 - Fix deprecation warning with libappstream 0.16.4
 - Fix a build error with MSVC
-- Add AdwDialog, AdwAlertDialog, AdwPreferencesDialog and AdwAboutDialog
-- AdwAboutWindow
+- Add AdapDialog, AdapAlertDialog, AdapPreferencesDialog and AdapAboutDialog
+- AdapAboutWindow
   - Don't pre-select the first section on the Legal page
-- AdwApplicationWindow
+- AdapApplicationWindow
   - Add :dialogs and :visible-dialog
-- AdwBreakpointBin
+- AdapBreakpointBin
   - Add remove_breakpoint()
   - Fix focus during transitions
   - Fix swapping the child during transitions
-- AdwButtonContent
+- AdapButtonContent
   - Horizontally center children
-- AdwCarousel
+- AdapCarousel
   - Fix carousel scroll behavior with page reordering
-- AdwComboRow
+- AdapComboRow
   - Don't change selection on filtering
   - Fix focus when opening the popover
   - Set the correct state on the selected checkmark
-- AdwEntryRow
+- AdapEntryRow
   - Add :text-length
-- AdwHeaderBar
-  - Integrate with AdwDialog
+- AdapHeaderBar
+  - Integrate with AdapDialog
   - Fix visibility after changing :show-back-button
-- AdwMessageDialog
+- AdapMessageDialog
   - Add remove_response()
   - Fix choose() annotations
-- AdwNavigationView
+- AdapNavigationView
   - Fix a warning message
-- AdwPreferencesWindow
+- AdapPreferencesWindow
   - Fix :visible-page and :visible-page-name docs
-- AdwStyleManager
+- AdapStyleManager
   - Support contrast setting in the settings portal
-- AdwSwipeTracker
+- AdapSwipeTracker
   - Add :allow-window-handle
-- AdwTabOverview
+- AdapTabOverview
   - Allow child focus on out animations
-- AdwTabView
+- AdapTabView
   - Keep view alive during ::page-detached
   - Fix crashes when using :pages
-- AdwViewSwitcherBar
+- AdapViewSwitcherBar
   - Fix a warning when empty
-- AdwWindow
+- AdapWindow
   - Add :dialogs and :visible-dialog
 - Demo
-  - Port everything to AdwDialog
+  - Port everything to AdapDialog
 - Docs
   - Add a migration guide for adaptive dialogs
   - Add a favicon
@@ -365,11 +365,11 @@ Version 1.5.beta
 Version 1.4.0
 =============
 
-- AdwBreakpointBin
+- AdapBreakpointBin
   - Clarify minimum size warnings
-- AdwExpanderRow
+- AdapExpanderRow
   - Improve accessible roles
-- AdwPreferencesGroup
+- AdapPreferencesGroup
   - Set described-by on the listbox
 - Docs
   - Fix a property name in breakpoint migration guide
@@ -391,25 +391,25 @@ Version 1.4.0
 Version 1.4.rc
 ==============
 
-- AdwAboutWindow
+- AdapAboutWindow
   - Accessibility fixes
   - Add a minimum size
-- AdwExpanderRow
+- AdapExpanderRow
   - Accessibility fixes
-- AdwHeaderBar
+- AdapHeaderBar
   - Fix missing title fallback for back button tooltip and history menu
   - Set "Back" as an accessible label for the back button
   - Clarify docs around :show-back-button
-- AdwNavigationView
+- AdapNavigationView
   - Warn when a navigation page is missing a title
-- AdwStyleManager
+- AdapStyleManager
   - Fix over-releasing a string on macOS
-- AdwTabButton
+- AdapTabButton
   - Set the correct gettext domain
-- AdwTabOverview
+- AdapTabOverview
   - Set the correct gettext domain
   - Fix reordered thumbnail being drawn below others
-- AdwToastOverlay
+- AdapToastOverlay
   - Set the correct gettext domain
 - Build
   - Update pkg-config description field
@@ -447,42 +447,42 @@ Version 1.4.beta
   - Depend on GLib 2.76.0
   - Fix build on Windows
   - Add a GTK subproject
-- AdwBreakpointBin
+- AdapBreakpointBin
   - Mention the correct widget in exceeded size warnings
   - Fix width-for-height and height-for-width sizing
-- AdwComboRow
+- AdapComboRow
   - Recreate default factory on expression changes
-- AdwEnumListModel
+- AdapEnumListModel
   - Better invalid value for find_position()
-- AdwHeaderBar
+- AdapHeaderBar
   - Fix spacing when there are no start/end children
   - Fix a memory leak
   - Fix GtkCenterBox:shrink-center-last usage
-- AdwLeaflet
+- AdapLeaflet
   - Fix back/forward mouse button handling
-- AdwMessageDialog
+- AdapMessageDialog
   - Fix shadow style
-- AdwNavigationView
+- AdapNavigationView
   - Pop the current page when pressing Escape
-  - Make AdwNavigationPage:child-view private
+  - Make AdapNavigationPage:child-view private
   - Fix back/forward mouse button handling
   - Clarify docs
-- AdwPreferencesWindow
+- AdapPreferencesWindow
   - Fix a memory leak
-- AdwTabOverview
+- AdapTabOverview
   - Cull invisible thumbnails
   - Fix a crash when opening overview before it's mpped
-- AdwTabView
+- AdapTabView
   - Fix thumbnail regressions from 1.4.alpha
-- AdwToastOverlay
+- AdapToastOverlay
   - Fix width-for-height and height-for-width sizing
-- AdwToolbarView
-  - Add ADW_TOOLBAR_RAISED_BORDER style
+- AdapToolbarView
+  - Add ADAP_TOOLBAR_RAISED_BORDER style
   - Fix width-for-height and height-for-width sizing
   - Clarify docs
-- AdwViewStack
-  - Add AdwViewStackPages:selected-page
-- AdwViewSwitcherBar
+- AdapViewStack
+  - Add AdapViewStackPages:selected-page
+- AdapViewSwitcherBar
   - Fix disabling reveal animation when using breakpoints
   - Make sure the height doesn't change with large text
 - Demo
@@ -520,85 +520,85 @@ Version 1.4.alpha
   - Fix gnome.compile_resources() on MSBuild
   - Fix doc include path
   - Make metainfo build reproducible
-- Add AdwBreakpoint and AdwBreakpointBin
-- Add AdwNavigationView
-- Add AdwNavigationSplitView
-- Add AdwOverlaySplitView
-- Add AdwSpinRow
-- Add AdwSwitchRow
-- Add AdwToolbarView
-- Deprecate AdwFlap, AdwLeaflet, AdwSqueezer and AdwViewSwitcherTitle
-- AdwAboutWindow
+- Add AdapBreakpoint and AdapBreakpointBin
+- Add AdapNavigationView
+- Add AdapNavigationSplitView
+- Add AdapOverlaySplitView
+- Add AdapSpinRow
+- Add AdapSwitchRow
+- Add AdapToolbarView
+- Deprecate AdapFlap, AdapLeaflet, AdapSqueezer and AdapViewSwitcherTitle
+- AdapAboutWindow
   - Add new_from_appdata()
   - Add a missing Since annotation
   - Fix accessible role on the application icon
-- AdwActionRow
+- AdapActionRow
   - Fix an inaccuracy in docs
-- AdwAvatar
+- AdapAvatar
   - Fix a memory leak
-- AdwBanner
+- AdapBanner
   - Allow to ellipsize the button
   - Clarify title placement in docs
   - Add a backdrop style
-- AdwButtonContent
+- AdapButtonContent
   - Add :can-shrink
-- AdwCarousel
+- AdapCarousel
   - Fix allocation
   - Fix scrolling to a recently inserted item
-- AdwClamp/AdwClampLayout/AdwClampScrollable
+- AdapClamp/AdapClampLayout/AdapClampScrollable
   - Add :unit, default to the sp unit instead of px
   - Deprecate clamp child  style classes
-- AdwComboRow
+- AdapComboRow
   - Add :enable-search
   - Fix accessible role on the dropdown arrow
-- AdwExpanderRow
+- AdapExpanderRow
   - Deprecate add_action(), replace it with add_suffix()
-- AdwFlap
+- AdapFlap
   - Add a missing setter annotation for :fold-policy
   - Correctly measure separator
   - Avoid notify emissions in dispose()
-- AdwEntryRow
+- AdapEntryRow
   - Fix baseline with new GTK
   - Fix accessibility
-- AdwHeaderBar
+- AdapHeaderBar
   - Add :show-title property
-  - Show page title instead of window title inside AdwNavigationPage
-  - Show back buttons inside AdwNavigationView, add :show-back-button
-  - Hide redundant window buttons inside AdwNavigationSplitView and
-    AdwOverlaySplitView
+  - Show page title instead of window title inside AdapNavigationPage
+  - Show back buttons inside AdapNavigationView, add :show-back-button
+  - Hide redundant window buttons inside AdapNavigationSplitView and
+    AdapOverlaySplitView
   - Ellipsize title before start/end children
-- AdwMessageDialog
+- AdapMessageDialog
   - Allow to ellipsize the buttons
   - Be more responsive on parent state changes
   - Fix criticals when using choose() with hide-on-close=true
-- AdwPasswordEntryRow
+- AdapPasswordEntryRow
   - Say password instead of text in the ui
-- AdwPreferencesPage
+- AdapPreferencesPage
   - Add :description
-- AdwPreferencesWindow
+- AdapPreferencesWindow
   - Deprecate present_subpage(), close_subpage() and :can-navigate-back,
-    replace with push_subpage() and pop_subpage() using AdwNavigationView
+    replace with push_subpage() and pop_subpage() using AdapNavigationView
   - Move search button to the left
   - Add placeholder to the search entry
   - Fix markup handling when searching
-- AdwSplitButton
+- AdapSplitButton
   - Add :can-shrink
-- AdwStatusPage
+- AdapStatusPage
   - Clarify docs
-- AdwStyleManager
+- AdapStyleManager
   - Stop reading GNOME-specific color-scheme setting via settings portal
-  - Only use GSettings with ADW_DISABLE_PORTAL=1
+  - Only use GSettings with ADAP_DISABLE_PORTAL=1
   - Fix get_for_display() annotation
-- AdwSwipeTracker
+- AdapSwipeTracker
   - Add overshoot properties
   - Fix swipe area handling
-- AdwTabBar
+- AdapTabBar
   - Add :extra-drag-preferred-action
   - Fix dropping data onto tabs/thumbnails
   - Fix accessibility
   - Fix clipped labels
   - Correctly unparent context menu
-- AdwTabOverview
+- AdapTabOverview
   - Rework thumbnails, reducing the number of glitches with
     WebKitWebView, and gaining antialiasing in process
   - Fix the transition curve
@@ -607,19 +607,19 @@ Version 1.4.alpha
   - Fix dropping data onto tabs/thumbnails
   - Fix clipped labels
   - Correctly unparent context menu
-- AdwTabView
+- AdapTabView
   - Allow Ctrl+Page Up/Down to wrap around
-- AdwToast
+- AdapToast
   - Add :use-markup
   - Allow to ellipsize toast buttons
-- AdwViewSwitcher
+- AdapViewSwitcher
   - Ellipsize labels in wide mode
   - Set correct accessible role for icons
-- AdwViewSwitcherBar
+- AdapViewSwitcherBar
   - Modernize style
-- AdwWindow/AdwApplicationWindow
-  - Add API for using breakpoints, matching AdwBreakpointBin
-- AdwWindowTitle
+- AdapWindow/AdapApplicationWindow
+  - Add API for using breakpoints, matching AdapBreakpointBin
+- AdapWindowTitle
   - Fix initial title visibility
 - Demo
   - Drop leaflet and flap demos
@@ -696,32 +696,32 @@ Version 1.3.rc
 
 - Build
   - Depend on GTK 4.9.5.
-- AdwApplication
+- AdapApplication
   - Disable style loading if Granite is present
-- AdwAvatar
+- AdapAvatar
   - Improve filtering for custom images
-- AdwCarousel
+- AdapCarousel
   - Doc updates
-- AdwEntryRow
+- AdapEntryRow
   - Fix :disabled styles
-- AdwExpanderRow
+- AdapExpanderRow
   - Expose expanded state for a11y
-- AdwPropertyAnimationTarget
+- AdapPropertyAnimationTarget
   - Remove critical when finalizing the object before the target
-- AdwSplitButton
+- AdapSplitButton
   - Correctly set a11y relations
   - Add a default tooltip to the dropdown
-- AdwStyleManager
+- AdapStyleManager
   - Fix regressions from 1.3.beta
   - Disable built-in styles if Granite is present
-- AdwTabOverview
+- AdapTabOverview
   - Clarify docs
-- AdwToastOverlay
+- AdapToastOverlay
   - Fix a use-after-free when quickly creating and dismissing toasts
 - Docs
   - Update named color descriptions
   - Update .linked widget list to keep up with GTK 4.9.x
-  - Mention AdwHeaderBar along with GtkHeaderBar
+  - Mention AdapHeaderBar along with GtkHeaderBar
 - Stylesheet
   - Fix page switcher in GtkShortcutsWindow
   - Fix GtkSearchBar spacing
@@ -755,37 +755,37 @@ Version 1.3.beta
 - AboutWindow
   - Prevent double clicks from opening troubleshooting page
   - Fix a GTK 4.9.x deprecation
-- AdwActionRow
+- AdapActionRow
   - Add :subtitle-selectable
-- AdwAnimation
+- AdapAnimation
   - Add :follow-enable-animations-setting
-- AdwBanner
+- AdapBanner
   - Sizing fixes
-- AdwEntryRow
+- AdapEntryRow
   - Make accessible
-- AdwLeaflet
+- AdapLeaflet
   - Fix can-unfold=false
-- AdwMessageDialog
+- AdapMessageDialog
   - Increase spacing when heading or body are missing
-- AdwSpringAnimation
+- AdapSpringAnimation
   - Add calculate_value() and calculate_velocity()
   - Fix unsafe float comparisons
   - Fix critical damping velocity
-- AdwStyleManager
+- AdapStyleManager
   - Support color schemes and high contrast on Windows
-- AdwSwipeable
+- AdapSwipeable
   - Fix get_swipe_area() fallback
-- AdwTabBar, AdwTabOverview
+- AdapTabBar, AdapTabOverview
   - Emit ::extra-drag-value on ::enter
-- AdwTabButton
-  - Fix needs-attention dot after viewing AdwTabPages in inspector
+- AdapTabButton
+  - Fix needs-attention dot after viewing AdapTabPages in inspector
   - Fix warning when building in Visual Studio
-- AdwTabView
+- AdapTabView
   - Make accessible
-- AdwToastOverlay
+- AdapToastOverlay
   - Don't focus buttons on click
   - Prevent toast labels from wrapping
-- AdwViewStack
+- AdapViewStack
   - Make accessible
 - Demo
   - Don't follow "enable animations" setting for the demo animation
@@ -814,51 +814,51 @@ Version 1.3.beta
 Verison 1.3.alpha
 =================
 
-- Introduce AdwBanner
-- Introduce AdwTabButton and AdwTabOverview
+- Introduce AdapBanner
+- Introduce AdapTabButton and AdapTabOverview
 - Fix or silence GTK 4.9.x deprecations
 - Require GTK 4.9.2 and GLib 2.72.0
 - Add developer name to metainfo
-- AdwActionRow
+- AdapActionRow
   - Deprecate icon-name property
   - Fix spacing after removing all prefixes/suffixes
-- AdwAvatar
+- AdapAvatar
   - Correctly redraw on custom image changes
-- AdwEntryRow
-  - Add adw_entry_row_grab_focus_without_selecting()
+- AdapEntryRow
+  - Add adap_entry_row_grab_focus_without_selecting()
   - Respect use-markup property
   - Fix error/warning/success styles
   - Fix spacing after removing all prefixes/suffixes
-- AdwExpanderRow
+- AdapExpanderRow
   - Add title-lines and subtitle-lines properties
   - Deprecate icon-name property
   - Fix spacing after removing all prefixes/suffixes
-- AdwFlap
+- AdapFlap
   - Fix natural width with fold-policy=never
-- AdwMessageDialog
-  - Add adw_message_dialog_choose()
+- AdapMessageDialog
+  - Add adap_message_dialog_choose()
   - Fix focus styles in RTL
   - Refactor adaptive layout
-- AdwTabBar
+- AdapTabBar
   - Add preload property and extra-drag-value signal
   - Fix focus handling
   - Fix autoscroll for non-local drags
-- AdwTabView
+- AdapTabView
   - Update default tab icon
   - Rewrite internals to allow overview thumbnails for inactive pages
-- AdwPreferencesPage
+- AdapPreferencesPage
   - Add a function to scroll to top
-- AdwPreferencesWindow
+- AdapPreferencesWindow
   - Fix a memory leak
-- AdwSplitButton
+- AdapSplitButton
   - Don't make dropdown insensitive when the button is
-- AdwSpringAnimation
+- AdapSpringAnimation
   - Correctly mark as final
-- AdwToastOverlay
+- AdapToastOverlay
   - Clarify documentation
-- AdwViewSwitcherBar
+- AdapViewSwitcherBar
   - Fix typos in examples
-- AdwViewSwitcherTitle
+- AdapViewSwitcherTitle
   - Fix typos in examples
 - Demo
   - Update icons
@@ -899,8 +899,8 @@ Version 1.2.0
 
 - Docs
   - Fix @card_shade_color description
-  - Fix a typo in AdwTabView docs
-  - Fix AdwMessageDialog example
+  - Fix a typo in AdapTabView docs
+  - Fix AdapMessageDialog example
 - Translation updates
   - Bulgarian
   - Croatian
@@ -917,24 +917,24 @@ Version 1.2.rc
 - Ensure setter documentation is consistent with their properties
 - Demo
   - Fix a critical when toggling tab indicators
-- AdwCarousel
+- AdapCarousel
   - Fix a crash when removing a child while it's animating
-- AdwMessageDialog
+- AdapMessageDialog
   - Use maximum width when no parent is set, instead of minimum
-- AdwSqueezer
+- AdapSqueezer
   - Sizing fixes
-- AdwTabBar
+- AdapTabBar
   - Fix long press handling
   - Fix a crash when clicking empty space while a tab is animating
-- AdwTabView
+- AdapTabView
   - Fix set_menu_model() input check
-- AdwWindow
+- AdapWindow
   - Clarify docs around child/content properties
 - Stylesheet
-  - Fix AdwSplitButton disabled state
+  - Fix AdapSplitButton disabled state
   - Fix focus transitions
   - Fix GtkColorScale slider
-  - Fix AdwViewSwitcher needs-attention dot color
+  - Fix AdapViewSwitcher needs-attention dot color
 - Translation updates
   - Abkhazian
   - Basque
@@ -963,41 +963,41 @@ Version 1.2.beta
 - Fix deprecations with newer GLib
 - Fix strict aliasing warnings
 - Fix GLSL shader compile errors on certain systems
-- AdwAboutWindow
+- AdapAboutWindow
   - Fix a random crash when closing
   - Rework the flat header bar layout
   - Properly mark as final class
-- AdwAvatar
+- AdapAvatar
   - Fix draw_to_texture() with rectangular avatars
-- AdwEntryRow
+- AdapEntryRow
   - Add entry-activated signal
   - Add attributes property
   - Add activates-default property
   - Don't select text when clicking the row
-- AdwMessageDialog
+- AdapMessageDialog
   - Fix crash when destroying the parent before the dialog
-- AdwShadowHelper
+- AdapShadowHelper
   - Fix warnings when drawing vertical shadow
-- AdwSplitButton
+- AdapSplitButton
   - Add dropdown-tooltip property
-- AdwSwipeTracker
+- AdapSwipeTracker
   - Fix swipe speed on GTK 4.7.x
   - Fix criticals with GTK 4.7.x
-- AdwTabBar
+- AdapTabBar
   - Remove tab background when there's only one tab
   - Add a tooltip for close buttons
   - Fix squished or clipped text with gtk-hint-font-metrics=0
   - Fix scrolling to a tab with disabled animations
   - Fix assorted tab reordering issues
-- AdwTabView
+- AdapTabView
   - Add shortcut management API
-  - Add AdwTabPage:indicator-tooltip property
+  - Add AdapTabPage:indicator-tooltip property
   - Handle shortcuts on CAPTURE phase
   - Shortcut propagation and bell fixes
-- AdwToast
+- AdapToast
   - Add button-clicked signal
-- AdwViewStack
-  - Add adw_view_stack_add_titled_with_icon()
+- AdapViewStack
+  - Add adap_view_stack_add_titled_with_icon()
 - Demo
   - Prefer properties over <child> in UI files
   - Don't explicilty add GtkViewport to GtkScrolledWindow
@@ -1030,44 +1030,44 @@ Version 1.2.beta
 Version 1.2.alpha
 =================
 
-- Introduce AdwAboutWindow
-- Introduce AdwEntryRow and AdwPasswordEntryRow
-- Introduce AdwMessageDialog
-- Introduce AdwPropertyAnimationTarget
-- AdwAnimation
-  - Add adw_animation_set_target()
-- AdwCallbackAnimationTarget
+- Introduce AdapAboutWindow
+- Introduce AdapEntryRow and AdapPasswordEntryRow
+- Introduce AdapMessageDialog
+- Introduce AdapPropertyAnimationTarget
+- AdapAnimation
+  - Add adap_animation_set_target()
+- AdapCallbackAnimationTarget
   - Fix callback annotations
-- AdwActionRow
+- AdapActionRow
   - Set a11y relations for the activatable widget
-  - Tweak spacing to match toolbars and AdwEntryRow
-- AdwAvatar
+  - Tweak spacing to match toolbars and AdapEntryRow
+- AdapAvatar
   - Fix initials not updating after setting custom-image
-- AdwComboRow
+- AdapComboRow
   - Add an example to docs
-- AdwExpanderRow
+- AdapExpanderRow
   - Change arrow orientation to make it look less similar
     to action rows that open subpages
-- AdwLeaflet
+- AdapLeaflet
   - Fix child sizing with fold-threshold-policy=natural
   - Clip child during transitions, preventing glitchy header bar borders
   - Check direction argument in navigate()
   - Fix a broken link in docs
-- AdwPreferencesGroup
+- AdapPreferencesGroup
   - Fix accessibility labels
   - Annotation fixes
-- AdwPreferencesRow
+- AdapPreferencesRow
   - Add use-markup property
   - Annotation fixes
-- AdwSplitButton
+- AdapSplitButton
   - Avoid state changes during dispose
-- AdwStyleManager
+- AdapStyleManager
   - Fix high contrast setting name when using a portal
   - Correctly handle removing a GdkDisplay
   - Add environment variables to control styles from Builder
-- AdwSwipeTracker
+- AdapSwipeTracker
   - Fix a memory leak
-- AdwTabBar
+- AdapTabBar
   - Ensure indicators are clickable with inverted=true
   - Fix resize deferring with non-expanded tabs
   - Fix scroll animation stopping too early
@@ -1080,19 +1080,19 @@ Version 1.2.alpha
     - Replace needs-attention glow with a line
     - Add backdrop style matching header bars
     - Use :selected state for selected tab instead of :checked
-- AdwToast
+- AdapToast
   - Add custom-title property
-  - Add adw_toast_new_format()
+  - Add adap_toast_new_format()
   - Allow dismiss() to be called multiple times
   - Fix the example in docs
-- AdwToastOverlay
+- AdapToastOverlay
   - Allow add_toast() to be called multiple times to extend the timeout
   - Make toasts without button narrower
-- AdwViewSwitcherTitle
+- AdapViewSwitcherTitle
   - Clear pending idle callback on unrealize
 - Stylesheet
   - Deprecate the .large-title style class
-  - Add @dialog_bg_color and @dialog_fg_color for AdwMessageDialog
+  - Add @dialog_bg_color and @dialog_fg_color for AdapMessageDialog
   - Add backdrop styles for GtkSearchBar and GtkActionBar
   - Update GtkColorScale style, following GTK
   - Add missing borders in high contrast version
@@ -1108,7 +1108,7 @@ Version 1.2.alpha
   - Fix progressbar.osd overriding text color
   - Fix action row title and subtitle inside GtkHeaderBar
 - Docs
-  - Mention AdwComboRow:selected type in migration guide
+  - Mention AdapComboRow:selected type in migration guide
   - Update *_shade color descriptions
   - Make screenshot tool buildable with MSVC
   - Disable animations before taking screenshots
@@ -1157,12 +1157,12 @@ Version 1.1.0
 Version 1.1.rc
 ==============
 
-- AdwAvatar
+- AdapAvatar
   - Fix invalid UTF-8 handling
-- AdwStyleManager
+- AdapStyleManager
   - Follow color-scheme on macOS
   - Don't disable non-CSS animations during style changes
-- AdwToast
+- AdapToast
   - Fix GVariant handling
 - Stylesheet
   - Fix scrollbars inside .osd widgets
@@ -1183,23 +1183,23 @@ Version 1.1.beta
 ================
 
 - Fix building with MSVC
-- AdwActionRow
+- AdapActionRow
   - Don't make activatable if the activatable widget is insensitive
-- AdwClamp
+- AdapClamp
   - Fix measure() with height-for-width children
-- AdwComboRow
+- AdapComboRow
   - Fix end padding when the dropdown arrow is hidden
-- AdwExpanderRow
+- AdapExpanderRow
   - Fix focus handling
-- AdwPreferencesGroup
+- AdapPreferencesGroup
   - Add support for header suffixes
-- AdwPreferencesRow
+- AdapPreferencesRow
   - Add 'title-selectable' property
 - Demo
-  - Fix combo rows in AdwCarousel demo
+  - Fix combo rows in AdapCarousel demo
   - Remove the "Frobnicate" button
 - Docs
-  - Fix AdwViewSwitcherBar and AdwViewStack examples
+  - Fix AdapViewSwitcherBar and AdapViewStack examples
   - Fix typos
   - Better wording for @self parameters
 - Stylesheet
@@ -1227,8 +1227,8 @@ Version 1.0.0
 - Accessibility fixes in action row, flap, leaflet, preferences group,
   preferences page, status page, view switcher, window
 - Animation
-  - Properly mark AdwAnimation as abstract
-  - Make ADW_DURATION_INFINITE introspectable
+  - Properly mark AdapAnimation as abstract
+  - Make ADAP_DURATION_INFINITE introspectable
 - Carousel
   - Fix reorder(), prepend() and insert() behavior
 - Clamp Layout
@@ -1291,22 +1291,22 @@ Version 1.0.0.beta.1
   - Depend on GLib 2.66.
   - Fix building as a subproject.
   - Remove unused dependencies.
-- Introduce AdwToastOverlay for showing in-app notifications
-- Introduce AdwAnimation - a basic animation API
-  - AdwTimedAnimation provides simple time-based animations.
-  - AdwSpringAnimation provides flexible animations based on spring
+- Introduce AdapToastOverlay for showing in-app notifications
+- Introduce AdapAnimation - a basic animation API
+  - AdapTimedAnimation provides simple time-based animations.
+  - AdapSpringAnimation provides flexible animations based on spring
     physics.
-  - Replace adw_ease_out_cubic() with adw_easing_ease().
-  - Make adw_lerp() public.
-- adw_init() now automatically calls gtk_init().
+  - Replace adap_ease_out_cubic() with adap_easing_ease().
+  - Make adap_lerp() public.
+- adap_init() now automatically calls gtk_init().
 - Use G_DEFINE_FINAL_TYPE if available.
 - Action Row
   - Increase spacing between title and subtitle.
 - Carousel
   - Use spring animations for scrolling, replace animation-duration with
     scroll-params.
-  - Remove adw_carousel_scroll_to_full(), add 'animate' parameter to
-    adw_carousel_scroll_to() instead.
+  - Remove adap_carousel_scroll_to_full(), add 'animate' parameter to
+    adap_carousel_scroll_to() instead.
 - Flap
   - Use spring animations for reveal, replace reveal-duration with
     reveal-params.
@@ -1320,7 +1320,7 @@ Version 1.0.0.beta.1
   - Remove adaptive margins - they never worked properly.
 - Preferences Window
   - Rename can-swipe-back to can-navigate-back, following the equivalent
-    AdwLeaflet change.
+    AdapLeaflet change.
   - Add API to show toasts.
 - Swipe Tracker
   - Move 'begin-swipe' signal to when the swipe actually starts instead
@@ -1398,7 +1398,7 @@ Version 1.0.0.alpha.4
   - Add a style classes demo.
   - Add about dialog.
   - Add an inspector item to the primary menu.
-  - Change appid to org.gnome.Adwaita1.Demo to version it.
+  - Change appid to org.gnome.Adapta1.Demo to version it.
   - Add an icon, metainfo and desktop file.
     - Make the desktop file visible for nightly flatpaks.
   - Make non-unique.
@@ -1406,7 +1406,7 @@ Version 1.0.0.alpha.4
   - Various polish.
 - Expander Row
   - Drop use-underline property.
-  - Rename adw_expander_row_add() to adw_expander_row_add_row().
+  - Rename adap_expander_row_add() to adap_expander_row_add_row().
 - Inspector
   - Fix color scheme resetting when opening inspector.
 - Preferences Window:
@@ -1427,7 +1427,7 @@ Version 1.0.0.alpha.4
     - button.opaque to allow custom colored buttons in the style of that
       look like .suggested-action or .destructive-action.
     - tabbar.inline and searchbar.inline - to opt out from using header
-      bar colors for AdwTabBar and GtkSearchBar.
+      bar colors for AdapTabBar and GtkSearchBar.
   - Boxed lists
     - Rename .content to .boxed-list to match HIG, keep .content as an
       alias.
@@ -1444,14 +1444,14 @@ Version 1.0.0.alpha.4
       GtkMessageDialog buttons instead.
     - Support .pill on GtkMenuButton
     - Support .suggested-action and .destructive-action on GtkMenuButton
-      and AdwSplitButton.
+      and AdapSplitButton.
     - Use toolbar-style buttons for GtkSearchBar.
-    - Fix AdwSplitButton styles in high contrast mode.
+    - Fix AdapSplitButton styles in high contrast mode.
     - Reduce disabled flat button opacity to make them easier to tell
       apart from the regular state.
   - Popovers
     - Drop popover.combo, make popover.menu handle this case instead.
-    - Unify GtkDropDown and AdwComboRow popup styles with menus.
+    - Unify GtkDropDown and AdapComboRow popup styles with menus.
     - Fix a double border with menu radios in high contrast mode.
   - Refresh UI colors.
   - Refresh scrollbar style.
@@ -1464,7 +1464,7 @@ Version 1.0.0.alpha.4
   - Use accent color for active drop styles.
   - Ensure proper opacity for the high contrast mode.
   - Simplify recoloring for GtkScale, GtkCheckButton, GtkSwitch,
-    GtkColumnView and AdwTabBar.
+    GtkColumnView and AdapTabBar.
   - Various toolbar button fixes.
   - Make entry.error and .warning style icons and progress bar too.
   - Fix disabled state on GtkScale, GtkNotebook and GtkSpinButton.
@@ -1480,7 +1480,7 @@ Version 1.0.0.alpha.4
     is already over a tab.
 - View Switcher
   - Fix screen readers reading page titles 4 times.
-- Add API to allow checking libadwaita version in runtime.
+- Add API to allow checking libadapta version in runtime.
 - Various fixes and cleanups.
 - Translation updates:
   - Finnish
@@ -1498,20 +1498,20 @@ Version 1.0.0.alpha.3
 - Depend on GTK 4.4.0.
 - Add a GtkInspector extension for simulating different system appearance
   settings. It can be disabled with -Dinspector=false.
-- Introduce AdwStyleManager for managing color schemes (light/dark) and
+- Introduce AdapStyleManager for managing color schemes (light/dark) and
   high contrast mode.
   - Support the cross-platform color scheme preference in the
     settings portal.
-- Introduce AdwApplication to handle automatic initialization and style
+- Introduce AdapApplication to handle automatic initialization and style
   loading.
-- Add adw_is_initialized() function.
-- Add AdwSplitButton to have consistent split buttons in toolbars.
-- Add AdwButtonContent as an easy way to create buttons with an icon and
+- Add adap_is_initialized() function.
+- Add AdapSplitButton to have consistent split buttons in toolbars.
+- Add AdapButtonContent as an easy way to create buttons with an icon and
   a label inside.
-- Remove AdwValueObject.
-- Rename AdwEnumValueObject to AdwEnumListItem.
+- Remove AdapValueObject.
+- Rename AdapEnumValueObject to AdapEnumListItem.
 - Avatar:
-  - Replace adw_avatar_draw_to_pixbuf() with adw_avatar_draw_to_texture()
+  - Replace adap_avatar_draw_to_pixbuf() with adap_avatar_draw_to_texture()
     that returns a GdkTexture instead.
     - Remove the size parameter, use the avatar's current size instead.
 - Carousel
@@ -1533,18 +1533,18 @@ Version 1.0.0.alpha.3
   - Allow markup on title and description.
 - Squeezer
   - Fix the child switch threshold in vertical orientation.
-  - Add switch-threshold-policy, matching AdwFlap and AdwLeaflet.
+  - Add switch-threshold-policy, matching AdapFlap and AdapLeaflet.
   - Add allow-none property, allowing to hide the last child as well.
 - Status Page
   - Make icon optional.
 - Tab View
   - Fix model updates when page selection changes.
 - View Switchers:
-  - Remove AdwViewSwitcher:narrow-ellipsize.
-  - Remove the policy property from AdwViewSwitcherBar and
-    AdwViewSwitcherTitle.
+  - Remove AdapViewSwitcher:narrow-ellipsize.
+  - Remove the policy property from AdapViewSwitcherBar and
+    AdapViewSwitcherTitle.
   - Remove the auto policy, applications can use two view
-    switchers and an AdwSqueezer instead.
+    switchers and an AdapSqueezer instead.
   - Switch to narrow layouts earlier.
 - Window and Application Window:
   - Rename the child property to content to avoid the name clash with
@@ -1555,12 +1555,12 @@ Version 1.0.0.alpha.3
     - separator.spacer to create spacing in toolbars or header bars.
     - button.pill for prominent standalone buttons, for example on status
       pages.
-    - statuspage.compact to make AdwStatusPage suitable for contexts such
+    - statuspage.compact to make AdapStatusPage suitable for contexts such
       as sidebars.
     - .numeric as an easy way to enable tabular figures in a label.
   - Use flat buttons by default in header bars and action bars, matching
     existing .toolbar.
-    - .raised style class on GtkButton, GtkMenuButton, or AdwSplitButton
+    - .raised style class on GtkButton, GtkMenuButton, or AdapSplitButton
       can be used to use the regular style instead.
   - Make window controls filled instead, leave the clickable area larger
     than the visible buttons.
@@ -1606,17 +1606,17 @@ Version 1.0.0-alpha.2
     green, yellow, orange, red, purple, brown, light and dark, and n
     being a darkness level from 1 to 5.
 - View Switcher:
-  - Add the AdwViewStack widget to represent views.
-  - Use AdwViewStack instead of GtkStack.
+  - Add the AdapViewStack widget to represent views.
+  - Use AdapViewStack instead of GtkStack.
   - Display a badge on buttons to display the pages' value from the
-    AdwViewStack:badge-number property.
+    AdapViewStack:badge-number property.
   - Keep displaying needs-attention when active.
 - Preferences Page:
   - Add the name property.
 - Preferences Window:
   - Add the visible-child and visible-child-name properties.
 - Leaflet and Flap:
-  - Add the AdwFoldThresholdPolicy enumeration.
+  - Add the AdapFoldThresholdPolicy enumeration.
   - Add the fold-threshold-policy property to determine the size at
      which the leaflet or flap should fold.
 - Leaflet:
@@ -1638,7 +1638,7 @@ Version 1.0.0-alpha.2
   - Fix a crash with 2 overlapping animations.
   - Fix a crash when scrolling when there is no children.
 - Avatar:
-  - Fix memory leaks in adw_avatar_draw_to_pixbuf().
+  - Fix memory leaks in adap_avatar_draw_to_pixbuf().
   - Fix a memory leak in the avatar demo.
 - Fix crashes by freeing shaders at the right time.
 - Specify the translation domain in UI files to avoid leaving them
@@ -1655,6 +1655,6 @@ Version 1.0.0-alpha.2
 Version 1.0.0-alpha.1
 =====================
 
-- First libadwaita 1 alpha.
+- First libadapta 1 alpha.
 - Check the migration guide in the documentation to port from libhandy
   to it.

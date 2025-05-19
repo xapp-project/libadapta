@@ -6,35 +6,35 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_WINDOW_TITLE (adw_window_title_get_type())
+#define ADAP_TYPE_WINDOW_TITLE (adap_window_title_get_type())
 
-ADW_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (AdwWindowTitle, adw_window_title, ADW, WINDOW_TITLE, GtkWidget)
+ADAP_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (AdapWindowTitle, adap_window_title, ADAP, WINDOW_TITLE, GtkWidget)
 
-ADW_AVAILABLE_IN_ALL
-GtkWidget *adw_window_title_new (const char *title,
+ADAP_AVAILABLE_IN_ALL
+GtkWidget *adap_window_title_new (const char *title,
                                  const char *subtitle) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_window_title_get_title (AdwWindowTitle *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_window_title_set_title (AdwWindowTitle *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_window_title_get_title (AdapWindowTitle *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_window_title_set_title (AdapWindowTitle *self,
                                         const char     *title);
 
-ADW_AVAILABLE_IN_ALL
-const char *adw_window_title_get_subtitle (AdwWindowTitle *self);
-ADW_AVAILABLE_IN_ALL
-void        adw_window_title_set_subtitle (AdwWindowTitle *self,
+ADAP_AVAILABLE_IN_ALL
+const char *adap_window_title_get_subtitle (AdapWindowTitle *self);
+ADAP_AVAILABLE_IN_ALL
+void        adap_window_title_set_subtitle (AdapWindowTitle *self,
                                            const char     *subtitle);
 
 G_END_DECLS

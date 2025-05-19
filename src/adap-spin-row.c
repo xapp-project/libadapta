@@ -6,18 +6,18 @@
 
 #include "config.h"
 
-#include "adw-spin-row.h"
+#include "adap-spin-row.h"
 
-#include "adw-action-row-private.h"
-#include "adw-marshalers.h"
-#include "adw-widget-utils-private.h"
+#include "adap-action-row-private.h"
+#include "adap-marshalers.h"
+#include "adap-widget-utils-private.h"
 
 #include <math.h>
 
 #define MAX_DIGITS 20
 
 /**
- * AdwSpinRow:
+ * AdapSpinRow:
  *
  * An [class@ActionRow] with an embedded spin button.
  *
@@ -26,10 +26,10 @@
  *   <img src="spin-row.png" alt="spin-row">
  * </picture>
  *
- * Example of an `AdwSpinRow` UI definition:
+ * Example of an `AdapSpinRow` UI definition:
  *
  * ```xml
- * <object class="AdwSpinRow">
+ * <object class="AdapSpinRow">
  *   <property name="title" translatable="yes">Spin Row</property>
  *   <property name="adjustment">
  *     <object class="GtkAdjustment">
@@ -47,30 +47,30 @@
  *
  * ## CSS nodes
  *
- * `AdwSpinRow` has the same structure as [class@ActionRow], as well as the
+ * `AdapSpinRow` has the same structure as [class@ActionRow], as well as the
  * `.spin` style class on the main node.
  *
  * ## Accessibility
  *
- * `AdwSpinRow` uses an internal `GtkSpinButton` with the
+ * `AdapSpinRow` uses an internal `GtkSpinButton` with the
  * `GTK_ACCESSIBLE_ROLE_SPIN_BUTTON` role.
  *
  * Since: 1.4
  */
 
-struct _AdwSpinRow
+struct _AdapSpinRow
 {
-  AdwActionRow parent_instance;
+  AdapActionRow parent_instance;
 
   GtkWidget *spin_button;
 };
 
-static void adw_spin_row_accessible_init (GtkAccessibleInterface *iface);
-static void adw_spin_row_editable_init (GtkEditableInterface *iface);
+static void adap_spin_row_accessible_init (GtkAccessibleInterface *iface);
+static void adap_spin_row_editable_init (GtkEditableInterface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwSpinRow, adw_spin_row, ADW_TYPE_ACTION_ROW,
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE, adw_spin_row_accessible_init)
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE, adw_spin_row_editable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapSpinRow, adap_spin_row, ADAP_TYPE_ACTION_ROW,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE, adap_spin_row_accessible_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE, adap_spin_row_editable_init))
 
 enum {
   PROP_0,
@@ -111,7 +111,7 @@ boolean_handled_accumulator (GSignalInvocationHint *ihint,
 }
 
 static void
-spin_button_state_flags_changed_cb (AdwSpinRow *self)
+spin_button_state_flags_changed_cb (AdapSpinRow *self)
 {
   GtkStateFlags flags = gtk_widget_get_state_flags (self->spin_button);
 
@@ -122,7 +122,7 @@ spin_button_state_flags_changed_cb (AdwSpinRow *self)
 }
 
 static gboolean
-spin_button_keynav_failed_cb (AdwSpinRow       *self,
+spin_button_keynav_failed_cb (AdapSpinRow       *self,
                               GtkDirectionType  direction)
 {
   if (direction == GTK_DIR_LEFT || direction == GTK_DIR_RIGHT)
@@ -132,7 +132,7 @@ spin_button_keynav_failed_cb (AdwSpinRow       *self,
 }
 
 static int
-spin_button_input_cb (AdwSpinRow *self,
+spin_button_input_cb (AdapSpinRow *self,
                       double     *new_value)
 {
   int return_value;
@@ -143,7 +143,7 @@ spin_button_input_cb (AdwSpinRow *self,
 }
 
 static gboolean
-spin_button_output_cb (AdwSpinRow *self)
+spin_button_output_cb (AdapSpinRow *self)
 {
   gboolean return_value;
 
@@ -153,60 +153,60 @@ spin_button_output_cb (AdwSpinRow *self)
 }
 
 static void
-spin_button_wrapped_cb (AdwSpinRow *self)
+spin_button_wrapped_cb (AdapSpinRow *self)
 {
   g_signal_emit (self, signals[SIGNAL_WRAPPED], 0);
 }
 
 static void
-spin_button_notify_value_cb (AdwSpinRow *self)
+spin_button_notify_value_cb (AdapSpinRow *self)
 {
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_VALUE]);
 }
 
 static gboolean
-adw_spin_row_grab_focus (GtkWidget *widget)
+adap_spin_row_grab_focus (GtkWidget *widget)
 {
-  AdwSpinRow *self = ADW_SPIN_ROW (widget);
+  AdapSpinRow *self = ADAP_SPIN_ROW (widget);
 
   return gtk_widget_grab_focus (self->spin_button);
 }
 
 static void
-adw_spin_row_get_property (GObject    *object,
+adap_spin_row_get_property (GObject    *object,
                            guint       prop_id,
                            GValue     *value,
                            GParamSpec *pspec)
 {
-  AdwSpinRow *self = ADW_SPIN_ROW (object);
+  AdapSpinRow *self = ADAP_SPIN_ROW (object);
 
   if (gtk_editable_delegate_get_property (object, prop_id, value, pspec))
     return;
 
   switch (prop_id) {
   case PROP_ADJUSTMENT:
-    g_value_set_object (value, adw_spin_row_get_adjustment (self));
+    g_value_set_object (value, adap_spin_row_get_adjustment (self));
     break;
   case PROP_CLIMB_RATE:
-    g_value_set_double (value, adw_spin_row_get_climb_rate (self));
+    g_value_set_double (value, adap_spin_row_get_climb_rate (self));
     break;
   case PROP_DIGITS:
-    g_value_set_uint (value, adw_spin_row_get_digits (self));
+    g_value_set_uint (value, adap_spin_row_get_digits (self));
     break;
   case PROP_NUMERIC:
-    g_value_set_boolean (value, adw_spin_row_get_numeric (self));
+    g_value_set_boolean (value, adap_spin_row_get_numeric (self));
     break;
   case PROP_SNAP_TO_TICKS:
-    g_value_set_boolean (value, adw_spin_row_get_snap_to_ticks (self));
+    g_value_set_boolean (value, adap_spin_row_get_snap_to_ticks (self));
     break;
   case PROP_UPDATE_POLICY:
-    g_value_set_enum (value, adw_spin_row_get_update_policy (self));
+    g_value_set_enum (value, adap_spin_row_get_update_policy (self));
     break;
   case PROP_VALUE:
-    g_value_set_double (value, adw_spin_row_get_value (self));
+    g_value_set_double (value, adap_spin_row_get_value (self));
     break;
   case PROP_WRAP:
-    g_value_set_boolean (value, adw_spin_row_get_wrap (self));
+    g_value_set_boolean (value, adap_spin_row_get_wrap (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -214,40 +214,40 @@ adw_spin_row_get_property (GObject    *object,
 }
 
 static void
-adw_spin_row_set_property (GObject      *object,
+adap_spin_row_set_property (GObject      *object,
                            guint         prop_id,
                            const GValue *value,
                            GParamSpec   *pspec)
 {
-  AdwSpinRow *self = ADW_SPIN_ROW (object);
+  AdapSpinRow *self = ADAP_SPIN_ROW (object);
 
   if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
     return;
 
   switch (prop_id) {
   case PROP_ADJUSTMENT:
-    adw_spin_row_set_adjustment (self, g_value_get_object (value));
+    adap_spin_row_set_adjustment (self, g_value_get_object (value));
     break;
   case PROP_CLIMB_RATE:
-    adw_spin_row_set_climb_rate (self, g_value_get_double (value));
+    adap_spin_row_set_climb_rate (self, g_value_get_double (value));
     break;
   case PROP_DIGITS:
-    adw_spin_row_set_digits (self, g_value_get_uint (value));
+    adap_spin_row_set_digits (self, g_value_get_uint (value));
     break;
   case PROP_NUMERIC:
-    adw_spin_row_set_numeric (self, g_value_get_boolean (value));
+    adap_spin_row_set_numeric (self, g_value_get_boolean (value));
     break;
   case PROP_SNAP_TO_TICKS:
-    adw_spin_row_set_snap_to_ticks (self, g_value_get_boolean (value));
+    adap_spin_row_set_snap_to_ticks (self, g_value_get_boolean (value));
     break;
   case PROP_UPDATE_POLICY:
-    adw_spin_row_set_update_policy (self, g_value_get_enum (value));
+    adap_spin_row_set_update_policy (self, g_value_get_enum (value));
     break;
   case PROP_VALUE:
-    adw_spin_row_set_value (self, g_value_get_double (value));
+    adap_spin_row_set_value (self, g_value_get_double (value));
     break;
   case PROP_WRAP:
-    adw_spin_row_set_wrap (self, g_value_get_boolean (value));
+    adap_spin_row_set_wrap (self, g_value_get_boolean (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -255,19 +255,19 @@ adw_spin_row_set_property (GObject      *object,
 }
 
 static void
-adw_spin_row_class_init (AdwSpinRowClass *klass)
+adap_spin_row_class_init (AdapSpinRowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->get_property = adw_spin_row_get_property;
-  object_class->set_property = adw_spin_row_set_property;
+  object_class->get_property = adap_spin_row_get_property;
+  object_class->set_property = adap_spin_row_set_property;
 
-  widget_class->focus = adw_widget_focus_child;
-  widget_class->grab_focus = adw_spin_row_grab_focus;
+  widget_class->focus = adap_widget_focus_child;
+  widget_class->grab_focus = adap_spin_row_grab_focus;
 
   /**
-   * AdwSpinRow:adjustment: (attributes org.gtk.Property.get=adw_spin_row_get_adjustment org.gtk.Property.set=adw_spin_row_set_adjustment)
+   * AdapSpinRow:adjustment: (attributes org.gtk.Property.get=adap_spin_row_get_adjustment org.gtk.Property.set=adap_spin_row_set_adjustment)
    *
    * The adjustment that holds the value of the spin row.
    *
@@ -279,7 +279,7 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSpinRow:climb-rate: (attributes org.gtk.Property.get=adw_spin_row_get_climb_rate org.gtk.Property.set=adw_spin_row_set_climb_rate)
+   * AdapSpinRow:climb-rate: (attributes org.gtk.Property.get=adap_spin_row_get_climb_rate org.gtk.Property.set=adap_spin_row_set_climb_rate)
    *
    * The acceleration rate when you hold down a button or key.
    *
@@ -291,7 +291,7 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSpinRow:digits: (attributes org.gtk.Property.get=adw_spin_row_get_digits org.gtk.Property.set=adw_spin_row_set_digits)
+   * AdapSpinRow:digits: (attributes org.gtk.Property.get=adap_spin_row_get_digits org.gtk.Property.set=adap_spin_row_set_digits)
    *
    * The number of decimal places to display.
    *
@@ -303,7 +303,7 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSpinRow:numeric: (attributes org.gtk.Property.get=adw_spin_row_get_numeric org.gtk.Property.set=adw_spin_row_set_numeric)
+   * AdapSpinRow:numeric: (attributes org.gtk.Property.get=adap_spin_row_get_numeric org.gtk.Property.set=adap_spin_row_set_numeric)
    *
    * Whether non-numeric characters should be ignored.
    *
@@ -315,7 +315,7 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSpinRow:snap-to-ticks: (attributes org.gtk.Property.get=adw_spin_row_get_snap_to_ticks org.gtk.Property.set=adw_spin_row_set_snap_to_ticks)
+   * AdapSpinRow:snap-to-ticks: (attributes org.gtk.Property.get=adap_spin_row_get_snap_to_ticks org.gtk.Property.set=adap_spin_row_set_snap_to_ticks)
    *
    * Whether invalid values are snapped to the nearest step increment.
    *
@@ -327,7 +327,7 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSpinRow:update-policy: (attributes org.gtk.Property.get=adw_spin_row_get_update_policy org.gtk.Property.set=adw_spin_row_set_update_policy)
+   * AdapSpinRow:update-policy: (attributes org.gtk.Property.get=adap_spin_row_get_update_policy org.gtk.Property.set=adap_spin_row_set_update_policy)
    *
    * The policy for updating the spin row.
    *
@@ -342,7 +342,7 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSpinRow:value: (attributes org.gtk.Property.get=adw_spin_row_get_value org.gtk.Property.set=adw_spin_row_set_value)
+   * AdapSpinRow:value: (attributes org.gtk.Property.get=adap_spin_row_get_value org.gtk.Property.set=adap_spin_row_set_value)
    *
    * The current value.
    *
@@ -354,7 +354,7 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * AdwSpinRow:wrap: (attributes org.gtk.Property.get=adw_spin_row_get_wrap org.gtk.Property.set=adw_spin_row_set_wrap)
+   * AdapSpinRow:wrap: (attributes org.gtk.Property.get=adap_spin_row_get_wrap org.gtk.Property.set=adap_spin_row_set_wrap)
    *
    * Whether the spin row should wrap upon reaching its limits.
    *
@@ -370,7 +370,7 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
   gtk_editable_install_properties (object_class, PROP_LAST_PROP);
 
   /**
-   * AdwSpinRow::input:
+   * AdapSpinRow::input:
    * @self: a spin row
    * @new_value: (out) (type double): return location for the new value
    *
@@ -394,15 +394,15 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  adw_marshal_INT__POINTER,
+                  adap_marshal_INT__POINTER,
                   G_TYPE_INT, 1,
                   G_TYPE_POINTER);
   g_signal_set_va_marshaller (signals[SIGNAL_INPUT],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_INT__POINTERv);
+                              adap_marshal_INT__POINTERv);
 
   /**
-   * AdwSpinRow::output:
+   * AdapSpinRow::output:
    *
    * Emitted to tweak the formatting of the value for display.
    *
@@ -419,14 +419,14 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
                   0,
                   boolean_handled_accumulator,
                   NULL,
-                  adw_marshal_BOOLEAN__VOID,
+                  adap_marshal_BOOLEAN__VOID,
                   G_TYPE_BOOLEAN, 0);
   g_signal_set_va_marshaller (signals[SIGNAL_OUTPUT],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_BOOLEAN__VOIDv);
+                              adap_marshal_BOOLEAN__VOIDv);
 
   /**
-   * AdwSpinRow::wrapped:
+   * AdapSpinRow::wrapped:
    *
    * Emitted right after the spinbutton wraps.
    *
@@ -440,15 +440,15 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   g_signal_set_va_marshaller (signals[SIGNAL_WRAPPED],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/Adwaita/ui/adw-spin-row.ui");
-  gtk_widget_class_bind_template_child (widget_class, AdwSpinRow, spin_button);
+                                               "/org/gnome/Adapta/ui/adap-spin-row.ui");
+  gtk_widget_class_bind_template_child (widget_class, AdapSpinRow, spin_button);
 
   gtk_widget_class_bind_template_callback (widget_class, spin_button_state_flags_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, spin_button_keynav_failed_cb);
@@ -461,7 +461,7 @@ adw_spin_row_class_init (AdwSpinRowClass *klass)
 }
 
 static void
-adw_spin_row_init (AdwSpinRow *self)
+adap_spin_row_init (AdapSpinRow *self)
 {
   GListModel *controllers;
   guint i, n;
@@ -469,7 +469,7 @@ adw_spin_row_init (AdwSpinRow *self)
   gtk_widget_init_template (GTK_WIDGET (self));
   gtk_editable_init_delegate (GTK_EDITABLE (self));
 
-  adw_action_row_set_expand_suffixes (ADW_ACTION_ROW (self), TRUE);
+  adap_action_row_set_expand_suffixes (ADAP_ACTION_ROW (self), TRUE);
 
   /* XXX: We shouldn't be doing this, but there's no way to prevent scrolling
    * on the spin button at the moment */
@@ -489,53 +489,53 @@ adw_spin_row_init (AdwSpinRow *self)
 }
 
 static gboolean
-adw_spin_row_accessible_get_platform_state (GtkAccessible              *accessible,
+adap_spin_row_accessible_get_platform_state (GtkAccessible              *accessible,
                                             GtkAccessiblePlatformState  state)
 {
   return gtk_editable_delegate_get_accessible_platform_state (GTK_EDITABLE (accessible), state);
 }
 
 static void
-adw_spin_row_accessible_init (GtkAccessibleInterface *iface)
+adap_spin_row_accessible_init (GtkAccessibleInterface *iface)
 {
-  iface->get_platform_state = adw_spin_row_accessible_get_platform_state;
+  iface->get_platform_state = adap_spin_row_accessible_get_platform_state;
 }
 
 static GtkEditable *
-adw_spin_row_editable_get_delegate (GtkEditable *editable)
+adap_spin_row_editable_get_delegate (GtkEditable *editable)
 {
-  AdwSpinRow *self = ADW_SPIN_ROW (editable);
+  AdapSpinRow *self = ADAP_SPIN_ROW (editable);
 
   return GTK_EDITABLE (self->spin_button);
 }
 
 void
-adw_spin_row_editable_init (GtkEditableInterface *iface)
+adap_spin_row_editable_init (GtkEditableInterface *iface)
 {
-  iface->get_delegate = adw_spin_row_editable_get_delegate;
+  iface->get_delegate = adap_spin_row_editable_get_delegate;
 }
 
 /**
- * adw_spin_row_new:
+ * adap_spin_row_new:
  * @adjustment: (nullable): the adjustment that this spin row should use
  * @climb_rate: the rate the value changes when holding a button or key
  * @digits: the number of decimal places to display
  *
- * Creates a new `AdwSpinRow`.
+ * Creates a new `AdapSpinRow`.
  *
- * Returns: the newly created `AdwSpinRow`
+ * Returns: the newly created `AdapSpinRow`
  *
  * Since: 1.4
  */
 GtkWidget *
-adw_spin_row_new (GtkAdjustment *adjustment,
+adap_spin_row_new (GtkAdjustment *adjustment,
                   double         climb_rate,
                   guint          digits)
 {
   g_return_val_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment), NULL);
   g_return_val_if_fail (climb_rate >= 0, NULL);
 
-  return g_object_new (ADW_TYPE_SPIN_ROW,
+  return g_object_new (ADAP_TYPE_SPIN_ROW,
                        "adjustment", adjustment,
                        "climb-rate", climb_rate,
                        "digits", digits,
@@ -543,15 +543,15 @@ adw_spin_row_new (GtkAdjustment *adjustment,
 }
 
 /**
- * adw_spin_row_new_with_range:
+ * adap_spin_row_new_with_range:
  * @min: minimum allowable value
  * @max: maximum allowable value
  * @step: increment added or subtracted by spinning the widget
  *
- * Creates a new `AdwSpinRow` with the given properties.
+ * Creates a new `AdapSpinRow` with the given properties.
  *
  * This is a convenience constructor that allows creation of a numeric
- * `AdwSpinRow` without manually creating an adjustment. The value is initially
+ * `AdapSpinRow` without manually creating an adjustment. The value is initially
  * set to the minimum value and a page increment of 10 * @step is the default.
  * The precision of the spin row is equivalent to the precisions of @step.
  *
@@ -560,12 +560,12 @@ adw_spin_row_new (GtkAdjustment *adjustment,
  *     of ten. If the resulting precision is not suitable for your needs, use
  *     [method@SpinRow.set_digits] to correct it.
  *
- * Returns: the new `AdwSpinRow`
+ * Returns: the new `AdapSpinRow`
  *
  * Since: 1.4
  */
 GtkWidget *
-adw_spin_row_new_with_range (double min,
+adap_spin_row_new_with_range (double min,
                              double max,
                              double step)
 {
@@ -586,7 +586,7 @@ adw_spin_row_new_with_range (double min,
       digits = MAX_DIGITS;
   }
 
-  return g_object_new (ADW_TYPE_SPIN_ROW,
+  return g_object_new (ADAP_TYPE_SPIN_ROW,
                        "adjustment", adjustment,
                        "climb-rate", step,
                        "digits", digits,
@@ -595,7 +595,7 @@ adw_spin_row_new_with_range (double min,
 }
 
 /**
- * adw_spin_row_configure:
+ * adap_spin_row_configure:
  * @self: a spin row
  * @adjustment: (nullable): the adjustment that this spin row should use
  * @climb_rate: the new climb rate
@@ -609,26 +609,26 @@ adw_spin_row_new_with_range (double min,
  * Since: 1.4
  */
 void
-adw_spin_row_configure (AdwSpinRow    *self,
+adap_spin_row_configure (AdapSpinRow    *self,
                         GtkAdjustment *adjustment,
                         double         climb_rate,
                         guint          digits)
 {
-  g_return_if_fail (ADW_IS_SPIN_ROW (self));
+  g_return_if_fail (ADAP_IS_SPIN_ROW (self));
   g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
   g_return_if_fail (climb_rate >= 0);
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  adw_spin_row_set_adjustment (self, adjustment);
-  adw_spin_row_set_climb_rate (self, climb_rate);
-  adw_spin_row_set_digits (self, digits);
+  adap_spin_row_set_adjustment (self, adjustment);
+  adap_spin_row_set_climb_rate (self, climb_rate);
+  adap_spin_row_set_digits (self, digits);
 
   g_object_thaw_notify (G_OBJECT (self));
 }
 
 /**
- * adw_spin_row_get_adjustment: (attributes org.gtk.Method.get_property=adjustment)
+ * adap_spin_row_get_adjustment: (attributes org.gtk.Method.get_property=adjustment)
  * @self: a spin row
  *
  * Gets the adjustment that holds the value for the spin row.
@@ -638,9 +638,9 @@ adw_spin_row_configure (AdwSpinRow    *self,
  * Since: 1.4
  */
 GtkAdjustment *
-adw_spin_row_get_adjustment (AdwSpinRow *self)
+adap_spin_row_get_adjustment (AdapSpinRow *self)
 {
-  g_return_val_if_fail (ADW_IS_SPIN_ROW (self), NULL);
+  g_return_val_if_fail (ADAP_IS_SPIN_ROW (self), NULL);
 
   /* Even though the setter is nullable, this will always return a valid
    * adjustment */
@@ -648,7 +648,7 @@ adw_spin_row_get_adjustment (AdwSpinRow *self)
 }
 
 /**
- * adw_spin_row_set_adjustment: (attributes org.gtk.Method.set_property=adjustment)
+ * adap_spin_row_set_adjustment: (attributes org.gtk.Method.set_property=adjustment)
  * @self: a spin row
  * @adjustment: (nullable): an adjustment
  *
@@ -657,13 +657,13 @@ adw_spin_row_get_adjustment (AdwSpinRow *self)
  * Since: 1.4
  */
 void
-adw_spin_row_set_adjustment (AdwSpinRow    *self,
+adap_spin_row_set_adjustment (AdapSpinRow    *self,
                              GtkAdjustment *adjustment)
 {
-  g_return_if_fail (ADW_IS_SPIN_ROW (self));
+  g_return_if_fail (ADAP_IS_SPIN_ROW (self));
   g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
 
-  if (adjustment == adw_spin_row_get_adjustment (self))
+  if (adjustment == adap_spin_row_get_adjustment (self))
     return;
 
   gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (self->spin_button), adjustment);
@@ -672,7 +672,7 @@ adw_spin_row_set_adjustment (AdwSpinRow    *self,
 }
 
 /**
- * adw_spin_row_get_climb_rate: (attributes org.gtk.Method.get_property=climb-rate)
+ * adap_spin_row_get_climb_rate: (attributes org.gtk.Method.get_property=climb-rate)
  * @self: a spin row
  *
  * Gets the acceleration rate when you hold down a button or key.
@@ -682,15 +682,15 @@ adw_spin_row_set_adjustment (AdwSpinRow    *self,
  * Since: 1.4
  */
 double
-adw_spin_row_get_climb_rate (AdwSpinRow *self)
+adap_spin_row_get_climb_rate (AdapSpinRow *self)
 {
-  g_return_val_if_fail (ADW_IS_SPIN_ROW (self), 0.0);
+  g_return_val_if_fail (ADAP_IS_SPIN_ROW (self), 0.0);
 
   return gtk_spin_button_get_climb_rate (GTK_SPIN_BUTTON (self->spin_button));
 }
 
 /**
- * adw_spin_row_set_climb_rate: (attributes org.gtk.Method.set_property=climb-rate)
+ * adap_spin_row_set_climb_rate: (attributes org.gtk.Method.set_property=climb-rate)
  * @self: a spin row
  * @climb_rate: the acceleration rate when you hold down a button or key
  *
@@ -699,13 +699,13 @@ adw_spin_row_get_climb_rate (AdwSpinRow *self)
  * Since: 1.4
  */
 void
-adw_spin_row_set_climb_rate (AdwSpinRow *self,
+adap_spin_row_set_climb_rate (AdapSpinRow *self,
                              double      climb_rate)
 {
-  g_return_if_fail (ADW_IS_SPIN_ROW (self));
+  g_return_if_fail (ADAP_IS_SPIN_ROW (self));
   g_return_if_fail (climb_rate >= 0);
 
-  if (G_APPROX_VALUE (climb_rate, adw_spin_row_get_climb_rate (self), DBL_EPSILON))
+  if (G_APPROX_VALUE (climb_rate, adap_spin_row_get_climb_rate (self), DBL_EPSILON))
     return;
 
   gtk_spin_button_set_climb_rate (GTK_SPIN_BUTTON (self->spin_button), climb_rate);
@@ -714,7 +714,7 @@ adw_spin_row_set_climb_rate (AdwSpinRow *self,
 }
 
 /**
- * adw_spin_row_get_digits: (attributes org.gtk.Method.get_property=digits)
+ * adap_spin_row_get_digits: (attributes org.gtk.Method.get_property=digits)
  * @self: a spin row
  *
  * Gets the number of decimal places to display.
@@ -724,15 +724,15 @@ adw_spin_row_set_climb_rate (AdwSpinRow *self,
  * Since: 1.4
  */
 guint
-adw_spin_row_get_digits (AdwSpinRow *self)
+adap_spin_row_get_digits (AdapSpinRow *self)
 {
-  g_return_val_if_fail (ADW_IS_SPIN_ROW (self), 0);
+  g_return_val_if_fail (ADAP_IS_SPIN_ROW (self), 0);
 
   return gtk_spin_button_get_digits (GTK_SPIN_BUTTON (self->spin_button));
 }
 
 /**
- * adw_spin_row_set_digits: (attributes org.gtk.Method.set_property=digits)
+ * adap_spin_row_set_digits: (attributes org.gtk.Method.set_property=digits)
  * @self: a spin row
  * @digits: the number of decimal places to display
  *
@@ -741,12 +741,12 @@ adw_spin_row_get_digits (AdwSpinRow *self)
  * Since: 1.4
  */
 void
-adw_spin_row_set_digits (AdwSpinRow *self,
+adap_spin_row_set_digits (AdapSpinRow *self,
                          guint       digits)
 {
-  g_return_if_fail (ADW_IS_SPIN_ROW (self));
+  g_return_if_fail (ADAP_IS_SPIN_ROW (self));
 
-  if (digits == adw_spin_row_get_digits (self))
+  if (digits == adap_spin_row_get_digits (self))
     return;
 
   gtk_spin_button_set_digits (GTK_SPIN_BUTTON (self->spin_button), digits);
@@ -755,7 +755,7 @@ adw_spin_row_set_digits (AdwSpinRow *self,
 }
 
 /**
- * adw_spin_row_get_numeric: (attributes org.gtk.Method.get_property=numeric)
+ * adap_spin_row_get_numeric: (attributes org.gtk.Method.get_property=numeric)
  * @self: a spin row
  *
  * Gets whether non-numeric characters should be ignored.
@@ -765,15 +765,15 @@ adw_spin_row_set_digits (AdwSpinRow *self,
  * Since: 1.4
  */
 gboolean
-adw_spin_row_get_numeric (AdwSpinRow *self)
+adap_spin_row_get_numeric (AdapSpinRow *self)
 {
-  g_return_val_if_fail (ADW_IS_SPIN_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SPIN_ROW (self), FALSE);
 
   return gtk_spin_button_get_numeric (GTK_SPIN_BUTTON (self->spin_button));
 }
 
 /**
- * adw_spin_row_set_numeric: (attributes org.gtk.Method.set_property=numeric)
+ * adap_spin_row_set_numeric: (attributes org.gtk.Method.set_property=numeric)
  * @self: a spin row
  * @numeric: whether non-numeric characters should be ignored
  *
@@ -782,14 +782,14 @@ adw_spin_row_get_numeric (AdwSpinRow *self)
  * Since: 1.4
  */
 void
-adw_spin_row_set_numeric (AdwSpinRow *self,
+adap_spin_row_set_numeric (AdapSpinRow *self,
                           gboolean    numeric)
 {
-  g_return_if_fail (ADW_IS_SPIN_ROW (self));
+  g_return_if_fail (ADAP_IS_SPIN_ROW (self));
 
   numeric = !!numeric;
 
-  if (numeric == adw_spin_row_get_numeric (self))
+  if (numeric == adap_spin_row_get_numeric (self))
     return;
 
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (self->spin_button), numeric);
@@ -798,7 +798,7 @@ adw_spin_row_set_numeric (AdwSpinRow *self,
 }
 
 /**
- * adw_spin_row_get_snap_to_ticks: (attributes org.gtk.Method.get_property=snap-to-ticks)
+ * adap_spin_row_get_snap_to_ticks: (attributes org.gtk.Method.get_property=snap-to-ticks)
  * @self: a spin row
  *
  * Gets whether invalid values are snapped to nearest step increment.
@@ -808,15 +808,15 @@ adw_spin_row_set_numeric (AdwSpinRow *self,
  * Since: 1.4
  */
 gboolean
-adw_spin_row_get_snap_to_ticks (AdwSpinRow *self)
+adap_spin_row_get_snap_to_ticks (AdapSpinRow *self)
 {
-  g_return_val_if_fail (ADW_IS_SPIN_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SPIN_ROW (self), FALSE);
 
   return gtk_spin_button_get_snap_to_ticks (GTK_SPIN_BUTTON (self->spin_button));
 }
 
 /**
- * adw_spin_row_set_snap_to_ticks: (attributes org.gtk.Method.set_property=snap-to-ticks)
+ * adap_spin_row_set_snap_to_ticks: (attributes org.gtk.Method.set_property=snap-to-ticks)
  * @self: a spin row
  * @snap_to_ticks: whether invalid values are snapped to the nearest step increment
  *
@@ -825,14 +825,14 @@ adw_spin_row_get_snap_to_ticks (AdwSpinRow *self)
  * Since: 1.4
  */
 void
-adw_spin_row_set_snap_to_ticks (AdwSpinRow *self,
+adap_spin_row_set_snap_to_ticks (AdapSpinRow *self,
                                 gboolean    snap_to_ticks)
 {
-  g_return_if_fail (ADW_IS_SPIN_ROW (self));
+  g_return_if_fail (ADAP_IS_SPIN_ROW (self));
 
   snap_to_ticks = !!snap_to_ticks;
 
-  if (snap_to_ticks == adw_spin_row_get_snap_to_ticks (self))
+  if (snap_to_ticks == adap_spin_row_get_snap_to_ticks (self))
     return;
 
   gtk_spin_button_set_snap_to_ticks (GTK_SPIN_BUTTON (self->spin_button), snap_to_ticks);
@@ -841,7 +841,7 @@ adw_spin_row_set_snap_to_ticks (AdwSpinRow *self,
 }
 
 /**
- * adw_spin_row_get_update_policy: (attributes org.gtk.Method.get_property=update-policy)
+ * adap_spin_row_get_update_policy: (attributes org.gtk.Method.get_property=update-policy)
  * @self: a spin row
  *
  * Gets the policy for updating the spin row.
@@ -851,15 +851,15 @@ adw_spin_row_set_snap_to_ticks (AdwSpinRow *self,
  * Since: 1.4
  */
 GtkSpinButtonUpdatePolicy
-adw_spin_row_get_update_policy (AdwSpinRow *self)
+adap_spin_row_get_update_policy (AdapSpinRow *self)
 {
-  g_return_val_if_fail (ADW_IS_SPIN_ROW (self), GTK_UPDATE_ALWAYS);
+  g_return_val_if_fail (ADAP_IS_SPIN_ROW (self), GTK_UPDATE_ALWAYS);
 
   return gtk_spin_button_get_update_policy (GTK_SPIN_BUTTON (self->spin_button));
 }
 
 /**
- * adw_spin_row_set_update_policy: (attributes org.gtk.Method.set_property=update-policy)
+ * adap_spin_row_set_update_policy: (attributes org.gtk.Method.set_property=update-policy)
  * @self: a spin row
  * @policy: the policy for updating the spin row
  *
@@ -870,12 +870,12 @@ adw_spin_row_get_update_policy (AdwSpinRow *self)
  * Since: 1.4
  */
 void
-adw_spin_row_set_update_policy (AdwSpinRow                *self,
+adap_spin_row_set_update_policy (AdapSpinRow                *self,
                                 GtkSpinButtonUpdatePolicy  policy)
 {
-  g_return_if_fail (ADW_IS_SPIN_ROW (self));
+  g_return_if_fail (ADAP_IS_SPIN_ROW (self));
 
-  if (policy == adw_spin_row_get_update_policy (self))
+  if (policy == adap_spin_row_get_update_policy (self))
     return;
 
   gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (self->spin_button), policy);
@@ -884,7 +884,7 @@ adw_spin_row_set_update_policy (AdwSpinRow                *self,
 }
 
 /**
- * adw_spin_row_get_value: (attributes org.gtk.Method.get_property=value)
+ * adap_spin_row_get_value: (attributes org.gtk.Method.get_property=value)
  * @self: a spin row
  *
  * Gets the current value.
@@ -894,15 +894,15 @@ adw_spin_row_set_update_policy (AdwSpinRow                *self,
  * Since: 1.4
  */
 double
-adw_spin_row_get_value (AdwSpinRow *self)
+adap_spin_row_get_value (AdapSpinRow *self)
 {
-  g_return_val_if_fail (ADW_IS_SPIN_ROW (self), 0.0);
+  g_return_val_if_fail (ADAP_IS_SPIN_ROW (self), 0.0);
 
   return gtk_spin_button_get_value (GTK_SPIN_BUTTON (self->spin_button));
 }
 
 /**
- * adw_spin_row_set_value: (attributes org.gtk.Method.set_property=value)
+ * adap_spin_row_set_value: (attributes org.gtk.Method.set_property=value)
  * @self: a spin row
  * @value: a new value
  *
@@ -911,19 +911,19 @@ adw_spin_row_get_value (AdwSpinRow *self)
  * Since: 1.4
  */
 void
-adw_spin_row_set_value (AdwSpinRow *self,
+adap_spin_row_set_value (AdapSpinRow *self,
                         double      value)
 {
-  g_return_if_fail (ADW_IS_SPIN_ROW (self));
+  g_return_if_fail (ADAP_IS_SPIN_ROW (self));
 
-  if (G_APPROX_VALUE (value, adw_spin_row_get_value (self), DBL_EPSILON))
+  if (G_APPROX_VALUE (value, adap_spin_row_get_value (self), DBL_EPSILON))
     return;
 
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (self->spin_button), value);
 }
 
 /**
- * adw_spin_row_get_wrap: (attributes org.gtk.Method.get_property=wrap)
+ * adap_spin_row_get_wrap: (attributes org.gtk.Method.get_property=wrap)
  * @self: a spin row
  *
  * Gets whether the spin row should wrap upon reaching its limits.
@@ -933,15 +933,15 @@ adw_spin_row_set_value (AdwSpinRow *self,
  * Since: 1.4
  */
 gboolean
-adw_spin_row_get_wrap (AdwSpinRow *self)
+adap_spin_row_get_wrap (AdapSpinRow *self)
 {
-  g_return_val_if_fail (ADW_IS_SPIN_ROW (self), FALSE);
+  g_return_val_if_fail (ADAP_IS_SPIN_ROW (self), FALSE);
 
   return gtk_spin_button_get_wrap (GTK_SPIN_BUTTON (self->spin_button));
 }
 
 /**
- * adw_spin_row_set_wrap: (attributes org.gtk.Method.set_property=wrap)
+ * adap_spin_row_set_wrap: (attributes org.gtk.Method.set_property=wrap)
  * @self: a spin row
  * @wrap: whether the spin row should wrap upon reaching its limits
  *
@@ -950,14 +950,14 @@ adw_spin_row_get_wrap (AdwSpinRow *self)
  * Since: 1.4
  */
 void
-adw_spin_row_set_wrap (AdwSpinRow *self,
+adap_spin_row_set_wrap (AdapSpinRow *self,
                        gboolean    wrap)
 {
-  g_return_if_fail (ADW_IS_SPIN_ROW (self));
+  g_return_if_fail (ADAP_IS_SPIN_ROW (self));
 
   wrap = !!wrap;
 
-  if (wrap == adw_spin_row_get_wrap (self))
+  if (wrap == adap_spin_row_get_wrap (self))
     return;
 
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (self->spin_button), wrap);
@@ -966,7 +966,7 @@ adw_spin_row_set_wrap (AdwSpinRow *self,
 }
 
 /**
- * adw_spin_row_update:
+ * adap_spin_row_update:
  * @self: a spin row
  *
  * Manually force an update of the spin row.
@@ -974,15 +974,15 @@ adw_spin_row_set_wrap (AdwSpinRow *self,
  * Since: 1.4
  */
 void
-adw_spin_row_update (AdwSpinRow *self)
+adap_spin_row_update (AdapSpinRow *self)
 {
-  g_return_if_fail (ADW_IS_SPIN_ROW (self));
+  g_return_if_fail (ADAP_IS_SPIN_ROW (self));
 
   gtk_spin_button_update (GTK_SPIN_BUTTON (self->spin_button));
 }
 
 /**
- * adw_spin_row_set_range:
+ * adap_spin_row_set_range:
  * @self: a spin row
  * @min: minimum allowable value
  * @max: maximum allowable value
@@ -995,11 +995,11 @@ adw_spin_row_update (AdwSpinRow *self)
  * Since: 1.4
  */
 void
-adw_spin_row_set_range (AdwSpinRow *self,
+adap_spin_row_set_range (AdapSpinRow *self,
                         double      min,
                         double      max)
 {
-  g_return_if_fail (ADW_IS_SPIN_ROW (self));
+  g_return_if_fail (ADAP_IS_SPIN_ROW (self));
 
   gtk_spin_button_set_range (GTK_SPIN_BUTTON (self->spin_button), min, max);
 }

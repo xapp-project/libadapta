@@ -1,24 +1,24 @@
-#include "adw-demo-page-buttons.h"
+#include "adap-demo-page-buttons.h"
 
 #include <glib/gi18n.h>
 
-struct _AdwDemoPageButtons
+struct _AdapDemoPageButtons
 {
-  AdwBin parent_instance;
+  AdapBin parent_instance;
 };
 
-G_DEFINE_FINAL_TYPE (AdwDemoPageButtons, adw_demo_page_buttons, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (AdapDemoPageButtons, adap_demo_page_buttons, ADAP_TYPE_BIN)
 
 static void
-adw_demo_page_buttons_class_init (AdwDemoPageButtonsClass *klass)
+adap_demo_page_buttons_class_init (AdapDemoPageButtonsClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adwaita1/Demo/ui/pages/buttons/adw-demo-page-buttons.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Adapta1/Demo/ui/pages/buttons/adap-demo-page-buttons.ui");
 }
 
 static void
-adw_demo_page_buttons_init (AdwDemoPageButtons *self)
+adap_demo_page_buttons_init (AdapDemoPageButtons *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }

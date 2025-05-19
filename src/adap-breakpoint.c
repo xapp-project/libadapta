@@ -8,16 +8,16 @@
 
 #include "config.h"
 
-#include "adw-breakpoint-private.h"
+#include "adap-breakpoint-private.h"
 
-#include "adw-gtkbuilder-utils-private.h"
-#include "adw-length-unit.h"
-#include "adw-marshalers.h"
+#include "adap-gtkbuilder-utils-private.h"
+#include "adap-length-unit.h"
+#include "adap-marshalers.h"
 
 #include <gobject/gvaluecollector.h>
 
 /**
- * AdwBreakpoint:
+ * AdapBreakpoint:
  *
  * Describes a breakpoint for [class@Window] or [class@Dialog].
  *
@@ -38,9 +38,9 @@
  * Breakpoints can be used within [class@Window], [class@ApplicationWindow],
  * [class@Dialog] or [class@BreakpointBin].
  *
- * ## `AdwBreakpoint` as `GtkBuildable`:
+ * ## `AdapBreakpoint` as `GtkBuildable`:
  *
- * `AdwBreakpoint` supports specifying its condition via the `<condition>`
+ * `AdapBreakpoint` supports specifying its condition via the `<condition>`
  * element. The contents of the element must be a string in a format accepted by
  * [func@BreakpointCondition.parse].
  *
@@ -55,10 +55,10 @@
  * Setter values can be translated with the usual `translatable`, `context` and
  * `comments` attributes.
  *
- * Example of an `AdwBreakpoint` UI definition:
+ * Example of an `AdapBreakpoint` UI definition:
  *
  * ```xml
- * <object class="AdwBreakpoint">
+ * <object class="AdapBreakpoint">
  *   <condition>max-width: 400px</condition>
  *   <setter object="button" property="visible">True</setter>
  *   <setter object="box" property="orientation">vertical</setter>
@@ -70,7 +70,7 @@
  */
 
 /**
- * AdwBreakpointCondition:
+ * AdapBreakpointCondition:
  *
  * Describes condition for an [class@Breakpoint].
  *
@@ -78,14 +78,14 @@
  */
 
 /**
- * AdwBreakpointConditionLengthType:
- * @ADW_BREAKPOINT_CONDITION_MIN_WIDTH: true if the width is greater than or
+ * AdapBreakpointConditionLengthType:
+ * @ADAP_BREAKPOINT_CONDITION_MIN_WIDTH: true if the width is greater than or
  *   equal to the condition value
- * @ADW_BREAKPOINT_CONDITION_MAX_WIDTH: true if the width is less than or
+ * @ADAP_BREAKPOINT_CONDITION_MAX_WIDTH: true if the width is less than or
  *   equal to the condition value
- * @ADW_BREAKPOINT_CONDITION_MIN_HEIGHT: true if the height is greater than or
+ * @ADAP_BREAKPOINT_CONDITION_MIN_HEIGHT: true if the height is greater than or
  *   equal to the condition value
- * @ADW_BREAKPOINT_CONDITION_MAX_HEIGHT: true if the height is less than or
+ * @ADAP_BREAKPOINT_CONDITION_MAX_HEIGHT: true if the height is less than or
  *   equal to the condition value
  *
  * Describes length types for [struct@BreakpointCondition].
@@ -98,10 +98,10 @@
  */
 
 /**
- * AdwBreakpointConditionRatioType:
- * @ADW_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO: true if the aspect ratio is
+ * AdapBreakpointConditionRatioType:
+ * @ADAP_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO: true if the aspect ratio is
  *   greater than or equal to the condition value
- * @ADW_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO: true if the aspect ratio is
+ * @ADAP_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO: true if the aspect ratio is
  *   less than or equal to the condition value
  *
  * Describes ratio types for [struct@BreakpointCondition].
@@ -113,8 +113,8 @@
  * Since: 1.4
  */
 
-G_DEFINE_BOXED_TYPE (AdwBreakpointCondition, adw_breakpoint_condition,
-                     adw_breakpoint_condition_copy, adw_breakpoint_condition_free)
+G_DEFINE_BOXED_TYPE (AdapBreakpointCondition, adap_breakpoint_condition,
+                     adap_breakpoint_condition_copy, adap_breakpoint_condition_free)
 
 typedef enum {
   CONDITION_LENGTH,
@@ -136,33 +136,33 @@ typedef enum {
   CONDITION_PARSER_ERROR_VALUE_OUT_OF_RANGE,
 } ConditionParserError;
 
-struct _AdwBreakpointCondition
+struct _AdapBreakpointCondition
 {
   ConditionType type;
 
   union {
     struct {
-      AdwBreakpointConditionLengthType type;
+      AdapBreakpointConditionLengthType type;
       double value;
-      AdwLengthUnit unit;
+      AdapLengthUnit unit;
     } length;
 
     struct {
-      AdwBreakpointConditionRatioType type;
+      AdapBreakpointConditionRatioType type;
       int width;
       int height;
     } ratio;
 
     struct {
       MultiConditionType type;
-      AdwBreakpointCondition *condition_1;
-      AdwBreakpointCondition *condition_2;
+      AdapBreakpointCondition *condition_1;
+      AdapBreakpointCondition *condition_2;
     } multi;
   } data;
 };
 
 static gboolean
-check_condition (AdwBreakpointCondition *self,
+check_condition (AdapBreakpointCondition *self,
                  GtkSettings            *settings,
                  int                     width,
                  int                     height)
@@ -182,18 +182,18 @@ check_condition (AdwBreakpointCondition *self,
   }
 
   if (self->type == CONDITION_LENGTH) {
-    double value_px = adw_length_unit_to_px (self->data.length.unit,
+    double value_px = adap_length_unit_to_px (self->data.length.unit,
                                              self->data.length.value,
                                              settings);
 
     switch (self->data.length.type) {
-    case ADW_BREAKPOINT_CONDITION_MIN_WIDTH:
+    case ADAP_BREAKPOINT_CONDITION_MIN_WIDTH:
       return width >= value_px;
-    case ADW_BREAKPOINT_CONDITION_MAX_WIDTH:
+    case ADAP_BREAKPOINT_CONDITION_MAX_WIDTH:
       return width <= value_px;
-    case ADW_BREAKPOINT_CONDITION_MIN_HEIGHT:
+    case ADAP_BREAKPOINT_CONDITION_MIN_HEIGHT:
       return height >= value_px;
-    case ADW_BREAKPOINT_CONDITION_MAX_HEIGHT:
+    case ADAP_BREAKPOINT_CONDITION_MAX_HEIGHT:
       return height <= value_px;
     default:
       g_assert_not_reached ();
@@ -204,9 +204,9 @@ check_condition (AdwBreakpointCondition *self,
     double ratio = (double) self->data.ratio.width / self->data.ratio.height;
 
     switch (self->data.ratio.type) {
-    case ADW_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO:
+    case ADAP_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO:
       return (double) width / height >= ratio;
-    case ADW_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO:
+    case ADAP_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO:
       return (double) width / height <= ratio;
     default:
       g_assert_not_reached ();
@@ -217,7 +217,7 @@ check_condition (AdwBreakpointCondition *self,
 }
 
 /**
- * adw_breakpoint_condition_new_length:
+ * adap_breakpoint_condition_new_length:
  * @type: the length type
  * @value: the length value
  * @unit: the length unit
@@ -228,19 +228,19 @@ check_condition (AdwBreakpointCondition *self,
  *
  * Since: 1.4
  */
-AdwBreakpointCondition *
-adw_breakpoint_condition_new_length (AdwBreakpointConditionLengthType type,
+AdapBreakpointCondition *
+adap_breakpoint_condition_new_length (AdapBreakpointConditionLengthType type,
                                      double                           value,
-                                     AdwLengthUnit                    unit)
+                                     AdapLengthUnit                    unit)
 {
-  AdwBreakpointCondition *self;
+  AdapBreakpointCondition *self;
 
-  g_return_val_if_fail (type >= ADW_BREAKPOINT_CONDITION_MIN_WIDTH, NULL);
-  g_return_val_if_fail (type <= ADW_BREAKPOINT_CONDITION_MAX_HEIGHT, NULL);
-  g_return_val_if_fail (unit >= ADW_LENGTH_UNIT_PX, NULL);
-  g_return_val_if_fail (unit <= ADW_LENGTH_UNIT_SP, NULL);
+  g_return_val_if_fail (type >= ADAP_BREAKPOINT_CONDITION_MIN_WIDTH, NULL);
+  g_return_val_if_fail (type <= ADAP_BREAKPOINT_CONDITION_MAX_HEIGHT, NULL);
+  g_return_val_if_fail (unit >= ADAP_LENGTH_UNIT_PX, NULL);
+  g_return_val_if_fail (unit <= ADAP_LENGTH_UNIT_SP, NULL);
 
-  self = g_new0 (AdwBreakpointCondition, 1);
+  self = g_new0 (AdapBreakpointCondition, 1);
   self->type = CONDITION_LENGTH;
   self->data.length.type = type;
   self->data.length.value = value;
@@ -250,7 +250,7 @@ adw_breakpoint_condition_new_length (AdwBreakpointConditionLengthType type,
 }
 
 /**
- * adw_breakpoint_condition_new_ratio:
+ * adap_breakpoint_condition_new_ratio:
  * @type: the ratio type
  * @width: ratio width
  * @height: ratio height
@@ -263,19 +263,19 @@ adw_breakpoint_condition_new_length (AdwBreakpointConditionLengthType type,
  *
  * Since: 1.4
  */
-AdwBreakpointCondition *
-adw_breakpoint_condition_new_ratio (AdwBreakpointConditionRatioType type,
+AdapBreakpointCondition *
+adap_breakpoint_condition_new_ratio (AdapBreakpointConditionRatioType type,
                                     int                             width,
                                     int                             height)
 {
-  AdwBreakpointCondition *self;
+  AdapBreakpointCondition *self;
 
-  g_return_val_if_fail (type >= ADW_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO, NULL);
-  g_return_val_if_fail (type <= ADW_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO, NULL);
+  g_return_val_if_fail (type >= ADAP_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO, NULL);
+  g_return_val_if_fail (type <= ADAP_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO, NULL);
   g_return_val_if_fail (width >= 0, NULL);
   g_return_val_if_fail (height >= 1, NULL);
 
-  self = g_new0 (AdwBreakpointCondition, 1);
+  self = g_new0 (AdapBreakpointCondition, 1);
   self->type = CONDITION_RATIO;
   self->data.ratio.type = type;
   self->data.ratio.width = width;
@@ -285,7 +285,7 @@ adw_breakpoint_condition_new_ratio (AdwBreakpointConditionRatioType type,
 }
 
 /**
- * adw_breakpoint_condition_new_and: (constructor)
+ * adap_breakpoint_condition_new_and: (constructor)
  * @condition_1: (transfer full): first condition
  * @condition_2: (transfer full): second condition
  *
@@ -296,16 +296,16 @@ adw_breakpoint_condition_new_ratio (AdwBreakpointConditionRatioType type,
  *
  * Since: 1.4
  */
-AdwBreakpointCondition *
-adw_breakpoint_condition_new_and (AdwBreakpointCondition *condition_1,
-                                  AdwBreakpointCondition *condition_2)
+AdapBreakpointCondition *
+adap_breakpoint_condition_new_and (AdapBreakpointCondition *condition_1,
+                                  AdapBreakpointCondition *condition_2)
 {
-  AdwBreakpointCondition *self;
+  AdapBreakpointCondition *self;
 
   g_return_val_if_fail (condition_1 != NULL, NULL);
   g_return_val_if_fail (condition_2 != NULL, NULL);
 
-  self = g_new0 (AdwBreakpointCondition, 1);
+  self = g_new0 (AdapBreakpointCondition, 1);
   self->type = CONDITION_MULTI;
   self->data.multi.type = MULTI_CONDITION_ALL;
   self->data.multi.condition_1 = condition_1;
@@ -315,7 +315,7 @@ adw_breakpoint_condition_new_and (AdwBreakpointCondition *condition_1,
 }
 
 /**
- * adw_breakpoint_condition_new_or: (constructor)
+ * adap_breakpoint_condition_new_or: (constructor)
  * @condition_1: (transfer full): first condition
  * @condition_2: (transfer full): second condition
  *
@@ -326,16 +326,16 @@ adw_breakpoint_condition_new_and (AdwBreakpointCondition *condition_1,
  *
  * Since: 1.4
  */
-AdwBreakpointCondition *
-adw_breakpoint_condition_new_or (AdwBreakpointCondition *condition_1,
-                                 AdwBreakpointCondition *condition_2)
+AdapBreakpointCondition *
+adap_breakpoint_condition_new_or (AdapBreakpointCondition *condition_1,
+                                 AdapBreakpointCondition *condition_2)
 {
-  AdwBreakpointCondition *self;
+  AdapBreakpointCondition *self;
 
   g_return_val_if_fail (condition_1 != NULL, NULL);
   g_return_val_if_fail (condition_2 != NULL, NULL);
 
-  self = g_new0 (AdwBreakpointCondition, 1);
+  self = g_new0 (AdapBreakpointCondition, 1);
   self->type = CONDITION_MULTI;
   self->data.multi.type = MULTI_CONDITION_ANY;
   self->data.multi.condition_1 = condition_1;
@@ -345,7 +345,7 @@ adw_breakpoint_condition_new_or (AdwBreakpointCondition *condition_1,
 }
 
 /**
- * adw_breakpoint_condition_copy:
+ * adap_breakpoint_condition_copy:
  * @self: a breakpoint condition
  *
  * Copies @self.
@@ -354,19 +354,19 @@ adw_breakpoint_condition_new_or (AdwBreakpointCondition *condition_1,
  *
  * Since: 1.4
  */
-AdwBreakpointCondition *
-adw_breakpoint_condition_copy (AdwBreakpointCondition *self)
+AdapBreakpointCondition *
+adap_breakpoint_condition_copy (AdapBreakpointCondition *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
 
   if (self->type == CONDITION_LENGTH) {
-    return adw_breakpoint_condition_new_length (self->data.length.type,
+    return adap_breakpoint_condition_new_length (self->data.length.type,
                                                 self->data.length.value,
                                                 self->data.length.unit);
   }
 
   if (self->type == CONDITION_RATIO) {
-    return adw_breakpoint_condition_new_ratio (self->data.ratio.type,
+    return adap_breakpoint_condition_new_ratio (self->data.ratio.type,
                                                self->data.ratio.width,
                                                self->data.ratio.height);
   }
@@ -374,11 +374,11 @@ adw_breakpoint_condition_copy (AdwBreakpointCondition *self)
   if (self->type == CONDITION_MULTI) {
     switch (self->data.multi.type) {
     case MULTI_CONDITION_ALL:
-      return adw_breakpoint_condition_new_and (adw_breakpoint_condition_copy (self->data.multi.condition_1),
-                                               adw_breakpoint_condition_copy (self->data.multi.condition_2));
+      return adap_breakpoint_condition_new_and (adap_breakpoint_condition_copy (self->data.multi.condition_1),
+                                               adap_breakpoint_condition_copy (self->data.multi.condition_2));
     case MULTI_CONDITION_ANY:
-      return adw_breakpoint_condition_new_or (adw_breakpoint_condition_copy (self->data.multi.condition_1),
-                                              adw_breakpoint_condition_copy (self->data.multi.condition_2));
+      return adap_breakpoint_condition_new_or (adap_breakpoint_condition_copy (self->data.multi.condition_1),
+                                              adap_breakpoint_condition_copy (self->data.multi.condition_2));
     default:
       g_assert_not_reached ();
     }
@@ -388,7 +388,7 @@ adw_breakpoint_condition_copy (AdwBreakpointCondition *self)
 }
 
 /**
- * adw_breakpoint_condition_free:
+ * adap_breakpoint_condition_free:
  * @self: a breakpoint condition
  *
  * Frees @self.
@@ -396,13 +396,13 @@ adw_breakpoint_condition_copy (AdwBreakpointCondition *self)
  * Since: 1.4
  */
 void
-adw_breakpoint_condition_free (AdwBreakpointCondition *self)
+adap_breakpoint_condition_free (AdapBreakpointCondition *self)
 {
   g_return_if_fail (self != NULL);
 
   if (self->type == CONDITION_MULTI) {
-    adw_breakpoint_condition_free (self->data.multi.condition_1);
-    adw_breakpoint_condition_free (self->data.multi.condition_2);
+    adap_breakpoint_condition_free (self->data.multi.condition_1);
+    adap_breakpoint_condition_free (self->data.multi.condition_2);
   }
 
   g_free (self);
@@ -447,38 +447,38 @@ parse_double (const char            *str,
 }
 
 /* Parse a single length or ratio condition */
-static AdwBreakpointCondition *
+static AdapBreakpointCondition *
 parse_single (const char            *str,
               char                 **endp,
               ConditionParserError  *error)
 {
   ConditionType type = -1;
-  AdwBreakpointConditionLengthType length_type = -1;
-  AdwBreakpointConditionRatioType ratio_type = -1;
+  AdapBreakpointConditionLengthType length_type = -1;
+  AdapBreakpointConditionRatioType ratio_type = -1;
 
   if (!strncmp (str, "min-width", 9)) {
     type = CONDITION_LENGTH;
-    length_type = ADW_BREAKPOINT_CONDITION_MIN_WIDTH;
+    length_type = ADAP_BREAKPOINT_CONDITION_MIN_WIDTH;
     str += 9;
   } else if (!strncmp (str, "max-width", 9)) {
     type = CONDITION_LENGTH;
-    length_type = ADW_BREAKPOINT_CONDITION_MAX_WIDTH;
+    length_type = ADAP_BREAKPOINT_CONDITION_MAX_WIDTH;
     str += 9;
   } else if (!strncmp (str, "min-height", 10)) {
     type = CONDITION_LENGTH;
-    length_type = ADW_BREAKPOINT_CONDITION_MIN_HEIGHT;
+    length_type = ADAP_BREAKPOINT_CONDITION_MIN_HEIGHT;
     str += 10;
   } else if (!strncmp (str, "max-height", 10)) {
     type = CONDITION_LENGTH;
-    length_type = ADW_BREAKPOINT_CONDITION_MAX_HEIGHT;
+    length_type = ADAP_BREAKPOINT_CONDITION_MAX_HEIGHT;
     str += 10;
   } else if (!strncmp (str, "min-aspect-ratio", 16)) {
     type = CONDITION_RATIO;
-    ratio_type = ADW_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO;
+    ratio_type = ADAP_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO;
     str += 16;
   } else if (!strncmp (str, "max-aspect-ratio", 16)) {
     type = CONDITION_RATIO;
-    ratio_type = ADW_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO;
+    ratio_type = ADAP_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO;
     str += 16;
   } else {
     *endp = (char *) str;
@@ -500,7 +500,7 @@ parse_single (const char            *str,
   *endp = (char *) str;
 
   if (type == CONDITION_LENGTH) {
-    AdwLengthUnit unit;
+    AdapLengthUnit unit;
     double value;
 
     if (!parse_double (str, endp, &value, error))
@@ -517,16 +517,16 @@ parse_single (const char            *str,
     SKIP_WHITESPACES (str);
 
     if (!strncmp (str, "px", 2)) {
-      unit = ADW_LENGTH_UNIT_PX;
+      unit = ADAP_LENGTH_UNIT_PX;
       str += 2;
     } else if (!strncmp (str, "pt", 2)) {
-      unit = ADW_LENGTH_UNIT_PT;
+      unit = ADAP_LENGTH_UNIT_PT;
       str += 2;
     } else if (!strncmp (str, "sp", 2)) {
-      unit = ADW_LENGTH_UNIT_SP;
+      unit = ADAP_LENGTH_UNIT_SP;
       str += 2;
     } else if (*str == ' ' || *str == ')' || *str == '\0') {
-      unit = ADW_LENGTH_UNIT_PX;
+      unit = ADAP_LENGTH_UNIT_PX;
     } else {
       *endp = (char *) str;
       *error = CONDITION_PARSER_ERROR_UNKNOWN_UNIT;
@@ -540,7 +540,7 @@ parse_single (const char            *str,
     }
 
     *endp = (char *) str;
-    return adw_breakpoint_condition_new_length (length_type, value, unit);
+    return adap_breakpoint_condition_new_length (length_type, value, unit);
   }
 
   if (type == CONDITION_RATIO) {
@@ -585,18 +585,18 @@ parse_single (const char            *str,
     }
 
     *endp = (char *) str;
-    return adw_breakpoint_condition_new_ratio (ratio_type, width, height);
+    return adap_breakpoint_condition_new_ratio (ratio_type, width, height);
   }
 
   g_assert_not_reached ();
 }
 
-static AdwBreakpointCondition *
+static AdapBreakpointCondition *
 parse_multi (const char            *str,
              char                 **endp,
              ConditionParserError  *error)
 {
-  AdwBreakpointCondition *cond_1, *cond_2;
+  AdapBreakpointCondition *cond_1, *cond_2;
   MultiConditionType multi_type = -1;
 
   SKIP_WHITESPACES (str);
@@ -615,7 +615,7 @@ parse_multi (const char            *str,
     if (*str == ')') {
       str++;
     } else {
-      g_clear_pointer (&cond_1, adw_breakpoint_condition_free);
+      g_clear_pointer (&cond_1, adap_breakpoint_condition_free);
       *error = CONDITION_PARSER_ERROR_UNEXPECTED_CHARACTER;
     }
   } else {
@@ -642,7 +642,7 @@ parse_multi (const char            *str,
       return cond_1;
     } else {
       *error = CONDITION_PARSER_ERROR_UNKNOWN_OPERATOR;
-      g_clear_pointer (&cond_1, adw_breakpoint_condition_free);
+      g_clear_pointer (&cond_1, adap_breakpoint_condition_free);
       return NULL;
     }
 
@@ -651,7 +651,7 @@ parse_multi (const char            *str,
     } else {
       *endp = (char *) str;
       *error = CONDITION_PARSER_ERROR_UNEXPECTED_CHARACTER;
-      g_clear_pointer (&cond_1, adw_breakpoint_condition_free);
+      g_clear_pointer (&cond_1, adap_breakpoint_condition_free);
       return NULL;
     }
 
@@ -665,14 +665,14 @@ parse_multi (const char            *str,
 
       if (!cond_2) {
         *endp = (char *) str;
-        g_clear_pointer (&cond_1, adw_breakpoint_condition_free);
+        g_clear_pointer (&cond_1, adap_breakpoint_condition_free);
         return NULL;
       }
 
       if (*str == ')') {
         str++;
       } else {
-        g_clear_pointer (&cond_2, adw_breakpoint_condition_free);
+        g_clear_pointer (&cond_2, adap_breakpoint_condition_free);
         *error = CONDITION_PARSER_ERROR_UNEXPECTED_CHARACTER;
       }
     } else {
@@ -682,16 +682,16 @@ parse_multi (const char            *str,
 
     if (!cond_2) {
       *endp = (char *) str;
-      g_clear_pointer (&cond_1, adw_breakpoint_condition_free);
+      g_clear_pointer (&cond_1, adap_breakpoint_condition_free);
       return NULL;
     }
 
     switch (multi_type) {
     case MULTI_CONDITION_ALL:
-      cond_1 = adw_breakpoint_condition_new_and (cond_1, cond_2);
+      cond_1 = adap_breakpoint_condition_new_and (cond_1, cond_2);
       break;
     case MULTI_CONDITION_ANY:
-      cond_1 = adw_breakpoint_condition_new_or (cond_1, cond_2);
+      cond_1 = adap_breakpoint_condition_new_or (cond_1, cond_2);
       break;
     default:
       g_assert_not_reached ();
@@ -707,7 +707,7 @@ parse_multi (const char            *str,
 }
 
 /**
- * adw_breakpoint_condition_parse:
+ * adap_breakpoint_condition_parse:
  * @str: the string specifying the condition
  *
  * Parses a condition from a string.
@@ -770,10 +770,10 @@ parse_multi (const char            *str,
  *
  * Since: 1.4
  */
-AdwBreakpointCondition *
-adw_breakpoint_condition_parse (const char *str)
+AdapBreakpointCondition *
+adap_breakpoint_condition_parse (const char *str)
 {
-  AdwBreakpointCondition *ret;
+  AdapBreakpointCondition *ret;
   char *endp;
   ConditionParserError error = 0;
 
@@ -784,7 +784,7 @@ adw_breakpoint_condition_parse (const char *str)
   ret = parse_multi (str, &endp, &error);
 
   if (*endp != '\0') {
-    g_clear_pointer (&ret, adw_breakpoint_condition_free);
+    g_clear_pointer (&ret, adap_breakpoint_condition_free);
 
     if (!error)
       error = CONDITION_PARSER_ERROR_UNEXPECTED_CHARACTER;
@@ -835,7 +835,7 @@ adw_breakpoint_condition_parse (const char *str)
 }
 
 /**
- * adw_breakpoint_condition_to_string:
+ * adap_breakpoint_condition_to_string:
  * @self: a breakpoint condition
  *
  * Returns a textual representation of @self.
@@ -847,7 +847,7 @@ adw_breakpoint_condition_parse (const char *str)
  * Since: 1.4
  */
 char *
-adw_breakpoint_condition_to_string (AdwBreakpointCondition *self)
+adap_breakpoint_condition_to_string (AdapBreakpointCondition *self)
 {
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
@@ -858,16 +858,16 @@ adw_breakpoint_condition_to_string (AdwBreakpointCondition *self)
     const char *type, *unit;
 
     switch (self->data.length.type) {
-    case ADW_BREAKPOINT_CONDITION_MIN_WIDTH:
+    case ADAP_BREAKPOINT_CONDITION_MIN_WIDTH:
       type = "min-width";
       break;
-    case ADW_BREAKPOINT_CONDITION_MAX_WIDTH:
+    case ADAP_BREAKPOINT_CONDITION_MAX_WIDTH:
       type = "max-width";
       break;
-    case ADW_BREAKPOINT_CONDITION_MIN_HEIGHT:
+    case ADAP_BREAKPOINT_CONDITION_MIN_HEIGHT:
       type = "min-height";
       break;
-    case ADW_BREAKPOINT_CONDITION_MAX_HEIGHT:
+    case ADAP_BREAKPOINT_CONDITION_MAX_HEIGHT:
       type = "max-height";
       break;
     default:
@@ -875,13 +875,13 @@ adw_breakpoint_condition_to_string (AdwBreakpointCondition *self)
     }
 
     switch (self->data.length.unit) {
-    case ADW_LENGTH_UNIT_PX:
+    case ADAP_LENGTH_UNIT_PX:
       unit = "px";
       break;
-    case ADW_LENGTH_UNIT_PT:
+    case ADAP_LENGTH_UNIT_PT:
       unit = "pt";
       break;
-    case ADW_LENGTH_UNIT_SP:
+    case ADAP_LENGTH_UNIT_SP:
       unit = "sp";
       break;
     default:
@@ -898,10 +898,10 @@ adw_breakpoint_condition_to_string (AdwBreakpointCondition *self)
     const char *type;
 
     switch (self->data.ratio.type) {
-    case ADW_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO:
+    case ADAP_BREAKPOINT_CONDITION_MIN_ASPECT_RATIO:
       type = "min-aspect-ratio";
       break;
-    case ADW_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO:
+    case ADAP_BREAKPOINT_CONDITION_MAX_ASPECT_RATIO:
       type = "max-aspect-ratio";
       break;
     default:
@@ -937,8 +937,8 @@ adw_breakpoint_condition_to_string (AdwBreakpointCondition *self)
       g_assert_not_reached ();
     }
 
-    str_1 = adw_breakpoint_condition_to_string (self->data.multi.condition_1);
-    str_2 = adw_breakpoint_condition_to_string (self->data.multi.condition_2);
+    str_1 = adap_breakpoint_condition_to_string (self->data.multi.condition_1);
+    str_2 = adap_breakpoint_condition_to_string (self->data.multi.condition_2);
 
     /* Omit parentheses for nested multi conditions of the same type,
      * so that we get "X and Y and Z" and not "X and (Y and Z)" */
@@ -967,26 +967,26 @@ adw_breakpoint_condition_to_string (AdwBreakpointCondition *self)
 }
 
 typedef struct {
-  AdwBreakpoint *breakpoint;
+  AdapBreakpoint *breakpoint;
   GObject *object;
   GParamSpec *pspec;
   GValue value;
   GValue original_value;
 } SetterData;
 
-struct _AdwBreakpoint
+struct _AdapBreakpoint
 {
   GObject parent_instance;
 
-  AdwBreakpointCondition *condition;
+  AdapBreakpointCondition *condition;
   GHashTable *setters;
   gboolean active;
 };
 
-static void adw_breakpoint_buildable_init (GtkBuildableIface *iface);
+static void adap_breakpoint_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (AdwBreakpoint, adw_breakpoint, G_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adw_breakpoint_buildable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (AdapBreakpoint, adap_breakpoint, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, adap_breakpoint_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -1064,27 +1064,27 @@ setter_equal (const SetterData *a,
 }
 
 static void
-adw_breakpoint_dispose (GObject *object)
+adap_breakpoint_dispose (GObject *object)
 {
-  AdwBreakpoint *self = ADW_BREAKPOINT (object);
+  AdapBreakpoint *self = ADAP_BREAKPOINT (object);
 
-  g_clear_pointer (&self->condition, adw_breakpoint_condition_free);
+  g_clear_pointer (&self->condition, adap_breakpoint_condition_free);
   g_clear_pointer (&self->setters, g_hash_table_unref);
 
-  G_OBJECT_CLASS (adw_breakpoint_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_breakpoint_parent_class)->dispose (object);
 }
 
 static void
-adw_breakpoint_get_property (GObject    *object,
+adap_breakpoint_get_property (GObject    *object,
                              guint       prop_id,
                              GValue     *value,
                              GParamSpec *pspec)
 {
-  AdwBreakpoint *self = ADW_BREAKPOINT (object);
+  AdapBreakpoint *self = ADAP_BREAKPOINT (object);
 
   switch (prop_id) {
   case PROP_CONDITION:
-    g_value_set_boxed (value, adw_breakpoint_get_condition (self));
+    g_value_set_boxed (value, adap_breakpoint_get_condition (self));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1092,16 +1092,16 @@ adw_breakpoint_get_property (GObject    *object,
 }
 
 static void
-adw_breakpoint_set_property (GObject      *object,
+adap_breakpoint_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
-  AdwBreakpoint *self = ADW_BREAKPOINT (object);
+  AdapBreakpoint *self = ADAP_BREAKPOINT (object);
 
   switch (prop_id) {
   case PROP_CONDITION:
-    adw_breakpoint_set_condition (self, g_value_get_boxed (value));
+    adap_breakpoint_set_condition (self, g_value_get_boxed (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1109,16 +1109,16 @@ adw_breakpoint_set_property (GObject      *object,
 }
 
 static void
-adw_breakpoint_class_init (AdwBreakpointClass *klass)
+adap_breakpoint_class_init (AdapBreakpointClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = adw_breakpoint_dispose;
-  object_class->get_property = adw_breakpoint_get_property;
-  object_class->set_property = adw_breakpoint_set_property;
+  object_class->dispose = adap_breakpoint_dispose;
+  object_class->get_property = adap_breakpoint_get_property;
+  object_class->set_property = adap_breakpoint_set_property;
 
   /**
-   * AdwBreakpoint:condition: (attributes org.gtk.Property.get=adw_breakpoint_get_condition org.gtk.Property.set=adw_breakpoint_set_condition)
+   * AdapBreakpoint:condition: (attributes org.gtk.Property.get=adap_breakpoint_get_condition org.gtk.Property.set=adap_breakpoint_set_condition)
    *
    * The breakpoint's condition.
    *
@@ -1126,13 +1126,13 @@ adw_breakpoint_class_init (AdwBreakpointClass *klass)
    */
   props[PROP_CONDITION] =
     g_param_spec_boxed ("condition", NULL, NULL,
-                        ADW_TYPE_BREAKPOINT_CONDITION,
+                        ADAP_TYPE_BREAKPOINT_CONDITION,
                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
-   * AdwBreakpoint::apply:
+   * AdapBreakpoint::apply:
    *
    * Emitted when the breakpoint is applied.
    *
@@ -1146,15 +1146,15 @@ adw_breakpoint_class_init (AdwBreakpointClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_APPLY],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 
   /**
-   * AdwBreakpoint::unapply:
+   * AdapBreakpoint::unapply:
    *
    * Emitted when the breakpoint is unapplied.
    *
@@ -1168,16 +1168,16 @@ adw_breakpoint_class_init (AdwBreakpointClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  adw_marshal_VOID__VOID,
+                  adap_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
   g_signal_set_va_marshaller (signals[SIGNAL_UNAPPLY],
                               G_TYPE_FROM_CLASS (klass),
-                              adw_marshal_VOID__VOIDv);
+                              adap_marshal_VOID__VOIDv);
 }
 
 static void
-adw_breakpoint_init (AdwBreakpoint *self)
+adap_breakpoint_init (AdapBreakpoint *self)
 {
   self->setters = g_hash_table_new_full ((GHashFunc) setter_hash,
                                          (GEqualFunc) setter_equal,
@@ -1218,7 +1218,7 @@ condition_start_element (GtkBuildableParseContext  *context,
   }
 
   _gtk_builder_error_unhandled_tag (data->builder, context,
-                                    "AdwBreakpoint", element_name,
+                                    "AdapBreakpoint", element_name,
                                     error);
 }
 
@@ -1281,7 +1281,7 @@ setter_start_element (GtkBuildableParseContext  *context,
 
   if (strcmp (element_name, "setter") != 0) {
     _gtk_builder_error_unhandled_tag (data->builder, context,
-                                      "AdwBreakpoint", element_name,
+                                      "AdapBreakpoint", element_name,
                                       error);
     return;
   }
@@ -1326,7 +1326,7 @@ static const GtkBuildableParser setter_parser = {
 };
 
 static gboolean
-adw_breakpoint_buildable_custom_tag_start (GtkBuildable       *buildable,
+adap_breakpoint_buildable_custom_tag_start (GtkBuildable       *buildable,
                                            GtkBuilder         *builder,
                                            GObject            *child,
                                            const char         *tagname,
@@ -1368,7 +1368,7 @@ adw_breakpoint_buildable_custom_tag_start (GtkBuildable       *buildable,
 }
 
 static void
-adw_breakpoint_buildable_custom_finished (GtkBuildable *buildable,
+adap_breakpoint_buildable_custom_finished (GtkBuildable *buildable,
                                           GtkBuilder   *builder,
                                           GObject      *child,
                                           const char   *tagname,
@@ -1420,7 +1420,7 @@ adw_breakpoint_buildable_custom_finished (GtkBuildable *buildable,
       return;
     }
 
-    adw_breakpoint_add_setter (ADW_BREAKPOINT (data->object),
+    adap_breakpoint_add_setter (ADAP_BREAKPOINT (data->object),
                                object,
                                data->property_name,
                                &value);
@@ -1433,13 +1433,13 @@ adw_breakpoint_buildable_custom_finished (GtkBuildable *buildable,
 
   if (strcmp (tagname, "condition") == 0) {
     ConditionParserData *data = user_data;
-    AdwBreakpointCondition *condition;
+    AdapBreakpointCondition *condition;
 
-    condition = adw_breakpoint_condition_parse (data->condition->str);
+    condition = adap_breakpoint_condition_parse (data->condition->str);
 
     if (condition) {
-      adw_breakpoint_set_condition (ADW_BREAKPOINT (data->object), condition);
-      adw_breakpoint_condition_free (condition);
+      adap_breakpoint_set_condition (ADAP_BREAKPOINT (data->object), condition);
+      adap_breakpoint_condition_free (condition);
     }
 
     condition_data_free (data);
@@ -1451,42 +1451,42 @@ adw_breakpoint_buildable_custom_finished (GtkBuildable *buildable,
 }
 
 static void
-adw_breakpoint_buildable_init (GtkBuildableIface *iface)
+adap_breakpoint_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  iface->custom_tag_start = adw_breakpoint_buildable_custom_tag_start;
-  iface->custom_finished = adw_breakpoint_buildable_custom_finished;
+  iface->custom_tag_start = adap_breakpoint_buildable_custom_tag_start;
+  iface->custom_finished = adap_breakpoint_buildable_custom_finished;
 }
 
 /**
- * adw_breakpoint_new:
+ * adap_breakpoint_new:
  * @condition: (transfer full): the condition
  *
- * Creates a new `AdwBreakpoint` with @condition.
+ * Creates a new `AdapBreakpoint` with @condition.
  *
- * Returns: the newly created `AdwBreakpoint`
+ * Returns: the newly created `AdapBreakpoint`
  *
  * Since: 1.4
  */
-AdwBreakpoint *
-adw_breakpoint_new (AdwBreakpointCondition *condition)
+AdapBreakpoint *
+adap_breakpoint_new (AdapBreakpointCondition *condition)
 {
-  AdwBreakpoint *breakpoint;
+  AdapBreakpoint *breakpoint;
 
   g_return_val_if_fail (condition != NULL, NULL);
 
-  breakpoint = g_object_new (ADW_TYPE_BREAKPOINT,
+  breakpoint = g_object_new (ADAP_TYPE_BREAKPOINT,
                              "condition", condition,
                              NULL);
 
-  adw_breakpoint_condition_free (condition);
+  adap_breakpoint_condition_free (condition);
 
   return breakpoint;
 }
 
 /**
- * adw_breakpoint_get_condition: (attributes org.gtk.Method.get_property=condition)
+ * adap_breakpoint_get_condition: (attributes org.gtk.Method.get_property=condition)
  * @self: a breakpoint
  *
  * Gets the condition for @self.
@@ -1495,16 +1495,16 @@ adw_breakpoint_new (AdwBreakpointCondition *condition)
  *
  * Since: 1.4
  */
-AdwBreakpointCondition *
-adw_breakpoint_get_condition (AdwBreakpoint *self)
+AdapBreakpointCondition *
+adap_breakpoint_get_condition (AdapBreakpoint *self)
 {
-  g_return_val_if_fail (ADW_IS_BREAKPOINT (self), NULL);
+  g_return_val_if_fail (ADAP_IS_BREAKPOINT (self), NULL);
 
   return self->condition;
 }
 
 /**
- * adw_breakpoint_set_condition: (attributes org.gtk.Method.set_property=condition)
+ * adap_breakpoint_set_condition: (attributes org.gtk.Method.set_property=condition)
  * @self: a breakpoint
  * @condition: (nullable): the new condition
  *
@@ -1513,24 +1513,24 @@ adw_breakpoint_get_condition (AdwBreakpoint *self)
  * Since: 1.4
  */
 void
-adw_breakpoint_set_condition (AdwBreakpoint          *self,
-                              AdwBreakpointCondition *condition)
+adap_breakpoint_set_condition (AdapBreakpoint          *self,
+                              AdapBreakpointCondition *condition)
 {
-  g_return_if_fail (ADW_IS_BREAKPOINT (self));
+  g_return_if_fail (ADAP_IS_BREAKPOINT (self));
 
   if (self->condition == condition)
     return;
 
-  g_clear_pointer (&self->condition, adw_breakpoint_condition_free);
+  g_clear_pointer (&self->condition, adap_breakpoint_condition_free);
 
   if (condition)
-    self->condition = adw_breakpoint_condition_copy (condition);
+    self->condition = adap_breakpoint_condition_copy (condition);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CONDITION]);
 }
 
 /**
- * adw_breakpoint_add_setter:
+ * adap_breakpoint_add_setter:
  * @self: a breakpoint
  * @object: the target object
  * @property: the target property
@@ -1576,7 +1576,7 @@ adw_breakpoint_set_condition (AdwBreakpoint          *self,
  * Since: 1.4
  */
 void
-adw_breakpoint_add_setter (AdwBreakpoint *self,
+adap_breakpoint_add_setter (AdapBreakpoint *self,
                            GObject       *object,
                            const char    *property,
                            const GValue  *value)
@@ -1586,7 +1586,7 @@ adw_breakpoint_add_setter (AdwBreakpoint *self,
   GValue validated_value = G_VALUE_INIT;
   GValue original_value = G_VALUE_INIT;
 
-  g_return_if_fail (ADW_IS_BREAKPOINT (self));
+  g_return_if_fail (ADAP_IS_BREAKPOINT (self));
   g_return_if_fail (G_IS_OBJECT (object));
   g_return_if_fail (property != NULL);
   g_return_if_fail (G_IS_VALUE (value));
@@ -1647,7 +1647,7 @@ adw_breakpoint_add_setter (AdwBreakpoint *self,
 }
 
 /**
- * adw_breakpoint_add_setters: (skip)
+ * adap_breakpoint_add_setters: (skip)
  * @self: a breakpoint
  * @first_object: the first target object
  * @first_property: the first target property
@@ -1661,7 +1661,7 @@ adw_breakpoint_add_setter (AdwBreakpoint *self,
  * Example:
  *
  * ```c
- * adw_breakpoint_add_setters (breakpoint,
+ * adap_breakpoint_add_setters (breakpoint,
  *                             G_OBJECT (box), "orientation", GTK_ORIENTATION_VERTICAL,
  *                             G_OBJECT (button), "halign", GTK_ALIGN_FILL,
  *                             G_OBJECT (button), "valign", GTK_ALIGN_END,
@@ -1671,24 +1671,24 @@ adw_breakpoint_add_setter (AdwBreakpoint *self,
  * Since: 1.4
  */
 void
-adw_breakpoint_add_setters (AdwBreakpoint *self,
+adap_breakpoint_add_setters (AdapBreakpoint *self,
                             GObject       *first_object,
                             const char    *first_property,
                             ...)
 {
   va_list args;
 
-  g_return_if_fail (ADW_IS_BREAKPOINT (self));
+  g_return_if_fail (ADAP_IS_BREAKPOINT (self));
   g_return_if_fail (G_IS_OBJECT (first_object));
   g_return_if_fail (first_property != NULL);
 
   va_start (args, first_property);
-  adw_breakpoint_add_setters_valist (self, first_object, first_property, args);
+  adap_breakpoint_add_setters_valist (self, first_object, first_property, args);
   va_end (args);
 }
 
 /**
- * adw_breakpoint_add_settersv: (rename-to adw_breakpoint_add_setters)
+ * adap_breakpoint_add_settersv: (rename-to adap_breakpoint_add_setters)
  * @self: a breakpoint
  * @n_setters: the number of setters to add
  * @objects: (array length=n_setters): setter target object
@@ -1706,7 +1706,7 @@ adw_breakpoint_add_setters (AdwBreakpoint *self,
  * Since: 1.4
  */
 void
-adw_breakpoint_add_settersv (AdwBreakpoint *self,
+adap_breakpoint_add_settersv (AdapBreakpoint *self,
                              int            n_setters,
                              GObject       *objects[],
                              const char    *names[],
@@ -1714,14 +1714,14 @@ adw_breakpoint_add_settersv (AdwBreakpoint *self,
 {
   int i;
 
-  g_return_if_fail (ADW_IS_BREAKPOINT (self));
+  g_return_if_fail (ADAP_IS_BREAKPOINT (self));
 
   for (i = 0; i < n_setters; i++)
-    adw_breakpoint_add_setter (self, objects[i], names[i], values[i]);
+    adap_breakpoint_add_setter (self, objects[i], names[i], values[i]);
 }
 
 /**
- * adw_breakpoint_add_setters_valist: (skip)
+ * adap_breakpoint_add_setters_valist: (skip)
  * @self: a breakpoint
  * @first_object: the first target object
  * @first_property: the first target property
@@ -1735,7 +1735,7 @@ adw_breakpoint_add_settersv (AdwBreakpoint *self,
  * Since: 1.4
  */
 void
-adw_breakpoint_add_setters_valist (AdwBreakpoint *self,
+adap_breakpoint_add_setters_valist (AdapBreakpoint *self,
                                    GObject       *first_object,
                                    const char    *first_property,
                                    va_list        args)
@@ -1743,7 +1743,7 @@ adw_breakpoint_add_setters_valist (AdwBreakpoint *self,
   GObject *object = first_object;
   const char *property = first_property;
 
-  g_return_if_fail (ADW_IS_BREAKPOINT (self));
+  g_return_if_fail (ADAP_IS_BREAKPOINT (self));
   g_return_if_fail (G_IS_OBJECT (object));
   g_return_if_fail (property != NULL);
 
@@ -1766,7 +1766,7 @@ adw_breakpoint_add_setters_valist (AdwBreakpoint *self,
       break;
     }
 
-    adw_breakpoint_add_setter (self, object, property, &value);
+    adap_breakpoint_add_setter (self, object, property, &value);
 
     g_value_unset (&value);
 
@@ -1778,15 +1778,15 @@ adw_breakpoint_add_setters_valist (AdwBreakpoint *self,
 }
 
 void
-adw_breakpoint_transition (AdwBreakpoint *from,
-                           AdwBreakpoint *to)
+adap_breakpoint_transition (AdapBreakpoint *from,
+                           AdapBreakpoint *to)
 {
   GHashTableIter iter;
   SetterData *setter;
 
-  g_assert (!from || ADW_IS_BREAKPOINT (from));
+  g_assert (!from || ADAP_IS_BREAKPOINT (from));
   g_assert (!from || from->active);
-  g_assert (!to || ADW_IS_BREAKPOINT (to));
+  g_assert (!to || ADAP_IS_BREAKPOINT (to));
   g_assert (!to || !to->active);
 
   if (from) {
@@ -1821,12 +1821,12 @@ adw_breakpoint_transition (AdwBreakpoint *from,
 }
 
 gboolean
-adw_breakpoint_check_condition (AdwBreakpoint *self,
+adap_breakpoint_check_condition (AdapBreakpoint *self,
                                 GtkSettings   *settings,
                                 int            width,
                                 int            height)
 {
-  g_assert (ADW_IS_BREAKPOINT (self));
+  g_assert (ADAP_IS_BREAKPOINT (self));
 
   if (!self->condition)
     return FALSE;

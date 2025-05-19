@@ -6,111 +6,111 @@
 
 #pragma once
 
-#if !defined(_ADWAITA_INSIDE) && !defined(ADWAITA_COMPILATION)
-#error "Only <adwaita.h> can be included directly."
+#if !defined(_ADAPTA_INSIDE) && !defined(ADAPTA_COMPILATION)
+#error "Only <adapta.h> can be included directly."
 #endif
 
-#include "adw-version.h"
+#include "adap-version.h"
 
 #include <gtk/gtk.h>
-#include "adw-enums.h"
-#include "adw-fold-threshold-policy.h"
+#include "adap-enums.h"
+#include "adap-fold-threshold-policy.h"
 
 G_BEGIN_DECLS
 
-#define ADW_TYPE_SQUEEZER_PAGE (adw_squeezer_page_get_type ())
+#define ADAP_TYPE_SQUEEZER_PAGE (adap_squeezer_page_get_type ())
 
-ADW_DEPRECATED_IN_1_4
-G_DECLARE_FINAL_TYPE (AdwSqueezerPage, adw_squeezer_page, ADW, SQUEEZER_PAGE, GObject)
+ADAP_DEPRECATED_IN_1_4
+G_DECLARE_FINAL_TYPE (AdapSqueezerPage, adap_squeezer_page, ADAP, SQUEEZER_PAGE, GObject)
 
-ADW_DEPRECATED_IN_1_4
-GtkWidget *adw_squeezer_page_get_child (AdwSqueezerPage *self);
+ADAP_DEPRECATED_IN_1_4
+GtkWidget *adap_squeezer_page_get_child (AdapSqueezerPage *self);
 
-ADW_DEPRECATED_IN_1_4
-gboolean adw_squeezer_page_get_enabled (AdwSqueezerPage *self);
-ADW_DEPRECATED_IN_1_4
-void     adw_squeezer_page_set_enabled (AdwSqueezerPage *self,
+ADAP_DEPRECATED_IN_1_4
+gboolean adap_squeezer_page_get_enabled (AdapSqueezerPage *self);
+ADAP_DEPRECATED_IN_1_4
+void     adap_squeezer_page_set_enabled (AdapSqueezerPage *self,
                                         gboolean         enabled);
 
-#define ADW_TYPE_SQUEEZER (adw_squeezer_get_type ())
+#define ADAP_TYPE_SQUEEZER (adap_squeezer_get_type ())
 
-ADW_DEPRECATED_IN_1_4
-G_DECLARE_FINAL_TYPE (AdwSqueezer, adw_squeezer, ADW, SQUEEZER, GtkWidget)
+ADAP_DEPRECATED_IN_1_4
+G_DECLARE_FINAL_TYPE (AdapSqueezer, adap_squeezer, ADAP, SQUEEZER, GtkWidget)
 
 typedef enum {
-  ADW_SQUEEZER_TRANSITION_TYPE_NONE,
-  ADW_SQUEEZER_TRANSITION_TYPE_CROSSFADE,
-} AdwSqueezerTransitionType;
+  ADAP_SQUEEZER_TRANSITION_TYPE_NONE,
+  ADAP_SQUEEZER_TRANSITION_TYPE_CROSSFADE,
+} AdapSqueezerTransitionType;
 
-ADW_DEPRECATED_IN_1_4
-GtkWidget *adw_squeezer_new (void) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_DEPRECATED_IN_1_4
+GtkWidget *adap_squeezer_new (void) G_GNUC_WARN_UNUSED_RESULT;
 
-ADW_DEPRECATED_IN_1_4
-AdwSqueezerPage *adw_squeezer_add    (AdwSqueezer *self,
+ADAP_DEPRECATED_IN_1_4
+AdapSqueezerPage *adap_squeezer_add    (AdapSqueezer *self,
                                       GtkWidget   *child);
-ADW_DEPRECATED_IN_1_4
-void             adw_squeezer_remove (AdwSqueezer *self,
+ADAP_DEPRECATED_IN_1_4
+void             adap_squeezer_remove (AdapSqueezer *self,
                                       GtkWidget   *child);
 
-ADW_DEPRECATED_IN_1_4
-AdwSqueezerPage *adw_squeezer_get_page (AdwSqueezer *self,
+ADAP_DEPRECATED_IN_1_4
+AdapSqueezerPage *adap_squeezer_get_page (AdapSqueezer *self,
                                         GtkWidget   *child);
 
-ADW_DEPRECATED_IN_1_4
-GtkWidget *adw_squeezer_get_visible_child (AdwSqueezer *self);
+ADAP_DEPRECATED_IN_1_4
+GtkWidget *adap_squeezer_get_visible_child (AdapSqueezer *self);
 
-ADW_DEPRECATED_IN_1_4
-gboolean adw_squeezer_get_homogeneous (AdwSqueezer *self);
-ADW_DEPRECATED_IN_1_4
-void     adw_squeezer_set_homogeneous (AdwSqueezer *self,
+ADAP_DEPRECATED_IN_1_4
+gboolean adap_squeezer_get_homogeneous (AdapSqueezer *self);
+ADAP_DEPRECATED_IN_1_4
+void     adap_squeezer_set_homogeneous (AdapSqueezer *self,
                                        gboolean     homogeneous);
 
-ADW_DEPRECATED_IN_1_4
-AdwFoldThresholdPolicy adw_squeezer_get_switch_threshold_policy (AdwSqueezer             *self);
-ADW_DEPRECATED_IN_1_4
-void                   adw_squeezer_set_switch_threshold_policy (AdwSqueezer            *self,
-                                                                 AdwFoldThresholdPolicy  policy);
+ADAP_DEPRECATED_IN_1_4
+AdapFoldThresholdPolicy adap_squeezer_get_switch_threshold_policy (AdapSqueezer             *self);
+ADAP_DEPRECATED_IN_1_4
+void                   adap_squeezer_set_switch_threshold_policy (AdapSqueezer            *self,
+                                                                 AdapFoldThresholdPolicy  policy);
 
-ADW_DEPRECATED_IN_1_4
-gboolean adw_squeezer_get_allow_none (AdwSqueezer *self);
-ADW_DEPRECATED_IN_1_4
-void     adw_squeezer_set_allow_none (AdwSqueezer *self,
+ADAP_DEPRECATED_IN_1_4
+gboolean adap_squeezer_get_allow_none (AdapSqueezer *self);
+ADAP_DEPRECATED_IN_1_4
+void     adap_squeezer_set_allow_none (AdapSqueezer *self,
                                       gboolean     allow_none);
 
-ADW_DEPRECATED_IN_1_4
-guint adw_squeezer_get_transition_duration (AdwSqueezer *self);
-ADW_DEPRECATED_IN_1_4
-void  adw_squeezer_set_transition_duration (AdwSqueezer *self,
+ADAP_DEPRECATED_IN_1_4
+guint adap_squeezer_get_transition_duration (AdapSqueezer *self);
+ADAP_DEPRECATED_IN_1_4
+void  adap_squeezer_set_transition_duration (AdapSqueezer *self,
                                             guint        duration);
 
-ADW_DEPRECATED_IN_1_4
-AdwSqueezerTransitionType adw_squeezer_get_transition_type (AdwSqueezer               *self);
-ADW_DEPRECATED_IN_1_4
-void                      adw_squeezer_set_transition_type (AdwSqueezer               *self,
-                                                            AdwSqueezerTransitionType  transition);
+ADAP_DEPRECATED_IN_1_4
+AdapSqueezerTransitionType adap_squeezer_get_transition_type (AdapSqueezer               *self);
+ADAP_DEPRECATED_IN_1_4
+void                      adap_squeezer_set_transition_type (AdapSqueezer               *self,
+                                                            AdapSqueezerTransitionType  transition);
 
-ADW_DEPRECATED_IN_1_4
-gboolean adw_squeezer_get_transition_running (AdwSqueezer *self);
+ADAP_DEPRECATED_IN_1_4
+gboolean adap_squeezer_get_transition_running (AdapSqueezer *self);
 
-ADW_DEPRECATED_IN_1_4
-gboolean adw_squeezer_get_interpolate_size (AdwSqueezer *self);
-ADW_DEPRECATED_IN_1_4
-void     adw_squeezer_set_interpolate_size (AdwSqueezer *self,
+ADAP_DEPRECATED_IN_1_4
+gboolean adap_squeezer_get_interpolate_size (AdapSqueezer *self);
+ADAP_DEPRECATED_IN_1_4
+void     adap_squeezer_set_interpolate_size (AdapSqueezer *self,
                                             gboolean     interpolate_size);
 
-ADW_DEPRECATED_IN_1_4
-float adw_squeezer_get_xalign (AdwSqueezer *self);
-ADW_DEPRECATED_IN_1_4
-void  adw_squeezer_set_xalign (AdwSqueezer *self,
+ADAP_DEPRECATED_IN_1_4
+float adap_squeezer_get_xalign (AdapSqueezer *self);
+ADAP_DEPRECATED_IN_1_4
+void  adap_squeezer_set_xalign (AdapSqueezer *self,
                                float        xalign);
 
-ADW_DEPRECATED_IN_1_4
-float adw_squeezer_get_yalign (AdwSqueezer *self);
-ADW_DEPRECATED_IN_1_4
-void  adw_squeezer_set_yalign (AdwSqueezer *self,
+ADAP_DEPRECATED_IN_1_4
+float adap_squeezer_get_yalign (AdapSqueezer *self);
+ADAP_DEPRECATED_IN_1_4
+void  adap_squeezer_set_yalign (AdapSqueezer *self,
                                float        yalign);
 
-ADW_DEPRECATED_IN_1_4
-GtkSelectionModel *adw_squeezer_get_pages (AdwSqueezer *self) G_GNUC_WARN_UNUSED_RESULT;
+ADAP_DEPRECATED_IN_1_4
+GtkSelectionModel *adap_squeezer_get_pages (AdapSqueezer *self) G_GNUC_WARN_UNUSED_RESULT;
 
 G_END_DECLS

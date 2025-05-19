@@ -5,23 +5,23 @@
  */
 
 #include "config.h"
-#include "adw-application.h"
-#include "adw-main-private.h"
+#include "adap-application.h"
+#include "adap-main-private.h"
 
 /**
- * AdwApplication:
+ * AdapApplication:
  *
- * A base class for Adwaita applications.
+ * A base class for Adapta applications.
  *
- * `AdwApplication` handles library initialization by calling [func@init] in the
+ * `AdapApplication` handles library initialization by calling [func@init] in the
  * default [signal@Gio.Application::startup] signal handler, in turn chaining up
  * as required by [class@Gtk.Application]. Therefore, any subclass of
- * `AdwApplication` should always chain up its `startup` handler before using
- * any Adwaita or GTK API.
+ * `AdapApplication` should always chain up its `startup` handler before using
+ * any Adapta or GTK API.
  *
  * ## Automatic Resources
  *
- * `AdwApplication` will automatically load stylesheets located in the
+ * `AdapApplication` will automatically load stylesheets located in the
  * application's resource base path (see
  * [method@Gio.Application.set_resource_base_path], if they're present.
  *
@@ -45,9 +45,9 @@ typedef struct
   GtkStyleProvider *dark_style_provider;
   GtkStyleProvider *hc_style_provider;
   GtkStyleProvider *hc_dark_style_provider;
-} AdwApplicationPrivate;
+} AdapApplicationPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (AdwApplication, adw_application, GTK_TYPE_APPLICATION)
+G_DEFINE_TYPE_WITH_PRIVATE (AdapApplication, adap_application, GTK_TYPE_APPLICATION)
 
 enum {
   PROP_0,
@@ -71,14 +71,14 @@ style_provider_set_enabled (GtkStyleProvider *provider,
 }
 
 static void
-update_stylesheet (AdwApplication *self)
+update_stylesheet (AdapApplication *self)
 {
-  AdwApplicationPrivate *priv = adw_application_get_instance_private (self);
-  AdwStyleManager *manager = adw_style_manager_get_default ();
+  AdapApplicationPrivate *priv = adap_application_get_instance_private (self);
+  AdapStyleManager *manager = adap_style_manager_get_default ();
   gboolean is_dark, is_hc;
 
-  is_dark = adw_style_manager_get_dark (manager);
-  is_hc = adw_style_manager_get_high_contrast (manager);
+  is_dark = adap_style_manager_get_dark (manager);
+  is_hc = adap_style_manager_get_high_contrast (manager);
 
   if (priv->dark_style_provider)
     style_provider_set_enabled (priv->dark_style_provider, is_dark);
@@ -106,9 +106,9 @@ init_provider_from_file (GtkStyleProvider **provider,
 }
 
 static void
-init_providers (AdwApplication *self)
+init_providers (AdapApplication *self)
 {
-  AdwApplicationPrivate *priv = adw_application_get_instance_private (self);
+  AdapApplicationPrivate *priv = adap_application_get_instance_private (self);
   const char *base_path;
   char *base_uri;
   GFile *base_file;
@@ -121,7 +121,7 @@ init_providers (AdwApplication *self)
   base_uri = g_strconcat ("resource://", base_path, NULL);
   base_file = g_file_new_for_uri (base_uri);
 
-  if (!adw_is_granite_present ()) {
+  if (!adap_is_granite_present ()) {
     init_provider_from_file (&priv->base_style_provider,
                              g_file_get_child (base_file, "style.css"));
     init_provider_from_file (&priv->dark_style_provider,
@@ -137,9 +137,9 @@ init_providers (AdwApplication *self)
 }
 
 static void
-init_styling (AdwApplication *self)
+init_styling (AdapApplication *self)
 {
-  AdwApplicationPrivate *priv = adw_application_get_instance_private (self);
+  AdapApplicationPrivate *priv = adap_application_get_instance_private (self);
 
   GdkDisplay *display = gdk_display_get_default ();
 
@@ -152,14 +152,14 @@ init_styling (AdwApplication *self)
                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   /* If gdk_display_get_default() worked, it means that
-   * gtk_settings adw_style_manager_get_default() won't return NULL, so we don't
+   * gtk_settings adap_style_manager_get_default() won't return NULL, so we don't
    * need to check it separately */
-  g_signal_connect_object (adw_style_manager_get_default (),
+  g_signal_connect_object (adap_style_manager_get_default (),
                            "notify::dark",
                            G_CALLBACK (update_stylesheet),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (adw_style_manager_get_default (),
+  g_signal_connect_object (adap_style_manager_get_default (),
                            "notify::high-contrast",
                            G_CALLBACK (update_stylesheet),
                            self,
@@ -169,43 +169,43 @@ init_styling (AdwApplication *self)
 }
 
 static void
-adw_application_startup (GApplication *application)
+adap_application_startup (GApplication *application)
 {
-  AdwApplication *self = ADW_APPLICATION (application);
+  AdapApplication *self = ADAP_APPLICATION (application);
 
-  G_APPLICATION_CLASS (adw_application_parent_class)->startup (application);
+  G_APPLICATION_CLASS (adap_application_parent_class)->startup (application);
 
-  adw_init ();
+  adap_init ();
 
   init_providers (self);
   init_styling (self);
 }
 
 static void
-adw_application_dispose (GObject *object)
+adap_application_dispose (GObject *object)
 {
-  AdwApplication *self = ADW_APPLICATION (object);
-  AdwApplicationPrivate *priv = adw_application_get_instance_private (self);
+  AdapApplication *self = ADAP_APPLICATION (object);
+  AdapApplicationPrivate *priv = adap_application_get_instance_private (self);
 
   g_clear_object (&priv->base_style_provider);
   g_clear_object (&priv->dark_style_provider);
   g_clear_object (&priv->hc_style_provider);
   g_clear_object (&priv->hc_dark_style_provider);
 
-  G_OBJECT_CLASS (adw_application_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_application_parent_class)->dispose (object);
 }
 
 static void
-adw_application_get_property (GObject    *object,
+adap_application_get_property (GObject    *object,
                               guint       prop_id,
                               GValue     *value,
                               GParamSpec *pspec)
 {
-  AdwApplication *self = ADW_APPLICATION (object);
+  AdapApplication *self = ADAP_APPLICATION (object);
 
   switch (prop_id) {
   case PROP_STYLE_MANAGER:
-    g_value_set_object (value, adw_application_get_style_manager (self));
+    g_value_set_object (value, adap_application_get_style_manager (self));
     break;
 
   default:
@@ -214,43 +214,43 @@ adw_application_get_property (GObject    *object,
 }
 
 static void
-adw_application_class_init (AdwApplicationClass *klass)
+adap_application_class_init (AdapApplicationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
 
-  object_class->dispose = adw_application_dispose;
-  object_class->get_property = adw_application_get_property;
+  object_class->dispose = adap_application_dispose;
+  object_class->get_property = adap_application_get_property;
 
-  application_class->startup = adw_application_startup;
+  application_class->startup = adap_application_startup;
 
   /**
-   * AdwApplication:style-manager: (attributes org.gtk.Property.get=adw_application_get_style_manager)
+   * AdapApplication:style-manager: (attributes org.gtk.Property.get=adap_application_get_style_manager)
    *
    * The style manager for this application.
    *
-   * This is a convenience property allowing to access `AdwStyleManager` through
+   * This is a convenience property allowing to access `AdapStyleManager` through
    * property bindings or expressions.
    */
   props[PROP_STYLE_MANAGER] =
     g_param_spec_object ("style-manager", NULL, NULL,
-                         ADW_TYPE_STYLE_MANAGER,
+                         ADAP_TYPE_STYLE_MANAGER,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 }
 
 static void
-adw_application_init (AdwApplication *self)
+adap_application_init (AdapApplication *self)
 {
 }
 
 /**
- * adw_application_new:
+ * adap_application_new:
  * @application_id: (nullable): The application ID
  * @flags: The application flags
  *
- * Creates a new `AdwApplication`.
+ * Creates a new `AdapApplication`.
  *
  * If `application_id` is not `NULL`, then it must be valid. See
  * [func@Gio.Application.id_is_valid].
@@ -258,33 +258,33 @@ adw_application_init (AdwApplication *self)
  * If no application ID is given then some features (most notably application
  * uniqueness) will be disabled.
  *
- * Returns: the newly created `AdwApplication`
+ * Returns: the newly created `AdapApplication`
  */
-AdwApplication *
-adw_application_new (const char        *application_id,
+AdapApplication *
+adap_application_new (const char        *application_id,
                      GApplicationFlags  flags)
 {
-  return g_object_new (ADW_TYPE_APPLICATION,
+  return g_object_new (ADAP_TYPE_APPLICATION,
                        "application-id", application_id,
                        "flags", flags,
                        NULL);
 }
 
 /**
- * adw_application_get_style_manager: (attributes org.gtk.Method.get_property=style-manager)
+ * adap_application_get_style_manager: (attributes org.gtk.Method.get_property=style-manager)
  * @self: an application
  *
  * Gets the style manager for @self.
  *
- * This is a convenience property allowing to access `AdwStyleManager` through
+ * This is a convenience property allowing to access `AdapStyleManager` through
  * property bindings or expressions.
  *
  * Returns: (transfer none): the style manager
  */
-AdwStyleManager *
-adw_application_get_style_manager (AdwApplication *self)
+AdapStyleManager *
+adap_application_get_style_manager (AdapApplication *self)
 {
-  g_return_val_if_fail (ADW_IS_APPLICATION (self), NULL);
+  g_return_val_if_fail (ADAP_IS_APPLICATION (self), NULL);
 
-  return adw_style_manager_get_default ();
+  return adap_style_manager_get_default ();
 }

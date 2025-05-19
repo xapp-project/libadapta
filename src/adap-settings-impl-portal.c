@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#include "adw-settings-impl-private.h"
+#include "adap-settings-impl-private.h"
 
 #include <gio/gio.h>
 
@@ -19,9 +19,9 @@
 
 #define PORTAL_ERROR_NOT_FOUND "org.freedesktop.portal.Error.NotFound"
 
-struct _AdwSettingsImplPortal
+struct _AdapSettingsImplPortal
 {
-  AdwSettingsImpl parent_instance;
+  AdapSettingsImpl parent_instance;
 
   GDBusProxy *settings_portal;
 
@@ -35,10 +35,10 @@ struct _AdwSettingsImplPortal
   } high_contrast_portal_state;
 };
 
-G_DEFINE_FINAL_TYPE (AdwSettingsImplPortal, adw_settings_impl_portal, ADW_TYPE_SETTINGS_IMPL)
+G_DEFINE_FINAL_TYPE (AdapSettingsImplPortal, adap_settings_impl_portal, ADAP_TYPE_SETTINGS_IMPL)
 
 static gboolean
-read_setting (AdwSettingsImplPortal  *self,
+read_setting (AdapSettingsImplPortal  *self,
               const char             *schema,
               const char             *name,
               const char             *type,
@@ -103,15 +103,15 @@ read_setting (AdwSettingsImplPortal  *self,
   return result;
 }
 
-static AdwSystemColorScheme
+static AdapSystemColorScheme
 get_fdo_color_scheme (GVariant *variant)
 {
   guint32 color_scheme = g_variant_get_uint32 (variant);
 
-  if (color_scheme > ADW_SYSTEM_COLOR_SCHEME_PREFER_LIGHT) {
+  if (color_scheme > ADAP_SYSTEM_COLOR_SCHEME_PREFER_LIGHT) {
     g_warning ("Invalid color scheme: %u", color_scheme);
 
-    color_scheme = ADW_SYSTEM_COLOR_SCHEME_DEFAULT;
+    color_scheme = ADAP_SYSTEM_COLOR_SCHEME_DEFAULT;
   }
 
   return color_scheme;
@@ -122,7 +122,7 @@ changed_cb (GDBusProxy            *proxy,
             const char            *sender_name,
             const char            *signal_name,
             GVariant              *parameters,
-            AdwSettingsImplPortal *self)
+            AdapSettingsImplPortal *self)
 {
   const char *namespace;
   const char *name;
@@ -135,7 +135,7 @@ changed_cb (GDBusProxy            *proxy,
 
   if (!g_strcmp0 (namespace, "org.gnome.desktop.interface")) {
     if (!g_strcmp0 (name, "gtk-theme") && self->found_theme_name) {
-      adw_settings_impl_set_theme_name (ADW_SETTINGS_IMPL (self),
+      adap_settings_impl_set_theme_name (ADAP_SETTINGS_IMPL (self),
                                         g_variant_get_string (value, NULL));
 
       g_variant_unref (value);
@@ -146,7 +146,7 @@ changed_cb (GDBusProxy            *proxy,
 
   if (!g_strcmp0 (namespace, "org.freedesktop.appearance")) {
     if (!g_strcmp0 (name, "color-scheme") && self->found_color_scheme) {
-      adw_settings_impl_set_color_scheme (ADW_SETTINGS_IMPL (self),
+      adap_settings_impl_set_color_scheme (ADAP_SETTINGS_IMPL (self),
                                           get_fdo_color_scheme (value));
 
       g_variant_unref (value);
@@ -156,7 +156,7 @@ changed_cb (GDBusProxy            *proxy,
 
     if (!g_strcmp0 (name, "contrast") &&
         self->high_contrast_portal_state == HIGH_CONTRAST_STATE_FDO) {
-      adw_settings_impl_set_high_contrast (ADW_SETTINGS_IMPL (self),
+      adap_settings_impl_set_high_contrast (ADAP_SETTINGS_IMPL (self),
                                            g_variant_get_uint32 (value) == 1);
 
       g_variant_unref (value);
@@ -168,7 +168,7 @@ changed_cb (GDBusProxy            *proxy,
   if (!g_strcmp0 (namespace, "org.gnome.desktop.a11y.interface") &&
       !g_strcmp0 (name, "high-contrast") &&
       self->high_contrast_portal_state == HIGH_CONTRAST_STATE_GNOME ) {
-    adw_settings_impl_set_high_contrast (ADW_SETTINGS_IMPL (self),
+    adap_settings_impl_set_high_contrast (ADAP_SETTINGS_IMPL (self),
                                          g_variant_get_boolean (value));
   }
 
@@ -176,39 +176,39 @@ changed_cb (GDBusProxy            *proxy,
 }
 
 static void
-adw_settings_impl_portal_dispose (GObject *object)
+adap_settings_impl_portal_dispose (GObject *object)
 {
-  AdwSettingsImplPortal *self = ADW_SETTINGS_IMPL_PORTAL (object);
+  AdapSettingsImplPortal *self = ADAP_SETTINGS_IMPL_PORTAL (object);
 
   g_clear_object (&self->settings_portal);
 
-  G_OBJECT_CLASS (adw_settings_impl_portal_parent_class)->dispose (object);
+  G_OBJECT_CLASS (adap_settings_impl_portal_parent_class)->dispose (object);
 }
 
 static void
-adw_settings_impl_portal_class_init (AdwSettingsImplPortalClass *klass)
+adap_settings_impl_portal_class_init (AdapSettingsImplPortalClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = adw_settings_impl_portal_dispose;
+  object_class->dispose = adap_settings_impl_portal_dispose;
 }
 
 static void
-adw_settings_impl_portal_init (AdwSettingsImplPortal *self)
+adap_settings_impl_portal_init (AdapSettingsImplPortal *self)
 {
 }
 
-AdwSettingsImpl *
-adw_settings_impl_portal_new (gboolean get_theme_name,
+AdapSettingsImpl *
+adap_settings_impl_portal_new (gboolean get_theme_name,
                               gboolean enable_color_scheme,
                               gboolean enable_high_contrast)
 {
-  AdwSettingsImplPortal *self = g_object_new (ADW_TYPE_SETTINGS_IMPL_PORTAL, NULL);
+  AdapSettingsImplPortal *self = g_object_new (ADAP_TYPE_SETTINGS_IMPL_PORTAL, NULL);
   GError *error = NULL;
   GVariant *variant;
 
-  if (adw_get_disable_portal ())
-    return ADW_SETTINGS_IMPL (self);
+  if (adap_get_disable_portal ())
+    return ADAP_SETTINGS_IMPL (self);
 
   self->settings_portal = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                          G_DBUS_PROXY_FLAGS_NONE,
@@ -223,14 +223,14 @@ adw_settings_impl_portal_new (gboolean get_theme_name,
 
     g_error_free (error);
 
-    return ADW_SETTINGS_IMPL (self);
+    return ADAP_SETTINGS_IMPL (self);
   }
 
   if (get_theme_name &&
       read_setting (self, "org.gnome.desktop.interface",
                     "gtk-theme", "s", &variant)) {
 
-    adw_settings_impl_set_theme_name (ADW_SETTINGS_IMPL (self),
+    adap_settings_impl_set_theme_name (ADAP_SETTINGS_IMPL (self),
                                       g_variant_get_string (variant, NULL));
 
     g_variant_unref (variant);
@@ -241,7 +241,7 @@ adw_settings_impl_portal_new (gboolean get_theme_name,
                     "color-scheme", "u", &variant)) {
     self->found_color_scheme = TRUE;
 
-    adw_settings_impl_set_color_scheme (ADW_SETTINGS_IMPL (self),
+    adap_settings_impl_set_color_scheme (ADAP_SETTINGS_IMPL (self),
                                         get_fdo_color_scheme (variant));
 
     g_variant_unref (variant);
@@ -252,7 +252,7 @@ adw_settings_impl_portal_new (gboolean get_theme_name,
                     "contrast", "u", &variant)) {
       self->high_contrast_portal_state = HIGH_CONTRAST_STATE_FDO;
 
-      adw_settings_impl_set_high_contrast (ADW_SETTINGS_IMPL (self),
+      adap_settings_impl_set_high_contrast (ADAP_SETTINGS_IMPL (self),
                                            g_variant_get_uint32 (variant) == 1);
 
       g_variant_unref (variant);
@@ -260,13 +260,13 @@ adw_settings_impl_portal_new (gboolean get_theme_name,
                     "high-contrast", "b", &variant)) {
       self->high_contrast_portal_state = HIGH_CONTRAST_STATE_GNOME;
 
-      adw_settings_impl_set_high_contrast (ADW_SETTINGS_IMPL (self),
+      adap_settings_impl_set_high_contrast (ADAP_SETTINGS_IMPL (self),
                                            g_variant_get_boolean (variant));
       g_variant_unref (variant);
     }
   }
 
-  adw_settings_impl_set_features (ADW_SETTINGS_IMPL (self),
+  adap_settings_impl_set_features (ADAP_SETTINGS_IMPL (self),
                                   self->found_theme_name,
                                   self->found_color_scheme,
                                   self->high_contrast_portal_state != HIGH_CONTRAST_STATE_NONE);
@@ -275,5 +275,5 @@ adw_settings_impl_portal_new (gboolean get_theme_name,
     g_signal_connect (self->settings_portal, "g-signal",
                       G_CALLBACK (changed_cb), self);
 
-  return ADW_SETTINGS_IMPL (self);
+  return ADAP_SETTINGS_IMPL (self);
 }

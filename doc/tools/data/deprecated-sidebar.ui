@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwBin" id="widget">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapBin" id="widget">
     <property name="width-request">200</property>
     <property name="child">
       <object class="GtkListBox">

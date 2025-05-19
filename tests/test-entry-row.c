@@ -6,7 +6,7 @@
  * Author: Alice Mikhaylenko <alice.mikhaylenko@puri.sm>
  */
 
-#include <adwaita.h>
+#include <adapta.h>
 
 static void
 increment (int *data)
@@ -15,9 +15,9 @@ increment (int *data)
 }
 
 static void
-test_adw_entry_row_add_remove (void)
+test_adap_entry_row_add_remove (void)
 {
-  AdwEntryRow *row = g_object_ref_sink (ADW_ENTRY_ROW (adw_entry_row_new ()));
+  AdapEntryRow *row = g_object_ref_sink (ADAP_ENTRY_ROW (adap_entry_row_new ()));
   GtkWidget *prefix, *suffix;
 
   g_assert_nonnull (row);
@@ -28,19 +28,19 @@ test_adw_entry_row_add_remove (void)
   suffix = gtk_check_button_new ();
   g_assert_nonnull (suffix);
 
-  adw_entry_row_add_prefix (row, prefix);
-  adw_entry_row_add_suffix (row, suffix);
+  adap_entry_row_add_prefix (row, prefix);
+  adap_entry_row_add_suffix (row, suffix);
 
-  adw_entry_row_remove (row, prefix);
-  adw_entry_row_remove (row, suffix);
+  adap_entry_row_remove (row, prefix);
+  adap_entry_row_remove (row, suffix);
 
   g_assert_finalize_object (row);
 }
 
 static void
-test_adw_entry_row_show_apply_button (void)
+test_adap_entry_row_show_apply_button (void)
 {
-  AdwEntryRow *row = g_object_ref_sink (ADW_ENTRY_ROW (adw_entry_row_new ()));
+  AdapEntryRow *row = g_object_ref_sink (ADAP_ENTRY_ROW (adap_entry_row_new ()));
   gboolean show_apply_button;
   int notified = 0;
 
@@ -51,15 +51,15 @@ test_adw_entry_row_show_apply_button (void)
   g_object_get (row, "show-apply-button", &show_apply_button, NULL);
   g_assert_false (show_apply_button);
 
-  adw_entry_row_set_show_apply_button (row, FALSE);
+  adap_entry_row_set_show_apply_button (row, FALSE);
   g_assert_cmpint (notified, ==, 0);
 
-  adw_entry_row_set_show_apply_button (row, TRUE);
-  g_assert_true (adw_entry_row_get_show_apply_button (row));
+  adap_entry_row_set_show_apply_button (row, TRUE);
+  g_assert_true (adap_entry_row_get_show_apply_button (row));
   g_assert_cmpint (notified, ==, 1);
 
   g_object_set (row, "show-apply-button", FALSE, NULL);
-  g_assert_false (adw_entry_row_get_show_apply_button (row));
+  g_assert_false (adap_entry_row_get_show_apply_button (row));
   g_assert_cmpint (notified, ==, 2);
 
   g_assert_finalize_object (row);
@@ -70,10 +70,10 @@ main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
-  adw_init ();
+  adap_init ();
 
-  g_test_add_func("/Adwaita/EntryRow/add_remove", test_adw_entry_row_add_remove);
-  g_test_add_func("/Adwaita/EntryRow/show_apply_button", test_adw_entry_row_show_apply_button);
+  g_test_add_func("/Adapta/EntryRow/add_remove", test_adap_entry_row_add_remove);
+  g_test_add_func("/Adapta/EntryRow/show_apply_button", test_adap_entry_row_show_apply_button);
 
   return g_test_run();
 }

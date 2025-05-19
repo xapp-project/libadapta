@@ -1,12 +1,12 @@
-# Belarusian translation for libadwaita.
-# Copyright (C) 2022 libadwaita's COPYRIGHT HOLDER
-# This file is distributed under the same license as the libadwaita package.
+# Belarusian translation for libadapta.
+# Copyright (C) 2022 libadapta's COPYRIGHT HOLDER
+# This file is distributed under the same license as the libadapta package.
 # 3abac <3abac@3a.by>, 2022.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: libadwaita libadwaita-1-2\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadwaita/issues\n"
+"Project-Id-Version: libadapta libadapta-1-2\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libadapta/issues\n"
 "POT-Creation-Date: 2024-03-02 19:53+0000\n"
 "PO-Revision-Date: 2024-03-05 22:52+0300\n"
 "Last-Translator: Yuras Shumovich <shumovichy@gmail.com>\n"
@@ -19,102 +19,102 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: src/adw-about-dialog.c:207 src/adw-about-window.c:206
+#: src/adap-about-dialog.c:207 src/adap-about-window.c:206
 msgid "GNU General Public License, version 2 or later"
 msgstr "Агульная Грамадская Ліцэнзія GNU версіі 2 або любой пазнейшай"
 
-#: src/adw-about-dialog.c:208 src/adw-about-window.c:207
+#: src/adap-about-dialog.c:208 src/adap-about-window.c:207
 msgid "GNU General Public License, version 3 or later"
 msgstr ""
 "Агульная Грамадская Ліцэнзія GNU\n"
 "версіі 3 або любой пазнейшай"
 
-#: src/adw-about-dialog.c:209 src/adw-about-window.c:208
+#: src/adap-about-dialog.c:209 src/adap-about-window.c:208
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr ""
 "Спрошчаная Агульная Грамадская Ліцэнзія GNU версіі 2.1 або любой пазнейшай"
 
-#: src/adw-about-dialog.c:210 src/adw-about-window.c:209
+#: src/adap-about-dialog.c:210 src/adap-about-window.c:209
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr ""
 "Спрошчаная Агульная Грамадская Ліцэнзія GNU версіі 3 або любой пазнейшай"
 
-#: src/adw-about-dialog.c:211 src/adw-about-window.c:210
+#: src/adap-about-dialog.c:211 src/adap-about-window.c:210
 msgid "BSD 2-Clause License"
 msgstr "Ліцэнзія BSD 2-Clause"
 
-#: src/adw-about-dialog.c:212 src/adw-about-window.c:211
+#: src/adap-about-dialog.c:212 src/adap-about-window.c:211
 msgid "The MIT License (MIT)"
 msgstr "Ліцэнзія MIT"
 
-#: src/adw-about-dialog.c:213 src/adw-about-window.c:212
+#: src/adap-about-dialog.c:213 src/adap-about-window.c:212
 msgid "Artistic License 2.0"
 msgstr "Ліцэнзія Artistic 2.0"
 
-#: src/adw-about-dialog.c:214 src/adw-about-window.c:213
+#: src/adap-about-dialog.c:214 src/adap-about-window.c:213
 msgid "GNU General Public License, version 2 only"
 msgstr "Агульная Грамадская Ліцэнзія GNU, толькі версія 2"
 
-#: src/adw-about-dialog.c:215 src/adw-about-window.c:214
+#: src/adap-about-dialog.c:215 src/adap-about-window.c:214
 msgid "GNU General Public License, version 3 only"
 msgstr "Агульная Грамадская Ліцэнзія GNU, толькі версія 3"
 
-#: src/adw-about-dialog.c:216 src/adw-about-window.c:215
+#: src/adap-about-dialog.c:216 src/adap-about-window.c:215
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "Спрошчаная Агульная Грамадская Ліцэнзія GNU, толькі версія 2.1"
 
-#: src/adw-about-dialog.c:217 src/adw-about-window.c:216
+#: src/adap-about-dialog.c:217 src/adap-about-window.c:216
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "Спрошчаная Агульная Грамадская Ліцэнзія GNU, толькі версія 3"
 
-#: src/adw-about-dialog.c:218 src/adw-about-window.c:217
+#: src/adap-about-dialog.c:218 src/adap-about-window.c:217
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero General Public License версіі 3 або любой пазнейшай"
 
-#: src/adw-about-dialog.c:219 src/adw-about-window.c:218
+#: src/adap-about-dialog.c:219 src/adap-about-window.c:218
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero General Public License, толькі версія 3"
 
-#: src/adw-about-dialog.c:220 src/adw-about-window.c:219
+#: src/adap-about-dialog.c:220 src/adap-about-window.c:219
 msgid "BSD 3-Clause License"
 msgstr "Ліцэнзія BSD 3-Clause"
 
-#: src/adw-about-dialog.c:221 src/adw-about-window.c:220
+#: src/adap-about-dialog.c:221 src/adap-about-window.c:220
 msgid "Apache License, Version 2.0"
 msgstr "Ліцэнзія Apache, версія 2.0"
 
-#: src/adw-about-dialog.c:222 src/adw-about-window.c:221
+#: src/adap-about-dialog.c:222 src/adap-about-window.c:221
 msgid "Mozilla Public License 2.0"
 msgstr "Публічная ліцэнзія Mozilla версіі 2.0"
 
-#: src/adw-about-dialog.c:223 src/adw-about-window.c:222
+#: src/adap-about-dialog.c:223 src/adap-about-window.c:222
 msgid "BSD Zero-Clause License"
 msgstr "Ліцэнзія BSD Zero-Clause"
 
-#: src/adw-about-dialog.c:560 src/adw-about-window.c:558
+#: src/adap-about-dialog.c:560 src/adap-about-window.c:558
 msgid "Code by"
 msgstr "Код"
 
-#: src/adw-about-dialog.c:561 src/adw-about-window.c:559
+#: src/adap-about-dialog.c:561 src/adap-about-window.c:559
 msgid "Design by"
 msgstr "Дызайн"
 
-#: src/adw-about-dialog.c:562 src/adw-about-window.c:560
+#: src/adap-about-dialog.c:562 src/adap-about-window.c:560
 msgid "Artwork by"
 msgstr "Мастацкае афармленне"
 
-#: src/adw-about-dialog.c:563 src/adw-about-window.c:561
+#: src/adap-about-dialog.c:563 src/adap-about-window.c:561
 msgid "Documentation by"
 msgstr "Дакументацыя"
 
-#: src/adw-about-dialog.c:564 src/adw-about-window.c:562
+#: src/adap-about-dialog.c:564 src/adap-about-window.c:562
 msgid "Translated by"
 msgstr "Пераклад"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: src/adw-about-dialog.c:593 src/adw-about-window.c:591
+#: src/adap-about-dialog.c:593 src/adap-about-window.c:591
 #, c-format
 msgid ""
 "This application comes with absolutely no warranty. See the <a "
@@ -123,94 +123,94 @@ msgstr ""
 "Праграма распаўсюджваецца без аніякіх гарантый. Падрабязнасці глядзіце тут: "
 "<a href=\"%s\">%s</a>."
 
-#: src/adw-about-dialog.c:671 src/adw-about-window.c:669
+#: src/adap-about-dialog.c:671 src/adap-about-window.c:669
 msgid "This Application"
 msgstr "Праграма"
 
-#: src/adw-about-dialog.c:973 src/adw-about-window.c:971
+#: src/adap-about-dialog.c:973 src/adap-about-window.c:971
 #, c-format
 msgid "Version %s"
 msgstr "Версія %s"
 
-#: src/adw-about-dialog.c:999 src/adw-about-window.c:997
+#: src/adap-about-dialog.c:999 src/adap-about-window.c:997
 msgid "Unable to parse release notes:"
 msgstr "Не ўдалося разабраць спіс змен:"
 
-#: src/adw-about-dialog.c:1005 src/adw-about-window.c:1003
+#: src/adap-about-dialog.c:1005 src/adap-about-window.c:1003
 #, c-format
 msgid "Line: %d, character: %d"
 msgstr "Радок: %d, знак: %d"
 
-#: src/adw-about-dialog.c:1291 src/adw-about-window.c:1289
+#: src/adap-about-dialog.c:1291 src/adap-about-window.c:1289
 msgid "Copied to clipboard"
 msgstr "Скапіявана ў буфер абмену"
 
-#: src/adw-about-dialog.c:1318 src/adw-about-window.c:1317
+#: src/adap-about-dialog.c:1318 src/adap-about-window.c:1317
 msgid "Unable to save debugging information"
 msgstr "Не ўдалося захаваць адладачную інфармацыю"
 
-#: src/adw-about-dialog.c:1323 src/adw-about-window.c:1322
+#: src/adap-about-dialog.c:1323 src/adap-about-window.c:1322
 msgid "Close"
 msgstr "Закрыць"
 
-#: src/adw-about-dialog.c:1340 src/adw-about-window.c:1338
+#: src/adap-about-dialog.c:1340 src/adap-about-window.c:1338
 msgid "Save debugging information"
 msgstr "Захаваць адладачную інфармацыю"
 
-#: src/adw-about-dialog.ui:5 src/adw-about-window.ui:5
+#: src/adap-about-dialog.ui:5 src/adap-about-window.ui:5
 msgid "About"
 msgstr "Аб праграме"
 
-#: src/adw-about-dialog.ui:89 src/adw-about-window.ui:92
+#: src/adap-about-dialog.ui:89 src/adap-about-window.ui:92
 msgid "_What’s New"
 msgstr "_Што новага"
 
-#: src/adw-about-dialog.ui:105 src/adw-about-window.ui:108
+#: src/adap-about-dialog.ui:105 src/adap-about-window.ui:108
 msgid "_Details"
 msgstr "_Падрабязнасці"
 
-#: src/adw-about-dialog.ui:121 src/adw-about-dialog.ui:341
-#: src/adw-about-window.ui:124 src/adw-about-window.ui:344
+#: src/adap-about-dialog.ui:121 src/adap-about-dialog.ui:341
+#: src/adap-about-window.ui:124 src/adap-about-window.ui:344
 msgid "_Website"
 msgstr "_Вэб-сайт"
 
-#: src/adw-about-dialog.ui:145 src/adw-about-window.ui:148
+#: src/adap-about-dialog.ui:145 src/adap-about-window.ui:148
 msgid "_Support Questions"
 msgstr "П_ытанні падтрымкі"
 
-#: src/adw-about-dialog.ui:162 src/adw-about-window.ui:165
+#: src/adap-about-dialog.ui:162 src/adap-about-window.ui:165
 msgid "_Report an Issue"
 msgstr "Паведаміць аб _праблеме"
 
-#: src/adw-about-dialog.ui:178 src/adw-about-window.ui:181
+#: src/adap-about-dialog.ui:178 src/adap-about-window.ui:181
 msgid "_Troubleshooting"
 msgstr "_Выпраўленне непаладак"
 
-#: src/adw-about-dialog.ui:198 src/adw-about-window.ui:201
+#: src/adap-about-dialog.ui:198 src/adap-about-window.ui:201
 msgid "_Credits"
 msgstr "_Удзельнікі"
 
-#: src/adw-about-dialog.ui:214 src/adw-about-window.ui:217
+#: src/adap-about-dialog.ui:214 src/adap-about-window.ui:217
 msgid "_Legal"
 msgstr "Прававыя _звесткі"
 
-#: src/adw-about-dialog.ui:230 src/adw-about-window.ui:233
+#: src/adap-about-dialog.ui:230 src/adap-about-window.ui:233
 msgid "_Acknowledgements"
 msgstr "_Падзякі"
 
-#: src/adw-about-dialog.ui:260 src/adw-about-window.ui:263
+#: src/adap-about-dialog.ui:260 src/adap-about-window.ui:263
 msgid "What’s New"
 msgstr "Што новага"
 
-#: src/adw-about-dialog.ui:303 src/adw-about-window.ui:306
+#: src/adap-about-dialog.ui:303 src/adap-about-window.ui:306
 msgid "Details"
 msgstr "Падрабязнасці"
 
-#: src/adw-about-dialog.ui:369 src/adw-about-window.ui:372
+#: src/adap-about-dialog.ui:369 src/adap-about-window.ui:372
 msgid "Troubleshooting"
 msgstr "Выпраўленне непаладак"
 
-#: src/adw-about-dialog.ui:392 src/adw-about-window.ui:395
+#: src/adap-about-dialog.ui:392 src/adap-about-window.ui:395
 msgid ""
 "To assist in troubleshooting, you can view your debugging information. "
 "Providing this information to the application developers can help diagnose "
@@ -220,71 +220,71 @@ msgstr ""
 "непаладак. Перадача гэтай інфармацыі распрацоўшчыкам праграмы, можа "
 "дапамагчы выявіць праблемы, з якімі вы сутыкнуліся."
 
-#: src/adw-about-dialog.ui:403 src/adw-about-window.ui:406
+#: src/adap-about-dialog.ui:403 src/adap-about-window.ui:406
 msgid "_Debugging Information"
 msgstr "_Адладачная інфармацыя"
 
-#: src/adw-about-dialog.ui:430 src/adw-about-window.ui:433
+#: src/adap-about-dialog.ui:430 src/adap-about-window.ui:433
 msgid "Debugging Information"
 msgstr "Адладачная інфармацыя"
 
-#: src/adw-about-dialog.ui:475 src/adw-about-window.ui:478
+#: src/adap-about-dialog.ui:475 src/adap-about-window.ui:478
 msgid "_Copy Text"
 msgstr "_Капіраваць тэкст"
 
-#: src/adw-about-dialog.ui:483 src/adw-about-window.ui:486
+#: src/adap-about-dialog.ui:483 src/adap-about-window.ui:486
 msgid "_Save As…"
 msgstr "Захаваць _як…"
 
-#: src/adw-about-dialog.ui:496 src/adw-about-window.ui:499
+#: src/adap-about-dialog.ui:496 src/adap-about-window.ui:499
 msgid "Credits"
 msgstr "Удзельнікі"
 
-#: src/adw-about-dialog.ui:527 src/adw-about-window.ui:530
+#: src/adap-about-dialog.ui:527 src/adap-about-window.ui:530
 msgid "Legal"
 msgstr "Прававыя звесткі"
 
-#: src/adw-about-dialog.ui:559 src/adw-about-window.ui:562
+#: src/adap-about-dialog.ui:559 src/adap-about-window.ui:562
 msgid "Acknowledgements"
 msgstr "Падзякі"
 
-#: src/adw-back-button.c:347 src/adw-back-button.c:445
-#: src/adw-back-button.c:555
+#: src/adap-back-button.c:347 src/adap-back-button.c:445
+#: src/adap-back-button.c:555
 msgid "Back"
 msgstr "Назад"
 
-#. Translators: This is a placeholder text of the search entry from AdwComboRow. It should be phrased as a verb.
-#: src/adw-combo-row.ui:50 src/adw-preferences-dialog.ui:85
-#: src/adw-preferences-window.ui:96
+#. Translators: This is a placeholder text of the search entry from AdapComboRow. It should be phrased as a verb.
+#: src/adap-combo-row.ui:50 src/adap-preferences-dialog.ui:85
+#: src/adap-preferences-window.ui:96
 msgid "Search"
 msgstr "Пошук"
 
-#: src/adw-entry-row.ui:97
+#: src/adap-entry-row.ui:97
 msgid "Apply"
 msgstr "Ужыць"
 
-#: src/adw-inspector-page.c:75
+#: src/adap-inspector-page.c:75
 msgid "No Preference"
 msgstr "Без пераваг"
 
-#: src/adw-inspector-page.c:77
+#: src/adap-inspector-page.c:77
 msgid "Prefer Dark"
 msgstr "Аддаваць перавагу цёмнай"
 
-#: src/adw-inspector-page.c:79
+#: src/adap-inspector-page.c:79
 msgid "Prefer Light"
 msgstr "Аддаваць перавагу светлай"
 
 #. Translators: The name of the library, not the stylesheet
-#: src/adw-inspector-page.c:97
-msgid "Adwaita"
-msgstr "Adwaita"
+#: src/adap-inspector-page.c:97
+msgid "Adapta"
+msgstr "Adapta"
 
-#: src/adw-inspector-page.ui:10
+#: src/adap-inspector-page.ui:10
 msgid "System Appearance"
 msgstr "Выгляд сістэмы"
 
-#: src/adw-inspector-page.ui:11
+#: src/adap-inspector-page.ui:11
 msgid ""
 "Override settings for this application. They will be reset upon closing the "
 "inspector."
@@ -292,65 +292,65 @@ msgstr ""
 "Перавызначэнне налад для гэтай праграмы. Пры закрыцці інспектара налады "
 "будуць скінуты."
 
-#: src/adw-inspector-page.ui:14
+#: src/adap-inspector-page.ui:14
 msgid "System Supports Color Schemes"
 msgstr "Сістэма падтрымлівае схемы колераў"
 
-#: src/adw-inspector-page.ui:20
+#: src/adap-inspector-page.ui:20
 msgid "Preferred Color Scheme"
 msgstr "Пераважная схема колераў"
 
-#: src/adw-inspector-page.ui:37
+#: src/adap-inspector-page.ui:37
 msgid "High Contrast"
 msgstr "Высокая кантраснасць"
 
-#: src/adw-password-entry-row.c:70
+#: src/adap-password-entry-row.c:70
 msgid "Hide Password"
 msgstr "Схаваць пароль"
 
-#: src/adw-password-entry-row.c:74
+#: src/adap-password-entry-row.c:74
 msgid "Show Password"
 msgstr "Паказаць пароль"
 
-#: src/adw-password-entry-row.c:168
+#: src/adap-password-entry-row.c:168
 msgid "Caps Lock is on"
 msgstr "Caps Lock уключаны"
 
-#: src/adw-password-entry-row.c:176
+#: src/adap-password-entry-row.c:176
 msgid "_Show Password"
 msgstr "_Паказваць пароль"
 
-#: src/adw-preferences-dialog.c:256 src/adw-preferences-window.c:259
+#: src/adap-preferences-dialog.c:256 src/adap-preferences-window.c:259
 msgid "Untitled page"
 msgstr "Неназваная старонка"
 
-#: src/adw-preferences-dialog.ui:5 src/adw-preferences-window.ui:8
+#: src/adap-preferences-dialog.ui:5 src/adap-preferences-window.ui:8
 msgid "Preferences"
 msgstr "Параметры"
 
-#: src/adw-preferences-dialog.ui:70 src/adw-preferences-window.ui:81
+#: src/adap-preferences-dialog.ui:70 src/adap-preferences-window.ui:81
 msgid "Search preferences"
 msgstr "Параметры пошуку"
 
-#: src/adw-preferences-dialog.ui:152 src/adw-preferences-window.ui:163
+#: src/adap-preferences-dialog.ui:152 src/adap-preferences-window.ui:163
 msgid "No Results Found"
 msgstr "Нічога не знойдзена"
 
-#: src/adw-preferences-dialog.ui:153 src/adw-preferences-window.ui:164
-#: src/adw-tab-overview.ui:111
+#: src/adap-preferences-dialog.ui:153 src/adap-preferences-window.ui:164
+#: src/adap-tab-overview.ui:111
 msgid "Try a different search."
 msgstr "Паспрабуйце іншы пошукавы запыт."
 
-#: src/adw-split-button.c:519 src/adw-split-button.c:1033
+#: src/adap-split-button.c:519 src/adap-split-button.c:1033
 msgid "More Options"
 msgstr "Больш параметраў"
 
-#: src/adw-tab-button.ui:7
+#: src/adap-tab-button.ui:7
 msgid "View Open Tabs"
 msgstr "Паказаць адкрытыя ўкладкі"
 
 #. Translators: Tab overview title, %u is the number of open tabs
-#: src/adw-tab-overview.c:928
+#: src/adap-tab-overview.c:928
 #, c-format
 msgid "%u Tab"
 msgid_plural "%u Tabs"
@@ -358,27 +358,27 @@ msgstr[0] "%u укладка"
 msgstr[1] "%u укладкі"
 msgstr[2] "%u укладак"
 
-#: src/adw-tab-overview.ui:21
+#: src/adap-tab-overview.ui:21
 msgid "Search Tabs"
 msgstr "Пошук укладак"
 
-#: src/adw-tab-overview.ui:51
+#: src/adap-tab-overview.ui:51
 msgid "Search tabs"
 msgstr "Пошук укладак"
 
-#: src/adw-tab-overview.ui:97
+#: src/adap-tab-overview.ui:97
 msgid "No Open Tabs"
 msgstr "Няма адкрытых укладак"
 
-#: src/adw-tab-overview.ui:110
+#: src/adap-tab-overview.ui:110
 msgid "No Tabs Found"
 msgstr "Укладкі не знойдзены"
 
-#: src/adw-tab-overview.ui:131
+#: src/adap-tab-overview.ui:131
 msgid "New _Tab"
 msgstr "_Новая ўкладка"
 
-#: src/adw-tab-thumbnail.ui:39 src/adw-tab.ui:95
+#: src/adap-tab-thumbnail.ui:39 src/adap-tab.ui:95
 msgid "Close Tab"
 msgstr "Закрыць укладку"
 

@@ -14,9 +14,9 @@ fi
 
 cd "$AUTOPKGTEST_TMP"
 
-cat <<EOF > adwtest.c
+cat <<EOF > adaptest.c
 #include <gtk/gtk.h>
-#include <adwaita.h>
+#include <adapta.h>
 
 int
 main (int    argc,
@@ -24,13 +24,13 @@ main (int    argc,
 {
 	g_autoptr (GtkWidget) st = NULL;
 	gtk_init();
-	adw_init();
-	st = g_object_ref_sink (adw_status_page_new());
+	adap_init();
+	st = g_object_ref_sink (adap_status_page_new());
 }
 EOF
 
-${CROSS_COMPILE}gcc -o adwtest adwtest.c $(${CROSS_COMPILE}pkg-config --cflags --libs libadwaita-1)
+${CROSS_COMPILE}gcc -o adaptest adaptest.c $(${CROSS_COMPILE}pkg-config --cflags --libs libadapta-1)
 echo "build ok"
-[ -x adwtest ]
-xvfb-run -a -s "-screen 0 1024x768x24" ./adwtest
+[ -x adaptest ]
+xvfb-run -a -s "-screen 0 1024x768x24" ./adaptest
 echo "starts ok"

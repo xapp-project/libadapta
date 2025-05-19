@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwWindow" id="window">
+  <requires lib="libadapta" version="1.0"/>
+  <object class="AdapWindow" id="window">
     <property name="default-width">600</property>
     <property name="default-height">350</property>
     <property name="content">
-      <object class="AdwToolbarView">
+      <object class="AdapToolbarView">
         <child type="top">
-          <object class="AdwHeaderBar">
+          <object class="AdapHeaderBar">
             <property name="show-title">False</property>
           </object>
         </child>
       </object>
     </property>
   </object>
-  <object class="AdwAlertDialog" id="widget">
+  <object class="AdapAlertDialog" id="widget">
     <property name="heading" translatable="yes">Save Changes?</property>
     <property name="body" translatable="yes">Open document contains unsaved changes. Changes which are not saved will be permanently lost.</property>
     <property name="default-response">save</property>
