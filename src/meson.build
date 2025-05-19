@@ -278,6 +278,7 @@ libadapta_public_headers += files(src_headers)
 libadapta_public_sources += files(src_sources)
 
 install_headers(src_headers, subdir: libadapta_header_subdir)
+install_headers(['adw-compat.h'], subdir: libadapta_header_subdir)
 
 glib_min_version = '>= 2.76.0'
 gtk_min_version = '>= 4.13.4'
